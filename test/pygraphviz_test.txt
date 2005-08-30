@@ -1,0 +1,37 @@
+Tests for pygraphviz
+--------------------
+
+>>> from pygraphviz import *
+
+>>> A=Agraph()
+>>> nodelist=['a','b','c','d','e']
+>>> edgelist=[['a','b'],['a','a'],['c','d']]
+
+>>> ids=[A.add_node(n) for n in nodelist]
+>>> len(ids)==len(nodelist)
+True
+
+>>> ids= [A.add_edge(source,target,None) for (source,target) in edgelist]
+>>> len(ids)==len(edgelist)
+True
+
+>>> for n in sorted(A.nodes()):
+...    print n
+a
+b
+c
+d
+e
+
+>>> for e in sorted(A.edges()):
+...    print e.source(),e.target()
+a b
+a a
+c d
+
+>>> print A.is_undirected()
+True
+
+>>> print A.is_directed()
+False
+

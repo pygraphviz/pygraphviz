@@ -1,0 +1,120 @@
+pygraphviz
+==========
+
+Latest version: 25 August 2005:  pygraphviz-0.10: http://sourceforge.net/projects/networkx/
+
+
+About
+-----
+
+   pygraphviz is a wrapper to the graph data structure 
+   of the graphviz graph layout and visualization package.
+   See http://graphviz.org/ for details.
+
+Requirements
+-------------
+
+   To use pygraphviz you need
+
+      - Python version 2.3 or later http://www.python.org/
+      - Graphviz http://graphviz.org/
+      - SWIG http://www.swig.org/
+
+
+Downloading
+-----------
+
+   You can download pygraphviz from http://sourceforge.net/projects/networkx/
+
+
+Quick Install
+-------------
+
+   Tested on Linux.  In principle will work on any platform. 
+
+   **Linux and OSX** (install from source)
+
+      Download the source tarball, unpack, and run "python setup.py install". 
+
+   **Windows** (binary installer)
+ 
+      None available at this point.  Use the source package as above.
+
+Using 
+-----
+
+   Just write in Python
+
+   >>> from pygraphviz import *
+   >>> A=Agraph()
+   >>> A.add_node("a")
+   >>> A.add_edge("a","b","label")
+   >>> for n in A.nodes():
+   >>>     print n
+   >>> for e in A.edges():
+   >>>     print e.source(),e.target()
+
+
+History
+-------
+
+   The original concept and much of the existing code 
+   was developed and implemented by
+   Manos Renieris at Brown University: 
+   http://www.cs.brown.edu/~er/software/
+
+Thanks
+------
+
+   Thanks to Manos Renieris for the original idea and code.
+
+Maintainers
+-----------
+
+   pygraphviz is currently maintained by Aric Hagberg and Dan Schult
+
+License
+-------
+
+   Copyright (C) 2004,2005 by 
+   Aric Hagberg <hagberg@lanl.gov>
+   Dan Schult <dschult@colgate.edu>
+   Manos Renieris, http://www.cs.brown.edu/~er/
+   All rights reserved, see COPYING for details.
+
+   pygraphviz is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   pygraphviz is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with pygraphviz; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Notice
+------
+   This software and ancillary information (herein called SOFTWARE )
+   called pygraphviz is made available under the terms described
+   here. The SOFTWARE has been approved for release with associated LA-CC
+   number 04-073.
+
+   Unless otherwise indicated, this SOFTWARE has been authored by an
+   employee or employees of the University of California, operator of the
+   Los Alamos National Laboratory under Contract No. W-7405-ENG-36 with
+   the U.S. Department of Energy. The U.S. Government has rights to use,
+   reproduce, and distribute this SOFTWARE. The public may copy,
+   distribute, prepare derivative works and publicly display this
+   SOFTWARE without charge, provided that this Notice and any statement
+   of authorship are reproduced on all copies. Neither the Government nor
+   the University makes any warranty, express or implied, or assumes any
+   liability or responsibility for the use of this SOFTWARE.
+
+   If SOFTWARE is modified to produce derivative works, such modified
+   SOFTWARE should be clearly marked, so as not to confuse it with the
+   version available from Los Alamos National Laboratory.

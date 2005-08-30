@@ -1,0 +1,14 @@
+include README
+include COPYING
+include setup.cfg
+include setup.py
+include __init__.py
+include graphviz.i
+include pygraphvz.py
+recursive-include  doc/ *.py
+recursive-include  test/ *.txt
+
+
+
+
+
