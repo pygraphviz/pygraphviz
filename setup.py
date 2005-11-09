@@ -11,9 +11,12 @@ import sys
 # update it when the contents of directories change
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
-import distutils
+from setuptools import setup
+#import distutils
 from distutils.command import build
-from distutils.core import setup, Extension
+#from distutils.core import setup, Extension
+from distutils.core import Extension
+
 
 if sys.argv[-1] == 'setup.py':
     print "To install, run 'python setup.py install'"
@@ -58,13 +61,13 @@ class my_build(build.build):
                    ]
 
 setup(name = "pygraphviz",
-      version = "0.1",
+      version = "0.2",
       author="Aric Hagberg, Dan Schult, Manos Renieris",
       author_email="hagberg@lanl.gov",
-      license="GPL",
+      license="BSD",
       description="A python interface to graphviz",
       long_description=long_description,
-      url="http://networkx.sourceforge.net/",
+      url="http://networkx.lanl.gov/pygraphviz/",
       cmdclass={'build':my_build},
       ext_modules = [
       Extension("pygraphviz._graphviz",
