@@ -7,6 +7,9 @@ Setup script for pygraphviz.
 import os
 import sys
 
+import ez_setup
+ez_setup.use_setuptools()
+
 # BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
 # update it when the contents of directories change
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
