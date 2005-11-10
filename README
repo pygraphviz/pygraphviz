@@ -18,11 +18,6 @@ Requirements
 
       - Python version 2.3 or later http://www.python.org/
       - Graphviz http://graphviz.org/
- 
-   To build graphviz you also need
-      
-      - SWIG http://www.swig.org/
-
 
 Downloading
 -----------

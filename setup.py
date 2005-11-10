@@ -9,24 +9,14 @@ import sys
 
 import ez_setup
 ez_setup.use_setuptools()
-
-# BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
-# update it when the contents of directories change
-if os.path.exists('MANIFEST'): os.remove('MANIFEST')
-
-from setuptools import setup
-#import distutils
-from distutils.command import build
-#from distutils.core import setup, Extension
-from distutils.core import Extension
-
+from setuptools import setup, find_packages, Extension
 
 if sys.argv[-1] == 'setup.py':
     print "To install, run 'python setup.py install'"
     print
 
 # get library and include prefix
-# TODO: the following might not be too portable
+# the following might not be too portable
 fp=os.popen('dotneato-config --prefix ','r')
 lib_prefix=fp.readline()[:-1]
 if fp.close():   # returns exit status
@@ -52,35 +42,43 @@ except:
 
 long_description = """\
 pygraphviz is a Python wrapper for the graphviz Agraph data structure.
-See http://graphviz.org/
 """
 
-class my_build(build.build):
-    """ Just change the order of build_py and build_ext """
-    sub_commands = [('build_clib',    build.build.has_c_libraries),
-                    ('build_ext',     build.build.has_ext_modules),
-                    ('build_scripts', build.build.has_scripts),
-                    ('build_py',      build.build.has_pure_modules),
-                   ]
 
 setup(name = "pygraphviz",
       version = "0.2",
+      packages = ["pygraphviz","pygraphviz.tests"],
+      ext_modules = [
+      Extension("pygraphviz._graphviz",
+                ["pygraphviz/graphviz_wrap.c"],
+                include_dirs=[includes],
+                library_dirs=[libs],
+                libraries=["agraph","cdt"],
+                )
+      ],
+      package_data = {
+        '': ['*.txt'],
+        },
+      test_suite = "pygraphviz.tests.test.test_suite",
       author="Aric Hagberg, Dan Schult, Manos Renieris",
       author_email="hagberg@lanl.gov",
       license="BSD",
       description="A python interface to graphviz",
       long_description=long_description,
       url="http://networkx.lanl.gov/pygraphviz/",
-      cmdclass={'build':my_build},
-      ext_modules = [
-      Extension("pygraphviz._graphviz",
-                ["graphviz.i"],
-                include_dirs=[includes],
-                library_dirs=[libs],
-                libraries=["agraph","cdt"],
-                )
-      ],
-      package_dir = {"pygraphviz" : ""},
-      packages = ["pygraphviz"],
+      download_url="http://sourceforge.net/project/showfiles.php?group_id=122233&package_id=161979",
 
+      classifiers = [
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: BSD License',
+        'Programming Language :: C',
+        'Programming Language :: Python',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Scientific/Engineering :: Information Analysis',
+        'Topic :: Scientific/Engineering :: Mathematics',
+        'Topic :: Scientific/Engineering :: Visualization',
+        ]
       )
+
