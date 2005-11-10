@@ -49,7 +49,7 @@ pygraphviz can be used to create and draw networks and graphs with Graphviz.
 
 
 setup(name = "pygraphviz",
-      version = "0.2",
+      version = "0.21",
       packages = ["pygraphviz","pygraphviz.tests"],
       ext_modules = [
       Extension("pygraphviz._graphviz",
