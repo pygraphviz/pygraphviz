@@ -41,7 +41,10 @@ except:
     raise
 
 long_description = """\
-pygraphviz is a Python wrapper for the graphviz Agraph data structure.
+pygraphviz is a Python wrapper for the Graphviz Agraph data structure.
+
+pygraphviz can be used to create and draw networks and graphs with Graphviz.
+
 """
 
 
