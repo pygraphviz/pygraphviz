@@ -7,29 +7,41 @@ Setup script for pygraphviz.
 import os
 import sys
 
-import ez_setup
-ez_setup.use_setuptools()
-from setuptools import setup, find_packages, Extension
+# use setuptools if we got it, else distutils
+try: 
+#    import ez_setup
+#    ez_setup.use_setuptools()
+    from setuptools import setup, Extension
+except:
+    from distutils.core import setup, Extension
 
 if sys.argv[-1] == 'setup.py':
     print "To install, run 'python setup.py install'"
     print
 
-# get library and include prefix
-# the following might not be too portable
+# get library and include prefix, the following might not be too portable
 fp=os.popen('dotneato-config --prefix ','r')
-lib_prefix=fp.readline()[:-1]
-if fp.close():   # returns exit status
+prefix=fp.readline()[:-1]
+print prefix
+
+# If setting the prefix failed you should attempt to set the prefix here:
+# prefix="/usr" # unix, Linux
+# prefix="/sw"  # OSX, fink
+# prefix="/opt/local"  # OSX, darwin-ports? or 
+
+if not prefix:  
+#if fp.close():   # returns exit status
     print "Warning: dotneato-config not in path!"
     print "   If you are using a non-unix system, "
     print "   you will probably need to manually change"
     print "   the include_dirs and library_dirs in setup.py"
     print "   to point to the correct locations of your graphviz installation."
-    lib_prefix="/usr"
+    prefix="/usr" # make a guess anyway
 
-# set includes and libs by hand if this isn't right for your platform
-includes=lib_prefix+os.sep+'include'+os.sep+'graphviz'
-libs=lib_prefix+os.sep+'lib'+os.sep+'graphviz'
+# set includes and libs by hand here if you have a very nonstandard
+# installation of graphviz
+includes=prefix+os.sep+'include'+os.sep+'graphviz'
+libs=prefix+os.sep+'lib'+os.sep+'graphviz'
 
 # sanity check
 try:
@@ -41,7 +53,7 @@ except:
     raise
 
 long_description = """\
-pygraphviz is a Python wrapper for the Graphviz Agraph data structure.
+A Python wrapper for the Graphviz Agraph data structure.
 
 pygraphviz can be used to create and draw networks and graphs with Graphviz.
 
@@ -66,7 +78,7 @@ setup(name = "pygraphviz",
       author="Aric Hagberg, Dan Schult, Manos Renieris",
       author_email="hagberg@lanl.gov",
       license="BSD",
-      description="A python interface to graphviz",
+      description="Python interface to Graphviz",
       long_description=long_description,
       url="http://networkx.lanl.gov/pygraphviz/",
       download_url="http://sourceforge.net/project/showfiles.php?group_id=122233&package_id=161979",
