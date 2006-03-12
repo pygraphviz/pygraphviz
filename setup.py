@@ -22,12 +22,13 @@ if sys.argv[-1] == 'setup.py':
 # get library and include prefix, the following might not be too portable
 fp=os.popen('dotneato-config --prefix ','r')
 prefix=fp.readline()[:-1]
-print prefix
 
 # If setting the prefix failed you should attempt to set the prefix here:
 # prefix="/usr" # unix, Linux
+# prefix="/usr/local" # unix, alternate
 # prefix="/sw"  # OSX, fink
-# prefix="/opt/local"  # OSX, darwin-ports? or 
+# prefix="/opt/local"  # OSX, darwin-ports? 
+
 
 if not prefix:  
 #if fp.close():   # returns exit status
@@ -61,7 +62,7 @@ pygraphviz can be used to create and draw networks and graphs with Graphviz.
 
 
 setup(name = "pygraphviz",
-      version = "0.22-svn",
+      version = "0.22",
       packages = ["pygraphviz","pygraphviz.tests"],
       ext_modules = [
       Extension("pygraphviz._graphviz",

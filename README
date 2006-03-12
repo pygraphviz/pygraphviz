@@ -68,10 +68,16 @@ History
    Manos Renieris at Brown University: 
    http://www.cs.brown.edu/~er/software/
 
-Maintainers
+Development
 -----------
 
    pygraphviz is currently maintained by Aric Hagberg and Dan Schult
+
+   More information can be found at the NetworkX wiki 
+   https://networkx.lanl.gov/wiki
+
+   For bug reports and feature requests fill out a ticket at
+   https://networkx.lanl.gov/wiki/newticket
 
 License
 -------
