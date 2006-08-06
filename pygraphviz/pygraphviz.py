@@ -157,11 +157,11 @@ class Agraph(object):
         return Agraph(agraphof(self.agraph))
 
     def get_all_attr(self, node=None, edge=None):
-        if node!=None:
+        if node is not None:
             n=self.get_node(str(node))
             pointer=n.anode
             type=AGNODE
-        elif edge!=None:
+        elif edge is not None:
             (u,v)=edge
             e=self.get_edge(str(u),str(v))
             pointer=e.aedge
@@ -171,7 +171,10 @@ class Agraph(object):
             type=AGRAPH
             
         attr={}
-        attrp=agnxtattr(self.agraph,type,None) # pointer to 1st attr
+        try:
+            attrp=agnxtattr(self.agraph,type,None) # pointer to 1st attr
+        except KeyError:
+            return attr
         while 1:
             try:
                 attr[agattrname(attrp)]=agxget(pointer,attrp)
@@ -188,17 +191,18 @@ class Agraph(object):
     def get_graph_attr(self,name):
         self.get_attr(name)
 
-    def set_attr(self, attr={}, **kwds):
-        items=kwds.items()
-        items.extend(attr.items())
-        for (name,value) in items:
+    def set_attr(self, attr=None, **kwds):
+        if attr is None:
+            attr={}
+        attr.update(kwds)
+        for (name,value) in attr.items():
             try: 
                 agset(self.agraph, str(name), str(value))
             except KeyError:
                 agattr(self.agraph, AGRAPH, str(name), str(value))
             
-    def set_graph_attr(self,attr={}, **kwds):
-        self.set_attr(attr={}, **kwds)
+    def set_graph_attr(self,attr=None, **kwds):
+        self.set_attr(attr=attr, **kwds)
 
     def del_attr(self, name):
         # doesn't really delete anything, sets value to ""
@@ -210,11 +214,12 @@ class Agraph(object):
     def del_graph_attr(self,name):
         self.del_attr(name)
 
-    def set_node_attr(self, nodes=None, attr={}, **kwds):
-        items=kwds.items()
-        items.extend(attr.items())
-        if nodes == None:
-            for (name,value) in items:
+    def set_node_attr(self, nodes=None, attr=None, **kwds):
+        if attr is None:
+            attr={}
+        attr.update(kwds)
+        if nodes is None:
+            for (name,value) in attr.items():
                 try: 
                     agattr(self.agraph, AGNODE, str(name), str(value))
                 except KeyError:
@@ -223,7 +228,7 @@ class Agraph(object):
             if not isinstance(nodes,list): nodes=[nodes]
             for n in nodes:
                 np=self.get_node(str(n))
-                for (name,value) in items:
+                for (name,value) in attr.items():
                     try: 
                         agset(np.anode, str(name), str(value))
                     except KeyError:
@@ -258,30 +263,34 @@ class Agraph(object):
     def del_node_attr(self, name):
         # doesn't really delete anything, sets value to ""
         try: 
-            print "deleting",name
             agattr(self.agraph, AGNODE, name, "")
         except KeyError:
             print "No node attribute \"%s\" in graph"%(name)
 
 
-    def set_edge_attr(self, edges=None, attr={}, **kwds):
-        items=kwds.items()
-        items.extend(attr.items())
+    def set_edge_attr(self, edges=None, attr=None, **kwds):
+        if attr is None:
+            attr={}
+        attr.update(kwds)
         if edges == None:
-            for (name,value) in items:
+            for (name,value) in attr.items():
                 try: 
                     agattr(self.agraph, AGEDGE, name, value)
                 except KeyError:
                     print "Failed to set edge attr \"%s\""%(name)
         else:
-            if not isinstance(edges,list): nodes=[edges]
+            if not isinstance(edges,list): edges=[edges]
             for (u,v) in edges:
                 ep=self.get_edge(str(u),str(v))
-                for (name,value) in items:
+                for (name,value) in attr.items():
                     try: 
                         agset(ep.aedge, str(name), str(value))
                     except KeyError:
-                        print "Failed to set attr \"%s\" for edge \"%s\""%(name, ep)
+                        agattr(self.agraph, AGEDGE, str(name), "")
+                        try:
+                            agset(ep.aedge, str(name), str(value))
+                        except KeyError:
+                            print "Failed to set attr \"%s\" for edge \"%s\""%(name, ep)
 
 
     def get_edge_attr(self, edges, items=[]):
@@ -328,8 +337,11 @@ class Agraph(object):
             except KeyError:
                 print "Node \"%s\" does not have attribute \"%s\""%(self,name)
 
-        def set_attr(self, **kwds):
-            for (name,value) in kwds.items():
+        def set_attr(self, attr=None, **kwds):
+            if attr is None:
+                attr={}
+            attr.update(kwds)
+            for (name,value) in attr.items():
                 try:
                     agset(self.anode, str(name), str(value))
                 except KeyError:
@@ -358,8 +370,11 @@ class Agraph(object):
                 except KeyError:
                     print "Edge attribute \"%s\" does not exist"%(name)
 
-        def set_attr(self, **kwds):
-            for (name,value) in kwds.items():
+        def set_attr(self, attr=None, **kwds):
+            if attr is None:
+                attr={}
+            attr.update(kwds)
+            for (name,value) in attr.items():
                 try:
                     agset(self.aedge, str(name), str(value))
                 except KeyError:
