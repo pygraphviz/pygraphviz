@@ -7,13 +7,7 @@ Setup script for pygraphviz.
 import os
 import sys
 
-# use setuptools if we got it, else distutils
-try: 
-#    import ez_setup
-#    ez_setup.use_setuptools()
-    from setuptools import setup, Extension
-except:
-    from distutils.core import setup, Extension
+from distutils.core import setup, Extension
 
 if sys.argv[-1] == 'setup.py':
     print "To install, run 'python setup.py install'"
@@ -23,15 +17,14 @@ if sys.argv[-1] == 'setup.py':
 fp=os.popen('dotneato-config --prefix ','r')
 prefix=fp.readline()[:-1]
 
-# If setting the prefix failed you should attempt to set the prefix here:
+# If setting the prefix failed you should attempt to set the prefix here
+# by ucommenting one of these lines or providing your own :
 # prefix="/usr" # unix, Linux
 # prefix="/usr/local" # unix, alternate
 # prefix="/sw"  # OSX, fink
 # prefix="/opt/local"  # OSX, darwin-ports? 
 
-
 if not prefix:  
-#if fp.close():   # returns exit status
     print "Warning: dotneato-config not in path!"
     print "   If you are using a non-unix system, "
     print "   you will probably need to manually change"
