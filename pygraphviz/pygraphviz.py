@@ -13,6 +13,7 @@ from graphviz import *
 CREATE=1
 SEARCH=0
 
+
 class Agraph(object):
     def __init__(self, agraph = None, name="Graphviz", type=cvar.Agundirected):
         if agraph==None:
@@ -45,51 +46,34 @@ class Agraph(object):
         return agnedges(self.agraph)
 
     def is_directed(self):
-        try:
-            agisdirected(self.agraph)
+        if agisdirected(self.agraph)==1:
             return True
-        except:
-            pass
-        return False
+        else:
+            return False
 
     def is_undirected(self):
-        try:
-            agisundirected(self.agraph)
+        if agisundirected(self.agraph)==1:
             return True
-        except:
-            pass
-        return  False
-
+        else:
+            return False
 
     def nodes(self):
         nodeslist = []
-        try:
-            a = agfstnode(self.agraph)
-        except KeyError:
-            return nodeslist
-        while 1:
-            try:
-                nodeslist.append(Agraph.Node(a))
-                a = agnxtnode(a)
-            except KeyError:
-                return tuple(nodeslist)
+        a = agfstnode(self.agraph)
+        while a is not None:
+            nodeslist.append(Agraph.Node(a))
+            a = agnxtnode(a)
+        return nodeslist
 
     def edges(self):
         edgeslist = []
         nodes = self.nodes()
         for n in nodes:
-            try: 
-                e = agfstout(n.anode)
+            e = agfstout(n.anode)
+            while e is not None:
                 edgeslist.append(Agraph.Edge(e))
-            except:
-                continue
-            while 1:
-                try:
-                    e = agnxtout(e)
-                    edgeslist.append(Agraph.Edge(e))
-                except KeyError:
-                    break
-        return tuple(edgeslist)
+                e = agnxtout(e)
+        return edgeslist
 
     def add_node(self, name):
         return Agraph.Node(agnode(self.agraph, name, CREATE))
@@ -100,7 +84,7 @@ class Agraph(object):
             return Agraph.Node(a)
         except KeyError:
             print "No node \"%s\" in graph"%(name)
-            return None
+            return Nonep
 
 
     def delete_node(self, name):
@@ -384,3 +368,24 @@ class Agraph(object):
         def graph(self):
             return Agraph(agraphof(self.aedge))
 
+    
+
+def _test_suite():
+    import doctest
+    suite = doctest.DocFileSuite('tests/pygraphviz_test.txt',
+                                 package='pygraphviz')
+    return suite
+
+
+if __name__ == "__main__":
+    import os
+    import sys
+    import unittest
+    if sys.version_info[:2] < (2, 4):
+        print "Python version 2.4 or later required for tests (%d.%d detected)." %  sys.version_info[:2]
+        sys.exit(-1)
+    # directory of package (relative to this)
+    nxbase=sys.path[0]+os.sep+os.pardir
+    sys.path.insert(0,nxbase) # prepend to search path
+    unittest.TextTestRunner().run(_test_suite())
+    
