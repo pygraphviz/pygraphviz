@@ -8,79 +8,81 @@ A python interface to the graphviz library.
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
 
-from graphviz import *
+import graphviz as gv
 
-CREATE=1
-SEARCH=0
+class ACTION:
+    CREATE=1
+    SEARCH=0
 
 
 class Agraph(object):
-    def __init__(self, agraph = None, name="Graphviz", type=cvar.Agundirected):
+    def __init__(self, agraph = None, name="Graphviz",
+                 type=gv.cvar.Agundirected):
         if agraph==None:
-            self.agraph = agopen(name, type, None)
+            self.agraph = gv.agopen(name, type, None)
         else:
             self.agraph = agraph
 
     def __str__(self):
-        return agnameof(self.agraph)
+        return gv.agnameof(self.agraph)
 
     def close(self):
-        agclose(self.agraph)
+        gv.agclose(self.agraph)
 
     def read(self, fp):
         try: 
-            self.agraph = agread(fp,None)
+            self.agraph = gv.agread(fp,None)
         except IOError:
             print "Can\'t read file"
 
     def write(self, fp):
         try: 
-            agwrite(self.agraph, fp)
+            gv.agwrite(self.agraph, fp)
         except IOError:
             print "Can\'t write file"
 
     def nnodes(self):
-        return agnnodes(self.agraph)
+        return gv.agnnodes(self.agraph)
 
     def nedges(self):
-        return agnedges(self.agraph)
+        return gv.agnedges(self.agraph)
 
     def is_directed(self):
-        if agisdirected(self.agraph)==1:
+        if gv.agisdirected(self.agraph)==1:
             return True
         else:
             return False
 
     def is_undirected(self):
-        if agisundirected(self.agraph)==1:
+        if gv.agisundirected(self.agraph)==1:
             return True
         else:
             return False
 
     def nodes(self):
         nodeslist = []
-        a = agfstnode(self.agraph)
+        a = gv.agfstnode(self.agraph)
         while a is not None:
             nodeslist.append(Agraph.Node(a))
-            a = agnxtnode(a)
+            a = gv.agnxtnode(a)
         return nodeslist
 
     def edges(self):
         edgeslist = []
         nodes = self.nodes()
         for n in nodes:
-            e = agfstout(n.anode)
+            e = gv.agfstout(n.anode)
             while e is not None:
                 edgeslist.append(Agraph.Edge(e))
-                e = agnxtout(e)
+                e = gv.agnxtout(e)
         return edgeslist
 
     def add_node(self, name):
-        return Agraph.Node(agnode(self.agraph, name, CREATE))
+        return Agraph.Node(gv.agnode(self.agraph, name, ACTION.CREATE))
 
     def get_node(self, name):
         try: 
-            a = agnode(self.agraph, name, SEARCH)
+            a = gv.agnode(self.agraph, name, ACTION.SEARCH)
             return Agraph.Node(a)
         except KeyError:
             print "No node \"%s\" in graph"%(name)
@@ -89,8 +91,8 @@ class Agraph(object):
 
     def delete_node(self, name):
         try:
-            a=agnode(self.agraph, name, SEARCH)
-            agdelnode(a)
+            a=gv.agnode(self.agraph, name, ACTION.SEARCH)
+            gv.agdelnode(a)
         except KeyError:
             print "No node \"%s\" in graph"%(name)
             return None
@@ -98,23 +100,23 @@ class Agraph(object):
 
     def add_edge(self, source, target, name):
         try:
-            s = Agraph.Node(agnode(self.agraph, source, CREATE))
-            t = Agraph.Node(agnode(self.agraph, target, CREATE))
-            return Agraph.Edge(agedge(s.anode, t.anode, name, CREATE))
+            s = Agraph.Node(gv.agnode(self.agraph, source, ACTION.CREATE))
+            t = Agraph.Node(gv.agnode(self.agraph, target, ACTION.CREATE))
+            return Agraph.Edge(gv.agedge(s.anode, t.anode, name, ACTION.CREATE))
         except:
             print "Can\'t create edge \"%s-%s\""%(source,target)
 
     def get_edge(self, source, target, name=None):
         try: 
-            s = agnode(self.agraph, source, SEARCH)
+            s = gv.agnode(self.agraph, source, ACTION.SEARCH)
         except KeyError:
             print "No node \"%s\" in graph"%(source)
         try: 
-            t = agnode(self.agraph, target, SEARCH)
+            t = gv.agnode(self.agraph, target, ACTION.SEARCH)
         except KeyError:
             print "No node \"%s\" in graph"%(target)
         try:
-            e = agedge(s, t, name, SEARCH)
+            e = gv.agedge(s, t, name, ACTION.SEARCH)
             return Agraph.Edge(e)
         except:
             print "No edge \"%s-%s\" \"%s\" in graph"%(source,target,name)
@@ -122,53 +124,53 @@ class Agraph(object):
 
     def delete_edge(self, source, target, name):
         try:
-            s = agnode(self.agraph, source, SEARCH)
+            s = gv.agnode(self.agraph, source, ACTION.SEARCH)
         except KeyError:
             print "No node \"%s\" in graph"%(source)
             return
         try:
-            t = agnode(self.agraph, target, SEARCH)
+            t = gv.agnode(self.agraph, target, Acdtion.SEARCH)
         except KeyError:
             print "No node \"%s\" in graph"%(target)
             return
         try: 
-            e = agedge(s, t, name, SEARCH)
-            agdeledge(e)
+            e = gv.agedge(s, t, name, ACTION.SEARCH)
+            gv.agdeledge(e)
         except KeyError:
             print "No edge \"%s-%s\" \"%s\" in graph"%(source,target,name)
 
     def graph(self):
-        return Agraph(agraphof(self.agraph))
+        return Agraph(gv.agraphof(self.agraph))
 
     def get_all_attr(self, node=None, edge=None):
         if node is not None:
             n=self.get_node(str(node))
             pointer=n.anode
-            type=AGNODE
+            type=gv.AGNODE
         elif edge is not None:
             (u,v)=edge
             e=self.get_edge(str(u),str(v))
             pointer=e.aedge
-            type=AGEDGE
+            type=gv.AGEDGE
         else:
             pointer=self.agraph
-            type=AGRAPH
+            type=gv.AGRAPH
             
         attr={}
         try:
-            attrp=agnxtattr(self.agraph,type,None) # pointer to 1st attr
+            attrp=gv.agnxtattr(self.agraph,type,None) # pointer to 1st attr
         except KeyError:
             return attr
         while 1:
             try:
-                attr[agattrname(attrp)]=agxget(pointer,attrp)
-                attrp=agnxtattr(self.agraph,type,attrp) # get next attr
+                attr[gv.agattrname(attrp)]=gv.agxget(pointer,attrp)
+                attrp=gv.agnxtattr(self.agraph,type,attrp) # get next attr
             except KeyError:
                 return attr
 
     def get_attr(self,name):
         try: 
-            return agget(self.agraph, name)
+            return gv.agget(self.agraph, name)
         except KeyError:
             print "Attribute \"%s\" does not exist"%(name)
 
@@ -181,9 +183,9 @@ class Agraph(object):
         attr.update(kwds)
         for (name,value) in attr.items():
             try: 
-                agset(self.agraph, str(name), str(value))
+                gv.agset(self.agraph, str(name), str(value))
             except KeyError:
-                agattr(self.agraph, AGRAPH, str(name), str(value))
+                gv.agattr(self.agraph, gv.AGRAPH, str(name), str(value))
             
     def set_graph_attr(self,attr=None, **kwds):
         self.set_attr(attr=attr, **kwds)
@@ -191,7 +193,7 @@ class Agraph(object):
     def del_attr(self, name):
         # doesn't really delete anything, sets value to ""
         try: 
-            agset(self.agraph, name, "")
+            gv.agset(self.agraph, name, "")
         except KeyError:
             print "No attribute \"%s\" in graph."%(name)
 
@@ -205,7 +207,7 @@ class Agraph(object):
         if nodes is None:
             for (name,value) in attr.items():
                 try: 
-                    agattr(self.agraph, AGNODE, str(name), str(value))
+                    gv.agattr(self.agraph, gv.AGNODE, str(name), str(value))
                 except KeyError:
                     print "Failed to set node attr \"%s\""%(name)
         else:
@@ -214,11 +216,11 @@ class Agraph(object):
                 np=self.get_node(str(n))
                 for (name,value) in attr.items():
                     try: 
-                        agset(np.anode, str(name), str(value))
+                        gv.agset(np.anode, str(name), str(value))
                     except KeyError:
-                        agattr(self.agraph, AGNODE, str(name), "")
+                        gv.agattr(self.agraph, gv.AGNODE, str(name), "")
                         try:
-                            agset(np.anode, str(name), str(value))
+                            gv.agset(np.anode, str(name), str(value))
                         except KeyError:
                             print "Failed to set attr \"%s\" for node \"%s\""%(name, n)
 
@@ -231,7 +233,7 @@ class Agraph(object):
             np=self.get_node(str(n))
             for name in items:
                 try: 
-                    attr[n][name]=agget(np.anode, name)
+                    attr[n][name]=gv.agget(np.anode, name)
                 except KeyError:
                     print "Failed to get attr \"%s\" for node \"%s\""%(name, n)
 
@@ -247,7 +249,7 @@ class Agraph(object):
     def del_node_attr(self, name):
         # doesn't really delete anything, sets value to ""
         try: 
-            agattr(self.agraph, AGNODE, name, "")
+            gv.agattr(self.agraph, gv.AGNODE, name, "")
         except KeyError:
             print "No node attribute \"%s\" in graph"%(name)
 
@@ -259,7 +261,7 @@ class Agraph(object):
         if edges == None:
             for (name,value) in attr.items():
                 try: 
-                    agattr(self.agraph, AGEDGE, name, value)
+                    gv.agattr(self.agraph, gv.AGEDGE, name, value)
                 except KeyError:
                     print "Failed to set edge attr \"%s\""%(name)
         else:
@@ -268,11 +270,11 @@ class Agraph(object):
                 ep=self.get_edge(str(u),str(v))
                 for (name,value) in attr.items():
                     try: 
-                        agset(ep.aedge, str(name), str(value))
+                        gv.agset(ep.aedge, str(name), str(value))
                     except KeyError:
-                        agattr(self.agraph, AGEDGE, str(name), "")
+                        gv.agattr(self.agraph, gv.AGEDGE, str(name), "")
                         try:
-                            agset(ep.aedge, str(name), str(value))
+                            gv.agset(ep.aedge, str(name), str(value))
                         except KeyError:
                             print "Failed to set attr \"%s\" for edge \"%s\""%(name, ep)
 
@@ -287,7 +289,7 @@ class Agraph(object):
             ep=self.get_edge(str(u),str(v))
             for name in items:
                 try: 
-                    attr[e][name]=agget(ep.aedge, name)
+                    attr[e][name]=gv.agget(ep.aedge, name)
                 except KeyError:
                     print "Failed to get attr \"%s\" for edge \"%s\""%(name, e)
 
@@ -303,7 +305,7 @@ class Agraph(object):
     def del_edge_attr(self, name):
         # doesn't really delete anything, sets value to ""
         try: 
-            agattr(self.agraph, AGEDGE, name, "")
+            gv.agattr(self.agraph, gv.AGEDGE, name, "")
         except KeyError:
             print "No edge attribute \"%s\" in graph"%(name)
 
@@ -313,11 +315,11 @@ class Agraph(object):
             self.anode=anode
 
         def __str__(self):
-            return agnameof(self.anode)
+            return gv.agnameof(self.anode)
 
         def get_attr(self, name):
             try:
-                return agget(self.anode, name)
+                return gv.agget(self.anode, name)
             except KeyError:
                 print "Node \"%s\" does not have attribute \"%s\""%(self,name)
 
@@ -327,30 +329,30 @@ class Agraph(object):
             attr.update(kwds)
             for (name,value) in attr.items():
                 try:
-                    agset(self.anode, str(name), str(value))
+                    gv.agset(self.anode, str(name), str(value))
                 except KeyError:
                     print "Node attribute \"%s\" not in graph."%(name),
                     print "Use set_node_attr(\"%s\",default)."%(name)
 
         def graph(self):
-            return Agraph(agraphof(self.anode))
+            return Agraph(gv.agraphof(self.anode))
 
     class Edge(object):
         def __init__(self, aedge):
             self.aedge=aedge
 
         def __str__(self):
-            return agnameof(self.aedge)
+            return gv.agnameof(self.aedge)
 
         def target(self):
-            return Agraph.Node(aghead(self.aedge))
+            return Agraph.Node(gv.aghead(self.aedge))
 
         def source(self):
-            return Agraph.Node(agtail(self.aedge))
+            return Agraph.Node(gv.agtail(self.aedge))
 
         def get_attr(self, name):
                 try:
-                    return agget(self.aedge, name)
+                    return gv.agget(self.aedge, name)
                 except KeyError:
                     print "Edge attribute \"%s\" does not exist"%(name)
 
@@ -360,13 +362,13 @@ class Agraph(object):
             attr.update(kwds)
             for (name,value) in attr.items():
                 try:
-                    agset(self.aedge, str(name), str(value))
+                    gv.agset(self.aedge, str(name), str(value))
                 except KeyError:
                     print "Edge attribute \"%s\" not in graph."%(name),
                     print "Use set_node_attr(\"%s\",default)."%(name)
 
         def graph(self):
-            return Agraph(agraphof(self.aedge))
+            return Agraph(gv.agraphof(self.aedge))
 
     
 

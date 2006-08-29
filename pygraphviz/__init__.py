@@ -28,4 +28,4 @@ del sys
 #
 # pygraphviz package modules
 #
-from pygraphviz import *
+from pygraphviz import ACTION, Agraph
