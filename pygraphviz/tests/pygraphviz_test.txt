@@ -29,6 +29,7 @@ a b
 a a
 c d
 
+
 >>> print A.is_undirected()
 True
 
