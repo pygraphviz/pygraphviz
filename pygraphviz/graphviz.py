@@ -37,17 +37,13 @@ agclose = _graphviz.agclose
 
 agread = _graphviz.agread
 
-agconcat = _graphviz.agconcat
-
 agwrite = _graphviz.agwrite
-
-agnnodes = _graphviz.agnnodes
-
-agnedges = _graphviz.agnedges
 
 agisundirected = _graphviz.agisundirected
 
 agisdirected = _graphviz.agisdirected
+
+agisstrict = _graphviz.agisstrict
 
 agsubg = _graphviz.agsubg
 
@@ -59,13 +55,13 @@ agparent = _graphviz.agparent
 
 agroot = _graphviz.agroot
 
+agsubnode = _graphviz.agsubnode
+
+agsubedge = _graphviz.agsubedge
+
 agdelsubg = _graphviz.agdelsubg
 
 agnode = _graphviz.agnode
-
-agidnode = _graphviz.agidnode
-
-agsubnode = _graphviz.agsubnode
 
 agfstnode = _graphviz.agfstnode
 
@@ -73,13 +69,7 @@ agnxtnode = _graphviz.agnxtnode
 
 agdelnode = _graphviz.agdelnode
 
-agdegree = _graphviz.agdegree
-
 agedge = _graphviz.agedge
-
-agsubedge = _graphviz.agsubedge
-
-agdeledge = _graphviz.agdeledge
 
 aghead = _graphviz.aghead
 
@@ -97,9 +87,11 @@ agfstout = _graphviz.agfstout
 
 agnxtout = _graphviz.agnxtout
 
-agattrsym = _graphviz.agattrsym
+agdeledge = _graphviz.agdeledge
 
 agattr = _graphviz.agattr
+
+agattrsym = _graphviz.agattrsym
 
 agnxtattr = _graphviz.agnxtattr
 
@@ -115,17 +107,15 @@ agattrname = _graphviz.agattrname
 
 agattrdefval = _graphviz.agattrdefval
 
+agnnodes = _graphviz.agnnodes
+
+agnedges = _graphviz.agnedges
+
+agdegree = _graphviz.agdegree
+
 agraphof = _graphviz.agraphof
 
 agnameof = _graphviz.agnameof
-
-agisarootobj = _graphviz.agisarootobj
-
-AGDATA = _graphviz.AGDATA
-
-AGID = _graphviz.AGID
-
-AGTYPE = _graphviz.AGTYPE
 AGRAPH = _graphviz.AGRAPH
 AGNODE = _graphviz.AGNODE
 AGOUTEDGE = _graphviz.AGOUTEDGE
