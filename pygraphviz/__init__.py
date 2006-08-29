@@ -13,7 +13,7 @@ A.write(sys.stdout)
 See pygraphviz.pygraphviz for detailed documentation.
 
 """
-#    Copyright (C) 2004,2005 by 
+#    Copyright (C) 2004-2006 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
@@ -29,4 +29,3 @@ del sys
 # pygraphviz package modules
 #
 from pygraphviz import *
-
