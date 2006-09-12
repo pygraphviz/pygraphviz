@@ -1,0 +1,175 @@
+Attributes
+==========
+
+>>> from pygraphviz import *
+
+Graph Defaults
+--------------
+
+>>> A=AGraph()
+>>> A.graph_attr['label']='test'
+>>> A.graph_attr['spam']='eggs'
+>>> 'label' in A.graph_attr
+True
+>>> A.graph_attr['label']
+'test'
+>>> A.graph_attr.keys()
+['label', 'spam']
+>>> sorted(list(A.graph_attr.iteritems()))
+[('label', 'test'), ('spam', 'eggs')]
+>>> print A.string().expandtabs()
+strict graph {
+        graph [label=test,
+                spam=eggs
+        ];
+}
+<BLANKLINE>
+>>> A.graph_attr['label']=''
+>>> A.graph_attr['spam']=''
+>>> print A.string().expandtabs()
+strict graph {
+}
+<BLANKLINE>
+>>> A.graph_attr['label']='test'
+>>> del A.graph_attr['label']
+>>> print A.string().expandtabs()
+strict graph {
+}
+<BLANKLINE>
+
+
+Node Defaults
+--------------
+
+>>> A=AGraph()
+>>> A.node_attr['label']='test'
+>>> 'label' in A.node_attr
+True
+>>> A.node_attr['label']
+'test'
+>>> A.node_attr.keys()
+['label']
+>>> A.node_attr
+{'label': 'test'}
+>>> list(A.node_attr.iteritems())
+[('label', 'test')]
+>>> print A.string().expandtabs()
+strict graph {
+        node [label=test];
+}
+<BLANKLINE>
+>>> A.node_attr['label']=''
+>>> print A.string().expandtabs()
+strict graph {
+}
+<BLANKLINE>
+>>> A.node_attr['label']='test'
+>>> del A.node_attr['label']
+>>> print A.string().expandtabs()
+strict graph {
+}
+<BLANKLINE>
+
+Edge Defaults
+--------------
+
+>>> A=AGraph()
+>>> A.edge_attr['label']='test'
+>>> 'label' in A.edge_attr
+True
+>>> A.edge_attr['label']
+'test'
+>>> A.edge_attr.keys()
+['label']
+>>> A.edge_attr
+{'label': 'test'}
+>>> list(A.edge_attr.iteritems())
+[('label', 'test')]
+>>> print A.string().expandtabs()
+strict graph {
+        edge [label=test];
+}
+<BLANKLINE>
+>>> A.edge_attr['label']=''
+>>> print A.string().expandtabs()
+strict graph {
+}
+<BLANKLINE>
+>>> A.edge_attr['label']='test'
+>>> del A.edge_attr['label']
+>>> print A.string().expandtabs()
+strict graph {
+}
+<BLANKLINE>
+
+
+
+Individual node attributes
+--------------------------
+
+>>> A=AGraph()
+>>> A.add_node(1)
+>>> one=A.get_node(1)
+>>> one.attr['label']='test'
+>>> one.attr['spam']='eggs'
+>>> 'label' in one.attr
+True
+>>> one.attr['label']
+'test'
+>>> sorted(one.attr.keys())
+['label', 'spam']
+>>> print A.string().expandtabs()
+strict graph {
+        1        [label=test,
+                spam=eggs];
+}
+<BLANKLINE>
+>>> one.attr['label']=''
+>>> one.attr['spam']=''
+>>> print A.string().expandtabs()
+strict graph {
+        1;
+}
+<BLANKLINE>
+>>> one.attr['label']='test'
+>>> del one.attr['label']
+>>> print A.string().expandtabs()
+strict graph {
+        1;
+}
+<BLANKLINE>
+
+Individual edge attributes
+--------------------------
+
+>>> A=AGraph()
+>>> A.add_edge(1,2)
+>>> one=A.get_edge(1,2)
+>>> one.attr['label']='test'
+>>> one.attr['spam']='eggs'
+>>> 'label' in one.attr
+True
+>>> one.attr['label']
+'test'
+>>> sorted(one.attr.keys())
+['label', 'spam']
+>>> print A.string().expandtabs()
+strict graph {
+        1 -- 2   [label=test,
+                spam=eggs];
+}
+<BLANKLINE>
+>>> one.attr['label']=''
+>>> one.attr['spam']=''
+>>> print A.string().expandtabs()
+strict graph {
+        1 -- 2;
+}
+<BLANKLINE>
+>>> one.attr['label']='test'
+>>> del one.attr['label']
+>>> print A.string().expandtabs()
+strict graph {
+        1 -- 2;
+}
+<BLANKLINE>

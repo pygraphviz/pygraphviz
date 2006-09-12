@@ -1,0 +1,107 @@
+AGraph String, Read, Write, Layout and Drawing
+==============================================
+
+>>> from pygraphviz import *
+>>> import os,tempfile
+
+String representation
+---------------------
+
+>>> A=AGraph(name='')
+>>> print A
+<BLANKLINE>
+
+>>> print A.string().expandtabs()
+strict graph {
+}
+<BLANKLINE>
+
+>>> A.__repr__() # test __repr__
+'strict graph {\n}'
+
+
+>>> A=AGraph(name='test')
+>>> A.add_path([1,2])
+>>> print A
+test
+>>> print A.string().expandtabs()
+strict graph test {
+        1 -- 2;
+}
+<BLANKLINE>
+
+>>> A.__repr__() # test __repr__
+'strict graph test {\n\t1 -- 2;\n}'
+
+>>> A=AGraph(name='test graph')
+>>> A.add_path([1,2,3,4,5,6,7,8,9,10])
+>>> A.add_node(11)
+>>> print A
+test graph
+>>> print A.string().expandtabs()
+strict graph "test graph" {
+        1 -- 2;
+        2 -- 3;
+        3 -- 4;
+        4 -- 5;
+        5 -- 6;
+        6 -- 7;
+        7 -- 8;
+        8 -- 9;
+        9 -- 10;
+        11;
+}
+<BLANKLINE>
+
+Read/Write
+----------
+>>> A=AGraph(name='test graph')
+>>> A.add_path([1,2,3,4,5,6,7,8,9,10])
+
+>>> import os,tempfile
+>>> (fd,fname)=tempfile.mkstemp()
+>>> A.write(fname)
+>>> A.read(fname)
+>>> B=AGraph(fname)
+>>> B==A
+True
+>>> B is A
+False
+>>> os.close(fd)
+>>> os.unlink(fname)
+
+
+Layout
+------
+>>> A=AGraph(name='test graph')
+>>> A.add_path([1,2,3,4])
+>>> A.layout()
+>>> ['pos' in n.attr for n in A.nodes()]==[True, True, True, True]
+True
+
+
+Drawing
+-------
+
+>>> d=A.draw()
+
+>>> A=AGraph(name='test graph')
+>>> A.add_path([1,2,3,4])
+>>> d=A.draw()
+Traceback (most recent call last):
+...
+AttributeError: graph has no layout information, see layout()
+
+>>> d=A.draw(prog='neato')
+
+>>> (fd,fname)=tempfile.mkstemp()
+>>> A.draw(fname,format='ps',prog='neato')
+>>> A.draw(fname,prog='neato')
+>>> A.draw(fname,prog='foo')
+Traceback (most recent call last):
+...
+ValueError: prog foo is not one of twopi, fdp, circo, neato, nop, dot
+
+
+>>> os.close(fd)
+>>> os.unlink(fname)

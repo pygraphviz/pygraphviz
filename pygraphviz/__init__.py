@@ -1,16 +1,20 @@
 """
 A Python wrapper for the graphviz Agraph data structure.
 
-Quick example:
+Quick example::
 
-from pygraphviz import *
-import sys
-A=Agraph()
-A.add_node("a")
-A.add_edge("a","b",None)
-A.write(sys.stdout)
+ >>> from pygraphviz import *
+ >>> G=AGraph()
+ >>> G.add_node('a')
+ >>> G.add_edge('b','c')
+ >>> G
+ strict graph {
+         a;
+         b -- c;
+ }
 
-See pygraphviz.pygraphviz for detailed documentation.
+
+See pygraphviz.AGraph for detailed documentation.
 
 """
 #    Copyright (C) 2004-2006 by 
@@ -20,12 +24,14 @@ See pygraphviz.pygraphviz for detailed documentation.
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
 
-import os, sys
-sys.path.append(os.path.join(os.path.split(__file__)[0], sys.platform))
-del os
-del sys
+from agraph import AGraph, Node, Edge, Attribute, ItemAttribute
 
-#
-# pygraphviz package modules
-#
-from pygraphviz import ACTION, Agraph
+__all__=[
+    'AGraph',
+    'Node',
+    'Edge',
+    'Attribute',
+    'ItemAttribute'
+    ]
+
+

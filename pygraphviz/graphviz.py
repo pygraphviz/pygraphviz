@@ -32,6 +32,18 @@ del types
 
 
 agopen = _graphviz.agopen
+def agraphnew(name,strict=False,directed=False):
+    if strict:
+       if directed:
+            return _graphviz.agopen(name,cvar.Agstrictdirected,None)
+       else:
+            return _graphviz.agopen(name,cvar.Agstrictundirected,None)
+    else:
+        if directed:
+            return _graphviz.agopen(name,cvar.Agdirected,None)
+        else:		 
+            return _graphviz.agopen(name,cvar.Agundirected,None)
+
 
 agclose = _graphviz.agclose
 
@@ -116,10 +128,21 @@ agdegree = _graphviz.agdegree
 agraphof = _graphviz.agraphof
 
 agnameof = _graphviz.agnameof
+def agnameof(handle):
+  name=_graphviz.agnameof(handle)
+  if name=='' or name.startswith('%'):
+    return None
+  else:
+    return name 
+
 AGRAPH = _graphviz.AGRAPH
 AGNODE = _graphviz.AGNODE
 AGOUTEDGE = _graphviz.AGOUTEDGE
 AGINEDGE = _graphviz.AGINEDGE
 AGEDGE = _graphviz.AGEDGE
 cvar = _graphviz.cvar
+Agdirected = cvar.Agdirected
+Agstrictdirected = cvar.Agstrictdirected
+Agundirected = cvar.Agundirected
+Agstrictundirected = cvar.Agstrictundirected
 

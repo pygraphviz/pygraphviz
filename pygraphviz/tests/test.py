@@ -7,9 +7,11 @@ import unittest
 def test_suite():
     from pkg_resources import resource_filename
     suite = unittest.TestSuite()
-    doctst = resource_filename(__name__, 'pygraphviz_test.txt')
-    s = doctest.DocFileSuite(doctst,module_relative=False)
-    suite.addTest(s)
+    tests=['graph.txt','layout_draw.txt','attributes.txt']
+    for t in tests:
+        doctst = resource_filename(__name__, t)
+        s = doctest.DocFileSuite(doctst,module_relative=False)
+        suite.addTest(s)
     return suite
 
 if __name__ == "__main__":

@@ -6,12 +6,11 @@
 #    All rights reserved, see LICENSE for details.
 
 %module graphviz
-%include exception.i
 
+/* %include exception.i */
 %{
 #include "agraph.h"
 %}
-
 
 
 %typemap(python, in) FILE* {
@@ -36,7 +35,6 @@
     $result = Py_BuildValue("s", $1);
 }
 
-
 %exception agnode {
   $action
   if (!result) {
@@ -45,7 +43,6 @@
   }
 }
 
-
 %exception agedge {
   $action
   if (!result) {
@@ -53,7 +50,6 @@
      return NULL;
   }
 }
-
 
 /* agset returns -1 on error */
 %exception agset {
@@ -82,7 +78,6 @@
     }
 }
 
-
 /* agdelnode returns -1 on error */
 %exception agdelnode {
   $action
@@ -91,8 +86,6 @@
      return NULL;
   }
 }
-
-
 
 /* agdeledge returns -1 on error */
 %exception agdeledge {
@@ -103,19 +96,52 @@
   }
 }
 
-
 %exception agnxtattr {
   $action
   if (!result) {
-     PyErr_SetString(PyExc_KeyError,"agnxtattr no key");
+     PyErr_SetString(PyExc_StopIteration,"agnxtattr");
      return NULL;
   }
 }
 
 
+%exception agattr {
+  $action
+  if (!result) {
+     PyErr_SetString(PyExc_KeyError,"agattr no key");
+     return NULL;
+  }
+}
+
+
+/* agattrdefval returns "" if no value */
+%exception agattrdefval {
+  $action
+    if (!strcmp(result,"")) {
+      PyErr_SetString(PyExc_KeyError,"No symbol");
+      return NULL;
+    }
+}
+
 
 /* graphs */
 Agraph_t *agopen(char *name, Agdesc_t kind, Agdisc_t *disc);
+
+/* some helpers to avoid using cvar in python modules */
+%pythoncode %{
+def agraphnew(name,strict=False,directed=False):
+    if strict:
+       if directed:
+            return _graphviz.agopen(name,cvar.Agstrictdirected,None)
+       else:
+            return _graphviz.agopen(name,cvar.Agstrictundirected,None)
+    else:
+        if directed:
+            return _graphviz.agopen(name,cvar.Agdirected,None)
+        else:		 
+            return _graphviz.agopen(name,cvar.Agundirected,None)
+%}
+
 int       agclose(Agraph_t *g);
 Agraph_t *agread(FILE *file, Agdisc_t *);
 int       agwrite(Agraph_t *g, FILE *file);
@@ -177,6 +203,8 @@ int      agxset(void *obj, Agsym_t *sym, char *value);
   }
   %}
 
+
+
 /* cardinality */
 int agnnodes(Agraph_t *g);
 int agnedges(Agraph_t *g);
@@ -187,7 +215,26 @@ int agdegree(Agnode_t *n, int use_inedges, int use_outedges);
 Agraph_t  *agraphof(void*);
 char      *agnameof(void*);
 
-Agdesc_t Agdirected, Agstrictdirected, Agundirected, Agstrictundirected;
+/* this pretty code finds anonymous items (start with %) or
+   items with no label and returns None - useful for anonymous
+   edges 
+*/
+%pythoncode %{
+def agnameof(handle):
+  name=_graphviz.agnameof(handle)
+  if name=='' or name.startswith('%'):
+    return None
+  else:
+    return name 
+%}
+
+
+/* Agdesc_t Agdirected, Agstrictdirected, Agundirected, Agstrictundirected;  */
+/* constants are safer */
+const Agdesc_t Agdirected = { 1, 0, 0, 1 };
+const Agdesc_t Agstrictdirected = { 1, 1, 0, 1 };
+const Agdesc_t Agundirected = { 0, 0, 0, 1 };
+const Agdesc_t Agstrictundirected = { 0, 1, 0, 1 };
 
 
 #define AGRAPH      0               /* can't exceed 2 bits. see Agtag_t. */
@@ -195,3 +242,6 @@ Agdesc_t Agdirected, Agstrictdirected, Agundirected, Agstrictundirected;
 #define AGOUTEDGE   2
 #define AGINEDGE    3               /* (1 << 1) indicates an edge tag.   */
 #define AGEDGE      AGOUTEDGE       /* synonym in object kind args */
+
+
+

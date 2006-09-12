@@ -702,60 +702,6 @@ static swig_type_info *swig_types[8];
 
 #define SWIG_name    "_graphviz"
 
-#define  SWIG_MemoryError    1
-#define  SWIG_IOError        2
-#define  SWIG_RuntimeError   3
-#define  SWIG_IndexError     4
-#define  SWIG_TypeError      5
-#define  SWIG_DivisionByZero 6
-#define  SWIG_OverflowError  7
-#define  SWIG_SyntaxError    8
-#define  SWIG_ValueError     9
-#define  SWIG_SystemError   10
-#define  SWIG_UnknownError  99
-
-
-static void SWIG_exception_(int code, const char *msg) {
-  switch(code) {
-  case SWIG_MemoryError:
-    PyErr_SetString(PyExc_MemoryError,msg);
-    break;
-  case SWIG_IOError:
-    PyErr_SetString(PyExc_IOError,msg);
-    break;
-  case SWIG_RuntimeError:
-    PyErr_SetString(PyExc_RuntimeError,msg);
-    break;
-  case SWIG_IndexError:
-    PyErr_SetString(PyExc_IndexError,msg);
-    break;
-  case SWIG_TypeError:
-    PyErr_SetString(PyExc_TypeError,msg);
-    break;
-  case SWIG_DivisionByZero:
-    PyErr_SetString(PyExc_ZeroDivisionError,msg);
-    break;
-  case SWIG_OverflowError:
-    PyErr_SetString(PyExc_OverflowError,msg);
-    break;
-  case SWIG_SyntaxError:
-    PyErr_SetString(PyExc_SyntaxError,msg);
-    break;
-  case SWIG_ValueError:
-    PyErr_SetString(PyExc_ValueError,msg);
-    break;
-  case SWIG_SystemError:
-    PyErr_SetString(PyExc_SystemError,msg);
-    break;
-  default:
-    PyErr_SetString(PyExc_RuntimeError,msg);
-    break;
-  }
-}
-
-#define SWIG_exception(a,b) { SWIG_exception_(a,b); SWIG_fail; }
-
-
 #include "agraph.h"
 
 
@@ -1400,8 +1346,14 @@ static PyObject *_wrap_agattr(PyObject *self, PyObject *args) {
             return NULL;
         } else arg4 = PyString_AsString(obj3);
     }
-    result = (Agsym_t *)agattr(arg1,arg2,arg3,arg4);
-    
+    {
+        result = (Agsym_t *)agattr(arg1,arg2,arg3,arg4);
+        
+        if (!result) {
+            PyErr_SetString(PyExc_KeyError,"agattr no key");
+            return NULL;
+        }
+    }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_Agsym_t, 0);
     return resultobj;
     fail:
@@ -1452,7 +1404,7 @@ static PyObject *_wrap_agnxtattr(PyObject *self, PyObject *args) {
         result = (Agsym_t *)agnxtattr(arg1,arg2,arg3);
         
         if (!result) {
-            PyErr_SetString(PyExc_KeyError,"agnxtattr no key");
+            PyErr_SetString(PyExc_StopIteration,"agnxtattr");
             return NULL;
         }
     }
@@ -1626,8 +1578,14 @@ static PyObject *_wrap_agattrdefval(PyObject *self, PyObject *args) {
     
     if(!PyArg_ParseTuple(args,(char *)"O:agattrdefval",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Agsym_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result = (char *)agattrdefval(arg1);
-    
+    {
+        result = (char *)agattrdefval(arg1);
+        
+        if (!strcmp(result,"")) {
+            PyErr_SetString(PyExc_KeyError,"No symbol");
+            return NULL;
+        }
+    }
     {
         resultobj = Py_BuildValue("s", result);
     }
@@ -1727,15 +1685,8 @@ static PyObject *_wrap_agnameof(PyObject *self, PyObject *args) {
 
 
 static int _wrap_Agdirected_set(PyObject *_val) {
-    {
-        Agdesc_t * temp;
-        if ((SWIG_ConvertPtr(_val, (void **) &temp, SWIGTYPE_p_Agdesc_t, SWIG_POINTER_EXCEPTION)) == -1) {
-            PyErr_SetString(PyExc_TypeError, "C variable 'Agdirected (Agdesc_t)'");
-            return 1;
-        }
-        Agdirected = *((Agdesc_t *) temp);
-    }
-    return 0;
+    PyErr_SetString(PyExc_TypeError,"Variable Agdirected is read-only.");
+    return 1;
 }
 
 
@@ -1748,15 +1699,8 @@ static PyObject *_wrap_Agdirected_get() {
 
 
 static int _wrap_Agstrictdirected_set(PyObject *_val) {
-    {
-        Agdesc_t * temp;
-        if ((SWIG_ConvertPtr(_val, (void **) &temp, SWIGTYPE_p_Agdesc_t, SWIG_POINTER_EXCEPTION)) == -1) {
-            PyErr_SetString(PyExc_TypeError, "C variable 'Agstrictdirected (Agdesc_t)'");
-            return 1;
-        }
-        Agstrictdirected = *((Agdesc_t *) temp);
-    }
-    return 0;
+    PyErr_SetString(PyExc_TypeError,"Variable Agstrictdirected is read-only.");
+    return 1;
 }
 
 
@@ -1769,15 +1713,8 @@ static PyObject *_wrap_Agstrictdirected_get() {
 
 
 static int _wrap_Agundirected_set(PyObject *_val) {
-    {
-        Agdesc_t * temp;
-        if ((SWIG_ConvertPtr(_val, (void **) &temp, SWIGTYPE_p_Agdesc_t, SWIG_POINTER_EXCEPTION)) == -1) {
-            PyErr_SetString(PyExc_TypeError, "C variable 'Agundirected (Agdesc_t)'");
-            return 1;
-        }
-        Agundirected = *((Agdesc_t *) temp);
-    }
-    return 0;
+    PyErr_SetString(PyExc_TypeError,"Variable Agundirected is read-only.");
+    return 1;
 }
 
 
@@ -1790,15 +1727,8 @@ static PyObject *_wrap_Agundirected_get() {
 
 
 static int _wrap_Agstrictundirected_set(PyObject *_val) {
-    {
-        Agdesc_t * temp;
-        if ((SWIG_ConvertPtr(_val, (void **) &temp, SWIGTYPE_p_Agdesc_t, SWIG_POINTER_EXCEPTION)) == -1) {
-            PyErr_SetString(PyExc_TypeError, "C variable 'Agstrictundirected (Agdesc_t)'");
-            return 1;
-        }
-        Agstrictundirected = *((Agdesc_t *) temp);
-    }
-    return 0;
+    PyErr_SetString(PyExc_TypeError,"Variable Agstrictundirected is read-only.");
+    return 1;
 }
 
 

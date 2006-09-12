@@ -4,6 +4,7 @@
 Setup script for pygraphviz.
 
 """
+from glob import glob
 import os
 import sys
 
@@ -53,9 +54,16 @@ pygraphviz can be used to create and draw networks and graphs with Graphviz.
 
 """
 
+version="0.23-svn"
+docdirbase  = 'share/doc/pygraphviz-%s' % version
+data = [(docdirbase, glob("doc/*.txt")),
+        (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.py")),
+        (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.dat")),
+        (os.path.join(docdirbase, 'data'),glob("doc/data/*ls")),
+        ]
 
 setup(name = "pygraphviz",
-      version = "0.23-svn",
+      version = version,
       packages = ["pygraphviz","pygraphviz.tests"],
       ext_modules = [
       Extension("pygraphviz._graphviz",
@@ -65,6 +73,7 @@ setup(name = "pygraphviz",
                 libraries=["agraph","cdt"],
                 )
       ],
+      data_files = data,
       package_data = {
         '': ['*.txt'],
         },

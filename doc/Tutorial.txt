@@ -1,0 +1,114 @@
+A Short Tutorial
+----------------
+
+See the examples for sample usage and ideas
+https://networkx.lanl.gov/browser/trunk/doc/examples/
+
+There is a complete reference guide at 
+https://networkx.lanl.gov/pygraphviz/reference/
+
+The API is very similar to that of NetworkX.  Most of the tutorial at 
+https://networkx.lanl.gov/wiki/Tutorial 
+is applicable to pygraphviz.  See the API notes
+https://networkx.lanl.gov/wiki/pygraphviz/API/
+for differences.
+
+Start-up
+--------
+
+Import pygraphviz with
+
+>>> import pygraphviz
+
+or to bring into the current namespace without the pygraphviz prefix
+
+>>> from pygraphviz import *
+
+
+Graphs
+------
+
+To make an empty pygraphviz graph use the AGraph class:
+
+>>> G=AGraph()
+
+You can use the strict and directed keywords to control what type of
+graph you want.  The default is to create a strict graph 
+(no parallel edges or self-loops).  To create a digraph with possible
+parallel edges and self-loops use
+
+>>> G=AGraph(strict=False,directed=True)
+
+You may specify a dot format file to be read on initialization:
+
+>>> G=AGraph("Petersen.dot")
+
+
+Nodes, and edges
+----------------
+
+Nodes and edges can be added one at a time 
+
+>>> G.add_node('a') # adds node 'a'
+>>> G.add_edge('b','c') # adds edge 'b'-'c' (and also nodes 'b', 'c')
+
+or from lists or containers.
+
+>>> nodelist=['f','g','h']
+>>> G.add_nodes_from(nodelist)
+
+If the node is not a string an attempt will be made to convert it
+to a string
+
+>>> G.add_node(1)  # adds node '1'
+
+
+Attributes
+----------
+
+To set the default attributes for graphs, nodes, and edges use
+the graph_attr, node_attr, and edge_attr dictionaries
+
+>>> G.graph_attr['label']='Name of graph'
+>>> G.node_attr['shape']='circle'
+>>> G.edge_attr['color']='red'
+
+Individual node and edge attributes can be set through their attr
+dictionary 
+
+>>> n.G.get_node(1)
+>>> n.attr['shape']='box'
+
+
+>>> e.G.get_edge('b','c')
+>>> e.attr['color']='green'
+
+
+Layout and Drawing
+------------------
+
+Pygraphviz provides several methods for layout and drawing of graphs.
+
+To store and print the graph in dot format as a Python string use
+
+>>> s=A.string()
+>>> print s
+
+To write to a file use
+
+>>> A.write("file.dot")
+
+To add positions to the nodes with a Graphviz layout algorithm
+
+>>> A.layout() # default to neato
+>>> A.layout(prog='dot') # use dot
+
+To render the graph to an image 
+
+>>> A.draw('file.png')  # write previously positioned graph to PNG file
+>>> A.draw('file.ps',prog='circo') # use circo to position, write PS file
+
+
+
+
+
