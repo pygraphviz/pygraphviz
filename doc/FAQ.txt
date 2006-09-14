@@ -1,3 +1,4 @@
+
 FAQ
 ---
 
@@ -30,8 +31,5 @@ FAQ
    :A: We don't have Windows development machines but would like to
        have pygraphviz work on all platforms.  If you have success
        with Windows or would be willing to help test and distribute a
-       Windows installer please drop us a note.  You might be able to
-       use the Makefile at
-       https://networkx.lanl.gov/pygraphviz/pygraphviz.mak if the
-       default setup doesn't work for you.
+       Windows installer please drop us a note. 
 
