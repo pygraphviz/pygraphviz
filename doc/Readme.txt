@@ -34,6 +34,12 @@ Quick Example
     }
 
 
+   More documentation
+
+     - Tutorial  http://networkx.lanl.gov/pygraphviz/Tutorial
+     - Reference Manual  http://networkx.lanl.gov/reference/pygraphviz/
+
+
 Requirements
 -------------
 
