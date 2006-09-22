@@ -939,7 +939,7 @@ class AGraph(object):
 
 
     def draw(self,path=None,format=None,prog=None,args=''):
-        """Output graph to to path in specified format.
+        """Output graph to path in specified format.
 
         An attempt will be made to guess the output format based
         on the file extension.  If that fails the format keyword

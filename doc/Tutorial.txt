@@ -91,22 +91,22 @@ Pygraphviz provides several methods for layout and drawing of graphs.
 
 To store and print the graph in dot format as a Python string use
 
->>> s=A.string()
+>>> s=G.string()
 >>> print s
 
 To write to a file use
 
->>> A.write("file.dot")
+>>> G.write("file.dot")
 
 To add positions to the nodes with a Graphviz layout algorithm
 
->>> A.layout() # default to neato
->>> A.layout(prog='dot') # use dot
+>>> G.layout() # default to neato
+>>> G.layout(prog='dot') # use dot
 
 To render the graph to an image 
 
->>> A.draw('file.png')  # write previously positioned graph to PNG file
->>> A.draw('file.ps',prog='circo') # use circo to position, write PS file
+>>> G.draw('file.png')  # write previously positioned graph to PNG file
+>>> G.draw('file.ps',prog='circo') # use circo to position, write PS file
 
 
 
