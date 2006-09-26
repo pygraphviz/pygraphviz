@@ -996,7 +996,7 @@ class AGraph(object):
             try:
                 self.has_layout==True
                 prog='neato'
-                args+=" -n2"
+                args+="-n2"
             except:
                 raise AttributeError(\
                     "graph has no layout information, see layout()")
@@ -1008,8 +1008,7 @@ class AGraph(object):
               self.number_of_nodes())
 
         runprog=self._get_prog(prog)
-        cmd=' '.join([prog,args," -T",format])
-        print cmd
+        cmd=' '.join([prog,args,"-T"+format])
         stdin,stdout,stderr=os.popen3(cmd, 'b')
         self.write(stdin)
         stdin.close()
