@@ -1008,7 +1008,8 @@ class AGraph(object):
               self.number_of_nodes())
 
         runprog=self._get_prog(prog)
-        cmd=''.join([prog,args," -T",format])
+        cmd=' '.join([prog,args," -T",format])
+        print cmd
         stdin,stdout,stderr=os.popen3(cmd, 'b')
         self.write(stdin)
         stdin.close()
