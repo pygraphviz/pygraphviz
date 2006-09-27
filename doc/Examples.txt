@@ -1,3 +1,7 @@
+----------
+Pygraphviz
+----------
+
 Examples
 --------
 See the examples for sample usage and ideas
