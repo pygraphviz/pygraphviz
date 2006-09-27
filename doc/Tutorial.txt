@@ -1,5 +1,9 @@
-A Short Tutorial
-----------------
+----------
+Pygraphviz
+----------
+
+Pygraphviz Short Tutorial
+-------------------------
 
 See the examples for sample usage and ideas
 https://networkx.lanl.gov/browser/pygraphviz/trunk/doc/examples/
