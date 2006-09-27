@@ -1,5 +1,9 @@
-API Notes
----------
+----------
+Pygraphviz
+----------
+
+Pygraphviz API Notes
+--------------------
 
 pygraphviz-0.32 is a rewrite of pygraphviz-0.2x  with some significant
 changes in the API and Graphviz wrapper.  It is not compatible with
