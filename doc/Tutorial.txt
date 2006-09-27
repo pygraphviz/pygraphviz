@@ -2,16 +2,15 @@ A Short Tutorial
 ----------------
 
 See the examples for sample usage and ideas
-https://networkx.lanl.gov/browser/trunk/doc/examples/
+https://networkx.lanl.gov/browser/pygraphviz/trunk/doc/examples/
 
 There is a complete reference guide at 
-https://networkx.lanl.gov/pygraphviz/reference/
+https://networkx.lanl.gov/reference/pygraphviz/
 
-The API is very similar to that of NetworkX.  Most of the tutorial at 
-https://networkx.lanl.gov/wiki/Tutorial 
+The API is very similar to that of NetworkX.  Most of the 
+NetworkX tutorial at https://networkx.lanl.gov/wiki/Tutorial 
 is applicable to pygraphviz.  See the API notes
-https://networkx.lanl.gov/wiki/pygraphviz/API/
-for differences.
+https://networkx.lanl.gov/wiki/pygraphviz/API/ for major differences.
 
 Start-up
 --------
