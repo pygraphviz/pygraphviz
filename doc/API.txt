@@ -5,37 +5,37 @@ Pygraphviz
 Pygraphviz API Notes
 --------------------
 
-pygraphviz-0.32 is a rewrite of pygraphviz-0.2x  with some significant
-changes in the API and Graphviz wrapper.  It is not compatible with
-with earlier versions.
+  pygraphviz-0.32 is a rewrite of pygraphviz-0.2x  with some significant
+  changes in the API and Graphviz wrapper.  It is not compatible with
+  with earlier versions.
 
-The goal of pygraphviz is to provide a (mostly) Pythonic interface
-to the Graphviz Agraph data-structure, layout, and drawing algorithms.
+  The goal of pygraphviz is to provide a (mostly) Pythonic interface
+  to the Graphviz Agraph data-structure, layout, and drawing algorithms.
 
-The API is now similar to the NetworkX API.  Studying the
-documentation and Tutorial for NetworkX will teach you most of what
-you need to know for pygraphviz.  For a short introduction on pygraphviz
-see the pygraphviz Tutorial.
+  The API is now similar to the NetworkX API.  Studying the
+  documentation and Tutorial for NetworkX will teach you most of what
+  you need to know for pygraphviz.  For a short introduction on pygraphviz
+  see the pygraphviz Tutorial.
 
-There are some important differences in pygraphviz:
+  There are some important differences in pygraphviz:
 
- - All nodes must be strings. An attempt will be made to convert other
-   types to a string.
+   - All nodes must be strings. An attempt will be made to convert other
+     types to a string.
 
- - Nodes and edges are custom Python objects.  Nodes are like
-   string objects and edges are like tuple objects.  (In NetworkX
-   nodes can be anything and edges are two- or three-tuples.)
+   - Nodes and edges are custom Python objects.  Nodes are like
+     string objects and edges are like tuple objects.  (In NetworkX
+     nodes can be anything and edges are two- or three-tuples.)
 
- - Graphs, edges, and nodes may have attributes such as color,
-   size, shape, attached to them.  If the attributes are known
-   Graphviz attributes they will be used for drawing and layout.
+   - Graphs, edges, and nodes may have attributes such as color,
+     size, shape, attached to them.  If the attributes are known
+     Graphviz attributes they will be used for drawing and layout.
 
- - The layout() and draw() methods allow positioning of nodes
-   and rendering in all of the supported Graphviz output formats.
+   - The layout() and draw() methods allow positioning of nodes
+     and rendering in all of the supported Graphviz output formats.
 
- - The string() method produces a string with the graph represented
-   in Graphviz dot format.
+   - The string() method produces a string with the graph represented
+     in Graphviz dot format.
    
-Pygraphviz supports most of the Graphviz API but at this point
-does not handle Graphviz subgraphs.  There is a subgraph() method
-but it is not the same subgraph as in dot format files.
+  Pygraphviz supports most of the Graphviz API but at this point
+  does not handle Graphviz subgraphs.  There is a subgraph() method
+  but it is not the same subgraph as in dot format files.
