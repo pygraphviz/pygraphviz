@@ -2,7 +2,7 @@
 Pygraphviz
 ----------
 
-pygraphviz
+Pygraphviz
 ----------
 
    Pygraphviz is a Python interface to the Graphviz graph layout and
@@ -11,13 +11,12 @@ pygraphviz
    With Pygraphviz you can create, edit, read, write, and draw graphs using
    Python to access the Graphviz graph data structure and layout algorithms.
 
-   Upcoming release:
-
-   pygraphviz-0.32 is the second rewrite of the original project
-   and has improved attribute handling and drawing function.
-   It is not backward compatible with earlier versions.  Breaking 
-   backward compatibility was necessary to correct the attribute handling
-   for graphs, nodes, and edges.
+   News
+   ~~~~
+   pygraphviz-0.32 is the second rewrite of the original project.
+   It has improved attribute handling and drawing capabilities.
+   It is not backward compatible with earlier versions.
+   Earlier versions will always be available at the download site.
 
    Pygraphviz is distributed with a BSD license.
 
