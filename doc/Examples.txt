@@ -1,9 +1,9 @@
-----------
-Pygraphviz
-----------
+-------------------
+Pygraphviz Examples
+-------------------
 
-Examples
---------
+Pygraphviz Examples
+~~~~~~~~~~~~~~~~~~~
   See the examples for sample usage and ideas
   https://networkx.lanl.gov/browser/pygraphviz/trunk/doc/examples/
 
