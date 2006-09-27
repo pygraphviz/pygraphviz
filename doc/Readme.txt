@@ -11,8 +11,8 @@ Pygraphviz
    With Pygraphviz you can create, edit, read, write, and draw graphs using
    Python to access the Graphviz graph data structure and layout algorithms.
 
-   News
-   ~~~~
+   News:
+
    pygraphviz-0.32 is the second rewrite of the original project.
    It has improved attribute handling and drawing capabilities.
    It is not backward compatible with earlier versions.
