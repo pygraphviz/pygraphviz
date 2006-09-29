@@ -54,12 +54,13 @@ pygraphviz can be used to create and draw networks and graphs with Graphviz.
 
 """
 
-version="0.23-svn"
+version="0.32"
 docdirbase  = 'share/doc/pygraphviz-%s' % version
 data = [(docdirbase, glob("doc/*.txt")),
+        (docdirbase, glob("doc/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.dat")),
-        (os.path.join(docdirbase, 'data'),glob("doc/data/*ls")),
+#        (os.path.join(docdirbase, 'data'),glob("doc/data/*ls")),
         ]
 
 setup(name = "pygraphviz",

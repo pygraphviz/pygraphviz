@@ -73,7 +73,7 @@ Quick Install
    In principle it will work on any platform that has Python,
    a C compiler, and the Graphviz libraries.  
 
-   Building from source:
+   Installing from source:
 
       - Download the source (tar.gz or zip file)
       - Unpack and change directory to pygraphviz-x.xx
@@ -81,7 +81,7 @@ Quick Install
       - (optional) cd pygraphviz/tests and run "python setup_egg.py test" to execute the tests
       
     
-   Building a Python egg from source:
+   Installing a Python egg from source:
 
       - Download the source (tar.gz or zip file)
       - Unpack and change directory to pygraphviz-x.xx
