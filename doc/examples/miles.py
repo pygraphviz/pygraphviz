@@ -5,8 +5,7 @@ An example that shows how to add your own positions to nodes
 and have graphviz neato draw the edges.
 
 miles_graph() returns an undirected graph over the 128 US cities from
-the datafile miles.dat.
-The cities each have location and population data.  
+the datafile miles.dat.  
 
 This example is described in Section 1.1 in Knuth's book [1,2].
 
