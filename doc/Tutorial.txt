@@ -79,11 +79,11 @@ the graph_attr, node_attr, and edge_attr dictionaries
 Individual node and edge attributes can be set through their attr
 dictionary 
 
->>> n.G.get_node(1)
+>>> n=G.get_node(1)
 >>> n.attr['shape']='box'
 
 
->>> e.G.get_edge('b','c')
+>>> e=G.get_edge('b','c')
 >>> e.attr['color']='green'
 
 
