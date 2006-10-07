@@ -51,7 +51,9 @@ Requirements
    To use Pygraphviz you need
 
       - Python version 2.3 or later http://www.python.org/
-      - Graphviz http://graphviz.org/ (tested with version 2.8 or later)
+      - Graphviz http://graphviz.org/ 
+        Tested with version 2.8 or later, but may work with earlier versions.
+	Linux users might need to install the graphviz-dev package.
       - A C compiler
 
 Downloading
