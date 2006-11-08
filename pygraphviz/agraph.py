@@ -713,6 +713,7 @@ class AGraph(object):
         return self.__class__(file=fh_read)
 
 
+
     def add_path(self, nlist):
         """Add the path of nodes given in nlist."""
         fromv = nlist.pop(0)
@@ -880,9 +881,25 @@ class AGraph(object):
             print "IO error writing file"
 
 
+    def string_nop(self):
+        """Return string representation of graph in dot format.""" 
+        # this will fail for graphviz-2.8 becuase of a broken nop
+        # so use tempfile version below
+        return self.draw(format='dot',prog='nop') 
+
     def string(self):
         """Return string representation of graph in dot format.""" 
-        return self.draw(format='dot',prog='nop') 
+        from tempfile import mkstemp
+        import os
+        fd,path=mkstemp()
+        fh=open(path,'w+b')
+        self.write(fh)
+        fh.close()
+        fh=open(path,'r+b')
+        data=fh.read()
+        fh.close()
+        os.unlink(path)
+        return data
 
     def _get_prog(self,prog):
         # private: get path of graphviz program
@@ -931,9 +948,10 @@ class AGraph(object):
             self.read(stdout)
             stdout.close(); stderr.close()
         except:
-            print stderr.read()
+            error=stderr.read()
             stdout.close(); stderr.close()
-            raise IOError("the graphviz layout with %s failed"%(prog))
+            raise IOError("the graphviz layout with %s failed:\n%s "%
+                          (prog,error))
         self.has_layout=True
         return
 
@@ -1008,7 +1026,10 @@ class AGraph(object):
               self.number_of_nodes())
 
         runprog=self._get_prog(prog)
-        cmd=' '.join([prog,args,"-T"+format])
+        if prog=='nop': # nop takes no switches
+            cmd=prog
+        else:
+            cmd=' '.join([prog,args,"-T"+format])
         stdin,stdout,stderr=os.popen3(cmd, 'b')
         self.write(stdin)
         stdin.close()
@@ -1016,14 +1037,17 @@ class AGraph(object):
         try:
             if path is None:
                 data=stdout.read()
+                if data=='':
+                    raise IOError
             else:
                 fh=self._get_fh(path,'w')
                 fh.write(stdout.read())
-            stdout.close(); stderr.close()
+                stdout.close(); stderr.close()
         except:
-            print stderr.read()
+            error=stderr.read()
             stdout.close(); stderr.close()
-            raise IOError("the graphviz layout with %s failed"%(prog))
+            raise IOError("the graphviz layout with %s failed:\n%s "%
+                          (prog,error))
         return data
 
 

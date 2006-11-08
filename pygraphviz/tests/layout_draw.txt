@@ -12,12 +12,12 @@ String representation
 <BLANKLINE>
 
 >>> print A.string().expandtabs()
-strict graph {
+strict graph  {
 }
 <BLANKLINE>
 
 >>> A.__repr__() # test __repr__
-'strict graph {\n}'
+'strict graph  {\n}'
 
 
 >>> A=AGraph(name='test')
