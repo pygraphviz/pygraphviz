@@ -14,6 +14,15 @@ def test_suite():
         suite.addTest(s)
     return suite
 
+
+def run():
+    if sys.version_info[:2] < (2, 4):
+        print "Python version 2.4 or later required for tests (%d.%d detected)." %  sys.version_info[:2]
+        sys.exit(-1)
+    runner = unittest.TextTestRunner()
+    runner.run(test_suite())
+
+
 if __name__ == "__main__":
     if sys.version_info[:2] < (2, 4):
         print "Python version 2.4 or later required for tests (%d.%d detected)." %  sys.version_info[:2]

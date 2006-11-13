@@ -34,4 +34,5 @@ __all__=[
     'ItemAttribute'
     ]
 
-
+# import tests: run as pygraphviz.test()
+from tests import run as test
