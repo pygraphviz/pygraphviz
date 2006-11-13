@@ -7,13 +7,12 @@
 
 %module graphviz
 
-/* %include exception.i */
 %{
 #include "agraph.h"
 %}
 
 
-%typemap(python, in) FILE* {
+%typemap(in) FILE* {
     if (!PyFile_Check($input)) {
         PyErr_SetString(PyExc_TypeError, "not a file handle");
         return NULL;
@@ -21,19 +20,6 @@
     $1 = PyFile_AsFile($input);
 }
 
-%typemap(python, in) char* {
-    if ($input == Py_None) {
-        $1 = 0;
-    } else if (!PyString_Check($input)) {
-            PyErr_SetString(PyExc_TypeError, "not a valid string");
-            return NULL;
-    } else $1 = PyString_AsString($input);
-}
-
-
-%typemap(python, out) char * {
-    $result = Py_BuildValue("s", $1);
-}
 
 %exception agnode {
   $action
