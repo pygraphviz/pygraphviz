@@ -60,10 +60,10 @@ data = [(docdirbase, glob("doc/*.txt")),
         (docdirbase, glob("doc/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.dat")),
-#        (os.path.join(docdirbase, 'data'),glob("doc/data/*ls")),
         ]
 
-setup(name = "pygraphviz",
+setup(
+      name = "pygraphviz",
       version = version,
       packages = ["pygraphviz","pygraphviz.tests"],
       ext_modules = [
@@ -78,7 +78,7 @@ setup(name = "pygraphviz",
       package_data = {
         '': ['*.txt'],
         },
-      test_suite = "pygraphviz.tests.test.test_suite",
+#      test_suite = "pygraphviz.tests.test.test_suite",
       author="Aric Hagberg, Dan Schult, Manos Renieris",
       author_email="hagberg@lanl.gov",
       license="BSD",
@@ -100,4 +100,5 @@ setup(name = "pygraphviz",
         'Topic :: Scientific/Engineering :: Visualization',
         ]
       )
+
 
