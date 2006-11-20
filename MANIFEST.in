@@ -1,0 +1,4 @@
+include MANIFEST.in
+include doc/*.txt
+include doc/examples/*.py
+include doc/examples/*.dat
