@@ -9,12 +9,18 @@ Pygraphviz
    visualization package.
 
    With Pygraphviz you can create, edit, read, write, and draw graphs using
-   Python to access the Graphviz internal graph data structure and 
-   layout algorithms.
+   Python to access the Graphviz graph data structure and layout algorithms.
 
    Pygraphviz is distributed with a BSD license.
 
    News:
+
+   pygraphviz-0.33
+
+   Workaround for "nop" bug in graphviz-2.8, improved packaging,
+   updated swig wrapper, better error handling.
+
+   pygraphviz-0.32
 
    The release pygraphviz-0.32 is the second rewrite of the original project.
    It has improved attribute handling and drawing capabilities.
@@ -37,7 +43,6 @@ Quick Example
             b -- c;
     }
 
-
    More documentation
 
      - Tutorial  http://networkx.lanl.gov/pygraphviz/Tutorial
@@ -52,9 +57,6 @@ Requirements
 
       - Python version 2.3 or later http://www.python.org/
       - Graphviz http://graphviz.org/ 
-        Tested with version 2.8 or later, but may work with earlier versions.
-	Linux users might need to install the graphviz-dev package.
-      - A C compiler
 
 Downloading
 -----------
@@ -68,8 +70,22 @@ Downloading
     svn co https://networkx.lanl.gov/svn/pygraphviz/trunk pygraphviz
 
 
-Quick Install
--------------
+Building pygraphviz
+-------------------
+
+   To build pygraphviz you need:	
+
+      - Python version 2.3 or later http://www.python.org/
+
+        Linux users will need the python-dev package installed.
+
+      - Graphviz http://graphviz.org/ 
+
+        Tested with version 2.8 or later, but may work with earlier versions.
+	Linux users might need to install the graphviz-dev package.
+
+      - A C compiler
+
 
    Pygraphviz is developed and tested on Linux and OSX.  
    In principle it will work on any platform that has Python,
@@ -80,15 +96,17 @@ Quick Install
       - Download the source (tar.gz or zip file)
       - Unpack and change directory to pygraphviz-x.xx
       - Run "python setup.py install" to build and install
-      - (optional) cd pygraphviz/tests and run "python setup_egg.py test" to execute the tests
       
-    
-   Installing a Python egg from source:
+   See the FAQ http://networkx.lanl.gov/pygraphviz/FAQ.html
+   for a note about building pygraphviz with Windows.
 
-      - Download the source (tar.gz or zip file)
-      - Unpack and change directory to pygraphviz-x.xx
-      - Run "python setup_egg.py install" to build and install
-      - (optional) run "python setup_egg.py test" to execute the tests
+Testing
+-------
+
+   Import the module and run the tests 
+
+   >>> import pygraphviz
+   >>> pygraphviz.test()
 
 
 History
@@ -109,3 +127,5 @@ Development
    For bug reports and feature requests fill out a ticket at
    https://networkx.lanl.gov/newticket/
 
+   Because of ongoing spam problems you will need to register first at
+   https://networkx.lanl.gov/register

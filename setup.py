@@ -26,7 +26,7 @@ prefix=fp.readline()[:-1]
 # prefix="/opt/local"  # OSX, darwin-ports? 
 
 if not prefix:  
-    print "Warning: dotneato-config not in path!"
+    print "Warning: dotneato-config not in path."
     print "   If you are using a non-unix system, "
     print "   you will probably need to manually change"
     print "   the include_dirs and library_dirs in setup.py"
@@ -54,13 +54,14 @@ pygraphviz can be used to create and draw networks and graphs with Graphviz.
 
 """
 
-version="0.32"
+version="0.33"
 docdirbase  = 'share/doc/pygraphviz-%s' % version
 data = [(docdirbase, glob("doc/*.txt")),
         (docdirbase, glob("doc/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.dat")),
         ]
+
 
 setup(
       name = "pygraphviz",
@@ -75,9 +76,9 @@ setup(
                 )
       ],
       data_files = data,
-      package_data = {
-        '': ['*.txt'],
-        },
+#      package_data = {
+#        '': ['*.txt'],
+#        },
 #      test_suite = "pygraphviz.tests.test.test_suite",
       author="Aric Hagberg, Dan Schult, Manos Renieris",
       author_email="hagberg@lanl.gov",
