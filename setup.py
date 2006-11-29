@@ -7,7 +7,7 @@ Setup script for pygraphviz.
 from glob import glob
 import os
 import sys
-
+if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 from distutils.core import setup, Extension
 
 if sys.argv[-1] == 'setup.py':
@@ -76,10 +76,7 @@ setup(
                 )
       ],
       data_files = data,
-#      package_data = {
-#        '': ['*.txt'],
-#        },
-#      test_suite = "pygraphviz.tests.test.test_suite",
+      package_data = {'': ['*.txt'],},
       author="Aric Hagberg, Dan Schult, Manos Renieris",
       author_email="hagberg@lanl.gov",
       license="BSD",

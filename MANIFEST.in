@@ -1,4 +1,13 @@
 include MANIFEST.in
+include setup_egg.py
+
 include doc/*.txt
 include doc/examples/*.py
 include doc/examples/*.dat
+
+include pygraphviz/tests/*.txt
+
+global-exclude *~
+global-exclude *.pyc
+global-exclude .svn
+
