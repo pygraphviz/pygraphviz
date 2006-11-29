@@ -110,7 +110,7 @@ class AGraph(object):
         ['a', '1']
         
         """
-        if not self._is_string_like(n):  n=str(n)
+        if not _is_string_like(n):  n=str(n)
         try:
             nh=gv.agnode(self.handle,n,_Action.find)
         except KeyError:
@@ -142,7 +142,7 @@ class AGraph(object):
         >>> G.delete_node('a')
 
         """
-        if not self._is_string_like(n):  n=str(n)
+        if not _is_string_like(n):  n=str(n)
         try:
             nh=gv.agnode(self.handle,n,_Action.find)
             gv.agdelnode(nh)
@@ -857,7 +857,7 @@ class AGraph(object):
            G.read('file.dot')
 
         """
-        fh=self._get_fh(path)
+        fh=_get_fh(path)
         try: 
             self.handle = gv.agread(fh,None)
         except IOError:
@@ -874,7 +874,7 @@ class AGraph(object):
         """
         if path is None:
             path=sys.stdout
-        fh=self._get_fh(path,'w')
+        fh=_get_fh(path,'w')
         try: 
             gv.agwrite(self.handle,fh)
         except IOError:
@@ -901,23 +901,6 @@ class AGraph(object):
         os.unlink(path)
         return data
 
-    def _get_prog(self,prog):
-        # private: get path of graphviz program
-        try:
-            gvprogs=dict.fromkeys(\
-                ['neato','dot','twopi','circo','fdp','nop'])
-            p=gvprogs[prog]
-        except KeyError:
-            raise ValueError("prog %s is not one of %s"%\
-                           (prog,', '.join(gvprogs.keys()))) 
-    
-        try: # user must pick one of the graphviz programs...
-            runprog = self._which(prog)
-        except:
-            raise ValueError("program %s not found in path"%prog) 
-        return runprog
-
-
     def layout(self,prog='neato',args='',fmt='dot'):
         """Assign positions to nodes in graph.
         
@@ -939,7 +922,7 @@ class AGraph(object):
             sys.stderr.write(\
               "Warning: graph has %s nodes...layout may take a long time.\n"%\
               self.number_of_nodes())
-        runprog=self._get_prog(prog)
+        runprog=_get_prog(prog)
         cmd=' '.join([runprog,args,"-T"+fmt])
         stdin,stdout,stderr=os.popen3(cmd, 'b')
         self.write(stdin)
@@ -1025,7 +1008,7 @@ class AGraph(object):
               "Warning: graph has %s nodes...layout may take a long time.\n"%\
               self.number_of_nodes())
 
-        runprog=self._get_prog(prog)
+        runprog=_get_prog(prog)
         if prog=='nop': # nop takes no switches
             cmd=prog
         else:
@@ -1040,7 +1023,7 @@ class AGraph(object):
                 if data=='':
                     raise IOError
             else:
-                fh=self._get_fh(path,'w')
+                fh=_get_fh(path,'w')
                 fh.write(stdout.read())
                 stdout.close(); stderr.close()
         except:
@@ -1049,53 +1032,6 @@ class AGraph(object):
             raise IOError("the graphviz layout with %s failed:\n%s "%
                           (prog,error))
         return data
-
-
-    # some private helper functions
-
-    def _is_string_like(self,obj): # from John Hunter, types-free version
-        try:
-            obj + ''
-        except (TypeError, ValueError):
-            return False
-        return True
-
-
-    def _get_fh(self, path, mode='r'):
-        """ Return a file handle for given path.
-
-        Path can be a string or a file handle.
-        Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
-        """
-        import os
-        if self._is_string_like(path):
-            if path.endswith('.gz'):
-#                import gzip
-#                fh = gzip.open(path,mode=mode)  # doesn't return real fh
-                 fh=os.popen("gzcat "+path) # probably not portable
-            elif path.endswith('.bz2'):
-#                import bz2
-#                fh = bz2.BZ2File(path,mode=mode) # doesn't return real fh
-                 fh=os.popen("bzcat "+path) # probably not portable
-            else:
-                fh = file(path,mode=mode)
-        elif hasattr(path, 'seek'):
-            fh = path
-        else:
-            raise TypeError('path must be a string or file handle')
-        return fh
-
-
-    def _which(self,name):
-        """Searches for name in exec path and returns full path"""
-        import os
-        import glob
-        paths = os.environ["PATH"]
-        for path in paths.split(os.pathsep):
-            match=glob.glob(os.path.join(path, name))
-            if match:
-                return match[0]
-        raise ValueError, "no prog %s in path"%name        
 
 
 
@@ -1328,7 +1264,74 @@ class ItemAttribute(Attribute):
                 yield gv.agattrname(ah),value # unique value for this edge
             except KeyError: # gv.agxget returned KeyError, skip
                 continue
-    
+
+
+# some private helper functions
+
+
+def _get_prog(prog):
+    # private: get path of graphviz program
+    try:
+        gvprogs=dict.fromkeys(\
+            ['neato','dot','twopi','circo','fdp','nop'])
+        p=gvprogs[prog]
+    except KeyError:
+        raise ValueError("prog %s is not one of %s"%\
+                       (prog,', '.join(gvprogs.keys()))) 
+
+    try: # user must pick one of the graphviz programs...
+        runprog = _which(prog)
+    except:
+        raise ValueError("program %s not found in path"%prog) 
+    return runprog
+
+
+
+def _is_string_like(obj): # from John Hunter, types-free version
+    try:
+        obj + ''
+    except (TypeError, ValueError):
+        return False
+    return True
+
+
+def _get_fh(path, mode='r'):
+    """ Return a file handle for given path.
+
+    Path can be a string or a file handle.
+    Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
+    """
+    import os
+    if _is_string_like(path):
+        if path.endswith('.gz'):
+             import gzip
+             fh = gzip.open(path,mode=mode)  # doesn't return real fh
+             fh=os.popen("gzcat "+path) # probably not portable
+        elif path.endswith('.bz2'):
+             import bz2
+             fh = bz2.BZ2File(path,mode=mode) # doesn't return real fh
+             fh=os.popen("bzcat "+path) # probably not portable
+        else:
+            fh = file(path,mode=mode)
+    elif hasattr(path, 'seek'):
+        fh = path
+    else:
+        raise TypeError('path must be a string or file handle')
+    return fh
+
+
+def _which(name):
+    """Searches for name in exec path and returns full path"""
+    import os
+    import glob
+    paths = os.environ["PATH"]
+    for path in paths.split(os.pathsep):
+        match=glob.glob(os.path.join(path, name))
+        if match:
+            return match[0]
+    raise ValueError, "no prog %s in path"%name        
+
+
 
 def _test_suite():
     import doctest
