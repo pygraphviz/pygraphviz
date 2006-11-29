@@ -2,8 +2,14 @@
 # -*- coding: utf-8 -*-
 """
 Setup script for pygraphviz.
-
 """
+#    Copyright (C) 2006 by 
+#    Aric Hagberg <hagberg@lanl.gov>
+#    Dan Schult <dschult@colgate.edu>
+#    Manos Renieris, http://www.cs.brown.edu/~er/
+#    Distributed with BSD license.     
+#    All rights reserved, see LICENSE for details.
+
 from glob import glob
 import os
 import sys
@@ -47,56 +53,42 @@ except:
     print "incomplete graphviz installation (graphviz-dev missing?)"
     raise
 
-long_description = """\
-A Python wrapper for the Graphviz Agraph data structure.
 
-pygraphviz can be used to create and draw networks and graphs with Graphviz.
+execfile(os.path.join('pygraphviz','release.py'))
 
-"""
-
-version="0.33"
+packages = ["pygraphviz","pygraphviz.tests"]
 docdirbase  = 'share/doc/pygraphviz-%s' % version
 data = [(docdirbase, glob("doc/*.txt")),
         (docdirbase, glob("doc/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.dat")),
         ]
+extension = [Extension("pygraphviz._graphviz",
+                      ["pygraphviz/graphviz_wrap.c"],
+                      include_dirs=[includes],
+                      library_dirs=[libs],
+                      libraries=["agraph","cdt"],
+                      )]
+package_data = {'': ['*.txt'],}
 
+if __name__ == "__main__":
 
-setup(
-      name = "pygraphviz",
-      version = version,
-      packages = ["pygraphviz","pygraphviz.tests"],
-      ext_modules = [
-      Extension("pygraphviz._graphviz",
-                ["pygraphviz/graphviz_wrap.c"],
-                include_dirs=[includes],
-                library_dirs=[libs],
-                libraries=["agraph","cdt"],
-                )
-      ],
-      data_files = data,
-      package_data = {'': ['*.txt'],},
-      author="Aric Hagberg, Dan Schult, Manos Renieris",
-      author_email="hagberg@lanl.gov",
-      license="BSD",
-      description="Python interface to Graphviz",
-      long_description=long_description,
-      url="http://networkx.lanl.gov/pygraphviz/",
-      download_url="http://sourceforge.net/project/showfiles.php?group_id=122233&package_id=161979",
-
-      classifiers = [
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License',
-        'Programming Language :: C',
-        'Programming Language :: Python',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        'Topic :: Scientific/Engineering :: Information Analysis',
-        'Topic :: Scientific/Engineering :: Mathematics',
-        'Topic :: Scientific/Engineering :: Visualization',
-        ]
+    setup(
+      name             = name,
+      version          = version,
+      author           = authors['Hagberg'][0],
+      author_email     = authors['Hagberg'][1],
+      description      = description,
+      keywords         = keywords,
+      long_description = long_description,
+      license          = license,
+      platforms        = platforms,
+      url              = url,      
+      download_url     = download_url,
+      packages         = packages,
+      data_files       = data,
+      classifiers      = classifiers,
+      ext_modules      = extension,
+      package_data     = package_data,
       )
-
 
