@@ -34,5 +34,5 @@ if __name__ == "__main__":
         print sys.path
         raise
     
-    runner = unittest.TextTestRunner()
-    runner.run(test_suite())
+    run()
+
