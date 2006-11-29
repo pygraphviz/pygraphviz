@@ -43,5 +43,12 @@ __all__=[
     'ItemAttribute'
     ]
 
+def version():
+    from agraph import _get_prog
+    import os
+    print "pygraphviz-"+__version__
+    neato=_get_prog('neato')
+    os.system(neato+' -V')
+
 # import tests: run as pygraphviz.test()
 from tests import run as test
