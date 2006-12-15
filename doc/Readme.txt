@@ -1,7 +1,3 @@
-----------
-Pygraphviz
-----------
-
 Pygraphviz
 ----------
 
@@ -27,6 +23,9 @@ Pygraphviz
    It is not backward compatible with earlier versions.
    Earlier versions will always be available at the download site.
 
+   This version now inter-operates with many of the NetworkX
+   algorithms and graph generators.  See 
+   https://networkx.lanl.gov/browser/networkx/trunk/doc/examples/pygraphviz_simple.py
 
 Quick Example
 -------------
@@ -115,6 +114,18 @@ History
    The original concept was developed and implemented by
    Manos Renieris at Brown University: 
    http://www.cs.brown.edu/~er/software/
+
+
+Related Pacakges
+----------------
+
+   - Python bindings distributed with Graphviz (graphviz-python):  http://www.graphviz.org/Download_linux.php
+
+   - Pydot: http://dkbza.org/pydot.html
+
+   - mfGraph: http://www.geocities.com/foetsch/mfgraph/index.htm
+
+   - Yapgvb: http://yapgvb.sourceforge.net/
 
 
 Development
