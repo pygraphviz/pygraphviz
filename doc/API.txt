@@ -1,7 +1,3 @@
-----------
-Pygraphviz
-----------
-
 Pygraphviz API Notes
 --------------------
 
