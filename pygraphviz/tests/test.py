@@ -3,14 +3,22 @@
 import sys
 import doctest
 import unittest
+import glob
+import os
 
 def test_suite():
-    from pkg_resources import resource_filename
+    test_files=['graph.txt','layout_draw.txt','attributes.txt']
+    try: # has setuptools
+        from pkg_resources import resource_filename
+        tests=[resource_filename(__name__, t) for t in test_files]
+    except: # no setuptools
+        import pygraphviz
+        base=os.path.dirname(pygraphviz.__file__)
+        tests=glob.glob(base+"/tests/"+"*.txt") 
+
     suite = unittest.TestSuite()
-    tests=['graph.txt','layout_draw.txt','attributes.txt']
     for t in tests:
-        doctst = resource_filename(__name__, t)
-        s = doctest.DocFileSuite(doctst,module_relative=False)
+        s = doctest.DocFileSuite(t,module_relative=False)
         suite.addTest(s)
     return suite
 
