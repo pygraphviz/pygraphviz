@@ -91,16 +91,18 @@ Drawing
 Traceback (most recent call last):
 ...
 AttributeError: graph has no layout information, see layout()
+                or specify prog=neato|dot|twopi|circo|fdp|nop
 
 >>> d=A.draw(prog='neato')
-
+>>> len(d.splitlines())
+11
 >>> (fd,fname)=tempfile.mkstemp()
 >>> A.draw(fname,format='ps',prog='neato')
 >>> A.draw(fname,prog='neato')
 >>> A.draw(fname,prog='foo')
 Traceback (most recent call last):
 ...
-ValueError: prog foo is not one of twopi, fdp, circo, neato, nop, dot
+ValueError: prog foo is not one of: twopi, fdp, circo, neato, nop, dot
 
 
 >>> os.close(fd)
