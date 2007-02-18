@@ -3,7 +3,7 @@
 A Python interface to Graphviz.  
 
 """
-#    Copyright (C) 2006 by 
+#    Copyright (C) 2006,2007 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
@@ -13,6 +13,26 @@ A Python interface to Graphviz.
 import graphviz as gv
 import UserDict
 import sys
+import threading
+
+class PipeReader(threading.Thread):
+    """Read and write pipes using threads.
+    """ 
+    def __init__(self, result, pipe):
+        threading.Thread.__init__(self)
+        self.result = result
+        self.pipe = pipe
+
+    def run(self):
+        try:
+            while True:
+                chunk = self.pipe.read()
+                if not chunk:
+                    break
+                self.result.append( chunk )
+        finally:
+            self.pipe.close()
+
 
 class _Action:
     find, create = 0,1
@@ -110,7 +130,7 @@ class AGraph(object):
         ['a', '1']
         
         """
-        if not _is_string_like(n):  n=str(n)
+        if not self._is_string_like(n):  n=str(n)
         try:
             nh=gv.agnode(self.handle,n,_Action.find)
         except KeyError:
@@ -142,7 +162,7 @@ class AGraph(object):
         >>> G.delete_node('a')
 
         """
-        if not _is_string_like(n):  n=str(n)
+        if not self._is_string_like(n):  n=str(n)
         try:
             nh=gv.agnode(self.handle,n,_Action.find)
             gv.agdelnode(nh)
@@ -570,7 +590,7 @@ class AGraph(object):
         """Return list of predecessor nodes of n."""
         return list(self.predecessors_iter(n))
 
-    # digraph definintions 
+    # digraph definitions 
     out_neighbors=successors
     in_neighbors=predecessors
 
@@ -704,14 +724,18 @@ class AGraph(object):
 
     def copy(self):
         """Return a copy of the graph."""
-        import os
-        (fd_read, fd_write) = os.pipe()
-        fh_read = os.fdopen(fd_read, 'r')
-        fh_write = os.fdopen(fd_write, 'w')
-        self.write(fh_write)
-        fh_write.close()
-        return self.__class__(file=fh_read)
+        from tempfile import TemporaryFile
+        fh = TemporaryFile()
+        # Cover TemporaryFile wart: on 'nt' we need the file member
+        if hasattr( fh, 'file' ):
+            fhandle = fh.file
+        else:
+            fhandle = fh
 
+        self.write( fhandle )
+        fh.seek( 0 )
+
+        return self.__class__( file=fhandle )
 
 
     def add_path(self, nlist):
@@ -857,14 +881,14 @@ class AGraph(object):
            G.read('file.dot')
 
         """
-        fh=_get_fh(path)
+        fh=self._get_fh(path)
         try: 
             self.handle = gv.agread(fh,None)
         except IOError:
             print "IO error reading file"
 
     def write(self, path=None):
-        """Read graph in dot format to file on path.
+        """Write graph in dot format to file on path.
         
         path can be a file name or file handle
 
@@ -874,7 +898,7 @@ class AGraph(object):
         """
         if path is None:
             path=sys.stdout
-        fh=_get_fh(path,'w')
+        fh=self._get_fh(path,'w')
         try: 
             gv.agwrite(self.handle,fh)
         except IOError:
@@ -883,23 +907,39 @@ class AGraph(object):
 
     def string_nop(self):
         """Return string representation of graph in dot format.""" 
-        # this will fail for graphviz-2.8 becuase of a broken nop
+        # this will fail for graphviz-2.8 because of a broken nop
         # so use tempfile version below
         return self.draw(format='dot',prog='nop') 
 
     def string(self):
         """Return string representation of graph in dot format.""" 
-        from tempfile import mkstemp
-        import os
-        fd,path=mkstemp()
-        fh=open(path,'w+b')
-        self.write(fh)
+        from tempfile import TemporaryFile
+        fh = TemporaryFile()
+        # Cover TemporaryFile wart: on 'nt' we need the file member
+        if hasattr( fh, 'file' ):
+            self.write( fh.file )
+        else:
+            self.write( fh )
+        fh.seek( 0 )
+        data = fh.read()
         fh.close()
-        fh=open(path,'r+b')
-        data=fh.read()
-        fh.close()
-        os.unlink(path)
         return data
+
+    def _get_prog(self,prog):
+        # private: get path of graphviz program
+        try:
+            gvprogs=dict.fromkeys(\
+                ['neato','dot','twopi','circo','fdp','nop'])
+            p=gvprogs[prog]
+        except KeyError:
+            raise ValueError("prog %s is not one of: %s"%\
+                           (prog,', '.join(gvprogs.keys()))) 
+    
+        try: # user must pick one of the graphviz programs...
+            runprog = self._which(prog)
+        except:
+            raise ValueError("program %s not found in path"%prog) 
+        return runprog
 
     def layout(self,prog='neato',args='',fmt='dot'):
         """Assign positions to nodes in graph.
@@ -917,24 +957,53 @@ class AGraph(object):
 
         """
         import os
+        from tempfile import TemporaryFile
 
         if self.number_of_nodes()>1000:
             sys.stderr.write(\
               "Warning: graph has %s nodes...layout may take a long time.\n"%\
               self.number_of_nodes())
-        runprog=_get_prog(prog)
+        runprog=self._get_prog(prog)
         cmd=' '.join([runprog,args,"-T"+fmt])
-        stdin,stdout,stderr=os.popen3(cmd, 'b')
-        self.write(stdin)
-        stdin.close()
+        child_stdin,child_stdout,child_stderr=os.popen3(cmd, 'b')
+        # Use threading to avoid blocking
+        # Use a temporary file because writing must be finished
+        # before starting to read
+        data = []
+        errors = []
+        threads = [PipeReader(data, child_stdout),
+                   PipeReader(errors, child_stderr)]
         try:
-            self.read(stdout)
-            stdout.close(); stderr.close()
+            for t in threads:
+                t.start()
+
+            self.write(child_stdin)
+            child_stdin.close()
+
+            for t in threads:
+                t.join()
+
+            if not data[0]:
+                raise IOError
+
+            # need to serialize writing and reading
+            # otherwise the internal state will be garbled
+            fh = TemporaryFile()
+            fh.write("".join(data))
+            fh.seek(0)
+            # Cover TemporaryFile wart: on 'nt' we need the file member
+            if hasattr(fh, 'file'):
+                self.read(fh.file)
+            else:
+                self.read(fh)
+            fh.close()
         except:
-            error=stderr.read()
-            stdout.close(); stderr.close()
-            raise IOError("the graphviz layout with %s failed:\n%s "%
-                          (prog,error))
+            if errors:
+                raise IOError("the graphviz layout with %s failed:\n%s "%
+                          (prog, "".join( errors )))
+            else:
+                raise IOError("the graphviz layout with %s failed."%prog)
+
         self.has_layout=True
         return
 
@@ -976,23 +1045,22 @@ class AGraph(object):
         """
         import os
 
-        if path is not None:
+        if format is None and path is not None:
             format=os.path.splitext(path)[1].lower()[1:]  # get extension
 
-        if format is None:
-            format='dot'
+        if format is None or format=='':
+            format = 'dot'
         else:
             formats=dict.fromkeys(
                 ['canon','dot','xdot','cmap','dia','fig','gd','gd2',\
                  'gif','hpgl','imap','cmapx','ismap','jpg','jpeg',\
                  'mif','mp','pcl','pic','plain','plain-ext','png','ps',\
                  'ps2','svg','svgz','vrml','vtx','wbmp'])
-            try:
-                format in formats==True
-            except KeyError:
+
+            if not format in formats:
                 raise ValueError("format %s is not one of %s"%\
-                           (format,', '.join(formats.keys()))) 
-                
+                                 (format,', '.join(formats.keys()))) 
+
         if prog is None:
             try:
                 self.has_layout==True
@@ -1000,7 +1068,9 @@ class AGraph(object):
                 args+="-n2"
             except:
                 raise AttributeError(\
-                    "graph has no layout information, see layout()")
+                    """graph has no layout information, see layout()
+                or specify prog=%s"""%\
+                ("|".join(['neato','dot','twopi','circo','fdp','nop'])))
 
         else:
             if self.number_of_nodes()>1000:
@@ -1008,30 +1078,97 @@ class AGraph(object):
               "Warning: graph has %s nodes...layout may take a long time.\n"%\
               self.number_of_nodes())
 
-        runprog=_get_prog(prog)
+        runprog=self._get_prog(prog)
         if prog=='nop': # nop takes no switches
             cmd=prog
         else:
             cmd=' '.join([prog,args,"-T"+format])
-        stdin,stdout,stderr=os.popen3(cmd, 'b')
-        self.write(stdin)
-        stdin.close()
-        data=None
+        child_stdin,child_stdout,child_stderr=os.popen3(cmd, 'b')
+
+        data = []
+        errors = []
+        threads = [PipeReader(data, child_stdout),
+                   PipeReader(errors, child_stderr)]
+
         try:
-            if path is None:
-                data=stdout.read()
-                if data=='':
-                    raise IOError
+            for t in threads:
+                t.start()
+
+            self.write(child_stdin)
+            child_stdin.close()
+
+            for t in threads:
+                t.join()
+
+            if not data[0]:
+                raise IOError
+
+            if path is not None:
+                fh=self._get_fh(path,'w+b')
+                fh.write("".join(data))
+                fh.close()
+                d=None
             else:
-                fh=_get_fh(path,'w')
-                fh.write(stdout.read())
-                stdout.close(); stderr.close()
+                d="".join( data )
+                
         except:
-            error=stderr.read()
-            stdout.close(); stderr.close()
-            raise IOError("the graphviz layout with %s failed:\n%s "%
-                          (prog,error))
-        return data
+            if errors:
+                raise IOError("the graphviz layout with %s failed:\n%s "%
+                              (prog, "".join( errors )) )
+            else:
+                raise IOError("the graphviz layout with %s failed."%prog)
+
+        return d
+
+    # some private helper functions
+
+    def _is_string_like(self,obj): # from John Hunter, types-free version
+        try:
+            obj + ''
+        except (TypeError, ValueError):
+            return False
+        return True
+
+
+    def _get_fh(self, path, mode='r'):
+        """ Return a file handle for given path.
+
+        Path can be a string or a file handle.
+        Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
+        """
+        import os
+        if self._is_string_like(path):
+            if path.endswith('.gz'):
+#                import gzip
+#                fh = gzip.open(path,mode=mode)  # doesn't return real fh
+                 fh=os.popen("gzcat "+path) # probably not portable
+            elif path.endswith('.bz2'):
+#                import bz2
+#                fh = bz2.BZ2File(path,mode=mode) # doesn't return real fh
+                 fh=os.popen("bzcat "+path) # probably not portable
+            else:
+                fh = file(path,mode=mode)
+        elif hasattr(path, 'seek'):
+            fh = path
+        else:
+            raise TypeError('path must be a string or file handle')
+        return fh
+
+
+    def _which(self,name):
+        """Searches for name in exec path and returns full path"""
+        import os
+        import glob
+        paths = os.environ["PATH"]
+        if os.name == "nt":
+            exe = ".exe"
+        else:
+            exe = ""
+        for path in paths.split(os.pathsep):
+            match=glob.glob(os.path.join(path, name+exe))
+            if match:
+                return match[0]
+        raise ValueError, "no prog %s in path"%name        
 
 
 
@@ -1264,74 +1401,7 @@ class ItemAttribute(Attribute):
                 yield gv.agattrname(ah),value # unique value for this edge
             except KeyError: # gv.agxget returned KeyError, skip
                 continue
-
-
-# some private helper functions
-
-
-def _get_prog(prog):
-    # private: get path of graphviz program
-    try:
-        gvprogs=dict.fromkeys(\
-            ['neato','dot','twopi','circo','fdp','nop'])
-        p=gvprogs[prog]
-    except KeyError:
-        raise ValueError("prog %s is not one of %s"%\
-                       (prog,', '.join(gvprogs.keys()))) 
-
-    try: # user must pick one of the graphviz programs...
-        runprog = _which(prog)
-    except:
-        raise ValueError("program %s not found in path"%prog) 
-    return runprog
-
-
-
-def _is_string_like(obj): # from John Hunter, types-free version
-    try:
-        obj + ''
-    except (TypeError, ValueError):
-        return False
-    return True
-
-
-def _get_fh(path, mode='r'):
-    """ Return a file handle for given path.
-
-    Path can be a string or a file handle.
-    Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
-    """
-    import os
-    if _is_string_like(path):
-        if path.endswith('.gz'):
-             import gzip
-             fh = gzip.open(path,mode=mode)  # doesn't return real fh
-             fh=os.popen("gzcat "+path) # probably not portable
-        elif path.endswith('.bz2'):
-             import bz2
-             fh = bz2.BZ2File(path,mode=mode) # doesn't return real fh
-             fh=os.popen("bzcat "+path) # probably not portable
-        else:
-            fh = file(path,mode=mode)
-    elif hasattr(path, 'seek'):
-        fh = path
-    else:
-        raise TypeError('path must be a string or file handle')
-    return fh
-
-
-def _which(name):
-    """Searches for name in exec path and returns full path"""
-    import os
-    import glob
-    paths = os.environ["PATH"]
-    for path in paths.split(os.pathsep):
-        match=glob.glob(os.path.join(path, name))
-        if match:
-            return match[0]
-    raise ValueError, "no prog %s in path"%name        
-
-
+    
 
 def _test_suite():
     import doctest
