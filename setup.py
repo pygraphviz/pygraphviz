@@ -20,38 +20,85 @@ if sys.argv[-1] == 'setup.py':
     print "To install, run 'python setup.py install'"
     print
 
-# get library and include prefix, the following might not be too portable
-fp=os.popen('dotneato-config --prefix ','r')
-prefix=fp.readline()[:-1]
 
-# If setting the prefix failed you should attempt to set the prefix here
-# by ucommenting one of these lines or providing your own :
-# prefix="/usr" # unix, Linux
-# prefix="/usr/local" # unix, alternate
-# prefix="/sw"  # OSX, fink
-# prefix="/opt/local"  # OSX, darwin-ports? 
+libs=None
+includes=None
 
-if not prefix:  
-    print "Warning: dotneato-config not in path."
-    print "   If you are using a non-unix system, "
-    print "   you will probably need to manually change"
-    print "   the include_dirs and library_dirs in setup.py"
-    print "   to point to the correct locations of your graphviz installation."
-    prefix="/usr" # make a guess anyway
+# If the setup script couldn't find your graphviz installation you can
+# specify it here by ucommenting these lines or providing your own:
+# You must set both 'libs' and 'includes'
 
-# set includes and libs by hand here if you have a very nonstandard
-# installation of graphviz
-includes=prefix+os.sep+'include'+os.sep+'graphviz'
-libs=prefix+os.sep+'lib'+os.sep+'graphviz'
+#libs='/packages/lib/graphviz'
+#includes='/packages/include/graphviz'
+
+# UNIX,Linux
+#libs='/usr/lib/graphviz'
+#includes='/usr/include/graphviz'
+
+# UNIX,Linux alternate
+#libs='/usr/local/lib/graphviz'
+#includes='/usr/local/include/graphviz'
+
+# OSX,fink
+#libs='/sw/lib/graphviz'
+#includes='/sw/include/graphviz'
+
+# OSX,darwin-ports?
+#libs='/opt/local/graphviz'
+#includes='/opt/local/include/graphviz'
+
+if libs is None:
+    try:
+        import subprocess as S
+        output,err = \
+        S.Popen('pkg-config --libs-only-L --cflags-only-I libagraph',
+                shell=True, stdin=S.PIPE, stdout=S.PIPE,
+                close_fds=True).communicate()
+        if output:
+            includes,libs=output.split()
+            libs=libs.strip()[2:]
+            includes=includes.strip()[2:]
+    except ImportError:
+        print """-- Missing subprocess package:
+        Install subprocess from
+        http://effbot.org/downloads/#subprocess
+        or set the graphviz paths manually as described below."""
+    if libs is None or libs=='':
+        print "-- Failed to find pkg-config for libagraph"
+        print "   Trying dotneato-config"
+        try:
+            output = S.Popen(['dotneato-config','--ldflags','--cflags'],
+                             stdout=S.PIPE).communicate()[0]
+            if output:
+                includes,libs=output.split()
+                libs=libs.strip()[2:]
+                includes=includes.strip()[2:]
+        except:
+            print "-- Failed to find dotneato-config"
+
+
+if libs is None or libs=='':
+    libs="/usr/lib/graphviz" # make a guess anyway
+    includes="/usr/includes/graphviz" # make a guess anyway
 
 # sanity check
 try:
     agraphpath=includes+os.sep+'agraph.h'
     fh=open(agraphpath,'r')    
 except:
-    print "agraph.h include file not found at %s"%agraphpath
-    print "incomplete graphviz installation (graphviz-dev missing?)"
-    raise
+    print "-- Error: agraph.h include file not found at %s"%agraphpath
+    print "   Incomplete graphviz installation (graphviz-dev missing?)"
+    print
+    print  """Your graphviz installation couldn't be found.
+If you think your installation is correct you will 
+need to manually change the includes and libs variables in setup.py
+to point to the correct locations of your graphviz installation.
+
+The current settings of libs and includes is:"""
+    print "libs=%s"%libs
+    print "includes=%s"%includes
+    print
+    raise "Error locating graphviz."
 
 
 execfile(os.path.join('pygraphviz','release.py'))
