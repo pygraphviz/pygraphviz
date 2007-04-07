@@ -131,7 +131,9 @@ Related Pacakges
 Development
 -----------
 
-   Pygraphviz is currently maintained by Aric Hagberg and Dan Schult
+   Pygraphviz is currently maintained by 
+   Aric Hagberg  (http://math.lanl.gov/~hagberg/)
+   and Dan Schult
 
    More information can be found at https://networkx.lanl.gov/pygraphviz/
 
