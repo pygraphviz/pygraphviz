@@ -9,24 +9,6 @@ Pygraphviz
 
    Pygraphviz is distributed with a BSD license.
 
-   News:
-
-   pygraphviz-0.33
-
-   Workaround for "nop" bug in graphviz-2.8, improved packaging,
-   updated swig wrapper, better error handling.
-
-   pygraphviz-0.32
-
-   The release pygraphviz-0.32 is the second rewrite of the original project.
-   It has improved attribute handling and drawing capabilities.
-   It is not backward compatible with earlier versions.
-   Earlier versions will always be available at the download site.
-
-   This version now inter-operates with many of the NetworkX
-   algorithms and graph generators.  See 
-   https://networkx.lanl.gov/browser/networkx/trunk/doc/examples/pygraphviz_simple.py
-
 Quick Example
 -------------
 

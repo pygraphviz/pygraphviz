@@ -15,4 +15,4 @@ Thanks to the following people who have made contributions:
 
  - Ross Richardson suggested fixes and tested the attribute handling 
 
- - Alexis Dinno debugged the setup and installation for OSX with darwinports.
+ - Alexis Dinno debugged the setup and installation for OSX.
