@@ -21,6 +21,7 @@ to join.
     <a href="http://groups.google.com/group/pygraphviz-discuss?hl=en">Visit this group</a>
   </td></tr>
  </table>
+ 
  <table border=0 style="background-color: #fff; padding: 5px;" cellspacing=0>
   <tr><td>
     <img src="http://groups.google.com/groups/img/3/groups_bar.gif"
