@@ -3,7 +3,7 @@
 """
 Setup script for pygraphviz.
 """
-#    Copyright (C) 2006 by 
+#    Copyright (C) 2006,2007 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
@@ -25,26 +25,26 @@ libs=None
 includes=None
 
 # If the setup script couldn't find your graphviz installation you can
-# specify it here by ucommenting these lines or providing your own:
+# specify it here by uncommenting these lines or providing your own:
 # You must set both 'libs' and 'includes'
 
 #libs='/packages/lib/graphviz'
 #includes='/packages/include/graphviz'
 
-# UNIX,Linux
+# UNIX, Linux
 #libs='/usr/lib/graphviz'
 #includes='/usr/include/graphviz'
 
-# UNIX,Linux alternate
+# UNIX, Linux alternate
 #libs='/usr/local/lib/graphviz'
 #includes='/usr/local/include/graphviz'
 
-# OSX,fink
+# Mac OS X (Fink)
 #libs='/sw/lib/graphviz'
 #includes='/sw/include/graphviz'
 
-# OSX,darwin-ports?
-#libs='/opt/local/graphviz'
+# Mac OS X (MacPorts)
+#libs='/opt/local/lib/graphviz'
 #includes='/opt/local/include/graphviz'
 
 if libs is None:
@@ -94,7 +94,7 @@ If you think your installation is correct you will
 need to manually change the includes and libs variables in setup.py
 to point to the correct locations of your graphviz installation.
 
-The current settings of libs and includes is:"""
+The current setting of libs and includes is:"""
     print "libs=%s"%libs
     print "includes=%s"%includes
     print
