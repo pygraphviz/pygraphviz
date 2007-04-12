@@ -1,0 +1,34 @@
+..  -*- coding: utf-8 -*-
+
+PyGraphviz News
+===============
+
+pygraphviz-0.34
+---------------
+Release date: 11 April 2007
+
+See: https://networkx.lanl.gov/timeline
+
+ - run "python setup_egg.py test" for tests if you have setuptools
+ - added tests for layout code
+ - use pkg-config for finding graphviz (dotneato-config still works
+   for older graphviz versions)
+ - use threads and temporary files for multiplatform nonblocking IO
+ - django example
+
+pygraphviz-0.33
+---------------
+  - Workaround for "nop" bug in graphviz-2.8, improved packaging,
+    updated swig wrapper, better error handling.
+
+pygraphviz-0.32
+---------------
+
+   The release pygraphviz-0.32 is the second rewrite of the original project.
+   It has improved attribute handling and drawing capabilities.
+   It is not backward compatible with earlier versions.
+   Earlier versions will always be available at the download site.
+
+   This version now inter-operates with many of the NetworkX
+   algorithms and graph generators.  See 
+   https://networkx.lanl.gov/browser/networkx/trunk/doc/examples/pygraphviz_simple.py
