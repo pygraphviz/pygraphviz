@@ -1,13 +1,13 @@
-Pygraphviz
+PyGraphviz
 ----------
 
-   Pygraphviz is a Python interface to the Graphviz graph layout and
+   PyGraphviz is a Python interface to the Graphviz graph layout and
    visualization package.
 
-   With Pygraphviz you can create, edit, read, write, and draw graphs using
+   With PyGraphviz you can create, edit, read, write, and draw graphs using
    Python to access the Graphviz graph data structure and layout algorithms.
 
-   Pygraphviz is distributed with a BSD license.
+   PyGraphviz is distributed with a BSD license.
 
 Quick Example
 -------------
@@ -34,7 +34,7 @@ Quick Example
 Requirements
 -------------
 
-   To use Pygraphviz you need
+   To use PyGraphviz you need
 
       - Python version 2.3 or later http://www.python.org/
       - Graphviz http://graphviz.org/ 
@@ -42,33 +42,29 @@ Requirements
 Downloading
 -----------
 
-   You can download pygraphviz from  http://sourceforge.net/project/showfiles.php?group_id=122233
+   - Releases
 
-   You can browse the source at https://networkx.lanl.gov/browser/pygraphviz/trunk
+     - Python Cheese Shop:  http://cheeseshop.python.org/pypi/pygraphviz/
+     - NetworkX site: https://networkx.lanl.gov/download/?C=M;O=A
 
-   To access the repository using subversion, you will need a subversion client (e.g. svn for Linux). Then check out the code using
-
-    svn co https://networkx.lanl.gov/svn/pygraphviz/trunk pygraphviz
+   - Subversion repository: https://networkx.lanl.gov/svn/pygraphviz/trunk pygraphviz
 
 
-Building pygraphviz
--------------------
+Building
+--------
 
-   To build pygraphviz you need:	
+   To build PyGraphviz you need:	
 
-      - Python version 2.3 or later http://www.python.org/
-
+      - Python: Version 2.3 or later http://www.python.org/ .
         Linux users will need the python-dev package installed.
 
-      - Graphviz http://graphviz.org/ 
-
+      - Graphviz: http://graphviz.org/ 
         Tested with version 2.8 or later, but may work with earlier versions.
 	Linux users might need to install the graphviz-dev package.
 
       - A C compiler
 
-
-   Pygraphviz is developed and tested on Linux and OSX.  
+   PyGraphviz is developed and tested on Linux and OSX.  
    In principle it will work on any platform that has Python,
    a C compiler, and the Graphviz libraries.  
 
@@ -78,7 +74,7 @@ Building pygraphviz
       - Unpack and change directory to pygraphviz-x.xx
       - Run "python setup.py install" to build and install
       
-   See the FAQ http://networkx.lanl.gov/pygraphviz/FAQ.html
+   See the FAQ http://networkx.lanl.gov/pygraphviz/FAQ
    for a note about building pygraphviz with Windows.
 
 Testing
