@@ -10,7 +10,7 @@
 
 
 name = 'pygraphviz'
-version = '0.33-svn'
+version = '0.34'
 description = "Python interface to Graphviz"
 long_description = """\
 A Python wrapper for the Graphviz Agraph data structure.
@@ -25,7 +25,7 @@ authors = {'Hagberg' : ('Aric Hagberg','hagberg@lanl.gov'),
            'Renieris' : ('Manos Renieris','')
            }
 url = 'http://networkx.lanl.gov/pygraphviz'
-download_url="http://sourceforge.net/project/showfiles.php?group_id=122233&package_id=161979"
+download_url="http://networkx.lanl.gov/wiki/download"
 platforms = ['Linux','Mac OSX','Windows XP/2000/NT']
 keywords = ['Networks', 'Graph Visualization', 'network', 'graph', 'graph drawing']
 classifiers = [
