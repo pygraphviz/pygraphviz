@@ -16,7 +16,11 @@ http://www.djangobook.com/en/beta/chapter11/
 #    All rights reserved, see LICENSE for details.
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 
-from django.http import HttpResponse
+try:
+    from django.http import HttpResponse
+except ImportError: # this won't run without Django, print message 
+    print "Django not found."
+
 def pygraphviz_graph(request):
     import pygraphviz as P
     A=P.AGraph() # init empty graph
@@ -31,3 +35,9 @@ def pygraphviz_graph(request):
     png=A.draw(format='png') # draw png
     return HttpResponse(png, mimetype='image/png')
 
+if __name__ == '__main__':
+    print """This code works with the Django web framework
+and should run as a django "view".
+See djangoproject.com for info.
+
+"""
