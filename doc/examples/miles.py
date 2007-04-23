@@ -37,11 +37,15 @@ def miles_graph():
     import math
     import re
 
+    # open file miles.dat.gz (or miles.dat)
     try:
-        fh=open("miles.dat","r")
+        try:
+            import gzip
+            fh = gzip.open('miles.dat.gz','r')
+        except:
+            fh=open("miles.dat","r")
     except IOError:
-        print "miles.dat not found"
-        raise
+        raise "File miles.dat not found."
 
     G=AGraph(name='miles.dat')
     G.node_attr['shape']='circle'
