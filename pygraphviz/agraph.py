@@ -1311,7 +1311,10 @@ class Attribute(UserDict.DictMixin):
         self.__dict__['type']=atype
 
     def __setitem__(self, name, value):
-        gv.agattr(self.handle,self.type,name,value)
+        try:
+            gv.agattr(self.handle,self.type,name,value)
+        except TypeError:
+            raise "Attribute value must be a string"
 
     def __getitem__(self, name):
         try:
@@ -1378,7 +1381,12 @@ class ItemAttribute(Attribute):
             gv.agset(self.handle,name,value)
         except KeyError: # not in default dict, set default to be empty string
             gv.agattr(self.ghandle,self.type,name,'')
-            gv.agset(self.handle,name,value)
+            try:
+                gv.agset(self.handle,name,value)
+            except KeyError: # not sucessful
+                pass
+        except TypeError:
+            raise "Attribute value must be a string"
 
     def __getitem__(self, name):
         return gv.agget(self.handle,name)

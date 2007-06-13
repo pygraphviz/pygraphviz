@@ -44,25 +44,7 @@
      PyErr_SetString(PyExc_KeyError,"agset: no key");
      return NULL;
   }
-}
-
-/* agget returns "" if no value */
-%exception agget {
-  $action
-  if (!strcmp(result,"")) {
-    PyErr_SetString(PyExc_KeyError,arg2);
-    return NULL;
-  }
-}
-
-/* agxget returns "" if no value */
-%exception agxget {
-  $action
-    if (!strcmp(result,"")) {
-      PyErr_SetString(PyExc_KeyError,"No symbol");
-      return NULL;
-    }
-}
+} */
 
 /* agdelnode returns -1 on error */
 %exception agdelnode {
@@ -77,7 +59,7 @@
 %exception agdeledge {
   $action
   if (result==-1) {
-     PyErr_SetString(PyExc_KeyError,"No key");
+     PyErr_SetString(PyExc_KeyError,"agdeledge: no key");
      return NULL;
   }
 }
@@ -94,7 +76,7 @@
 %exception agattr {
   $action
   if (!result) {
-     PyErr_SetString(PyExc_KeyError,"agattr no key");
+     PyErr_SetString(PyExc_KeyError,"agattr: no key");
      return NULL;
   }
 }
@@ -104,7 +86,7 @@
 %exception agattrdefval {
   $action
     if (!strcmp(result,"")) {
-      PyErr_SetString(PyExc_KeyError,"No symbol");
+      PyErr_SetString(PyExc_KeyError,"agattrdefval: no symbol");
       return NULL;
     }
 }

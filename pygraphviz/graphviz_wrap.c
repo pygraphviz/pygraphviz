@@ -3742,13 +3742,7 @@ SWIGINTERN PyObject *_wrap_agget(PyObject *SWIGUNUSEDPARM(self), PyObject *args)
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "agget" "', argument " "2"" of type '" "char *""'");
   }
   arg2 = (char *)(buf2);
-  {
-    result = (char *)agget(arg1,arg2);
-    if (!strcmp(result,"")) {
-      PyErr_SetString(PyExc_KeyError,arg2);
-      return NULL;
-    }
-  }
+  result = (char *)agget(arg1,arg2);
   resultobj = SWIG_FromCharPtr((const char *)result);
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
@@ -3779,13 +3773,7 @@ SWIGINTERN PyObject *_wrap_agxget(PyObject *SWIGUNUSEDPARM(self), PyObject *args
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "agxget" "', argument " "2"" of type '" "Agsym_t *""'"); 
   }
   arg2 = (Agsym_t *)(argp2);
-  {
-    result = (char *)agxget(arg1,arg2);
-    if (!strcmp(result,"")) {
-      PyErr_SetString(PyExc_KeyError,"No symbol");
-      return NULL;
-    }
-  }
+  result = (char *)agxget(arg1,arg2);
   resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
