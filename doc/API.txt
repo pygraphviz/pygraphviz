@@ -32,6 +32,11 @@ Pygraphviz API Notes
    - The string() method produces a string with the graph represented
      in Graphviz dot format.
    
+   - The subgraph() method does not have an inplace option.
+     Graphviz subgraphs form a tree of graphs under the original
+     (root) graph and are primarily used for clustering of nodes when
+     drawing with dot.
+
   Pygraphviz supports most of the Graphviz API but at this point
   does not handle Graphviz subgraphs.  There is a subgraph() method
   but it is not the same subgraph as in dot format files.

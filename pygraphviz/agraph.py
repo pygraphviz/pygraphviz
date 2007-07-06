@@ -765,31 +765,67 @@ class AGraph(object):
         return bunch
 
 
-    def subgraph(self, nbunch, inplace=False, name=None, create_using=None):
-        """Return subgraph of graph induced by nodes in nbunch.
-
-        This does not make a graphviz subgraph (see pygraphviz.graphviz).
-
-        Optional inplace=True demolishes the graph instead of returning a
-        new graph.
-
+    def add_subgraph(self, nbunch=None, name=None):
+        """Return subgraph induced by nodes in nbunch.
         """
+        handle=gv.agsubg(self.handle,name,_Action.create)
+        H=self.__class__(strict=self.is_strict(),directed=self.is_directed(),handle=handle,name=name)
+
+        if nbunch is None: return H
+        # add induced subgraph on nodes in nbunch
         bunch=self.prepare_nbunch(nbunch)
-        if inplace: # demolish all nodes (and attached edges) not in nbunch
-            bunch=dict.fromkeys(bunch) # make a dict
-            self.delete_nodes_from([n for n in self if n not in bunch])
-            return self
-        # create new graph        
-        if create_using is None:  
-            H=self.__class__(strict=self.is_strict(),directed=self.is_directed())
-        else:                     # user specified graph
-            H=create_using
-            H.clear()
         H.add_nodes_from(bunch)
         for (u,v) in self.edges():
             if u in H and v in H: 
                 H.add_edge(u,v)
         return H
+
+    def delete_subgraph(self, name):
+        """Delete subgraph with given name."""  
+        handle=gv.agsubg(self.handle,name,_Action.find)
+        if handle is None: raise KeyError("subgraph %s not in graph"%name)
+        gv.agdelsubg(self.handle,handle)
+        
+
+    subgraph=add_subgraph
+
+    def subgraph_parent(self, nbunch=None, name=None):
+        """Return parent graph of subgraph or None if graph is root graph.
+        """
+        handle=gv.agparent(self.handle)
+        if handle is None: return None
+        H=self.__class__(strict=self.is_strict(),directed=self.is_directed(),handle=handle,name=name)
+        return H
+    
+    def subgraph_root(self, nbunch=None, name=None):
+        """Return root graph of subgraph or None if graph is root graph.
+        """
+        handle=gv.agroot(self.handle)
+        if handle is None: return None
+        H=self.__class__(strict=self.is_strict(),directed=self.is_directed(),handle=handle,name=name)
+        return H
+    
+    def get_subgraph(self,name):
+        """Return existing subgraph with specified name or None if it
+        doesn't exist.
+        """
+        handle=gv.agsubg(self.handle,name,_Action.find)
+        if handle is None: return None
+        H=self.__class__(strict=self.is_strict(),directed=self.is_directed(),handle=handle)
+        return H
+        
+    def subgraphs_iter(self):
+        """Iterator over subgraphs."""
+        handle=gv.agfstsubg(self.handle)
+        while handle is not None:
+            yield self.__class__(strict=self.is_strict(),directed=self.is_directed(),handle=handle)
+            handle=gv.agnxtsubg(handle)
+        raise StopIteration
+
+    def subgraphs(self):
+        """Return a list of all subgraphs in the graph."""
+        return list(self.subgraphs_iter())
+
 
     # directed, undirected tests and conversions
 

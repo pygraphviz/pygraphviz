@@ -342,14 +342,71 @@ True
 >>> B=A.subgraph(map(str,K1))
 >>> B==K1
 True
->>> B=A.subgraph(map(str,K3),inplace=True)
->>> B==A
-True
->>> B is A
-True
->>> B==P3
-True
 
+>>> A=AGraph(name='main graph')
+>>> nodelist=['a','b','c','d','e']
+>>> edgelist=[['a','b'],['a','a'],['c','d']]
+
+>>> A.add_nodes_from(nodelist)
+>>> A.add_edges_from(edgelist)
+>>> B1=A.subgraph(nbunch=['a','b'],name='subgraph b1')
+>>> B2=A.subgraph(nbunch=['c','d'],name='subgraph b2')
+>>> C=B1.subgraph(nbunch=['a','b'],name='cluster c')
+>>> print A.string().expandtabs()
+strict graph "main graph" {
+        subgraph "subgraph b1" {
+                subgraph "cluster c" {
+                        a -- b;
+                }
+                a -- b;
+        }
+        subgraph "subgraph b2" {
+                c -- d;
+        }
+        a -- b;
+        c -- d;
+        e;
+}
+<BLANKLINE>
+
+>>> print B1.subgraph_parent()
+main graph
+>>> print B1.subgraph_root()
+main graph
+>>> print B2.subgraph_parent()
+main graph
+>>> print B2.subgraph_root()
+main graph
+>>> print C.subgraph_parent()
+subgraph b1
+>>> print C.subgraph_root()
+main graph
+
+>>> Glist=A.subgraphs()
+>>> print [str(G) for G in Glist]
+['subgraph b1', 'subgraph b2']
+
+>>> H=A.get_subgraph('subgraph b1')
+>>> print H.string().expandtabs()
+strict graph "subgraph b1" {
+        subgraph "cluster c" {
+                a -- b;
+        }
+        a -- b;
+}
+<BLANKLINE>
+
+>>> H=A.delete_subgraph('subgraph b1')
+>>> print A.string().expandtabs()
+strict graph "main graph" {
+        subgraph "subgraph b2" {
+                c -- d;
+        }
+        a -- b;
+        c -- d;
+        e;
+}
+<BLANKLINE>
 
 strict
 ------
