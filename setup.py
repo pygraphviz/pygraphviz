@@ -144,6 +144,7 @@ extension = [Extension("pygraphviz._graphviz",
                       ["pygraphviz/graphviz_wrap.c"],
                       include_dirs=include_dirs,
                       library_dirs=library_dirs,
+                      runtime_library_dirs=library_dirs,
                       libraries=["agraph","cdt"],
                       )]
 package_data = {'': ['*.txt'],}
