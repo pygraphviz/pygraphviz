@@ -106,7 +106,8 @@ if library_path is None or include_path is None:
     print 
     print  """Your graphviz installation could not be found.
 
-Either the graphviz package is missing on incomplete (graphviz-dev missing?).  
+Either the graphviz package is missing on incomplete
+(binary packages graphviz-dev or graphviz-devel missing?).  
 
 If you think your installation is correct you will need to manually
 change the include_path and library_path variables in setup.py to
