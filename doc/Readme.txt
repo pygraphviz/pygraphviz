@@ -45,7 +45,7 @@ Downloading
    - Releases
 
      - Python Cheese Shop:  http://cheeseshop.python.org/pypi/pygraphviz/
-     - NetworkX site: https://networkx.lanl.gov/download/?C=M;O=A
+     - NetworkX site: https://networkx.lanl.gov/download/pygraphviz/
 
    - Subversion repository: https://networkx.lanl.gov/svn/pygraphviz/trunk pygraphviz
 
@@ -56,11 +56,12 @@ Building
    To build PyGraphviz you need:	
 
       - Python: Version 2.3 or later http://www.python.org/ .
-        Linux users will need the python-dev package installed.
+        Linux users need the python-dev or python-devel package installed.
 
       - Graphviz: http://graphviz.org/ 
         Tested with version 2.8 or later, but may work with earlier versions.
-	Linux users might need to install the graphviz-dev package.
+	Linux users might need to install the graphviz-dev or
+        graphviz-devel package.
 
       - A C compiler
 

@@ -3,6 +3,19 @@
 PyGraphviz News
 ===============
 
+pygraphviz-0.35
+---------------
+Release date: 22 July 2007
+
+See: https://networkx.lanl.gov/timeline
+
+ - Rebuilt SWIG wrappers - works correctly now on 64 bit machines/python2.5
+ - Implement Graphviz subgraph functionality
+ - Better error reporting when attempting to set attributes, avoid 
+   segfault when using None 
+ - pkg-config handling now works in more configurations (hopefully all) 
+ 
+
 pygraphviz-0.34
 ---------------
 Release date: 11 April 2007
