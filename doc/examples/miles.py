@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 """
-Draw the graph of cities from miles.dat.
 An example that shows how to add your own positions to nodes
-and have graphviz neato draw the edges.
+and have graphviz "neato" position the edges. 
 
 miles_graph() returns an undirected graph over the 128 US cities from
-the datafile miles.dat.  
+the datafile miles_dat.txt.  
 
 This example is described in Section 1.1 in Knuth's book [1,2].
+
+The data used in this example is copied from [2].  The filename and
+header have been modified to adhere to the request of the author to
+not corrupt the original source file content and name.
 
 References.
 -----------
@@ -20,7 +23,7 @@ References.
 
 """
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
-#    Copyright (C) 2006 by 
+#    Copyright (C) 2006-2007 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
@@ -29,7 +32,7 @@ __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 
 
 def miles_graph():
-    """ Return the example graph in miles.dat from the Stanford GraphBase.
+    """Return a graph from the data in miles_dat.txt.
 
     Edges are made between cities that are less then 300 miles apart.
 
@@ -37,23 +40,23 @@ def miles_graph():
     import math
     import re
 
-    # open file miles.dat.gz (or miles.dat)
+    # open file miles_dat.txt.gz (or miles_dat.txt)
     try:
         try:
             import gzip
-            fh = gzip.open('miles.dat.gz','r')
+            fh = gzip.open('miles_dat.txt.gz','r')
         except:
-            fh=open("miles.dat","r")
+            fh=open("miles_dat.txt","r")
     except IOError:
-        raise "File miles.dat not found."
+        raise "File miles_dat.txt not found."
 
-    G=AGraph(name='miles.dat')
+    G=AGraph(name='miles_dat')
     G.node_attr['shape']='circle'
     G.node_attr['fixedsize']='true'
     G.node_attr['fontsize']='0.1'
     G.node_attr['style']='filled'
     G.graph_attr['outputorder']='edgesfirst'
-    G.graph_attr['label']="Knuth's miles.dat"
+    G.graph_attr['label']="miles_dat"
     G.graph_attr['ratio']='1.0'
     G.edge_attr['color']='#AA00FF'
     G.edge_attr['style']='setlinewidth(2)'
@@ -100,7 +103,7 @@ if __name__ == '__main__':
 
     G=miles_graph()
 
-    print "Loaded Donald Knuth's miles.dat containing 128 cities."
+    print "Loaded miles_dat.txt containing 128 cities."
    
     G.string()
     G.write("miles.dot")
