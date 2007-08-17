@@ -1009,36 +1009,32 @@ class AGraph(object):
         errors = []
         threads = [PipeReader(data, child_stdout),
                    PipeReader(errors, child_stderr)]
-        try:
-            for t in threads:
-                t.start()
+        for t in threads:
+            t.start()
 
-            self.write(child_stdin)
-            child_stdin.close()
+        self.write(child_stdin)
+        child_stdin.close()
 
-            for t in threads:
-                t.join()
+        for t in threads:
+            t.join()
 
-            if not data[0]:
-                raise IOError
+        if not data[0]:
+            raise IOError
 
-            # need to serialize writing and reading
-            # otherwise the internal state will be garbled
-            fh = TemporaryFile()
-            fh.write("".join(data))
-            fh.seek(0)
-            # Cover TemporaryFile wart: on 'nt' we need the file member
-            if hasattr(fh, 'file'):
-                self.read(fh.file)
-            else:
-                self.read(fh)
-            fh.close()
-        except:
-            if errors:
-                raise IOError("the graphviz layout with %s failed:\n%s "%
+        # need to serialize writing and reading
+        # otherwise the internal state will be garbled
+        fh = TemporaryFile()
+        fh.write("".join(data))
+        fh.seek(0)
+        # Cover TemporaryFile wart: on 'nt' we need the file member
+        if hasattr(fh, 'file'):
+            self.read(fh.file)
+        else:
+            self.read(fh)
+        fh.close()
+        if errors:
+            raise IOError("the graphviz layout with %s failed:\n%s "%
                           (prog, "".join( errors )))
-            else:
-                raise IOError("the graphviz layout with %s failed."%prog)
 
         self.has_layout=True
         return
@@ -1048,8 +1044,8 @@ class AGraph(object):
         """Output graph to path in specified format.
 
         An attempt will be made to guess the output format based
-        on the file extension.  If that fails the format keyword
-        will be used.
+        on the file extension of path.  If that fails the format keyword
+        will be used.  
         
         Formats::
 
@@ -1060,7 +1056,7 @@ class AGraph(object):
 
         If prog is not specified and the graph has positions
         (see layout()) then no additional graph positioning will
-        be preformed.
+        be performed.
                  
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
         will use specified graphviz layout method.
@@ -1074,15 +1070,18 @@ class AGraph(object):
         # use dot to position, output png in 'file'
         >>> G.draw('file', format='png',prog='dot') 
 
-        Use keyword args to add additional arguments to graphviz programs.
+        # use keyword 'args' to pass additional arguments to graphviz
+        >>> G.draw('test.ps',prog='twopi',args='-Groot=1')
 
         The layout might take a long time on large graphs.
 
         """
         import os
 
+        # try to guess format from extension
         if format is None and path is not None:
-            format=os.path.splitext(path)[1].lower()[1:]  # get extension
+            fh=self._get_fh(path,'w+b')
+            format=os.path.splitext(fh.name)[-1].lower()[1:] 
 
         if format is None or format=='':
             format = 'dot'
@@ -1126,34 +1125,30 @@ class AGraph(object):
         threads = [PipeReader(data, child_stdout),
                    PipeReader(errors, child_stderr)]
 
-        try:
-            for t in threads:
-                t.start()
 
-            self.write(child_stdin)
-            child_stdin.close()
+        for t in threads:
+            t.start()
 
-            for t in threads:
-                t.join()
+        self.write(child_stdin)
+        child_stdin.close()
 
-            if not data[0]:
-                raise IOError
+        for t in threads:
+            t.join()
 
-            if path is not None:
-                fh=self._get_fh(path,'w+b')
-                fh.write("".join(data))
-                fh.close()
-                d=None
-            else:
-                d="".join( data )
+        if not data[0]:
+            raise IOError
+
+        if path is not None:
+            fh=self._get_fh(path,'w+b')
+            fh.write("".join(data))
+            fh.close()
+            d=None
+        else:
+            d="".join( data )
                 
-        except:
-            if errors:
-                raise IOError("the graphviz layout with %s failed:\n%s "%
+        if errors:
+            raise IOError("the graphviz layout with %s failed:\n%s "%
                               (prog, "".join( errors )) )
-            else:
-                raise IOError("the graphviz layout with %s failed."%prog)
-
         return d
 
     # some private helper functions
