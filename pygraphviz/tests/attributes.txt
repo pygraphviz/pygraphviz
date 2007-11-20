@@ -173,3 +173,21 @@ strict graph {
         1 -- 2;
 }
 <BLANKLINE>
+
+
+Anonymous edges and attributes
+------------------------------
+>>> d="""graph test {\n a -- b [label="edge1"];\n a -- b [label="edge2"];\n }"""
+>>> import os,tempfile
+>>> (fd,fname)=tempfile.mkstemp()
+>>> fh=open(fname,'w')
+>>> fh.write(d)
+>>> fh.close()
+>>> A=AGraph(fname)
+>>> print A.string().expandtabs()
+graph test {
+        a -- b   [label=edge1];
+        a -- b   [label=edge2];
+}
+<BLANKLINE>
+

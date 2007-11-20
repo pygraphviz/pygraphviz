@@ -129,6 +129,8 @@ class AGraph(object):
         >>> G.nodes()
         ['a', '1']
         
+        Anonymous Graphviz nodes are currently not implemented.
+
         """
         if not self._is_string_like(n):  n=str(n)
         try:
@@ -352,8 +354,7 @@ class AGraph(object):
                 while eh is not None:
                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    key=gv.agnameof(eh)
-                    yield Edge(self,u,v,key)
+                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
                     eh=gv.agnxtout(eh)
                 nh=gv.agnxtnode(nh)
         elif nbunch in self: # if nbunch is a single node 
@@ -363,7 +364,7 @@ class AGraph(object):
             while eh is not None:
                 (s,t)=(gv.agtail(eh),gv.aghead(eh))
                 (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                yield Edge(self,u,v,gv.agnameof(eh))
+                yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
                 eh=gv.agnxtedge(eh,nh)
         else:                # if nbunch is a sequence of nodes
             try: bunch=[n for n in nbunch if n in self]
@@ -379,7 +380,7 @@ class AGraph(object):
                 while eh is not None:
                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,gv.agnameof(eh))
+                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
                     eh=gv.agnxtout(eh)
         raise StopIteration
  
@@ -448,7 +449,7 @@ class AGraph(object):
                 while eh is not None:
                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,gv.agnameof(eh))
+                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
                     eh=gv.agnxtout(eh)
                 nh=gv.agnxtnode(nh)
         elif nbunch in self: # if nbunch is a single node 
@@ -458,7 +459,7 @@ class AGraph(object):
             while eh is not None:
                 (s,t)=(gv.agtail(eh),gv.aghead(eh))
                 (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                yield Edge(self,u,v,gv.agnameof(eh))
+                yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
                 eh=gv.agnxtout(eh)
         else:                # if nbunch is a sequence of nodes
             try: bunch=[n for n in nbunch if n in self]
@@ -474,7 +475,7 @@ class AGraph(object):
                 while eh is not None:
                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,gv.agnameof(eh))
+                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
                     eh=gv.agnxtout(eh)
         raise StopIteration
  
@@ -494,7 +495,7 @@ class AGraph(object):
                 while eh is not None:
                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,gv.agnameof(eh))
+                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
                     eh=gv.agnxtin(eh)
                 nh=gv.agnxtnode(nh)
         elif nbunch in self: # if nbunch is a single node 
@@ -504,7 +505,7 @@ class AGraph(object):
             while eh is not None:
                 (s,t)=(gv.agtail(eh),gv.aghead(eh))
                 (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                yield Edge(self,u,v,gv.agnameof(eh))
+                yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
                 eh=gv.agnxtin(eh)
         else:                # if nbunch is a sequence of nodes
             try: bunch=[n for n in nbunch if n in self]
@@ -520,7 +521,7 @@ class AGraph(object):
                 while eh is not None:
                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,gv.agnameof(eh))
+                    yield Edge(self,u,v,key=gv.agnameof(key),eh=eh)
                     eh=gv.agnxtin(eh)
         raise StopIteration
 
@@ -770,7 +771,6 @@ class AGraph(object):
         """
         handle=gv.agsubg(self.handle,name,_Action.create)
         H=self.__class__(strict=self.is_strict(),directed=self.is_directed(),handle=handle,name=name)
-
         if nbunch is None: return H
         # add induced subgraph on nodes in nbunch
         bunch=self.prepare_nbunch(nbunch)
@@ -778,7 +778,9 @@ class AGraph(object):
         for (u,v) in self.edges():
             if u in H and v in H: 
                 H.add_edge(u,v)
+
         return H
+
 
     def delete_subgraph(self, name):
         """Delete subgraph with given name."""  
@@ -1280,12 +1282,13 @@ class Edge(tuple):
     >>> edge.attr['color']='red'
 
     """ 
-    def __new__(self,graph,source,target,key=None):
+    def __new__(self,graph,source,target,key=None,eh=None):
         s=Node(graph,source)
         t=Node(graph,target)
 
         try:
-            eh=gv.agedge(s.get_handle(),t.get_handle(),key,_Action.find)
+            if eh is None:
+                eh=gv.agedge(s.get_handle(),t.get_handle(),key,_Action.find)
         except KeyError:
             raise KeyError("edge %s-%s not in graph"%(source,target))
 
