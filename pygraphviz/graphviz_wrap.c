@@ -3570,7 +3570,7 @@ SWIGINTERN PyObject *_wrap_agdeledge(PyObject *SWIGUNUSEDPARM(self), PyObject *a
   {
     result = (int)agdeledge(arg1);
     if (result==-1) {
-      PyErr_SetString(PyExc_KeyError,"No key");
+      PyErr_SetString(PyExc_KeyError,"agdeledge: no key");
       return NULL;
     }
   }
@@ -3627,7 +3627,7 @@ SWIGINTERN PyObject *_wrap_agattr(PyObject *SWIGUNUSEDPARM(self), PyObject *args
   {
     result = (Agsym_t *)agattr(arg1,arg2,arg3,arg4);
     if (!result) {
-      PyErr_SetString(PyExc_KeyError,"agattr no key");
+      PyErr_SetString(PyExc_KeyError,"agattr: no key");
       return NULL;
     }
   }
@@ -3911,7 +3911,7 @@ SWIGINTERN PyObject *_wrap_agattrdefval(PyObject *SWIGUNUSEDPARM(self), PyObject
   {
     result = (char *)agattrdefval(arg1);
     if (!strcmp(result,"")) {
-      PyErr_SetString(PyExc_KeyError,"No symbol");
+      PyErr_SetString(PyExc_KeyError,"agattrdefval: no symbol");
       return NULL;
     }
   }
