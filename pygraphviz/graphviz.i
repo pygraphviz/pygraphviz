@@ -44,7 +44,7 @@
      PyErr_SetString(PyExc_KeyError,"agset: no key");
      return NULL;
   }
-} */
+} 
 
 /* agdelnode returns -1 on error */
 %exception agdelnode {
