@@ -48,11 +48,39 @@ class AGraph(object):
 
       G=AGraph("file.dot")   
 
+    Graphviz graph keyword parameters are processed so you may add
+    them like
+
+    >>> G=AGraph(landscape='true',ranksep='0.1')
+
+    or alternatively
+
+    >>> G=AGraph()
+    >>> G.graph_attr.update(landscape='true',ranksep='0.1')
+
+    and
+
+    >>> G.node_attr.update(color='red')
+    >>> G.edge_attr.update(len='2.0',color='blue')
+
+    See http://www.graphviz.org/doc/info/attrs.html
+    for a list of attributes.
     
+    Keyword parameters:
+
+    name is a string name for the graph        
+
+    strict=True|False (True for simple graphs)
+
+    directed=True|False
+
+    data is a dictionary of dictionaries or dictionary of lists
+    representing nodes or edges to load into intial graph
+
     """
     def __init__(self, file=None, name=None,
                  data=None, strict=True, directed=False,
-                 handle=None):
+                 handle=None,**attr):
 
         if handle is None:
             # the graph pointer (handle)
@@ -69,6 +97,7 @@ class AGraph(object):
             self.add_nodes_from(data.keys())        
 
         self.graph_attr=Attribute(self.handle,0) # default graph attributes
+        self.graph_attr.update(attr) # apply attributes passed to init
         self.node_attr=Attribute(self.handle,1)  # default node attributes
         self.edge_attr=Attribute(self.handle,2)  # default edge attribtes
 
@@ -114,7 +143,7 @@ class AGraph(object):
 #    def __setitem__(self,u,v):
 #        self.add_edge(u,v)
 
-    def add_node(self, n):
+    def add_node(self, n, **attr):
         """Add a single node n to the graph.
 
         If n is not a string, conversion to a string will be attempted.
@@ -129,6 +158,13 @@ class AGraph(object):
         >>> G.nodes()
         ['a', '1']
         
+        Attributes can be added to nodes on creation
+
+        >>> G.add_node(2,color='red')
+
+        See http://www.graphviz.org/doc/info/attrs.html
+        for a list of attributes.
+
         Anonymous Graphviz nodes are currently not implemented.
 
         """
@@ -137,8 +173,10 @@ class AGraph(object):
             nh=gv.agnode(self.handle,n,_Action.find)
         except KeyError:
             nh=gv.agnode(self.handle,n,_Action.create)
+            nh=Node(self,n)
+            nh.attr.update(**attr)
 
-    def add_nodes_from(self, nbunch):
+    def add_nodes_from(self, nbunch, **attr):
         """Add nodes to graph from a container nbunch.
 
         nbunch can be any iterable container such as a list or dictionary
@@ -149,9 +187,14 @@ class AGraph(object):
         >>> sorted(G.nodes())
         ['1', 'a', 'b', 'spam']
         
+
+        Attributes can be added to nodes on creation
+
+        >>> G.add_nodes_from(nlist, color='red') # set all nodes in nlist red
+
         """
         for n in nbunch:
-            self.add_node(n)
+            self.add_node(n,**attr)
 
     def delete_node(self,n):
         """Delete the single node n from graph.
@@ -234,7 +277,7 @@ class AGraph(object):
         """
         return Node(self,n)
 
-    def add_edge(self,u,v=None,key=None):  
+    def add_edge(self,u,v=None,key=None,**attr):  
         """Add a single edge between nodes u and v to the graph.
 
         If u and v are not nodes in they graph they will added.
@@ -258,6 +301,13 @@ class AGraph(object):
         >>> sorted(G.edges())
         [('a', 'b', 'first'), ('a', 'b', 'second')]
 
+        Attributes can be added when edges are created
+
+        >>> G.add_edge('a','b',color='green')
+
+        See http://www.graphviz.org/doc/info/attrs.html
+        for a list of attributes.
+
         """
         if v is None: (u,v)=u  # no v given, assume u is an edge tuple
         try:
@@ -272,10 +322,12 @@ class AGraph(object):
             vh=Node(self,v).get_handle()
         try:
             eh=gv.agedge(uh,vh,key,_Action.create)
+            eh=Edge(self,u,v,key,eh)
+            eh.attr.update(**attr)
         except KeyError:
             return None # silent failure for strict graph, already added
 
-    def add_edges_from(self, ebunch):  
+    def add_edges_from(self, ebunch, **attr):  
         """Add nodes to graph from a container ebunch.
 
         ebunch is a container of edges such as a list or dictionary.
@@ -283,9 +335,14 @@ class AGraph(object):
         >>> G=AGraph()
         >>> elist=[('a','b'),('b','c')]
         >>> G.add_edges_from(elist)
+
+        Attributes can be added when edges are created
+
+        >>> G.add_edges_from(elist, color='green')
+
         """
         for e in ebunch:
-            self.add_edge(e)
+            self.add_edge(e,**attr)
 
     def get_edge(self, u, v, key=None):
         """Return an edge object (Edge) corresponding to edge (u,v).
@@ -680,8 +737,18 @@ class AGraph(object):
         if self.is_directed():
             # new empty DiGraph
             H=self.__class__(strict=self.is_strict(),directed=True) 
-            H.add_nodes_from(self)
-            H.add_edges_from([(v,u) for (u,v) in self.edges_iter()])
+            H.graph_attr.update(self.graph_attr)
+            H.node_attr.update(self.node_attr)
+            H.edge_attr.update(self.edge_attr)
+            for n in self.nodes():
+                H.add_node(n)
+                new_n=Node(H,n)
+                new_n.attr.update(n.attr)
+            for e in self.edges():
+                (u,v)=e
+                H.add_edge(v,u)
+                uv=H.get_edge(v,u)
+                uv.attr.update(e.attr)
             return H
         else:
             return self
@@ -716,9 +783,9 @@ class AGraph(object):
 
     def clear(self):
         """Remove all nodes, edges, and attributes from the graph."""
-        for a in self.edge_attr:  del self.edge_attr[a]
-        for a in self.node_attr:  del self.node_attr[a]
-        for a in self.graph_attr: del self.graph_attr[a]
+        self.edge_attr.clear()
+        self.node_attr.clear()
+        self.graph_attr.clear()
         self.delete_edges_from(self.edges())
         self.delete_nodes_from(self.nodes())
 
@@ -862,20 +929,18 @@ class AGraph(object):
             return self.copy()
         else:
             U=AGraph(strict=self.is_strict())
-            for (k,v) in self.edge_attr.iteritems(): U.edge_attr[k]=v
-            for (k,v) in self.node_attr.iteritems(): U.node_attr[k]=v
-            for (k,v) in self.graph_attr.iteritems(): U.graph_attr[k]=v
+            U.graph_attr.update(self.graph_attr)
+            U.node_attr.update(self.node_attr)
+            U.edge_attr.update(self.edge_attr)
             for n in self.nodes():
                 U.add_node(n)
                 new_n=Node(U,n)
-                for (k,v) in n.attr.iteritems():
-                    new_n.attr[k]=v
+                new_n.attr.update(n.attr)
             for e in self.edges():
                 (u,v)=e
                 U.add_edge(u,v)
                 uv=U.get_edge(u,v)
-                for (k,v) in e.attr.iteritems():
-                    uv.attr[k]=v
+                uv.attr.update(e.attr)
             return U
 
 
@@ -887,23 +952,22 @@ class AGraph(object):
         """
         if self.is_undirected():
             D=AGraph(strict=self.is_strict(),directed=True)
-            for (k,v) in self.edge_attr.iteritems(): D.edge_attr[k]=v
-            for (k,v) in self.node_attr.iteritems(): D.node_attr[k]=v
-            for (k,v) in self.graph_attr.iteritems(): D.graph_attr[k]=v
+            D.graph_attr.update(self.graph_attr)
+            D.node_attr.update(self.node_attr)
+            D.edge_attr.update(self.edge_attr)
             for n in self.nodes():
                 D.add_node(n)
                 new_n=Node(D,n)
-                for (k,v) in n.attr.iteritems():
-                    new_n.attr[k]=v
+                new_n.attr.update(n.attr)
             for e in self.edges():
                 (u,v)=e
                 D.add_edge(u,v)
                 D.add_edge(v,u)
                 uv=D.get_edge(u,v)
                 vu=D.get_edge(v,u)
-                for (k,v) in e.attr.iteritems():
-                    uv.attr[k]=v
-                    vu.attr[k]=v
+                uv.attr.update(e.attr)
+                uv.attr.update(e.attr)
+                vu.attr.update(e.attr)
             return D
         else:
             return self.copy()
@@ -1073,7 +1137,7 @@ class AGraph(object):
         >>> G.draw('file', format='png',prog='dot') 
 
         # use keyword 'args' to pass additional arguments to graphviz
-        >>> G.draw('test.ps',prog='twopi',args='-Groot=1')
+        >>> G.draw('test.ps',prog='twopi',args='-Gepsilon=1')
 
         The layout might take a long time on large graphs.
 

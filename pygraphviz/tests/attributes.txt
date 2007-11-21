@@ -38,6 +38,17 @@ strict graph {
 <BLANKLINE>
 
 
+>>> A=AGraph(rankdir='LR',pack='true')
+>>> print A.string().expandtabs()
+strict graph {
+        graph [pack=true,
+                rankdir=LR
+        ];
+}
+<BLANKLINE>
+
+
+
 Node Defaults
 --------------
 
@@ -108,6 +119,15 @@ Individual node attributes
 --------------------------
 
 >>> A=AGraph()
+>>> A.add_node(1,label='test',spam='eggs')
+>>> print A.string().expandtabs()
+strict graph {
+        1        [label=test,
+                spam=eggs];
+}
+<BLANKLINE>
+
+>>> A=AGraph()
 >>> A.add_node(1)
 >>> one=A.get_node(1)
 >>> one.attr['label']='test'
@@ -141,6 +161,16 @@ strict graph {
 
 Individual edge attributes
 --------------------------
+
+>>> A=AGraph()
+>>> A.add_edge(1,2,label='test',spam='eggs')
+>>> print A.string().expandtabs()
+strict graph {
+        1 -- 2   [label=test,
+                spam=eggs];
+}
+<BLANKLINE>
+
 
 >>> A=AGraph()
 >>> A.add_edge(1,2)
