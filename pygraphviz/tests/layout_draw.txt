@@ -102,8 +102,7 @@ AttributeError: graph has no layout information, see layout()
 >>> A.draw(fname,prog='foo')
 Traceback (most recent call last):
 ...
-ValueError: prog foo is not one of: twopi, fdp, circo, neato, nop, dot
-
+ValueError: prog foo is not one of: twopi, gvcolor, wc, ccomps, tred, sccmap, fdp, circo, neato, acyclic, nop, gvpr, dot
 
 >>> os.close(fd)
 >>> os.unlink(fname)

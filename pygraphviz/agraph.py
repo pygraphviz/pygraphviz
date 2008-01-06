@@ -14,6 +14,7 @@ import graphviz as gv
 import UserDict
 import sys
 import threading
+import warnings
 
 class PipeReader(threading.Thread):
     """Read and write pipes using threads.
@@ -66,7 +67,19 @@ class AGraph(object):
     See http://www.graphviz.org/doc/info/attrs.html
     for a list of attributes.
     
+
     Keyword parameters:
+
+    thing is a generic input type (filename, string, handle to pointer, 
+    dictionary of dictionaries).  An attempt is made to automaticaly
+    detect the type so you may write for example:
+
+    >>> d={'1': {'2': None}, '2': {'1': None, '3': None}, '3': {'2': None}}
+    >>> A=AGraph(d)
+    >>> s=AGraph.to_string()
+    >>> B=AGraph(s)
+    >>> h=AGraph.handle
+    >>> C=AGraph(h)
 
     name is a string name for the graph        
 
@@ -77,25 +90,50 @@ class AGraph(object):
     data is a dictionary of dictionaries or dictionary of lists
     representing nodes or edges to load into intial graph
 
+    string is a string containing a dot format graph
+
+    handle is a Swig pointer to an agraph_t data structure
+
     """
-    def __init__(self, file=None, name=None,
-                 data=None, strict=True, directed=False,
+    def __init__(self, thing=None, file=None, name=None,
+                 data=None, string=None, strict=True, directed=False,
                  handle=None,**attr):
 
-        if handle is None:
-            # the graph pointer (handle)
-            self.handle=gv.agraphnew(name,strict,directed)  
+        # atttempt to guess input type
+        if isinstance(thing,dict):
+            data=thing # a dictionary of dictionaries (or lists)
+        if hasattr(thing,'own'): # a Swig pointer - graph handle
+            handle=thing
+        if self._is_string_like(thing): 
+            if (thing.startswith("strict") or 
+                thing.startswith("digraph") or 
+                thing.startswith("graph")):
+               string=thing # this is a dot format graph in a string
+            else:
+                file=thing  # assume this is a file name
+
+        # input type guessed or specified - now init graph                
+        if handle is None:  # the graph pointer (handle)
+            self.handle=gv.agraphnew(name,strict,directed) # new graph
         else:
-            self.handle=handle
+            self.handle=handle # use pointer to exisiting graph
+
+        # read from filename
         if file is not None:
             self.read(file)
 
-        if data is not None: # dict of dicts or dict of lists
+        # load from dict of dicts or dict of lists
+        if data is not None:
             for node in data:
                 for nbr in data[node]:
                     self.add_edge(node,nbr)
             self.add_nodes_from(data.keys())        
 
+        # load from string
+        if string is not None:
+            self.from_string(string)
+
+        # assign any attributes specified through keywords
         self.graph_attr=Attribute(self.handle,0) # default graph attributes
         self.graph_attr.update(attr) # apply attributes passed to init
         self.node_attr=Attribute(self.handle,1)  # default node attributes
@@ -1013,8 +1051,8 @@ class AGraph(object):
         # so use tempfile version below
         return self.draw(format='dot',prog='nop') 
 
-    def string(self):
-        """Return string representation of graph in dot format.""" 
+    def to_string(self):
+        """Return a string containing the graph in dot format.""" 
         from tempfile import TemporaryFile
         fh = TemporaryFile()
         # Cover TemporaryFile wart: on 'nt' we need the file member
@@ -1027,11 +1065,44 @@ class AGraph(object):
         fh.close()
         return data
 
+    def string(self):
+        """Return a string containing the graph in dot format.""" 
+        return self.to_string()
+
+    def from_string(self,string):
+        """ 
+        Load a graph from a string in dot format. Overwrites any existing graph.
+
+        To make a new graph from a string use
+        
+        >>> s='digraph {\n1 -> 2\n;}\n'
+        >>> A=AGraph()
+        >>> A.from_string(s)
+
+        or
+
+        >>> A=AGraph(string=s) # specify s is a string
+        >>> A=AGraph(s)  # s assumed to be a string during initialization
+
+        """
+        from tempfile import TemporaryFile
+        fh = TemporaryFile()
+        fh.write(string)
+        fh.seek(0)
+        # Cover TemporaryFile wart: on 'nt' we need the file member
+        if hasattr(fh, 'file'):
+            self.read(fh.file)
+        else:
+            self.read(fh)
+        fh.close()
+        return self
+
     def _get_prog(self,prog):
         # private: get path of graphviz program
         try:
             gvprogs=dict.fromkeys(\
-                ['neato','dot','twopi','circo','fdp','nop'])
+                ['neato','dot','twopi','circo','fdp','nop',
+                 'wc','acyclic','gvpr','gvcolor','ccomps','sccmap','tred'])
             p=gvprogs[prog]
         except KeyError:
             raise ValueError("prog %s is not one of: %s"%\
@@ -1042,6 +1113,43 @@ class AGraph(object):
         except:
             raise ValueError("program %s not found in path"%prog) 
         return runprog
+
+    def _run_prog(self,prog='nop',args=''):
+        """Apply graphviz program to graph and return the result as a string.
+
+        >>> A=AGraph()
+        >>> s=A._run_prog() # uses 'nop' by default
+        >>> s=A._run_prog(prog='acyclic')
+
+        Use keyword args to add additional arguments to graphviz programs.
+
+        """
+        import os
+
+        runprog=self._get_prog(prog)
+        cmd=' '.join([runprog,args])
+        child_stdin,child_stdout,child_stderr=os.popen3(cmd, 'b')
+        # Use threading to avoid blocking
+        data = []
+        errors = []
+        threads = [PipeReader(data, child_stdout),
+                   PipeReader(errors, child_stderr)]
+        for t in threads:
+            t.start()
+
+        self.write(child_stdin)
+        child_stdin.close()
+
+        for t in threads:
+            t.join()
+
+        if data==[]:
+            raise IOError("".join(errors))
+# errors should be reported here somehow - is this the right way?
+#        if len(errors)>0:
+#            warnings.warn("".join(errors),UserWarning) 
+        return "".join(data)
+
 
     def layout(self,prog='neato',args='',fmt='dot'):
         """Assign positions to nodes in graph.
@@ -1065,45 +1173,46 @@ class AGraph(object):
             sys.stderr.write(\
               "Warning: graph has %s nodes...layout may take a long time.\n"%\
               self.number_of_nodes())
-        runprog=self._get_prog(prog)
-        cmd=' '.join([runprog,args,"-T"+fmt])
-        child_stdin,child_stdout,child_stderr=os.popen3(cmd, 'b')
-        # Use threading to avoid blocking
-        # Use a temporary file because writing must be finished
-        # before starting to read
-        data = []
-        errors = []
-        threads = [PipeReader(data, child_stdout),
-                   PipeReader(errors, child_stderr)]
-        for t in threads:
-            t.start()
 
-        self.write(child_stdin)
-        child_stdin.close()
-
-        for t in threads:
-            t.join()
-
-        if not data[0]:
-            raise IOError
-
-        # need to serialize writing and reading
-        # otherwise the internal state will be garbled
-        fh = TemporaryFile()
-        fh.write("".join(data))
-        fh.seek(0)
-        # Cover TemporaryFile wart: on 'nt' we need the file member
-        if hasattr(fh, 'file'):
-            self.read(fh.file)
-        else:
-            self.read(fh)
-        fh.close()
-        if errors:
-            raise IOError("the graphviz layout with %s failed:\n%s "%
-                          (prog, "".join( errors )))
-
+        data=self._run_prog(prog,' '.join([args,"-T",fmt]))
+        self.from_string(data)
         self.has_layout=True
         return
+
+
+    def tred(self,args='',copy=False):
+        """Transitive reduction of graph.  Modifies existing graph.
+        
+        To create a new graph use 
+
+        >>> A=AGraph()
+        >>> B=A.tred(copy=True)
+
+        See the graphviz "tred" program for details of the algorithm.
+        """
+        data=self._run_prog('tred',args)
+        if copy:
+            return self.__class__(string=data)
+        else:
+            return self.from_string(data)
+
+
+    def acyclic(self,args='',copy=False):
+        """Reverse sufficient edges in digraph to make graph acyclic.
+        Modifies existing graph.
+
+        To create a new graph use 
+
+        >>> A=AGraph()
+        >>> B=A.acyclic(copy=True)
+
+        See the graphviz "acyclic" program for details of the algorithm.
+        """
+        data=self._run_prog('acyclic',args)
+        if copy:
+            return self.__class__(string=data)
+        else:
+            return self.from_string(data)
 
 
     def draw(self,path=None,format=None,prog=None,args=''):
@@ -1179,30 +1288,12 @@ class AGraph(object):
               "Warning: graph has %s nodes...layout may take a long time.\n"%\
               self.number_of_nodes())
 
-        runprog=self._get_prog(prog)
         if prog=='nop': # nop takes no switches
-            cmd=prog
+            args=''
         else:
-            cmd=' '.join([prog,args,"-T"+format])
-        child_stdin,child_stdout,child_stderr=os.popen3(cmd, 'b')
+            args=' '.join([args,"-T"+format])
 
-        data = []
-        errors = []
-        threads = [PipeReader(data, child_stdout),
-                   PipeReader(errors, child_stderr)]
-
-
-        for t in threads:
-            t.start()
-
-        self.write(child_stdin)
-        child_stdin.close()
-
-        for t in threads:
-            t.join()
-
-        if not data[0]:
-            raise IOError
+        data=self._run_prog(prog,args)
 
         if path is not None:
             fh=self._get_fh(path,'w+b')
@@ -1211,10 +1302,6 @@ class AGraph(object):
             d=None
         else:
             d="".join( data )
-                
-        if errors:
-            raise IOError("the graphviz layout with %s failed:\n%s "%
-                              (prog, "".join( errors )) )
         return d
 
     # some private helper functions
