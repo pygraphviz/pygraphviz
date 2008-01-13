@@ -24,6 +24,11 @@ Quick Example
             b -- c;
     }
 
+    To load a dot file use::
+
+    >>> from pygraphviz import *
+    >>> G=AGraph("file.dot")
+
    More documentation
 
      - Tutorial  http://networkx.lanl.gov/pygraphviz/Tutorial

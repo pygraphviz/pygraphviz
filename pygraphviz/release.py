@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Release data for pygraphviz."""
 
-#    Copyright (C) 2006 by 
+#    Copyright (C) 2006-2008 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
@@ -10,7 +10,7 @@
 
 
 name = 'pygraphviz'
-version = '0.36-svn'
+version = '0.36'
 description = "Python interface to Graphviz"
 long_description = """\
 A Python wrapper for the Graphviz Agraph data structure.

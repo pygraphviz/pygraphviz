@@ -43,6 +43,25 @@ You may specify a dot format file to be read on initialization:
 >>> G=AGraph("Petersen.dot")
 
 
+Other options for intializing a graph are
+
+using a string,
+
+>>> l=open("ER.dot").readlines() # read file as list 
+>>> s=' '.join(l) # make a string by joining list
+>>> G=AGraph(s)
+
+using a dict of dicts,
+
+>>> d={'1': {'2': None}, '2': {'1': None, '3': None}, '3': {'2': None}}
+>>> A=AGraph(d)
+
+or using a SWIG pointer to the AGraph datastructure,
+
+>>> h=AGraph.handle
+>>> C=AGraph(h)
+
+
 Nodes, and edges
 ----------------
 
@@ -72,6 +91,10 @@ the graph_attr, node_attr, and edge_attr dictionaries
 >>> G.node_attr['shape']='circle'
 >>> G.edge_attr['color']='red'
 
+Graph attributes can be set when initializing the graph
+
+>>> G=AGraph(ranksep='0.1')
+
 Individual node and edge attributes can be set through their attr
 dictionary 
 
@@ -81,6 +104,11 @@ dictionary
 
 >>> e=G.get_edge('b','c')
 >>> e.attr['color']='green'
+
+Attributes can be added when adding nodes or edges
+
+>>> G.add_node('a',color='red')
+>>> G.add_edge('a','b',color='blue')
 
 
 Layout and Drawing
