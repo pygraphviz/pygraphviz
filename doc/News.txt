@@ -12,11 +12,11 @@ See: https://networkx.lanl.gov/timeline
  - Automatic handling of types on init of AGraph(data): data can be
    a filename, string in dot format, dictionary-of-dictionaries,
    or a SWIG AGraph pointer.
- - Add interface to graphviz programs acyclic and tred
- - Refactor process handling to allow easier access to graphviz layout
+ - Add interface to Graphviz programs acyclic and tred
+ - Refactor process handling to allow easier access to Graphviz layout
    and graph processing programs
  - to_string() and from_string() methods 
- - Handle multple anonymous edges correctly
+ - Handle multiple anonymous edges correctly
  - Attribute handling on add_node, add_edge and init of AGraph.
    So you can e.g. A=AGraph(ranksep='0.1'); A.add_node('a',color='red')
    A.add_edge('a','b',color='blue')
