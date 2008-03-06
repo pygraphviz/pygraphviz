@@ -616,7 +616,7 @@ class AGraph(object):
                 while eh is not None:
                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,key=gv.agnameof(key),eh=eh)
+                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
                     eh=gv.agnxtin(eh)
         raise StopIteration
 
