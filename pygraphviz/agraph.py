@@ -871,11 +871,11 @@ class AGraph(object):
         return bunch
 
 
-    def add_subgraph(self, nbunch=None, name=None):
+    def add_subgraph(self, nbunch=None, name=None, **attr):
         """Return subgraph induced by nodes in nbunch.
         """
         handle=gv.agsubg(self.handle,name,_Action.create)
-        H=self.__class__(strict=self.is_strict(),directed=self.is_directed(),handle=handle,name=name)
+        H=self.__class__(strict=self.is_strict(),directed=self.is_directed(),handle=handle,name=name,**attr)
         if nbunch is None: return H
         # add induced subgraph on nodes in nbunch
         bunch=self.prepare_nbunch(nbunch)
