@@ -1496,11 +1496,6 @@ class Attribute(UserDict.DictMixin):
         self.__dict__['type']=atype
 
     def __setitem__(self, name, value):
-#        try:
-#            gv.agattr(self.handle,self.type,name,value)
-#        except TypeError:
-#            raise "Attribute value must be a string"
-
         try:
             gv.agset(self.handle,name,value)
         except KeyError: # not in default dict, set default to be empty string
