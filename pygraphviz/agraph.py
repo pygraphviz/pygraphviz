@@ -1496,15 +1496,21 @@ class Attribute(UserDict.DictMixin):
         self.__dict__['type']=atype
 
     def __setitem__(self, name, value):
-        try:
+        try: # try to set the attribute
             gv.agset(self.handle,name,value)
-        except KeyError: # not in default dict, set default to be empty string
+        except KeyError: # not in root graph default attribute set
             ghandle=gv.agroot(self.handle) # get root graph
-            gv.agattr(ghandle,self.type,name,'') 
-            try:
-                gv.agset(self.handle,name,value)
-            except KeyError: # not sucessful
-                pass
+            # check if this is the root graph and set default for all items
+            if self.handle==ghandle:
+                gv.agattr(ghandle,self.type,name,value) 
+            else: # this is not the root graph
+                try:
+                    # set graph default to be empty string
+                    gv.agattr(ghandle,self.type,name,'') 
+                    # set the attribute for this item
+                    gv.agset(self.handle,name,value)
+                except KeyError: # not sucessful
+                    pass
         except TypeError:
             raise "Attribute value must be a string"
 
