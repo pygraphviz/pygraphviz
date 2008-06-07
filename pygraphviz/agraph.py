@@ -112,6 +112,8 @@ class AGraph(object):
             else:
                 file=thing  # assume this is a file name
 
+        self.charset='UTF-8' # default charset encoding 
+
         # input type guessed or specified - now init graph                
         if handle is None:  # the graph pointer (handle)
             self.handle=gv.agraphnew(name,strict,directed) # new graph
@@ -207,6 +209,7 @@ class AGraph(object):
 
         """
         if not self._is_string_like(n):  n=str(n)
+        n=n.encode(self.charset)
         try:
             nh=gv.agnode(self.handle,n,_Action.find)
         except KeyError:
