@@ -53,7 +53,7 @@ def miles_graph():
     G=AGraph(name='miles_dat')
     G.node_attr['shape']='circle'
     G.node_attr['fixedsize']='true'
-    G.node_attr['fontsize']='0.1'
+    G.node_attr['fontsize']='8'
     G.node_attr['style']='filled'
     G.graph_attr['outputorder']='edgesfirst'
     G.graph_attr['label']="miles_dat"
