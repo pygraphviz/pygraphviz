@@ -827,9 +827,17 @@ class AGraph(object):
         self.edge_attr.clear()
         self.node_attr.clear()
         self.graph_attr.clear()
-        self.delete_edges_from(self.edges())
-        self.delete_nodes_from(self.nodes())
+        # now "close" existing graph and create a new graph
+        name=gv.agnameof(self.handle)
+        strict=self.is_strict()
+        directed=self.is_directed()
+        gv.agclose(self.handle) 
+        self.handle=gv.agraphnew(name,strict,directed) 
 
+    def close(self):
+        # may be useful to clean up graphviz data
+        # this should completely remove all of the existing graphviz data
+        gv.agclose(self.handle)
 
     def copy(self):
         """Return a copy of the graph."""
