@@ -815,7 +815,7 @@ class AGraph(object):
                 
     def number_of_edges(self):
         """Return the number of edges in the graph."""
-        return sum(self.degree())/2
+        return gv.agnedges(self.handle)
 
     def size(self):
         """Return the number of edges in the graph."""
