@@ -1156,9 +1156,9 @@ class AGraph(object):
 
         if data==[]:
             raise IOError("".join(errors))
-# errors should be reported here somehow - is this the right way?
-#        if len(errors)>0:
-#            warnings.warn("".join(errors),UserWarning) 
+
+        if len(errors)>0:
+            raise IOError("".join(errors))
         return "".join(data)
 
 
@@ -1233,12 +1233,15 @@ class AGraph(object):
         on the file extension of path.  If that fails the format keyword
         will be used.  
         
-        Formats::
+        Formats (not all may be available on every system depending on
+        how Graphviz was built)::
 
-             ['canon','dot','xdot','cmap','dia','fig','gd','gd2',
-             'gif','hpgl','imap','cmapx','ismap','jpg','jpeg',
-             'mif','mp','pcl','pic','plain','plain-ext','png','ps',
-             'ps2','svg','svgz','vrml','vtx','wbmp']
+            ['canon', 'cmap', 'cmapx', 'cmapx_np', 'dia', 'dot',\
+            'fig', 'gd', 'gd2', 'gif', 'hpgl', 'imap', 'imap_np',\
+            'ismap', 'jpe', 'jpeg', 'jpg', 'mif', 'mp', 'pcl', 'pdf',\
+            'pic', 'plain', 'plain-ext', 'png', 'ps', 'ps2', 'svg',\
+            'svgz', 'vml', 'vmlz', 'vrml', 'vtx', 'wbmp', 'xdot', 'xlib'])
+
 
         If prog is not specified and the graph has positions
         (see layout()) then no additional graph positioning will
@@ -1271,16 +1274,17 @@ class AGraph(object):
 
         if format is None or format=='':
             format = 'dot'
-        else:
-            formats=dict.fromkeys(
-                ['canon','dot','xdot','cmap','dia','fig','gd','gd2',\
-                 'gif','hpgl','imap','cmapx','ismap','jpg','jpeg',\
-                 'mif','mp','pcl','pic','plain','plain-ext','png','ps',\
-                 'ps2','svg','svgz','vrml','vtx','wbmp'])
-
-            if not format in formats:
-                raise ValueError("format %s is not one of %s"%\
-                                 (format,', '.join(formats.keys()))) 
+#         else:
+#             formats=dict.fromkeys(
+#                 ['canon', 'cmap', 'cmapx', 'cmapx_np', 'dia', 'dot',\
+#                      'fig', 'gd', 'gd2', 'gif', 'hpgl', 'imap', 'imap_np',\
+#                      'ismap', 'jpe', 'jpeg', 'jpg', 'mif', 'mp', 'pcl', 'pdf',\
+#                      'pic', 'plain', 'plain-ext', 'png', 'ps', 'ps2', 'svg',\
+#                      'svgz', 'vml', 'vmlz', 'vrml', 'vtx', 'wbmp', 'xdot', \
+#                      'xlib'])
+#             if not format in formats:
+#                 raise ValueError("format %s is not one of %s"%\
+#                                  (format,', '.join(formats.keys()))) 
 
         if prog is None:
             try:
