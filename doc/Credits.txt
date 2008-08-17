@@ -16,3 +16,6 @@ Thanks to the following people who have made contributions:
  - Ross Richardson suggested fixes and tested the attribute handling 
 
  - Alexis Dinno debugged the setup and installation for OSX.
+
+ - Stefano Costa reported attribute bugs and contributed the 
+   code to run Graphviz "tred" and friends

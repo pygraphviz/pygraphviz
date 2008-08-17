@@ -3,6 +3,23 @@
 PyGraphviz News
 ===============
 
+pygraphviz-0.37
+---------------
+Release date: 17 August 2008
+
+See: https://networkx.lanl.gov/timeline
+
+ - Handle default attributes for subgraphs, examples at
+   https://networkx.lanl.gov/browser/pygraphviz/trunk/doc/examples/attributes.py
+   https://networkx.lanl.gov/browser/pygraphviz/trunk/doc/examples/subgraph.py
+ - Buggy attribute assignment fixed by Graphviz team (use Graphviz>2.17.20080127)
+ - Encode all stings as UTF-8 as default
+ - Fix AGraph.clear() memory leak and attempt to address slow deletion 
+   of nodes and edges 
+ - Allow pdf output and support all available output types on a given platform
+ - Fix number_of_edges() to use gv.agnedges to correctly report edges for
+   graphs with self loops
+
 pygraphviz-0.36
 ---------------
 Release date: 13 January 2008
