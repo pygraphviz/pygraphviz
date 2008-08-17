@@ -10,7 +10,7 @@
 
 
 name = 'pygraphviz'
-version = '0.36'
+version = '0.37-svn'
 description = "Python interface to Graphviz"
 long_description = """\
 A Python wrapper for the Graphviz Agraph data structure.
