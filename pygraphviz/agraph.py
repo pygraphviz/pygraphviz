@@ -1347,7 +1347,7 @@ class AGraph(object):
                  fh=os.popen("bzcat "+path) # probably not portable
             else:
                 fh = file(path,mode=mode)
-        elif hasattr(path, 'seek'):
+        elif hasattr(path, 'write'):
             fh = path
         else:
             raise TypeError('path must be a string or file handle')
