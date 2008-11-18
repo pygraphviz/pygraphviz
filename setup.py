@@ -136,10 +136,9 @@ execfile(os.path.join('pygraphviz','release.py'))
 
 packages = ["pygraphviz","pygraphviz.tests"]
 docdirbase  = 'share/doc/pygraphviz-%s' % version
-data = [(docdirbase, glob("doc/*.txt")),
-        (docdirbase, glob("doc/*.py")),
-        (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.py")),
-        (os.path.join(docdirbase, 'examples'),glob("doc/examples/*.dat")),
+data = [(docdirbase, glob("*.txt")),
+        (os.path.join(docdirbase, 'examples'),glob("examples/*.py")),
+        (os.path.join(docdirbase, 'examples'),glob("examples/*.dat")),
         ]
 extension = [Extension("pygraphviz._graphviz",
                       ["pygraphviz/graphviz_wrap.c"],
