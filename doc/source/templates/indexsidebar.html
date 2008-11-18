@@ -1,5 +1,5 @@
 <h3>Download</h3>
-{% if version.endswith('foo') %}
+{% if version.split('.')[-1].startswith('dev') %}
 <p>This documentation is for version <b>{{ version }}</b>, which is
   not released yet.</p>
 <p>You can check it out from
