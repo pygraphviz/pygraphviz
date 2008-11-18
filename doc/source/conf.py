@@ -64,7 +64,7 @@ release = version
 #today_fmt = '%B %d, %Y'
 
 # List of documents that shouldn't be included in the build.
-#unused_docs = []
+unused_docs = ['download']
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 #add_function_parentheses = True
