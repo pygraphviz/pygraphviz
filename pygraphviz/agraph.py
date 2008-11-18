@@ -39,34 +39,31 @@ class _Action:
     find, create = 0,1
 
 class AGraph(object):
-    """
-    Class for Graphviz agraph type.
-
-    Example use::
-         
-      >>> G=AGraph()         
-      >>> G=AGraph(directed=True)
-
-      G=AGraph("file.dot")   
-
+    """Class for Graphviz agraph type.
+    
+    Example use
+    
+    >>> G=AGraph()         
+    >>> G=AGraph(directed=True)
+    >>> G=AGraph("file.dot")   
+    
     Graphviz graph keyword parameters are processed so you may add
     them like
-
+    
     >>> G=AGraph(landscape='true',ranksep='0.1')
-
+    
     or alternatively
-
+    
     >>> G=AGraph()
     >>> G.graph_attr.update(landscape='true',ranksep='0.1')
-
+    
     and
-
+    
     >>> G.node_attr.update(color='red')
     >>> G.edge_attr.update(len='2.0',color='blue')
-
+    
     See http://www.graphviz.org/doc/info/attrs.html
     for a list of attributes.
-    
 
     Keyword parameters:
 
@@ -81,18 +78,20 @@ class AGraph(object):
     >>> h=AGraph.handle
     >>> C=AGraph(h)
 
-    name is a string name for the graph        
+    Parameters:: 
 
-    strict=True|False (True for simple graphs)
+      name:    String name for the graph        
 
-    directed=True|False
+      strict: True|False (True for simple graphs)
 
-    data is a dictionary of dictionaries or dictionary of lists
-    representing nodes or edges to load into intial graph
+      directed: True|False
 
-    string is a string containing a dot format graph
+      data: Dictionary of dictionaries or dictionary of lists
+      representing nodes or edges to load into intial graph
 
-    handle is a Swig pointer to an agraph_t data structure
+      string:  String containing a dot format graph
+
+      handle:  Swig pointer to an agraph_t data structure
 
     """
     def __init__(self, thing=None, file=None, name=None,
@@ -184,7 +183,7 @@ class AGraph(object):
 #        self.add_edge(u,v)
 
     def add_node(self, n, **attr):
-        """Add a single node n to the graph.
+        """Add a single node n.
 
         If n is not a string, conversion to a string will be attempted.
         String conversion will work if n has valid string representation
@@ -218,7 +217,7 @@ class AGraph(object):
             nh.attr.update(**attr)
 
     def add_nodes_from(self, nbunch, **attr):
-        """Add nodes to graph from a container nbunch.
+        """Add nodes from a container nbunch.
 
         nbunch can be any iterable container such as a list or dictionary
 
@@ -238,7 +237,7 @@ class AGraph(object):
             self.add_node(n,**attr)
 
     def delete_node(self,n):
-        """Delete the single node n from graph.
+        """Delete the single node n.
 
         Attempting to delete a node that isn't in the graph will produce
         an error.
@@ -256,7 +255,7 @@ class AGraph(object):
             raise KeyError("node %s not in graph"%n)
 
     def delete_nodes_from(self,nbunch):
-        """Delete nodes in graph from a container nbunch.
+        """Delete nodes from a container nbunch.
 
         nbunch can be any iterable container such as a list or dictionary
 
@@ -1081,20 +1080,17 @@ class AGraph(object):
         return self.to_string()
 
     def from_string(self,string):
-        """ 
-        Load a graph from a string in dot format. Overwrites any existing graph.
+        """Load a graph from a string in dot format.
 
+        Overwrites any existing graph.
+        
         To make a new graph from a string use
         
-        >>> s='digraph {\n1 -> 2\n;}\n'
+        >>> s='digraph {1 -> 2}'
         >>> A=AGraph()
         >>> A.from_string(s)
-
-        or
-
         >>> A=AGraph(string=s) # specify s is a string
         >>> A=AGraph(s)  # s assumed to be a string during initialization
-
         """
         from tempfile import TemporaryFile
         fh = TemporaryFile()
@@ -1234,13 +1230,13 @@ class AGraph(object):
         will be used.  
         
         Formats (not all may be available on every system depending on
-        how Graphviz was built)::
+        how Graphviz was built)
 
-            ['canon', 'cmap', 'cmapx', 'cmapx_np', 'dia', 'dot',\
-            'fig', 'gd', 'gd2', 'gif', 'hpgl', 'imap', 'imap_np',\
-            'ismap', 'jpe', 'jpeg', 'jpg', 'mif', 'mp', 'pcl', 'pdf',\
-            'pic', 'plain', 'plain-ext', 'png', 'ps', 'ps2', 'svg',\
-            'svgz', 'vml', 'vmlz', 'vrml', 'vtx', 'wbmp', 'xdot', 'xlib'])
+            'canon', 'cmap', 'cmapx', 'cmapx_np', 'dia', 'dot',
+            'fig', 'gd', 'gd2', 'gif', 'hpgl', 'imap', 'imap_np',
+            'ismap', 'jpe', 'jpeg', 'jpg', 'mif', 'mp', 'pcl', 'pdf',
+            'pic', 'plain', 'plain-ext', 'png', 'ps', 'ps2', 'svg',
+            'svgz', 'vml', 'vmlz', 'vrml', 'vtx', 'wbmp', 'xdot', 'xlib'
 
 
         If prog is not specified and the graph has positions
