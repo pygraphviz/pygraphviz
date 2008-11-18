@@ -2,6 +2,17 @@
 
 News
 ==== 
+pygraphviz-0.99
+---------------
+Release date: 18 November 2008
+
+See: https://networkx.lanl.gov/trac/timeline
+
+ - New documentation at http://networkx.lanl.gov/pygraphviz/
+ - Developer's site at https://networkx.lanl.gov/trac/wiki/PyGraphviz
+
+
+
 pygraphviz-0.37
 ---------------
 Release date: 17 August 2008

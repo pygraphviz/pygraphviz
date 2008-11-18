@@ -30,7 +30,7 @@ def get_svn_revision():
     return None
 
 name = 'pygraphviz'
-version = '0.99'
+version = '1.0'
 revision = get_svn_revision()
 if revision is not None:
     version+=".%s"%revision
