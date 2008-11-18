@@ -1,5 +1,5 @@
-Pygraphviz FAQ
---------------
+FAQ
+---
 
    :Q: I followed the installation instructions but when I do
 

@@ -1,0 +1,32 @@
+.. _contents:
+
+************************
+PyGraphviz documentation
+************************
+
+.. htmlonly::
+
+    :Release: |version|
+    :Date: |today|
+
+    Download `PDF <http://networkx.lanl.gov/pygraphviz/pygraphviz.pdf>`_
+    `HTML <http://networkx.lanl.gov/pygraphviz/pygraphviz-documentation.zip>`_
+
+
+.. toctree::
+   :maxdepth: 2
+
+   
+   install
+   tutorial
+   reference/index
+   examples
+
+   
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+

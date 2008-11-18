@@ -1,5 +1,5 @@
-Pygraphviz API Notes
---------------------
+API Notes
+=========
 
   pygraphviz-0.32 is a rewrite of pygraphviz-0.2x  with some significant
   changes in the API and Graphviz wrapper.  It is not compatible with
@@ -13,7 +13,8 @@ Pygraphviz API Notes
   you need to know for pygraphviz.  For a short introduction on pygraphviz
   see the pygraphviz Tutorial.
 
-  There are some important differences in pygraphviz:
+  There are some important differences between the PyGraphviz
+  and NetworkX API.  With PyGraphviz
 
    - All nodes must be strings. An attempt will be made to convert other
      types to a string.
@@ -37,6 +38,5 @@ Pygraphviz API Notes
      (root) graph. The are primarily used for clustering of nodes when
      drawing with dot.
 
-  Pygraphviz supports most of the Graphviz API but at this point
-  does not handle Graphviz subgraphs.  There is a subgraph() method
-  but it is not the same subgraph as in dot format files.
+  Pygraphviz supports most of the Graphviz API.
+

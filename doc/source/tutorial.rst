@@ -1,25 +1,19 @@
-Pygraphviz Short Tutorial
--------------------------
+Tutorial
+========
 
-See the examples for sample usage and ideas
-https://networkx.lanl.gov/browser/pygraphviz/trunk/doc/examples/
-
-There is a complete reference guide at 
-https://networkx.lanl.gov/reference/pygraphviz/
-
-The API is very similar to that of NetworkX.  Most of the 
-NetworkX tutorial at https://networkx.lanl.gov/wiki/Tutorial 
-is applicable to pygraphviz.  See the API notes
-https://networkx.lanl.gov/wiki/pygraphviz/API/ for major differences.
+The API is very similar to that of NetworkX.  Much of the 
+NetworkX tutorial at http://networkx.lanl.gov/tutorial/
+is applicable to PyGraphviz.  
+See https://networkx.lanl.gov/pygraphviz/api_notes.html for major differences.
 
 Start-up
 --------
 
-Import pygraphviz with
+Import PyGraphviz with
 
->>> import pygraphviz
+>>> import pygraphviz as pgv
 
-or to bring into the current namespace without the pygraphviz prefix
+or to bring into the current namespace without the "pgv" prefix
 
 >>> from pygraphviz import *
 
@@ -29,18 +23,18 @@ Graphs
 
 To make an empty pygraphviz graph use the AGraph class:
 
->>> G=AGraph()
+>>> G=pgv.AGraph()
 
 You can use the strict and directed keywords to control what type of
 graph you want.  The default is to create a strict graph 
 (no parallel edges or self-loops).  To create a digraph with possible
 parallel edges and self-loops use
 
->>> G=AGraph(strict=False,directed=True)
+>>> G=pgv.AGraph(strict=False,directed=True)
 
 You may specify a dot format file to be read on initialization:
 
->>> G=AGraph("Petersen.dot")
+>>> G=pgv.AGraph("Petersen.dot")
 
 
 Other options for intializing a graph are
@@ -49,17 +43,17 @@ using a string,
 
 >>> l=open("ER.dot").readlines() # read file as list 
 >>> s=' '.join(l) # make a string by joining list
->>> G=AGraph(s)
+>>> G=pgv.AGraph(s)
 
 using a dict of dicts,
 
 >>> d={'1': {'2': None}, '2': {'1': None, '3': None}, '3': {'2': None}}
->>> A=AGraph(d)
+>>> A=pgv.AGraph(d)
 
 or using a SWIG pointer to the AGraph datastructure,
 
 >>> h=AGraph.handle
->>> C=AGraph(h)
+>>> C=pgv.AGraph(h)
 
 
 Nodes, and edges
@@ -93,7 +87,7 @@ the graph_attr, node_attr, and edge_attr dictionaries
 
 Graph attributes can be set when initializing the graph
 
->>> G=AGraph(ranksep='0.1')
+>>> G=pgv.AGraph(ranksep='0.1')
 
 Individual node and edge attributes can be set through their attr
 dictionary 

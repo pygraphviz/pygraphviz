@@ -1,4 +1,7 @@
-Pygraphviz License
+Legal
+=====
+
+PyGraphviz License
 ------------------
 
 

@@ -1,17 +1,16 @@
 ..  -*- coding: utf-8 -*-
 
-PyGraphviz News
-===============
-
+News
+==== 
 pygraphviz-0.37
 ---------------
 Release date: 17 August 2008
 
-See: https://networkx.lanl.gov/timeline
+See: https://networkx.lanl.gov/trac/timeline
 
  - Handle default attributes for subgraphs, examples at
-   https://networkx.lanl.gov/browser/pygraphviz/trunk/doc/examples/attributes.py
-   https://networkx.lanl.gov/browser/pygraphviz/trunk/doc/examples/subgraph.py
+   https://networkx.lanl.gov/trac/browser/pygraphviz/trunk/doc/examples/attributes.py
+   https://networkx.lanl.gov/trac/browser/pygraphviz/trunk/doc/examples/subgraph.py
  - Buggy attribute assignment fixed by Graphviz team (use Graphviz>2.17.20080127)
  - Encode all stings as UTF-8 as default
  - Fix AGraph.clear() memory leak and attempt to address slow deletion 
@@ -24,7 +23,7 @@ pygraphviz-0.36
 ---------------
 Release date: 13 January 2008
 
-See: https://networkx.lanl.gov/timeline
+See: https://networkx.lanl.gov/trac/timeline
 
  - Automatic handling of types on init of AGraph(data): data can be
    a filename, string in dot format, dictionary-of-dictionaries,
@@ -43,7 +42,7 @@ pygraphviz-0.35
 ---------------
 Release date: 22 July 2007
 
-See: https://networkx.lanl.gov/timeline
+See: https://networkx.lanl.gov/trac/timeline
 
  - Rebuilt SWIG wrappers - works correctly now on 64 bit machines/python2.5
  - Implement Graphviz subgraph functionality
@@ -56,7 +55,7 @@ pygraphviz-0.34
 ---------------
 Release date: 11 April 2007
 
-See: https://networkx.lanl.gov/timeline
+See: https://networkx.lanl.gov/trac/timeline
 
  - run "python setup_egg.py test" for tests if you have setuptools
  - added tests for layout code
@@ -80,4 +79,4 @@ pygraphviz-0.32
 
    This version now inter-operates with many of the NetworkX
    algorithms and graph generators.  See 
-   https://networkx.lanl.gov/browser/networkx/trunk/doc/examples/pygraphviz_simple.py
+   https://networkx.lanl.gov/trac/browser/networkx/trunk/doc/examples/pygraphviz_simple.py

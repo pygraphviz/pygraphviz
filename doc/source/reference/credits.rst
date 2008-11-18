@@ -1,5 +1,5 @@
 Credits
--------
+=======
 
 Thanks to Stephen North and the AT&T Graphviz team for creating
 and maintaining the Graphviz graph layout and drawing packages
