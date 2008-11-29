@@ -1,5 +1,7 @@
-from pygraphviz import *
-A=AGraph()
+#!/usr/bin/env python
+import pygraphviz as pgv
+
+A=pgv.AGraph()
 # add some edges
 A.add_edge(1,2)
 A.add_edge(2,3)

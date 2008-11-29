@@ -12,9 +12,9 @@ A simple example to create a graphviz dot file and draw a graph.
 #    All rights reserved, see LICENSE for details.
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 
-from pygraphviz import *
+import pygraphviz as pgv
 
-A=AGraph()
+A=pgv.AGraph()
 
 A.add_edge(1,2)
 A.add_edge(2,3)
