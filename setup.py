@@ -139,6 +139,7 @@ docdirbase  = 'share/doc/pygraphviz-%s' % version
 data = [(docdirbase, glob("*.txt")),
         (os.path.join(docdirbase, 'examples'),glob("examples/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("examples/*.dat")),
+        (os.path.join(docdirbase, 'examples'),glob("examples/*.dat.gz")),
         ]
 extension = [Extension("pygraphviz._graphviz",
                       ["pygraphviz/graphviz_wrap.c"],
