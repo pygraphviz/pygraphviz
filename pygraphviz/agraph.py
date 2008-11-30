@@ -235,15 +235,15 @@ class AGraph(object):
         for n in nbunch:
             self.add_node(n,**attr)
 
-    def delete_node(self,n):
-        """Delete the single node n.
+    def remove_node(self,n):
+        """Remove the single node n.
 
-        Attempting to delete a node that isn't in the graph will produce
+        Attempting to remove a node that isn't in the graph will produce
         an error.
         
         >>> G=AGraph()
         >>> G.add_node('a')
-        >>> G.delete_node('a')
+        >>> G.remove_node('a')
 
         """
         if not self._is_string_like(n):  n=str(n)
@@ -253,18 +253,22 @@ class AGraph(object):
         except KeyError:
             raise KeyError("node %s not in graph"%n)
 
-    def delete_nodes_from(self,nbunch):
-        """Delete nodes from a container nbunch.
+    delete_node=remove_node
+
+    def remove_nodes_from(self,nbunch):
+        """Remove nodes from a container nbunch.
 
         nbunch can be any iterable container such as a list or dictionary
 
         >>> G=AGraph()
         >>> nlist=['a','b',1,'spam']
         >>> G.add_nodes_from(nlist)
-        >>> G.delete_nodes_from(nlist)
+        >>> G.remove_nodes_from(nlist)
         """
         for n in nbunch: 
-            self.delete_node(n)
+            self.remove_node(n)
+
+    delete_nodes_from=remove_nodes_from
 
     def nodes_iter(self):
         """Return an iterator over all the nodes in the graph."""
@@ -398,10 +402,10 @@ class AGraph(object):
         return Edge(self,u,v,key)
 
 
-    def delete_edge(self, u, v=None, key=None):
-        """Delete edge between nodes u and v from the graph.
+    def remove_edge(self, u, v=None, key=None):
+        """Remove edge between nodes u and v from the graph.
 
-        With optional key argument  will only delete an edge
+        With optional key argument will only remove an edge
         matching (u,v,key).
 
         """
@@ -412,10 +416,14 @@ class AGraph(object):
         except KeyError:
             raise KeyError("edge %s-%s not in graph"%(u,v))
 
-    def delete_edges_from(self, ebunch): 
-        """Delete edges from ebunch (a container of edges)."""
+    delete_edge=remove_edge        
+
+    def remove_edges_from(self, ebunch): 
+        """Remove edges from ebunch (a container of edges)."""
         for e in ebunch:
-            self.delete_edge(e)
+            self.remove_edge(e)
+
+    delete_edges_from=remove_edges_from
 
     def has_edge(self, u, v=None, key=None):
         """Return True an edge u-v is in the graph or False if not.
@@ -864,12 +872,13 @@ class AGraph(object):
         return H
 
 
-    def delete_subgraph(self, name):
-        """Delete subgraph with given name."""  
+    def remove_subgraph(self, name):
+        """Remove subgraph with given name."""  
         handle=gv.agsubg(self.handle,name,_Action.find)
         if handle is None: raise KeyError("subgraph %s not in graph"%name)
         gv.agdelsubg(self.handle,handle)
         
+    delete_subgraph=remove_subgraph
 
     subgraph=add_subgraph
 

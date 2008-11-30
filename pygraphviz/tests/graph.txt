@@ -110,33 +110,33 @@ test add_node
 ['1', 'A', '[1]']
 
 
-test delete_node
+test remove_node
 
->>> A.delete_node([1])
+>>> A.remove_node([1])
 >>> sorted(A.nodes())
 ['1', 'A']
->>> A.delete_node('A')
+>>> A.remove_node('A')
 >>> A.nodes()
 ['1']
->>> A.delete_node(1)
+>>> A.remove_node(1)
 >>> A.nodes()
 []
->>> A.delete_node(1)
+>>> A.remove_node(1)
 Traceback (most recent call last):
 ...
 KeyError: 'node 1 not in graph'
 
 
-test add_nodes_from and delete_nodes_from
+test add_nodes_from and remove_nodes_from
 
 >>> A=AGraph()
 >>> A.add_nodes_from(range(3))
 >>> sorted(A.nodes())
 ['0', '1', '2']
->>> A.delete_nodes_from(range(3))
+>>> A.remove_nodes_from(range(3))
 >>> A.nodes()
 []
->>> A.delete_nodes_from(range(3))
+>>> A.remove_nodes_from(range(3))
 Traceback (most recent call last):
 ...
 KeyError: 'node 0 not in graph'
@@ -199,28 +199,28 @@ test add_edges_from
 >>> sorted([tuple(sorted(e)) for e in A.edges()])
 [('1', '2'), ('2', '3')]
 
-test delete_edge
+test remove_edge
 
->>> A.delete_edge(1,2)
+>>> A.remove_edge(1,2)
 >>> sorted(A.edges())
 [('2', '3')]
 >>> e=(2,3)
->>> A.delete_edge(e)
+>>> A.remove_edge(e)
 >>> A.edges()
 []
->>> A.delete_edge(1,2)
+>>> A.remove_edge(1,2)
 Traceback (most recent call last):
 ...
 KeyError: 'edge 1-2 not in graph'
 
 
-test delete_edges_from
+test remove_edges_from
 
 >>> A=AGraph()
 >>> A.add_edges_from([(1,2),(2,3)])
 >>> sorted([tuple(sorted(e)) for e in A.edges()])
 [('1', '2'), ('2', '3')]
->>> A.delete_edges_from([(1,2),(2,3)])
+>>> A.remove_edges_from([(1,2),(2,3)])
 >>> A.edges()
 []
 
