@@ -738,9 +738,9 @@ class AGraph(object):
         
     def reverse(self):
         """Return copy of directed graph with edge directions reversed."""
-        if self.is_directed():
+        if self.directed:
             # new empty DiGraph
-            H=self.__class__(strict=self.is_strict(),directed=True) 
+            H=self.__class__(strict=self.strict,directed=True) 
             H.graph_attr.update(self.graph_attr)
             H.node_attr.update(self.node_attr)
             H.edge_attr.update(self.edge_attr)
@@ -792,8 +792,8 @@ class AGraph(object):
         self.graph_attr.clear()
         # now "close" existing graph and create a new graph
         name=gv.agnameof(self.handle)
-        strict=self.is_strict()
-        directed=self.is_directed()
+        strict=self.strict
+        directed=self.directed
         gv.agclose(self.handle) 
         self.handle=gv.agraphnew(name,strict,directed) 
 
@@ -849,8 +849,8 @@ class AGraph(object):
         """Return subgraph induced by nodes in nbunch.
         """
         handle=gv.agsubg(self.handle,name,_Action.create)
-        H=self.__class__(strict=self.is_strict(),
-                         directed=self.is_directed(),
+        H=self.__class__(strict=self.strict,
+                         directed=self.directed,
                          handle=handle,name=name,**attr)
         if nbunch is None: return H
         # add induced subgraph on nodes in nbunch
@@ -878,8 +878,8 @@ class AGraph(object):
         """
         handle=gv.agparent(self.handle)
         if handle is None: return None
-        H=self.__class__(strict=self.is_strict(),
-                         directed=self.is_directed(),
+        H=self.__class__(strict=self.strict,
+                         directed=self.directed,
                          handle=handle,
                          name=name)
         return H
@@ -889,8 +889,8 @@ class AGraph(object):
         """
         handle=gv.agroot(self.handle)
         if handle is None: return None
-        H=self.__class__(strict=self.is_strict(),
-                         directed=self.is_directed(),
+        H=self.__class__(strict=self.strict,
+                         directed=self.directed,
                          handle=handle,name=name)
         return H
     
@@ -900,8 +900,8 @@ class AGraph(object):
         """
         handle=gv.agsubg(self.handle,name,_Action.find)
         if handle is None: return None
-        H=self.__class__(strict=self.is_strict(),
-                         directed=self.is_directed(),
+        H=self.__class__(strict=self.strict,
+                         directed=self.directed,
                          handle=handle)
         return H
         
@@ -909,8 +909,8 @@ class AGraph(object):
         """Iterator over subgraphs."""
         handle=gv.agfstsubg(self.handle)
         while handle is not None:
-            yield self.__class__(strict=self.is_strict(),
-                                 directed=self.is_directed(),
+            yield self.__class__(strict=self.strict,
+                                 directed=self.directed,
                                  handle=handle)
             handle=gv.agnxtsubg(handle)
         raise StopIteration
@@ -931,7 +931,8 @@ class AGraph(object):
             return True
         else:
             return False
-        
+
+    strict=property(is_strict)        
 
     def is_directed(self):
         """Return True if graph is directed or False if not."""
@@ -939,6 +940,8 @@ class AGraph(object):
             return True
         else:
             return False
+
+    directed=property(is_directed)
 
     def is_undirected(self):
         """Return True if graph is undirected or False if not."""
@@ -952,7 +955,7 @@ class AGraph(object):
         if self.is_undirected():
             return self.copy()
         else:
-            U=AGraph(strict=self.is_strict())
+            U=AGraph(strict=self.strict)
             U.graph_attr.update(self.graph_attr)
             U.node_attr.update(self.node_attr)
             U.edge_attr.update(self.edge_attr)
@@ -975,7 +978,7 @@ class AGraph(object):
         edges u->v and v->u.
         """
         if self.is_undirected():
-            D=AGraph(strict=self.is_strict(),directed=True)
+            D=AGraph(strict=self.strict,directed=True)
             D.graph_attr.update(self.graph_attr)
             D.node_attr.update(self.node_attr)
             D.edge_attr.update(self.edge_attr)
