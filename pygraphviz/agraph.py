@@ -212,8 +212,8 @@ class AGraph(object):
             nh=gv.agnode(self.handle,n,_Action.find)
         except KeyError:
             nh=gv.agnode(self.handle,n,_Action.create)
-            nh=Node(self,n)
-            nh.attr.update(**attr)
+            node=Node(self,nh=nh)
+            node.attr.update(**attr)
 
     def add_nodes_from(self, nbunch, **attr):
         """Add nodes from a container nbunch.
@@ -270,7 +270,7 @@ class AGraph(object):
         """Return an iterator over all the nodes in the graph."""
         nh=gv.agfstnode(self.handle)
         while nh is not None:
-            yield Node(self,gv.agnameof(nh))
+            yield Node(self,nh=nh)
             nh=gv.agnxtnode(self.handle,nh)
         raise StopIteration
 
@@ -471,12 +471,11 @@ class AGraph(object):
         nh=n.handle
         eh=gv.agfstedge(self.handle,nh)
         while eh is not None:
-            (s,t)=(gv.agtail(eh),gv.aghead(eh))
-            (u,v)=(gv.agnameof(s),gv.agnameof(t))
-            if u==n:
-                yield Node(self,v)
+            (s,t)=Edge(self,eh=eh)
+            if s==n:
+                yield Node(self,t)
             else:
-                yield Node(self,u)
+                yield Node(self,s)
             eh=gv.agnxtedge(self.handle,eh,nh)
         raise StopIteration
 
@@ -617,12 +616,11 @@ class AGraph(object):
         nh=n.handle
         eh=gv.agfstin(self.handle,nh)
         while eh is not None:
-            (s,t)=(gv.agtail(eh),gv.aghead(eh))
-            (u,v)=(gv.agnameof(s),gv.agnameof(t))
-            if u==n:
-                yield Node(self,v)
+            (s,t)=Edge(self,eh=eh)
+            if s==n:
+                yield Node(self,t)
             else:
-                yield Node(self,u)
+                yield Node(self,s)
             eh=gv.agnxtin(self.handle,eh)
         raise StopIteration
 
@@ -635,12 +633,11 @@ class AGraph(object):
         nh=n.handle
         eh=gv.agfstout(self.handle,nh)
         while eh is not None:
-            (s,t)=(gv.agtail(eh),gv.aghead(eh))
-            (u,v)=(gv.agnameof(s),gv.agnameof(t))
-            if u==n:
-                yield Node(self,v)
+            (s,t)=Edge(self,eh=eh)
+            if s==n:
+                yield Node(self,t)
             else:
-                yield Node(self,u)
+                yield Node(self,s)
             eh=gv.agnxtout(self.handle,eh)
         raise StopIteration
 
