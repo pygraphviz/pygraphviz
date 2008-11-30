@@ -436,7 +436,7 @@ class AGraph(object):
         except KeyError:
             return False
 
-    def edges(self, nbunch=None, data=False):
+    def edges(self, nbunch=None, keys=False):
         """Return list of edges in the graph.
 
         If the optional nbunch (container of nodes) only edges
@@ -450,7 +450,7 @@ class AGraph(object):
         >>> print G.edges('a')
         [('a', 'b')]
         """
-        return list(self.edges_iter(nbunch=nbunch,data=data))
+        return list(self.edges_iter(nbunch=nbunch,keys=keys))
 
     def has_neighbor(self, u, v, key=None):
         """Return True if u has an edge to v or False if not.
@@ -485,7 +485,7 @@ class AGraph(object):
 
     iterneighbors=neighbors_iter
 
-    def out_edges_iter(self, nbunch=None, data=False):
+    def out_edges_iter(self, nbunch=None, keys=False):
         """Return iterator over out edges in the graph.
 
         If the optional nbunch (container of nodes) only out edges
@@ -498,7 +498,7 @@ class AGraph(object):
                 eh=gv.agfstout(self.handle,nh)
                 while eh is not None:
                     e=Edge(self,eh=eh)
-                    if data:
+                    if keys:
                         yield (e[0],e[1],e.name)
                     else:
                         yield e
@@ -510,7 +510,7 @@ class AGraph(object):
             eh=gv.agfstout(self.handle,nh)
             while eh is not None:
                 e=Edge(self,eh=eh)
-                if data:
+                if keys:
                     yield (e[0],e[1],e.name)
                 else:
                     yield e
@@ -528,7 +528,7 @@ class AGraph(object):
                 eh=gv.agfstout(self.handle,nh)
                 while eh is not None:
                     e=Edge(self,eh=eh)
-                    if data:
+                    if keys:
                         yield (e[0],e[1],e.name)
                     else:
                         yield e
@@ -539,7 +539,7 @@ class AGraph(object):
     iteroutedges=out_edges_iter
     iteredges=out_edges_iter
 
-    def in_edges_iter(self, nbunch=None, data=False):
+    def in_edges_iter(self, nbunch=None, keys=False):
         """Return iterator over out edges in the graph.
 
         If the optional nbunch (container of nodes) only out edges
@@ -551,7 +551,7 @@ class AGraph(object):
                 eh=gv.agfstin(self.handle,nh)
                 while eh is not None:
                     e=Edge(self,eh=eh)
-                    if data:
+                    if keys:
                         yield (e[0],e[1],e.name)
                     else:
                         yield e
@@ -563,7 +563,7 @@ class AGraph(object):
             eh=gv.agfstin(self.handle,nh)
             while eh is not None:
                 e=Edge(self,eh=eh)
-                if data:
+                if keys:
                     yield (e[0],e[1],e.name)
                 else:
                     yield e
@@ -581,7 +581,7 @@ class AGraph(object):
                 eh=gv.agfstin(self.handle,nh)
                 while eh is not None:
                     e=Edge(self,eh=eh)
-                    if data:
+                    if keys:
                         yield (e[0],e[1],e.name)
                     else:
                         yield e
@@ -594,20 +594,20 @@ class AGraph(object):
     # define edges to be out_edges implicitly since edges uses edges_iter
     edges_iter=out_edges_iter
             
-    def out_edges(self, nbunch=None, data=False):
+    def out_edges(self, nbunch=None, keys=False):
         """Return list of out edges in the graph.
 
         If the optional nbunch (container of nodes) only out edges
         adjacent to nodes in nbunch will be returned.
         """
-        return list(self.out_edges_iter(nbunch=nbunch,data=data))
+        return list(self.out_edges_iter(nbunch=nbunch,keys=keys))
 
-    def in_edges(self, nbunch=None, data=False):
+    def in_edges(self, nbunch=None, keys=False):
         """Return list of in edges in the graph.
         If the optional nbunch (container of nodes) only in edges
         adjacent to nodes in nbunch will be returned.
         """
-        return list(self.in_edges_iter(nbunch=nbunch,data=data))
+        return list(self.in_edges_iter(nbunch=nbunch,keys=keys))
 
 
     def predecessors_iter(self,n):
@@ -1445,6 +1445,7 @@ class Edge(tuple):
         tp.ghandle=graph.handle
         tp.handle=eh
         tp.attr=ItemAttribute(eh,3)
+        tp.key=key
         return tp
 
     def get_name(self):

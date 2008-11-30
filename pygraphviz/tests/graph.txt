@@ -374,7 +374,7 @@ with keyed edge
 >>> A.add_edge('3','3','foo')
 >>> A.edges()
 [('1', '2'), ('1', '2'), ('3', '3'), ('3', '3')]
->>> A.edges(data=True)
+>>> A.edges(keys=True)
 [('1', '2', None), ('1', '2', None), ('3', '3', None), ('3', '3', 'foo')]
 >>> eone=A.get_edge(3,3,'foo')
 >>> eh=eone.handle
