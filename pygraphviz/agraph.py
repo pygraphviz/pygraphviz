@@ -436,63 +436,6 @@ class AGraph(object):
         except KeyError:
             return False
 
-#     def edges_iter(self, nbunch=None, data=False):
-#         """Return iterator over edges in the graph.
-
-#         If the optional nbunch (container of nodes) only edges
-#         adjacent to nodes in nbunch will be returned.
-#         """
-#         if nbunch is None:   # all nodes
-#             nh=gv.agfstnode(self.handle)
-#             while nh is not None:
-#                 eh=gv.agfstout(self.handle,nh)
-#                 while eh is not None:
-#                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
-#                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
-#                     e=Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
-# #                    print "yield"
-#                     if data:
-#                         yield (e[0],e[1],e.name)
-#                     else:
-#                         yield e
-#                     eh=gv.agnxtout(self.handle,eh)
-#                 nh=gv.agnxtnode(self.handle,nh)
-#         elif nbunch in self: # if nbunch is a single node 
-#             n=Node(self,nbunch)
-#             nh=n.get_handle()
-#             eh=gv.agfstedge(self.handle,nh)
-#             while eh is not None:
-#                 (s,t)=(gv.agtail(eh),gv.aghead(eh))
-#                 (u,v)=(gv.agnameof(s),gv.agnameof(t))
-#                 e=Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
-#                 if data:
-#                     yield (e[0],e[1],e.name)
-#                 else:
-#                     yield e
-#                 eh=gv.agnxtedge(self.handle,eh,nh)
-#         else:                # if nbunch is a sequence of nodes
-#             try: bunch=[n for n in nbunch if n in self]
-#             except TypeError:
-#                 raise TypeError(
-#                       "nbunch is not a node or a sequence of nodes")
-#             for n in nbunch:
-#                 try: 
-#                     nh=Node(self,n).get_handle()
-#                 except KeyError:
-#                     continue
-#                 eh=gv.agfstout(self.handle,nh)
-#                 while eh is not None:
-#                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
-#                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
-#                     e=Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
-#                     if data:
-#                         yield (e[0],e[1],e.name)
-#                     else:
-#                         yield e
-#                     eh=gv.agnxtout(self.handle,eh)
-#         raise StopIteration
- 
-
     def edges(self, nbunch=None, data=False):
         """Return list of edges in the graph.
 
