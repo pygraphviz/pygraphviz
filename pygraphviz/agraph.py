@@ -1154,7 +1154,8 @@ class AGraph(object):
             raise IOError("".join(errors))
 
         if len(errors)>0:
-            raise IOError("".join(errors))
+            warnings.warn("".join(errors),RuntimeWarning)
+
         return "".join(data)
 
 
