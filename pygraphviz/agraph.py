@@ -1410,6 +1410,13 @@ class Node(str):
         """Return pointer to graphviz node object.""" 
         return gv.agnode(self.ghandle,self,_Action.find)
         
+    handle=property(get_handle)
+
+    def get_name(self):
+        return gv.agnameof(self.handle)
+
+    name=property(get_name)
+
 
 class Edge(tuple):
     """Edge object based on tuple.
@@ -1465,6 +1472,7 @@ class Edge(tuple):
         tp.attr=ItemAttribute(eh,3)
         return tp
 
+
     def get_handle(self):
         """Return pointer to graphviz edge object.""" 
         try:
@@ -1484,6 +1492,12 @@ class Edge(tuple):
         except KeyError:
             raise KeyError("edge %s-%s not in graph"%(source,target))
 
+    handle=property(get_handle)
+
+    def get_name(self):
+        return gv.agnameof(self.handle)
+
+    name=property(get_name)
 
 
 class Attribute(UserDict.DictMixin):
