@@ -277,13 +277,13 @@ test degree, degree_iter
 >>> sorted(A.degree())
 [1, 1, 2]
 >>> sorted(A.degree_iter())
-[1, 1, 2]
+[('1', 1), ('2', 2), ('3', 1)]
 >>> sorted(A.iterdegree())
-[1, 1, 2]
+[('1', 1), ('2', 2), ('3', 1)]
 >>> sorted(A.iterdegree(A.nodes()))
-[1, 1, 2]
+[('1', 1), ('2', 2), ('3', 1)]
 >>> sorted(A.iterdegree(A))
-[1, 1, 2]
+[('1', 1), ('2', 2), ('3', 1)]
 >>> A.degree(1)
 1
 >>> A.degree(2)
@@ -474,12 +474,14 @@ True
 
 >>> sorted(A.out_degree())
 [0, 1, 1]
->>> sorted(A.out_degree_iter())
+>>> sorted(A.out_degree(with_labels=True).values())
 [0, 1, 1]
+>>> sorted(A.out_degree_iter())
+[('1', 1), ('2', 1), ('3', 0)]
 >>> sorted(A.in_degree())
 [0, 1, 1]
 >>> sorted(A.in_degree_iter())
-[0, 1, 1]
+[('1', 0), ('2', 1), ('3', 1)]
 
 >>> A.in_degree(1)
 0

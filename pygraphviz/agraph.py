@@ -664,12 +664,11 @@ class AGraph(object):
     out_neighbors=successors
     in_neighbors=predecessors
 
-    def degree_iter(self,nbunch=None,with_labels=False,indeg=True,outdeg=True):
+    def degree_iter(self,nbunch=None,indeg=True,outdeg=True):
         """Return an iterator over the degree of the nodes given in
-        nbunch container.
-        
-        Using optional with_labels=True returns paris of (node,degree) .
+        nbunch container.  
 
+        Returns paris of (node,degree).        
         """
         # prepare nbunch
         if nbunch is None:   # include all nodes via iterator
@@ -680,34 +679,26 @@ class AGraph(object):
             try: bunch=[Node(self,n) for n in nbunch if n in self]
             except TypeError:
                 raise TypeError("nbunch is not a node or a sequence of nodes")
-        if with_labels:
-            for n in bunch:
-                yield (Node(self,n),gv.agdegree(self.handle,
-                                                n.handle,indeg,outdeg))
-        else:
-            for n in bunch:
-                yield gv.agdegree(self.handle,n.handle,indeg,outdeg)
+        for n in bunch:
+            yield (Node(self,n),gv.agdegree(self.handle,
+                                            n.handle,indeg,outdeg))
 
-
-
-    def in_degree_iter(self,nbunch=None,with_labels=False):
+    def in_degree_iter(self,nbunch=None):
         """Return an iterator over the in-degree of the nodes given in
         nbunch container.
-        
-        Using optional with_labels=True returns paris of (node,degree) .
 
+        Returns paris of (node,degree).        
         """
-        return self.degree_iter(nbunch,with_labels,indeg=True,outdeg=False)
+        return self.degree_iter(nbunch,indeg=True,outdeg=False)
 
-    def out_degree_iter(self,nbunch=None,with_labels=False):
+    def out_degree_iter(self,nbunch=None):
         """Return an iterator over the out-degree of the nodes given in
         nbunch container.
-        
-        Using optional with_labels=True returns paris of (node,degree) .
+
+        Returns paris of (node,degree).        
 
         """
-
-        return self.degree_iter(nbunch,with_labels,indeg=False,outdeg=True)
+        return self.degree_iter(nbunch,indeg=False,outdeg=True)
 
     iteroutdegree=out_degree_iter
     iterindegree=in_degree_iter
@@ -719,9 +710,9 @@ class AGraph(object):
         keyed by node with value set to the degree.
         """
         if with_labels:
-            return dict(self.out_degree_iter(nbunch,with_labels))
+            return dict(self.out_degree_iter(nbunch))
         else:
-            dlist=list(self.out_degree_iter(nbunch,with_labels))
+            dlist=list(d for n,d in self.out_degree_iter(nbunch))
             if nbunch in self:
                 return dlist[0]
             else:
@@ -738,7 +729,7 @@ class AGraph(object):
         if with_labels:
             return dict(self.in_degree_iter(nbunch,with_labels))
         else:
-            dlist=list(self.in_degree_iter(nbunch,with_labels))
+            dlist=list(d for n,d in self.in_degree_iter(nbunch))
             if nbunch in self:
                 return dlist[0]
             else:
@@ -775,9 +766,9 @@ class AGraph(object):
 
         """
         if with_labels:
-            return dict(self.degree_iter(nbunch,with_labels))
+            return dict(self.degree_iter(nbunch))
         else:
-            dlist=list(self.degree_iter(nbunch,with_labels))
+            dlist=list(d for n,d in self.degree_iter(nbunch))
             if nbunch in self:
                 return dlist[0]
             else:
