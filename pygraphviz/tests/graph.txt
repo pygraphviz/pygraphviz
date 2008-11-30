@@ -246,9 +246,9 @@ False
 >>> P3.get_edge(1,2)
 ('1', '2')
 >>> eone=P3.get_edge(1,2)
->>> eh=eone.get_handle()
+>>> eh=eone.handle
 >>> edge=Edge(P3,1,2)
->>> edge.get_handle()==eh
+>>> edge.handle==eh
 True
 >>> edge
 ('1', '2')
@@ -373,16 +373,20 @@ with keyed edge
 
 >>> A.add_edge('3','3','foo')
 >>> A.edges()
-[('1', '2'), ('1', '2'), ('3', '3'), ('3', '3', 'foo')]
+[('1', '2'), ('1', '2'), ('3', '3'), ('3', '3')]
+>>> A.edges(data=True)
+[('1', '2', None), ('1', '2', None), ('3', '3', None), ('3', '3', 'foo')]
 >>> eone=A.get_edge(3,3,'foo')
->>> eh=eone.get_handle()
+>>> eh=eone.handle
 >>> edge=Edge(A,3,3,'foo')
->>> edge.get_handle()==eh
+>>> edge.handle==eh
 True
 >>> edge
-('3', '3', 'foo')
+('3', '3')
 >>> eone
-('3', '3', 'foo')
+('3', '3')
+>>> edge.name
+'foo'
 
 graph only
 ----------

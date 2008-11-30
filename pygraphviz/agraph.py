@@ -361,8 +361,8 @@ class AGraph(object):
             vh=Node(self,v).get_handle()
         try:
             eh=gv.agedge(self.handle,uh,vh,key,_Action.create)
-            eh=Edge(self,u,v,key,eh)
-            eh.attr.update(**attr)
+            e=Edge(self,eh=eh)
+            e.attr.update(**attr)
         except KeyError:
             return None # silent failure for strict graph, already added
 
@@ -408,7 +408,7 @@ class AGraph(object):
         if v is None: (u,v)=u  # no v given, assume u is an edge tuple
         e=Edge(self,u,v,key)
         try:
-            gv.agdeledge(self.handle,e.get_handle())
+            gv.agdeledge(self.handle,e.handle)
         except KeyError:
             raise KeyError("edge %s-%s not in graph"%(u,v))
 
@@ -436,53 +436,64 @@ class AGraph(object):
         except KeyError:
             return False
 
-    def edges_iter(self, nbunch=None):
-        """Return iterator over edges in the graph.
+#     def edges_iter(self, nbunch=None, data=False):
+#         """Return iterator over edges in the graph.
 
-        If the optional nbunch (container of nodes) only edges
-        adjacent to nodes in nbunch will be returned.
-        """
-
-        if nbunch is None:   # all nodes
-            nh=gv.agfstnode(self.handle)
-            while nh is not None:
-                eh=gv.agfstout(self.handle,nh)
-                while eh is not None:
-                    (s,t)=(gv.agtail(eh),gv.aghead(eh))
-                    (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
-                    eh=gv.agnxtout(self.handle,eh)
-                nh=gv.agnxtnode(self.handle,nh)
-        elif nbunch in self: # if nbunch is a single node 
-            n=Node(self,nbunch)
-            nh=n.get_handle()
-            eh=gv.agfstedge(self.handle,nh)
-            while eh is not None:
-                (s,t)=(gv.agtail(eh),gv.aghead(eh))
-                (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
-                eh=gv.agnxtedge(self.handle,eh,nh)
-        else:                # if nbunch is a sequence of nodes
-            try: bunch=[n for n in nbunch if n in self]
-            except TypeError:
-                raise TypeError(
-                      "nbunch is not a node or a sequence of nodes")
-            for n in nbunch:
-                try: 
-                    nh=Node(self,n).get_handle()
-                except KeyError:
-                    continue
-                eh=gv.agfstout(self.handle,nh)
-                while eh is not None:
-                    (s,t)=(gv.agtail(eh),gv.aghead(eh))
-                    (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
-                    eh=gv.agnxtout(self.handle,eh)
-        raise StopIteration
+#         If the optional nbunch (container of nodes) only edges
+#         adjacent to nodes in nbunch will be returned.
+#         """
+#         if nbunch is None:   # all nodes
+#             nh=gv.agfstnode(self.handle)
+#             while nh is not None:
+#                 eh=gv.agfstout(self.handle,nh)
+#                 while eh is not None:
+#                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
+#                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
+#                     e=Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
+# #                    print "yield"
+#                     if data:
+#                         yield (e[0],e[1],e.name)
+#                     else:
+#                         yield e
+#                     eh=gv.agnxtout(self.handle,eh)
+#                 nh=gv.agnxtnode(self.handle,nh)
+#         elif nbunch in self: # if nbunch is a single node 
+#             n=Node(self,nbunch)
+#             nh=n.get_handle()
+#             eh=gv.agfstedge(self.handle,nh)
+#             while eh is not None:
+#                 (s,t)=(gv.agtail(eh),gv.aghead(eh))
+#                 (u,v)=(gv.agnameof(s),gv.agnameof(t))
+#                 e=Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
+#                 if data:
+#                     yield (e[0],e[1],e.name)
+#                 else:
+#                     yield e
+#                 eh=gv.agnxtedge(self.handle,eh,nh)
+#         else:                # if nbunch is a sequence of nodes
+#             try: bunch=[n for n in nbunch if n in self]
+#             except TypeError:
+#                 raise TypeError(
+#                       "nbunch is not a node or a sequence of nodes")
+#             for n in nbunch:
+#                 try: 
+#                     nh=Node(self,n).get_handle()
+#                 except KeyError:
+#                     continue
+#                 eh=gv.agfstout(self.handle,nh)
+#                 while eh is not None:
+#                     (s,t)=(gv.agtail(eh),gv.aghead(eh))
+#                     (u,v)=(gv.agnameof(s),gv.agnameof(t))
+#                     e=Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
+#                     if data:
+#                         yield (e[0],e[1],e.name)
+#                     else:
+#                         yield e
+#                     eh=gv.agnxtout(self.handle,eh)
+#         raise StopIteration
  
-    iteredges=edges_iter
 
-    def edges(self, nbunch=None):
+    def edges(self, nbunch=None, data=False):
         """Return list of edges in the graph.
 
         If the optional nbunch (container of nodes) only edges
@@ -496,7 +507,7 @@ class AGraph(object):
         >>> print G.edges('a')
         [('a', 'b')]
         """
-        return list(self.edges_iter(nbunch))
+        return list(self.edges_iter(nbunch=nbunch,data=data))
 
     def has_neighbor(self, u, v, key=None):
         """Return True if u has an edge to v or False if not.
@@ -532,20 +543,23 @@ class AGraph(object):
 
     iterneighbors=neighbors_iter
 
-    def out_edges_iter(self, nbunch=None):
+    def out_edges_iter(self, nbunch=None, data=False):
         """Return iterator over out edges in the graph.
 
         If the optional nbunch (container of nodes) only out edges
         adjacent to nodes in nbunch will be returned.
         """
+
         if nbunch is None:   # all nodes
             nh=gv.agfstnode(self.handle)
             while nh is not None:
                 eh=gv.agfstout(self.handle,nh)
                 while eh is not None:
-                    (s,t)=(gv.agtail(eh),gv.aghead(eh))
-                    (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
+                    e=Edge(self,eh=eh)
+                    if data:
+                        yield (e[0],e[1],e.name)
+                    else:
+                        yield e
                     eh=gv.agnxtout(self.handle,eh)
                 nh=gv.agnxtnode(self.handle,nh)
         elif nbunch in self: # if nbunch is a single node 
@@ -553,9 +567,11 @@ class AGraph(object):
             nh=n.get_handle()
             eh=gv.agfstout(self.handle,nh)
             while eh is not None:
-                (s,t)=(gv.agtail(eh),gv.aghead(eh))
-                (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
+                e=Edge(self,eh=eh)
+                if data:
+                    yield (e[0],e[1],e.name)
+                else:
+                    yield e
                 eh=gv.agnxtout(self.handle,eh)
         else:                # if nbunch is a sequence of nodes
             try: bunch=[n for n in nbunch if n in self]
@@ -569,16 +585,19 @@ class AGraph(object):
                     continue
                 eh=gv.agfstout(self.handle,nh)
                 while eh is not None:
-                    (s,t)=(gv.agtail(eh),gv.aghead(eh))
-                    (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
+                    e=Edge(self,eh=eh)
+                    if data:
+                        yield (e[0],e[1],e.name)
+                    else:
+                        yield e
                     eh=gv.agnxtout(self.handle,eh)
         raise StopIteration
  
 
     iteroutedges=out_edges_iter
+    iteredges=out_edges_iter
 
-    def in_edges_iter(self, nbunch=None):
+    def in_edges_iter(self, nbunch=None, data=False):
         """Return iterator over out edges in the graph.
 
         If the optional nbunch (container of nodes) only out edges
@@ -589,9 +608,11 @@ class AGraph(object):
             while nh is not None:
                 eh=gv.agfstin(self.handle,nh)
                 while eh is not None:
-                    (s,t)=(gv.agtail(eh),gv.aghead(eh))
-                    (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
+                    e=Edge(self,eh=eh)
+                    if data:
+                        yield (e[0],e[1],e.name)
+                    else:
+                        yield e
                     eh=gv.agnxtin(self.handle,eh)
                 nh=gv.agnxtnode(self.handle,nh)
         elif nbunch in self: # if nbunch is a single node 
@@ -599,9 +620,11 @@ class AGraph(object):
             nh=n.get_handle()
             eh=gv.agfstin(self.handle,nh)
             while eh is not None:
-                (s,t)=(gv.agtail(eh),gv.aghead(eh))
-                (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
+                e=Edge(self,eh=eh)
+                if data:
+                    yield (e[0],e[1],e.name)
+                else:
+                    yield e
                 eh=gv.agnxtin(self.handle,eh)
         else:                # if nbunch is a sequence of nodes
             try: bunch=[n for n in nbunch if n in self]
@@ -615,9 +638,11 @@ class AGraph(object):
                     continue
                 eh=gv.agfstin(self.handle,nh)
                 while eh is not None:
-                    (s,t)=(gv.agtail(eh),gv.aghead(eh))
-                    (u,v)=(gv.agnameof(s),gv.agnameof(t))
-                    yield Edge(self,u,v,key=gv.agnameof(eh),eh=eh)
+                    e=Edge(self,eh=eh)
+                    if data:
+                        yield (e[0],e[1],e.name)
+                    else:
+                        yield e
                     eh=gv.agnxtin(self.handle,eh)
         raise StopIteration
 
@@ -627,20 +652,20 @@ class AGraph(object):
     # define edges to be out_edges implicitly since edges uses edges_iter
     edges_iter=out_edges_iter
             
-    def out_edges(self, nbunch=None):
+    def out_edges(self, nbunch=None, data=False):
         """Return list of out edges in the graph.
 
         If the optional nbunch (container of nodes) only out edges
         adjacent to nodes in nbunch will be returned.
         """
-        return list(self.out_edges_iter(nbunch))
+        return list(self.out_edges_iter(nbunch=nbunch,data=data))
 
-    def in_edges(self, nbunch=None):
+    def in_edges(self, nbunch=None, data=False):
         """Return list of in edges in the graph.
         If the optional nbunch (container of nodes) only in edges
         adjacent to nodes in nbunch will be returned.
         """
-        return list(self.in_edges_iter(nbunch))
+        return list(self.in_edges_iter(nbunch=nbunch,data=data))
 
 
     def predecessors_iter(self,n):
@@ -1396,21 +1421,26 @@ class Node(str):
     >>> node.attr['color']='red'
 
     """ 
-    def __new__(self,graph,name):
-        n=str.__new__(self,name)
+    def __new__(self,graph,name=None,nh=None):
+        if nh is not None:
+            n=str.__new__(self,gv.agnameof(nh))
+        else:
+            n=str.__new__(self,name)
+            try:
+                nh=gv.agnode(graph.handle,n,_Action.find)
+            except KeyError:
+                raise KeyError("node %s not in graph"%n)
+            
         n.ghandle=graph.handle
-        try:
-            nh=gv.agnode(graph.handle,n,_Action.find)
-        except KeyError:
-            raise KeyError("node %s not in graph"%n)
         n.attr=ItemAttribute(nh,1)
+        n.handle=nh
         return n
 
     def get_handle(self):
         """Return pointer to graphviz node object.""" 
         return gv.agnode(self.ghandle,self,_Action.find)
         
-    handle=property(get_handle)
+#    handle=property(get_handle)
 
     def get_name(self):
         return gv.agnameof(self.handle)
@@ -1452,47 +1482,30 @@ class Edge(tuple):
     >>> edge.attr['color']='red'
 
     """ 
-    def __new__(self,graph,source,target,key=None,eh=None):
-        s=Node(graph,source)
-        t=Node(graph,target)
-
-        try:
-            if eh is None:
-                eh=gv.agedge(graph.handle,
-                             s.get_handle(),t.get_handle(),key,_Action.find)
-        except KeyError:
-            raise KeyError("edge %s-%s not in graph"%(source,target))
-
-        if key is None:
-            tp=tuple.__new__(self,(s,t))
+    def __new__(self,graph,source=None,target=None,key=None,eh=None):
+        # edge handle given, reconstruct node object 
+        if eh is not None:
+            (source,target)=(gv.agtail(eh),gv.aghead(eh))
+            s=Node(graph,nh=source)
+            t=Node(graph,nh=target)
+        # no edge handle, search for edge and construct object             
         else:
-            tp=tuple.__new__(self,(s,t,key))
+            s=Node(graph,source)
+            t=Node(graph,target)
+            try:
+                eh=gv.agedge(graph.handle,
+                             s.handle,
+                             t.handle,
+                             key,
+                             _Action.find)
+            except KeyError:
+                raise KeyError("edge %s-%s not in graph"%(source,target))
 
+        tp=tuple.__new__(self,(s,t))
         tp.ghandle=graph.handle
+        tp.handle=eh
         tp.attr=ItemAttribute(eh,3)
         return tp
-
-
-    def get_handle(self):
-        """Return pointer to graphviz edge object.""" 
-        try:
-            sh=gv.agnode(self.ghandle,self[0],_Action.find)
-        except KeyError:
-            raise KeyError("node %s not in graph"%source)
-        try:
-            th=gv.agnode(self.ghandle,self[1],_Action.find)
-        except KeyError:
-            raise KeyError("node %s not in graph"%target)
-        try:
-            if len(self)==3:
-                key=self[2]
-            else:
-                key=None
-            return gv.agedge(self.ghandle,sh,th,key,_Action.find)
-        except KeyError:
-            raise KeyError("edge %s-%s not in graph"%(source,target))
-
-    handle=property(get_handle)
 
     def get_name(self):
         return gv.agnameof(self.handle)
