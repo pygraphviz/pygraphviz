@@ -8,7 +8,7 @@
 %module graphviz
 
 %{
-#include "agraph.h"
+#include "cgraph.h"
 %}
 
 
@@ -56,13 +56,14 @@
 }
 
 /* agdeledge returns -1 on error */
-%exception agdeledge {
+/* %exception agdeledge {
   $action
   if (result==-1) {
      PyErr_SetString(PyExc_KeyError,"agdeledge: no key");
      return NULL;
   }
 }
+*/
 
 %exception agnxtattr {
   $action
@@ -71,7 +72,6 @@
      return NULL;
   }
 }
-
 
 %exception agattr {
   $action
@@ -82,15 +82,26 @@
 }
 
 
-/* agattrdefval returns "" if no value */
-%exception agattrdefval {
+/* agget returns "" if no value */
+/*%exception agget {
+  $action
+    if (!strcmp(result,"")) {
+      PyErr_SetString(PyExc_KeyError,"agget: no symbol");
+      return NULL;
+    }
+    }
+*/
+
+
+/*  agattrdefval returns "" if no value */
+/* %exception agattrdefval {
   $action
     if (!strcmp(result,"")) {
       PyErr_SetString(PyExc_KeyError,"agattrdefval: no symbol");
       return NULL;
     }
 }
-
+*/
 
 /* graphs */
 Agraph_t *agopen(char *name, Agdesc_t kind, Agdisc_t *disc);
@@ -120,35 +131,33 @@ int       agisstrict(Agraph_t * g);
 /* Agraph_t        *agconcat(Agraph_t *g, FILE *file, Agdisc_t *disc); */
 
 
-/* subgraphs */
-Agraph_t *agsubg(Agraph_t *g, char *name, int createflag);
-Agraph_t *agfstsubg(Agraph_t *g); 
-Agraph_t *agnxtsubg(Agraph_t *subg);
-Agraph_t *agparent(Agraph_t *g);  
-Agraph_t *agroot(Agraph_t *g);
-Agnode_t *agsubnode(Agraph_t *g, Agnode_t *n, int createflag);
-Agedge_t *agsubedge(Agraph_t *g, Agedge_t *e, int createflag);
-long      agdelsubg(Agraph_t *g, Agraph_t *sub);
-
 /* nodes */
 Agnode_t *agnode(Agraph_t *g, char *name, int createflag);
+Agnode_t *agidnode(Agraph_t * g, unsigned long id, int createflag); 
+Agnode_t *agsubnode(Agraph_t *g, Agnode_t *n, int createflag);
 Agnode_t *agfstnode(Agraph_t *g);
-Agnode_t *agnxtnode(Agnode_t *n);
-int       agdelnode(Agnode_t *n);
-
+Agnode_t *agnxtnode(Agraph_t *g, Agnode_t *n);
+Agnode_t *aglstnode(Agraph_t * g); 
+Agnode_t *agprvnode(Agraph_t * g, Agnode_t * n); 
+/* Agsubnode_t *agsubrep(Agraph_t * g, Agnode_t * n); */
 
 /* edges */ 
 
-Agedge_t *agedge(Agnode_t *t, Agnode_t *h, char *name, int createflag);
+Agedge_t *agedge(Agraph_t * g, Agnode_t * t, Agnode_t * h,
+ 		char *name, int createflag);
+Agedge_t *agidedge(Agraph_t * g, Agnode_t * t, Agnode_t * h,
+ 		  unsigned long id, int createflag);
+Agedge_t *agsubedge(Agraph_t * g, Agedge_t * e, int createflag);
+Agedge_t *agfstin(Agraph_t * g, Agnode_t * n);
+Agedge_t *agnxtin(Agraph_t * g, Agedge_t * e);
+Agedge_t *agfstout(Agraph_t * g, Agnode_t * n);
+Agedge_t *agnxtout(Agraph_t * g, Agedge_t * e);
+Agedge_t *agfstedge(Agraph_t * g, Agnode_t * n);
+Agedge_t *agnxtedge(Agraph_t * g, Agedge_t * e, Agnode_t * n);
+
+
 Agnode_t *aghead(Agedge_t *e);
 Agnode_t *agtail(Agedge_t *e);
-Agedge_t *agfstedge(Agnode_t *n);
-Agedge_t *agnxtedge(Agedge_t *e, Agnode_t *n);
-Agedge_t *agfstin(Agnode_t *n);
-Agedge_t *agnxtin(Agedge_t *e);
-Agedge_t *agfstout(Agnode_t *n);
-Agedge_t *agnxtout(Agedge_t *e);
-int       agdeledge(Agedge_t *e);
 
 /* attributes */
 Agsym_t *agattr(Agraph_t *g, int kind, char *name, char *value);
@@ -173,15 +182,27 @@ int      agxset(void *obj, Agsym_t *sym, char *value);
 
 
 
-/* cardinality */
-int agnnodes(Agraph_t *g);
-int agnedges(Agraph_t *g);
-int agdegree(Agnode_t *n, int use_inedges, int use_outedges);
+/* subgraphs */
+Agraph_t *agsubg(Agraph_t *g, char *name, int createflag);
+Agraph_t *agfstsubg(Agraph_t *g); 
+Agraph_t *agnxtsubg(Agraph_t *subg);
+Agraph_t *agparent(Agraph_t *g);  
+Agraph_t *agroot(Agraph_t *g);
+Agedge_t *agsubedge(Agraph_t *g, Agedge_t *e, int createflag);
+long      agdelsubg(Agraph_t *g, Agraph_t *sub);
 
+
+/* cardinality */
+int agnnodes(Agraph_t * g);
+int agnedges(Agraph_t * g);
+int agdegree(Agraph_t * g, Agnode_t * n, int in, int out);
 
 /* generic */
 Agraph_t  *agraphof(void*);
 char      *agnameof(void*);
+
+int agdelnode(Agraph_t * g, Agnode_t * arg_n);
+int agdeledge(Agraph_t * g, Agedge_t * arg_e);
 
 /* this pretty code finds anonymous items (start with %) or
    items with no label and returns None - useful for anonymous
@@ -190,11 +211,15 @@ char      *agnameof(void*);
 %pythoncode %{
 def agnameof(handle):
   name=_graphviz.agnameof(handle)
+  if name is None:
+     return None
   if name=='' or name.startswith('%'):
     return None
   else:
     return name 
 %}
+
+
 
 
 /* Agdesc_t Agdirected, Agstrictdirected, Agundirected, Agstrictundirected;  */

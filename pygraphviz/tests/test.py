@@ -8,6 +8,7 @@ import os
 
 def test_suite():
     test_files=['graph.txt','layout_draw.txt','attributes.txt']
+#    test_files=['graph.txt','layout_draw.txt','attributes.txt','subgraph.txt']
     try: # has setuptools
         from pkg_resources import resource_filename
         tests=[resource_filename(__name__, t) for t in test_files]

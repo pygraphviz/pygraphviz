@@ -52,13 +52,13 @@ def pkg_config():
     include_path=None
     try:
         output,err = \
-                   S.Popen('pkg-config --libs-only-L libagraph',
+                   S.Popen('pkg-config --libs-only-L libcgraph',
                            shell=True, stdin=S.PIPE, stdout=S.PIPE,
                            close_fds=True).communicate()
         if output:
             library_path=output.strip()[2:]
         output,err = \
-                   S.Popen('pkg-config --cflags-only-I libagraph',
+                   S.Popen('pkg-config --cflags-only-I libcgraph',
                            shell=True, stdin=S.PIPE, stdout=S.PIPE,
                            close_fds=True).communicate()
         if output:
@@ -146,7 +146,7 @@ extension = [Extension("pygraphviz._graphviz",
                       include_dirs=include_dirs,
                       library_dirs=library_dirs,
                       runtime_library_dirs=library_dirs,
-                      libraries=["agraph","cdt"],
+                      libraries=["cgraph","cdt"],
                       )]
 package_data = {'': ['*.txt'],}
 
