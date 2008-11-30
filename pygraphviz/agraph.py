@@ -350,15 +350,15 @@ class AGraph(object):
         """
         if v is None: (u,v)=u  # no v given, assume u is an edge tuple
         try:
-            uh=Node(self,u).get_handle()
+            uh=Node(self,u).handle
         except:
             self.add_node(u)
-            uh=Node(self,u).get_handle()
+            uh=Node(self,u).handle
         try:
-            vh=Node(self,v).get_handle()
+            vh=Node(self,v).handle
         except:
             self.add_node(v)
-            vh=Node(self,v).get_handle()
+            vh=Node(self,v).handle
         try:
             eh=gv.agedge(self.handle,uh,vh,key,_Action.create)
             e=Edge(self,eh=eh)
@@ -468,7 +468,7 @@ class AGraph(object):
     def neighbors_iter(self,n):
         """Return iterator over the nodes attached to n."""
         n=Node(self,n)
-        nh=n.get_handle()
+        nh=n.handle
         eh=gv.agfstedge(self.handle,nh)
         while eh is not None:
             (s,t)=(gv.agtail(eh),gv.aghead(eh))
@@ -507,7 +507,7 @@ class AGraph(object):
                 nh=gv.agnxtnode(self.handle,nh)
         elif nbunch in self: # if nbunch is a single node 
             n=Node(self,nbunch)
-            nh=n.get_handle()
+            nh=n.handle
             eh=gv.agfstout(self.handle,nh)
             while eh is not None:
                 e=Edge(self,eh=eh)
@@ -523,7 +523,7 @@ class AGraph(object):
                       "nbunch is not a node or a sequence of nodes")
             for n in nbunch:
                 try: 
-                    nh=Node(self,n).get_handle()
+                    nh=Node(self,n).handle
                 except KeyError:
                     continue
                 eh=gv.agfstout(self.handle,nh)
@@ -560,7 +560,7 @@ class AGraph(object):
                 nh=gv.agnxtnode(self.handle,nh)
         elif nbunch in self: # if nbunch is a single node 
             n=Node(self,nbunch)
-            nh=n.get_handle()
+            nh=n.handle
             eh=gv.agfstin(self.handle,nh)
             while eh is not None:
                 e=Edge(self,eh=eh)
@@ -576,7 +576,7 @@ class AGraph(object):
                       "nbunch is not a node or a sequence of nodes")
             for n in nbunch:
                 try: 
-                    nh=Node(self,n).get_handle()
+                    nh=Node(self,n).handle
                 except KeyError:
                     continue
                 eh=gv.agfstin(self.handle,nh)
@@ -614,7 +614,7 @@ class AGraph(object):
     def predecessors_iter(self,n):
         """Return iterator over predecessor nodes of n."""
         n=Node(self,n)
-        nh=n.get_handle()
+        nh=n.handle
         eh=gv.agfstin(self.handle,nh)
         while eh is not None:
             (s,t)=(gv.agtail(eh),gv.aghead(eh))
@@ -632,7 +632,7 @@ class AGraph(object):
     def successors_iter(self,n):
         """Return iterator over successor nodes of n."""
         n=Node(self,n)
-        nh=n.get_handle()
+        nh=n.handle
         eh=gv.agfstout(self.handle,nh)
         while eh is not None:
             (s,t)=(gv.agtail(eh),gv.aghead(eh))
@@ -678,10 +678,10 @@ class AGraph(object):
         if with_labels:
             for n in bunch:
                 yield (Node(self,n),gv.agdegree(self.handle,
-                                                n.get_handle(),indeg,outdeg))
+                                                n.handle,indeg,outdeg))
         else:
             for n in bunch:
-                yield gv.agdegree(self.handle,n.get_handle(),indeg,outdeg)
+                yield gv.agdegree(self.handle,n.handle,indeg,outdeg)
 
 
 
