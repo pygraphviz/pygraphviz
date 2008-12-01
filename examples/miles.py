@@ -50,7 +50,7 @@ def miles_graph():
     except IOError:
         raise "File miles_dat.txt not found."
 
-    G=AGraph(name='miles_dat')
+    G=pgv.AGraph(name='miles_dat')
     G.node_attr['shape']='circle'
     G.node_attr['fixedsize']='true'
     G.node_attr['fontsize']='8'
@@ -99,10 +99,13 @@ def miles_graph():
     return G            
 
 if __name__ == '__main__':
-    from pygraphviz import *
+    import warnings
+    import pygraphviz as pgv
+
+    # ignore Graphviz warning messages
+    warnings.simplefilter('ignore', RuntimeWarning)
 
     G=miles_graph()
-
     print "Loaded miles_dat.txt containing 128 cities."
    
     G.string()
