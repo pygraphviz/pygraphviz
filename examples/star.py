@@ -27,8 +27,8 @@ for i in range(16):
     A.add_edge(0,i)
     n=A.get_node(i)
     n.attr['fillcolor']="#%2x0000"%(i*16)
-    n.attr['height']="%s"%(i/16.0+0.25)
-    n.attr['width']="%s"%(i/16.0+0.25)
+    n.attr['height']="%s"%(i/16.0+0.5)
+    n.attr['width']="%s"%(i/16.0+0.5)
 
 print A.string() # print to screen
 A.write("star.dot") # write to simple.dot
