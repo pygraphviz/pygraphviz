@@ -11,6 +11,7 @@ A Python interface to Graphviz.
 #    All rights reserved, see LICENSE for details.
 import sys
 import threading
+import warnings
 import UserDict
 
 import graphviz as gv
