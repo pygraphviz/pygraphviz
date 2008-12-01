@@ -55,16 +55,6 @@
   }
 }
 
-/* agdeledge returns -1 on error */
-/* %exception agdeledge {
-  $action
-  if (result==-1) {
-     PyErr_SetString(PyExc_KeyError,"agdeledge: no key");
-     return NULL;
-  }
-}
-*/
-
 %exception agnxtattr {
   $action
   if (!result) {
@@ -81,27 +71,6 @@
   }
 }
 
-
-/* agget returns "" if no value */
-/*%exception agget {
-  $action
-    if (!strcmp(result,"")) {
-      PyErr_SetString(PyExc_KeyError,"agget: no symbol");
-      return NULL;
-    }
-    }
-*/
-
-
-/*  agattrdefval returns "" if no value */
-/* %exception agattrdefval {
-  $action
-    if (!strcmp(result,"")) {
-      PyErr_SetString(PyExc_KeyError,"agattrdefval: no symbol");
-      return NULL;
-    }
-}
-*/
 
 /* graphs */
 Agraph_t *agopen(char *name, Agdesc_t kind, Agdisc_t *disc);
@@ -204,9 +173,9 @@ char      *agnameof(void*);
 int agdelnode(Agraph_t * g, Agnode_t * arg_n);
 int agdeledge(Agraph_t * g, Agedge_t * arg_e);
 
-/* this pretty code finds anonymous items (start with %) or
-   items with no label and returns None - useful for anonymous
-   edges 
+/* This pretty code finds anonymous items (start with %) or
+   items with no label and returns None.
+   Useful for anonymous edges .
 */
 %pythoncode %{
 def agnameof(handle):
