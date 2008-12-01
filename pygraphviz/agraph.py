@@ -953,7 +953,7 @@ class AGraph(object):
 
     def to_undirected(self):
         """Return undirected copy of graph."""
-        if self.is_undirected():
+        if not self.directed:
             return self.copy()
         else:
             U=AGraph(strict=self.strict)
@@ -978,7 +978,7 @@ class AGraph(object):
         Each undirected edge u-v is represented as two directed
         edges u->v and v->u.
         """
-        if self.is_undirected():
+        if not self.directed:
             D=AGraph(strict=self.strict,directed=True)
             D.graph_attr.update(self.graph_attr)
             D.node_attr.update(self.node_attr)
