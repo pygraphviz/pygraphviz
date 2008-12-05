@@ -164,6 +164,11 @@ class AGraph(object):
         # this is not graph isomorphism
         return self.string()==other.string()
 
+    def __hash__(self):
+        # hash the string representation for id
+        return hash(self.string())
+
+
     def __iter__(self):
         # provide "for n in G"
         return self.nodes_iter()
