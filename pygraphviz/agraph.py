@@ -9,6 +9,7 @@ A Python interface to Graphviz.
 #    Manos Renieris, http://www.cs.brown.edu/~er/
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
+import subprocess
 import sys
 import threading
 import warnings
@@ -1111,11 +1112,18 @@ class AGraph(object):
         Use keyword args to add additional arguments to graphviz programs.
 
         """
-        import os
 
         runprog=self._get_prog(prog)
         cmd=' '.join([runprog,args])
-        child_stdin,child_stdout,child_stderr=os.popen3(cmd, 'b')
+        p = subprocess.Popen(cmd, 
+                             shell=True,
+                             stdin=subprocess.PIPE, 
+                             stdout=subprocess.PIPE, 
+                             stderr=subprocess.PIPE, 
+                             close_fds=True)
+        (child_stdin,
+         child_stdout,
+         child_stderr) = (p.stdin, p.stdout, p.stderr)
         # Use threading to avoid blocking
         data = []
         errors = []
