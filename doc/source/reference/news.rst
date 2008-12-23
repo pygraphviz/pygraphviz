@@ -2,6 +2,21 @@
 
 News
 ==== 
+pygraphviz-0.99.1
+-----------------
+Release date: 7 December 2008
+
+See: https://networkx.lanl.gov/trac/timeline
+
+ - Use Graphviz libcgraph instead of deprecated libagraph
+ - More closely match API to NetworkX 
+ - edges() now produces two-tuples or three tuples if edges(keys=True)
+ - Edge and Node objects now have .name and .handle properties
+ - Warn without throwing exceptions for Graphviz errors
+ - Graph now has .strict and .directed properties
+ - Cleared up fontsize warnings in examples 
+
+
 pygraphviz-0.99
 ---------------
 Release date: 18 November 2008
@@ -10,8 +25,6 @@ See: https://networkx.lanl.gov/trac/timeline
 
  - New documentation at http://networkx.lanl.gov/pygraphviz/
  - Developer's site at https://networkx.lanl.gov/trac/wiki/PyGraphviz
-
-
 
 pygraphviz-0.37
 ---------------
