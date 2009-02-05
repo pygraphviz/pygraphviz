@@ -328,13 +328,13 @@ class AGraph(object):
         return Node(self,n)
 
     def add_edge(self,u,v=None,key=None,**attr):  
-        """Add a single edge between nodes u and v to the graph.
+        """Add a single edge between nodes u and v.
 
-        If u and v are not nodes in they graph they will added.
+        If the nodes u and v are not in the graph they will added.
 
-        If u and v is not a strings, conversion to a string will be attempted.
+        If u and v are not strings, conversion to a string will be attempted.
         String conversion will work if u and v have valid string representation
-        (try e.g. str(u) if you are unsure).
+        (try str(u) if you are unsure).
         
         >>> G=AGraph()
         >>> G.add_edge('a','b')
@@ -354,6 +354,8 @@ class AGraph(object):
         Attributes can be added when edges are created
 
         >>> G.add_edge('a','b',color='green')
+
+        Attributes must be valid strings.
 
         See http://www.graphviz.org/doc/info/attrs.html
         for a list of attributes.
