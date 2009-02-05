@@ -204,6 +204,7 @@ class AGraph(object):
         ['a', '1']
         
         Attributes can be added to nodes on creation
+        (attribute values must be strings)
 
         >>> G.add_node(2,color='red')
 
