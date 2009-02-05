@@ -259,7 +259,7 @@ class AGraph(object):
             nh=gv.agnode(self.handle,n,_Action.find)
             gv.agdelnode(self.handle,nh)
         except KeyError:
-            raise KeyError("node %s not in graph"%n)
+            raise KeyError("Node %s not in graph."%n)
 
     delete_node=remove_node
 
@@ -424,7 +424,7 @@ class AGraph(object):
         try:
             gv.agdeledge(self.handle,e.handle)
         except KeyError:
-            raise KeyError("edge %s-%s not in graph"%(u,v))
+            raise KeyError("Edge %s-%s not in graph."%(u,v))
 
     delete_edge=remove_edge        
 
@@ -537,7 +537,7 @@ class AGraph(object):
             try: bunch=[n for n in nbunch if n in self]
             except TypeError:
                 raise TypeError(
-                      "nbunch is not a node or a sequence of nodes")
+                      "nbunch is not a node or a sequence of nodes.")
             for n in nbunch:
                 try: 
                     nh=Node(self,n).handle
@@ -590,7 +590,7 @@ class AGraph(object):
             try: bunch=[n for n in nbunch if n in self]
             except TypeError:
                 raise TypeError(
-                      "nbunch is not a node or a sequence of nodes")
+                      "nbunch is not a node or a sequence of nodes.")
             for n in nbunch:
                 try: 
                     nh=Node(self,n).handle
@@ -688,7 +688,7 @@ class AGraph(object):
         else:                # if nbunch is a sequence of nodes
             try: bunch=[Node(self,n) for n in nbunch if n in self]
             except TypeError:
-                raise TypeError("nbunch is not a node or a sequence of nodes")
+                raise TypeError("nbunch is not a node or a sequence of nodes.")
         for n in bunch:
             yield (Node(self,n),gv.agdegree(self.handle,
                                             n.handle,indeg,outdeg))
@@ -851,7 +851,7 @@ class AGraph(object):
                 bunch=[Node(self,n) for n in nbunch if n in self]
                 # bunch=(n for n in nbunch if n in self) # need python 2.4
             except TypeError:
-               raise TypeError("nbunch is not a node or a sequence of nodes")
+               raise TypeError("nbunch is not a node or a sequence of nodes.")
         return bunch
 
 
@@ -876,7 +876,8 @@ class AGraph(object):
     def remove_subgraph(self, name):
         """Remove subgraph with given name."""  
         handle=gv.agsubg(self.handle,name,_Action.find)
-        if handle is None: raise KeyError("subgraph %s not in graph"%name)
+        if handle is None: 
+            raise KeyError("Subgraph %s not in graph."%name)
         gv.agdelsubg(self.handle,handle)
         
     delete_subgraph=remove_subgraph
@@ -1101,13 +1102,13 @@ class AGraph(object):
                  'wc','acyclic','gvpr','gvcolor','ccomps','sccmap','tred'])
             p=gvprogs[prog]
         except KeyError:
-            raise ValueError("prog %s is not one of: %s"%\
+            raise ValueError("Program %s is not one of: %s."%\
                            (prog,', '.join(gvprogs.keys()))) 
     
         try: # user must pick one of the graphviz programs...
             runprog = self._which(prog)
         except:
-            raise ValueError("program %s not found in path"%prog) 
+            raise ValueError("Program %s not found in path."%prog) 
         return runprog
 
     def _run_prog(self,prog='nop',args=''):
@@ -1275,8 +1276,8 @@ class AGraph(object):
                 args+="-n2"
             except:
                 raise AttributeError(\
-                    """graph has no layout information, see layout()
-                or specify prog=%s"""%\
+                    """Graph has no layout information, see layout()
+                or specify prog=%s."""%\
                 ("|".join(['neato','dot','twopi','circo','fdp','nop'])))
 
         else:
@@ -1332,7 +1333,7 @@ class AGraph(object):
         elif hasattr(path, 'write'):
             fh = path
         else:
-            raise TypeError('path must be a string or file handle')
+            raise TypeError('path must be a string or file handle.')
         return fh
 
 
@@ -1349,7 +1350,7 @@ class AGraph(object):
             match=glob.glob(os.path.join(path, name+exe))
             if match:
                 return match[0]
-        raise ValueError, "no prog %s in path"%name        
+        raise ValueError, "No prog %s in path."%name        
 
 
 
@@ -1389,7 +1390,7 @@ class Node(str):
             try:
                 nh=gv.agnode(graph.handle,n,_Action.find)
             except KeyError:
-                raise KeyError("node %s not in graph"%n)
+                raise KeyError("Node %s not in graph."%n)
             
         n.ghandle=graph.handle
         n.attr=ItemAttribute(nh,1)
@@ -1459,7 +1460,7 @@ class Edge(tuple):
                              key,
                              _Action.find)
             except KeyError:
-                raise KeyError("edge %s-%s not in graph"%(source,target))
+                raise KeyError("Edge %s-%s not in graph."%(source,target))
 
         tp=tuple.__new__(self,(s,t))
         tp.ghandle=graph.handle
@@ -1513,7 +1514,7 @@ class Attribute(UserDict.DictMixin):
                 except KeyError: # not sucessful
                     pass
         except TypeError:
-            raise "Attribute value must be a string"
+            raise TypeError("Attribute value must be a string.")
 
 
     def __getitem__(self, name):
@@ -1586,7 +1587,7 @@ class ItemAttribute(Attribute):
             except KeyError: # not sucessful
                 pass
         except TypeError:
-            raise "Attribute value must be a string"
+            raise TypeError("Attribute value must be a string.")
 
     def __getitem__(self, name):
         return gv.agget(self.handle,name)

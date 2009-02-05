@@ -93,7 +93,7 @@ test __getitem__
 >>> P3[10]
 Traceback (most recent call last):
 ...
-KeyError: 'node 10 not in graph'
+KeyError: 'Node 10 not in graph.'
 
 
 test add_node
@@ -124,7 +124,7 @@ test remove_node
 >>> A.remove_node(1)
 Traceback (most recent call last):
 ...
-KeyError: 'node 1 not in graph'
+KeyError: 'Node 1 not in graph.'
 
 
 test add_nodes_from and remove_nodes_from
@@ -139,7 +139,7 @@ test add_nodes_from and remove_nodes_from
 >>> A.remove_nodes_from(range(3))
 Traceback (most recent call last):
 ...
-KeyError: 'node 0 not in graph'
+KeyError: 'Node 0 not in graph.'
 
 test nodes and nodes_iter
 
@@ -177,7 +177,7 @@ True
 >>> Node(P3,10)
 Traceback (most recent call last):
 ...
-KeyError: 'node 10 not in graph'
+KeyError: 'Node 10 not in graph.'
 
 
 
@@ -211,7 +211,7 @@ test remove_edge
 >>> A.remove_edge(1,2)
 Traceback (most recent call last):
 ...
-KeyError: 'edge 1-2 not in graph'
+KeyError: 'Edge 1-2 not in graph.'
 
 
 test remove_edges_from
@@ -257,7 +257,7 @@ True
 >>> Edge(A,1,10)
 Traceback (most recent call last):
 ...
-KeyError: 'edge 1-10 not in graph'
+KeyError: 'Edge 1-10 not in graph.'
 
 
 test neighbors, neighbors_iter

@@ -90,8 +90,8 @@ Drawing
 >>> d=A.draw()
 Traceback (most recent call last):
 ...
-AttributeError: graph has no layout information, see layout()
-                or specify prog=neato|dot|twopi|circo|fdp|nop
+AttributeError: Graph has no layout information, see layout()
+                or specify prog=neato|dot|twopi|circo|fdp|nop.
 
 >>> d=A.draw(prog='neato')
 >>> len(d.splitlines())
@@ -102,7 +102,7 @@ AttributeError: graph has no layout information, see layout()
 >>> A.draw(fname,prog='foo')
 Traceback (most recent call last):
 ...
-ValueError: prog foo is not one of: twopi, gvcolor, wc, ccomps, tred, sccmap, fdp, circo, neato, acyclic, nop, gvpr, dot
+ValueError: Program foo is not one of: twopi, gvcolor, wc, ccomps, tred, sccmap, fdp, circo, neato, acyclic, nop, gvpr, dot.
 
 >>> os.close(fd)
 >>> os.unlink(fname)
