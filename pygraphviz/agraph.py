@@ -116,7 +116,10 @@ class AGraph(object):
 
         # input type guessed or specified - now init graph                
         if handle is None:  # the graph pointer (handle)
-            self.handle=gv.agraphnew(name,strict,directed) # new graph
+            try:
+                self.handle=gv.agraphnew(name,strict,directed) # new graph
+            except TypeError:
+                raise TypeError("Graph name must be a string: %s"%name)
         else:
             self.handle=handle # use pointer to exisiting graph
 
@@ -858,7 +861,11 @@ class AGraph(object):
     def add_subgraph(self, nbunch=None, name=None, **attr):
         """Return subgraph induced by nodes in nbunch.
         """
-        handle=gv.agsubg(self.handle,name,_Action.create)
+        try:
+            handle=gv.agsubg(self.handle,name,_Action.create)
+        except TypeError:
+            raise TypeError("Subgraph name must be a string: %s"%name)
+
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
                          handle=handle,name=name,**attr)
@@ -875,7 +882,10 @@ class AGraph(object):
 
     def remove_subgraph(self, name):
         """Remove subgraph with given name."""  
-        handle=gv.agsubg(self.handle,name,_Action.find)
+        try:
+            handle=gv.agsubg(self.handle,name,_Action.find)
+        except TypeError:
+            raise TypeError("Subgraph name must be a string: %s"%name)
         if handle is None: 
             raise KeyError("Subgraph %s not in graph."%name)
         gv.agdelsubg(self.handle,handle)
@@ -909,7 +919,11 @@ class AGraph(object):
         """Return existing subgraph with specified name or None if it
         doesn't exist.
         """
-        handle=gv.agsubg(self.handle,name,_Action.find)
+        try:
+            handle=gv.agsubg(self.handle,name,_Action.find)
+        except TypeError:
+            raise TypeError("Subgraph name must be a string: %s"%name)
+
         if handle is None: return None
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
