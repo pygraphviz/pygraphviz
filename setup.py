@@ -79,6 +79,13 @@ def dotneato_config():
             include_path,library_path=output.split()
             library_path=library_path.strip()[2:]
             include_path=include_path.strip()[2:]
+        else:
+            output = S.Popen(['dotneato-config','--libs','--cflags'],
+                         stdout=S.PIPE).communicate()[0]
+            if output:
+                include_path,library_path=output.split('\n',1)
+                library_path=library_path.strip()[2:]
+                include_path=include_path.strip()[2:]
     except:
         print "Failed to find dotneato-config"
     return include_path,library_path
