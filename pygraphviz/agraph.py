@@ -1143,7 +1143,7 @@ class AGraph(object):
                              stdin=subprocess.PIPE, 
                              stdout=subprocess.PIPE, 
                              stderr=subprocess.PIPE, 
-                             close_fds=True)
+                             close_fds=False)
         (child_stdin,
          child_stdout,
          child_stderr) = (p.stdin, p.stdout, p.stderr)
