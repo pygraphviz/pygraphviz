@@ -1593,11 +1593,11 @@ class ItemAttribute(Attribute):
 
     def __setitem__(self, name, value):
         try:
-            gv.agset(self.handle,name,value)
+            gv.agset_label(self.ghandle,self.handle,name,value)
         except KeyError: # not in default dict, set default to be empty string
             gv.agattr(self.ghandle,self.type,name,'')
             try:
-                gv.agset(self.handle,name,value)
+                gv.agset_label(self.ghandle,self.handle,name,value)
             except KeyError: # not sucessful
                 pass
         except TypeError:

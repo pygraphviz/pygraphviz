@@ -46,6 +46,16 @@
   }
 } 
 
+/* agset_label returns -1 on error */
+%exception agset_label {
+  $action
+  if (result==-1) {
+     PyErr_SetString(PyExc_KeyError,"agset_label: no key");
+     return NULL;
+  }
+} 
+
+
 /* agdelnode returns -1 on error */
 %exception agdelnode {
   $action
@@ -149,6 +159,25 @@ int      agxset(void *obj, Agsym_t *sym, char *value);
   }
   %}
 
+/* styled from gv.cpp in Graphviz to handle <> html data in label */
+%inline %{
+int agset_label(Agraph_t *g, void *obj, char *name, char *val)
+{
+    int len;
+    char *hs;
+
+    if (val[0] == '<' && strcmp(name, "label") == 0) {
+        len = strlen(val);
+        if (val[len-1] == '>') {
+            hs = strdup(val+1);
+                *(hs+len-2) = '\0';
+            val = agstrdup_html(g,hs);
+            free(hs);
+        }
+    }
+    return agset(obj, name, val);
+}
+  %}
 
 
 /* subgraphs */

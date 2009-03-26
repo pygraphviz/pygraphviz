@@ -2813,6 +2813,24 @@ SWIG_FromCharPtr(const char *cptr)
     return atsym->defval;
   }
   
+
+int agset_label(Agraph_t *g, void *obj, char *name, char *val)
+{
+    int len;
+    char *hs;
+
+    if (val[0] == '<' && strcmp(name, "label") == 0) {
+        len = strlen(val);
+        if (val[len-1] == '>') {
+            hs = strdup(val+1);
+                *(hs+len-2) = '\0';
+            val = agstrdup_html(g,hs);
+            free(hs);
+        }
+    }
+    return agset(obj, name, val);
+}
+  
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -3989,6 +4007,65 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_agset_label(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Agraph_t *arg1 = (Agraph_t *) 0 ;
+  void *arg2 = (void *) 0 ;
+  char *arg3 = (char *) 0 ;
+  char *arg4 = (char *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  int res4 ;
+  char *buf4 = 0 ;
+  int alloc4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:agset_label",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Agraph_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "agset_label" "', argument " "1"" of type '" "Agraph_t *""'"); 
+  }
+  arg1 = (Agraph_t *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "agset_label" "', argument " "2"" of type '" "void *""'"); 
+  }
+  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "agset_label" "', argument " "3"" of type '" "char *""'");
+  }
+  arg3 = (char *)(buf3);
+  res4 = SWIG_AsCharPtrAndSize(obj3, &buf4, NULL, &alloc4);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "agset_label" "', argument " "4"" of type '" "char *""'");
+  }
+  arg4 = (char *)(buf4);
+  {
+    result = (int)agset_label(arg1,arg2,arg3,arg4);
+    if (result==-1) {
+      PyErr_SetString(PyExc_KeyError,"agset_label: no key");
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_int((int)(result));
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  return resultobj;
+fail:
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_agsubg(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Agraph_t *arg1 = (Agraph_t *) 0 ;
@@ -4443,6 +4520,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"agxset", _wrap_agxset, METH_VARARGS, NULL},
 	 { (char *)"agattrname", _wrap_agattrname, METH_VARARGS, NULL},
 	 { (char *)"agattrdefval", _wrap_agattrdefval, METH_VARARGS, NULL},
+	 { (char *)"agset_label", _wrap_agset_label, METH_VARARGS, NULL},
 	 { (char *)"agsubg", _wrap_agsubg, METH_VARARGS, NULL},
 	 { (char *)"agfstsubg", _wrap_agfstsubg, METH_VARARGS, NULL},
 	 { (char *)"agnxtsubg", _wrap_agnxtsubg, METH_VARARGS, NULL},

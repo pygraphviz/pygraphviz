@@ -94,6 +94,7 @@ agset = _graphviz.agset
 agxset = _graphviz.agxset
 agattrname = _graphviz.agattrname
 agattrdefval = _graphviz.agattrdefval
+agset_label = _graphviz.agset_label
 agsubg = _graphviz.agsubg
 agfstsubg = _graphviz.agfstsubg
 agnxtsubg = _graphviz.agnxtsubg
