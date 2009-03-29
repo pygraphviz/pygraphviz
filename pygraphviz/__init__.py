@@ -17,7 +17,7 @@ Quick example::
 See pygraphviz.AGraph for detailed documentation.
 
 """
-#    Copyright (C) 2004-2006 by 
+#    Copyright (C) 2004-2009 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
@@ -26,8 +26,26 @@ See pygraphviz.AGraph for detailed documentation.
 
 # Release data
 import release 
-__version__  = release.version
-__date__     = release.date
+
+if release.revision is None:
+    # we probably not running in an svn directory   
+    try:
+        # use release data stored at installatation time.
+        import version
+        __version__ = version.__version__
+        __revision__ = version.__revision__
+        __date__ = version.__date__
+    except ImportError:
+        # version.py was not created or no longer exists
+        __version__ = release.version
+        __revision__ = release.revision
+        __date__ = release.date
+else:
+    # use dynamic values, even if version.py exists
+    __version__ = release.version
+    __revision__ = release.revision
+    __date__ = release.date
+
 __author__   = '%s <%s>\n%s <%s>\n%s <%s>' % \
               ( release.authors['Hagberg'] + release.authors['Schult'] + \
                 release.authors['Renieris'] )

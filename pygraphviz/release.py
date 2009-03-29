@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Release data for pygraphviz."""
+"""Release data for PyGraphviz."""
 
 #    Copyright (C) 2006-2008 by 
 #    Aric Hagberg <hagberg@lanl.gov>
@@ -15,9 +15,9 @@ import re
 
 def get_svn_revision():
     rev = None
-    path ="."
-    entries_path = '%s/.svn/entries' % path
-    if os.path.exists(entries_path):
+    base = os.path.split(__file__)[0]
+    entries_path = os.path.join(base, '.svn', 'entries')
+    if os.path.isfile(entries_path):
         entries = open(entries_path, 'r').read()
         # Versions >= 7 of the entries file are flat text.  The first line is
         # the version number. The next set of digits after 'dir' is the revision.
@@ -26,20 +26,27 @@ def get_svn_revision():
             if rev_match:
                 rev = rev_match.groups()[0]
     if rev:
-        return 'dev%s' % rev
-    return None
+        return rev
+    else:
+        return None
 
 name = 'pygraphviz'
 version = '1.0'
-revision = get_svn_revision()
-if revision is not None:
-    version+=".%s"%revision
+
+# change to True before tagging a release; then change back
+release = False 
+
+if not release:
+    version += '.dev'   
+    revision = get_svn_revision()
+    if revision is not None:
+        version += "%s" % revision
 
 description = "Python interface to Graphviz"
 long_description = """\
 A Python wrapper for the Graphviz Agraph data structure.
 
-pygraphviz can be used to create and draw networks and graphs with Graphviz.
+PyGraphviz can be used to create and draw networks and graphs with Graphviz.
 
 """
 license = 'BSD'
@@ -49,7 +56,7 @@ authors = {'Hagberg' : ('Aric Hagberg','hagberg@lanl.gov'),
            'Renieris' : ('Manos Renieris','')
            }
 url = 'http://networkx.lanl.gov/pygraphviz'
-download_url="http://networkx.lanl.gov/wiki/download"
+download_url="http://networkx.lanl.gov/download/pygraphviz"
 platforms = ['Linux','Mac OSX','Windows XP/2000/NT']
 keywords = ['Networks', 'Graph Visualization', 'network', 'graph', 'graph drawing']
 classifiers = [

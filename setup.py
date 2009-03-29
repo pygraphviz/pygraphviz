@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Setup script for pygraphviz.
+Setup script for PyGraphviz
 """
-#    Copyright (C) 2006,2007 by 
+#    Copyright (C) 2006-2009 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
@@ -14,93 +14,45 @@ from glob import glob
 import os
 import sys
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
-from distutils.core import setup, Extension
+try:
+    from setuptools import setup, Extension
+except ImportError:
+    from distutils.core import setup, Extension
+from setuptools import pkg_config, dotneato_config, write_versionfile
 
 if sys.argv[-1] == 'setup.py':
     print "To install, run 'python setup.py install'"
     print
 
+if sys.version_info[:2] < (2, 4):
+    print "PyGraphviz requires Python version 2.4 or later (%d.%d detected)." % \
+          sys.version_info[:2]
+    sys.exit(-1)
+
 library_path=None
 include_path=None
-
 
 # If the setup script couldn't find your graphviz installation you can
 # specify it here by uncommenting these lines or providing your own:
 # You must set both 'library_path' and 'include_path'
 
-# UNIX, Linux
+# Linux, generic UNIX
 #library_path='/usr/lib/graphviz'
 #include_path='/usr/include/graphviz'
 
-# UNIX, Linux alternate
+# OSX, Linux, alternate location
 #library_path='/usr/local/lib/graphviz'
 #include_path='/usr/local/include/graphviz'
 
-# Mac OS X (Fink)
+# OSX (Fink)
 #library_path='/sw/lib/graphviz'
 #include_path='/sw/include/graphviz'
 
-# Mac OS X (MacPorts)
+# OSX (MacPorts)
 #library_path='/opt/local/lib/graphviz'
 #include_path='/opt/local/include/graphviz'
 
-
-def pkg_config():
-    # attempt to find graphviz installation with pkg-config
-    # should work with modern versions of graphviz
-    library_path=None
-    include_path=None
-    try:
-        output,err = \
-                   S.Popen('pkg-config --libs-only-L libcgraph',
-                           shell=True, stdin=S.PIPE, stdout=S.PIPE,
-                           close_fds=True).communicate()
-        if output:
-            library_path=output.strip()[2:]
-        output,err = \
-                   S.Popen('pkg-config --cflags-only-I libcgraph',
-                           shell=True, stdin=S.PIPE, stdout=S.PIPE,
-                           close_fds=True).communicate()
-        if output:
-            include_path=output.strip()[2:]
-    except:
-        print "Failed to find pkg-config"
-    return include_path,library_path
-
-def dotneato_config():
-    # find graphviz configuration with dotneato-config
-    # works with older versions of graphviz
-    library_path=None
-    include_path=None
-    try:
-        output = S.Popen(['dotneato-config','--ldflags','--cflags'],
-                         stdout=S.PIPE).communicate()[0]
-        if output:
-            include_path,library_path=output.split()
-            library_path=library_path.strip()[2:]
-            include_path=include_path.strip()[2:]
-        else:
-            output = S.Popen(['dotneato-config','--libs','--cflags'],
-                         stdout=S.PIPE).communicate()[0]
-            if output:
-                include_path,library_path=output.split('\n',1)
-                library_path=library_path.strip()[2:]
-                include_path=include_path.strip()[2:]
-    except:
-        print "Failed to find dotneato-config"
-    return include_path,library_path
-
-
-
-if library_path is None and include_path is None:
-    try:
-        import subprocess as S
-    except ImportError:
-        print """-- Missing subprocess package:
-        Install subprocess from
-        http://effbot.org/downloads/#subprocess
-        or set the graphviz paths manually as described below."""
-
+# Attempt to find Graphviz installation
 if library_path is None and include_path is None:
     print "Trying pkg-config"
     include_path,library_path=pkg_config()
@@ -140,6 +92,8 @@ else:
     include_dirs=None
 
 execfile(os.path.join('pygraphviz','release.py'))
+write_versionfile(version,revision,date)
+
 
 packages = ["pygraphviz","pygraphviz.tests"]
 docdirbase  = 'share/doc/pygraphviz-%s' % version
