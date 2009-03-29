@@ -18,7 +18,7 @@ try:
     from setuptools import setup, Extension
 except ImportError:
     from distutils.core import setup, Extension
-from setuptools import pkg_config, dotneato_config, write_versionfile
+from setup_extra import pkg_config, dotneato_config, write_versionfile
 
 if sys.argv[-1] == 'setup.py':
     print "To install, run 'python setup.py install'"
