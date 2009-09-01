@@ -1592,6 +1592,7 @@ class ItemAttribute(Attribute):
         self.__dict__['ghandle']=gv.agraphof(handle)
 
     def __setitem__(self, name, value):
+        if not _is_string_like(value):  value=str(value)
         try:
             gv.agset_label(self.ghandle,self.handle,name,value)
         except KeyError: # not in default dict, set default to be empty string
@@ -1625,6 +1626,14 @@ class ItemAttribute(Attribute):
             except KeyError: # gv.agxget returned KeyError, skip
                 continue
     
+
+def _is_string_like(obj): # from John Hunter, types-free version
+    try:
+        obj + ''
+    except (TypeError, ValueError):
+        return False
+    return True
+
 
 def _test_suite():
     import doctest
