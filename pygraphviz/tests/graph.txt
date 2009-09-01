@@ -343,9 +343,9 @@ strict
 >>> A.add_edge(1,2) # silent falure
 >>> A.edges()
 [('1', '2')]
->>> A.add_edge(3,3) # silent falure, but add node 3
+>>> A.add_edge(3,3) # self-loops OK with strict
 >>> A.edges()
-[('1', '2')]
+[('1', '2'), ('3', '3')]
 >>> A.nodes()
 ['1', '2', '3']
 
