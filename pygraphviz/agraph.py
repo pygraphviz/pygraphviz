@@ -1640,7 +1640,7 @@ def _test_suite():
     suite = doctest.DocFileSuite('tests/graph.txt',
                                  'tests/attributes.txt',
                                  'tests/layout_draw.txt',
-#                                 'tests/subgraph.txt',
+                                 'tests/subgraph.txt',
                                  package='pygraphviz')
     doctest.testmod() # test docstrings in module
     return suite
