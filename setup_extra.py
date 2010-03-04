@@ -75,24 +75,3 @@ def dotneato_config():
     return include_path,library_path
 
 
-def write_versionfile(version,revision,date):
-    """Creates a file containing version information."""
-    base = os.path.split(__file__)[0]
-    versionfile = os.path.join(base, 'pygraphviz', 'version.py')
-    fh = open(versionfile, 'w')
-    text = '''"""
-Version information for PyGraphviz, created during installation.
-
-Do not add this file to the repository.
-
-"""
-
-__version__ = '%(version)s'
-__revision__ = '%(revision)s'
-__date__ = '%(date)s'
-'''
-    subs = {'version': version,
-            'revision': revision,
-            'date': date}
-    fh.write(text % subs)
-    fh.close()

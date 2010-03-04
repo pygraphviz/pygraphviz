@@ -14,11 +14,10 @@ from glob import glob
 import os
 import sys
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
-try:
-    from setuptools import setup, Extension
-except ImportError:
-    from distutils.core import setup, Extension
-from setup_extra import pkg_config, dotneato_config, write_versionfile
+
+from distutils.core import setup, Extension
+
+from setup_extra import pkg_config, dotneato_config
 
 if sys.argv[-1] == 'setup.py':
     print "To install, run 'python setup.py install'"
@@ -91,12 +90,15 @@ if len(include_path)>0:
 else:
     include_dirs=None
 
-execfile(os.path.join('pygraphviz','release.py'))
-write_versionfile(version,revision,date)
 
+# Write the version information.
+sys.path.insert(0, 'pygraphviz')
+import release
+release.write_versionfile()
+sys.path.pop(0)
 
 packages = ["pygraphviz","pygraphviz.tests"]
-docdirbase  = 'share/doc/pygraphviz-%s' % version
+docdirbase  = 'share/doc/pygraphviz-%s' % release.version
 data = [(docdirbase, glob("*.txt")),
         (os.path.join(docdirbase, 'examples'),glob("examples/*.py")),
         (os.path.join(docdirbase, 'examples'),glob("examples/*.dat")),
@@ -113,22 +115,23 @@ package_data = {'': ['*.txt'],}
 
 if __name__ == "__main__":
 
+
     setup(
-      name             = name,
-      version          = version,
-      author           = authors['Hagberg'][0],
-      author_email     = authors['Hagberg'][1],
-      description      = description,
-      keywords         = keywords,
-      long_description = long_description,
-      license          = license,
-      platforms        = platforms,
-      url              = url,      
-      download_url     = download_url,
-      packages         = packages,
-      data_files       = data,
-      classifiers      = classifiers,
-      ext_modules      = extension,
-      package_data     = package_data,
+        name             = release.name,
+        version          = release.version,
+        author           = release.authors['Hagberg'][0],
+        author_email     = release.authors['Hagberg'][1],
+        description      = release.description,
+        keywords         = release.keywords,
+        long_description = release.long_description,
+        license          = release.license,
+        platforms        = release.platforms,
+        url              = release.url,      
+        download_url     = release.download_url,
+        classifiers      = release.classifiers,
+        packages         = packages,
+        data_files       = data,
+        ext_modules      = extension,
+        package_data     = package_data
       )
 

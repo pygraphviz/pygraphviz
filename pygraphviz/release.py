@@ -13,6 +13,38 @@ import os
 import re
 
 
+def write_versionfile():
+    """Creates a file containing version information."""
+    base = os.path.split(__file__)[0]
+    versionfile = os.path.join(base, 'version.py')
+    if revision is None and os.path.isfile(versionfile):
+        # Unable to get revision info, so probably not in an SVN directory
+        # If a version.py already exists, let's not overwrite it.
+        # Useful mostly for nightly tarballs.
+        return
+    fh = open(versionfile, 'w')
+    text = '''"""
+Version information for PyGraphviz, created during installation.
+
+Do not add this file to the repository.
+
+"""
+
+__version__ = '%(version)s'
+__revision__ = %(revision)s
+__date__ = '%(date)s'
+
+'''
+    if revision is not None:
+        rev = "'%s'" % (revision,)
+    else:
+        rev = revision
+    subs = {'version': version,
+            'revision': rev,
+            'date': date}
+    fh.write(text % subs)
+    fh.close()
+
 def get_svn_revision():
     rev = None
     base = os.path.split(__file__)[0]
@@ -33,10 +65,12 @@ def get_svn_revision():
 name = 'pygraphviz'
 version = '1.0'
 
-# change to True before tagging a release; then change back
-release = False 
+# Declare current release as a development release.
+# Change to False before tagging a release; then change back.
+dev = True 
 
-if not release:
+revision = None
+if dev:
     version += '.dev'   
     revision = get_svn_revision()
     if revision is not None:
@@ -76,4 +110,8 @@ classifiers = [
 import time
 date = time.asctime()
 del time
+
+if __name__ == '__main__':
+    # Write versionfile for nightly snapshots.
+    write_versionfile()
 
