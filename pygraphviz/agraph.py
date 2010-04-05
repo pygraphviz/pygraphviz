@@ -1188,10 +1188,6 @@ class AGraph(object):
         import os
         from tempfile import TemporaryFile
 
-        if self.number_of_nodes()>1000:
-            sys.stderr.write(\
-              "Warning: graph has %s nodes...layout may take a long time.\n"%\
-              self.number_of_nodes())
 
         data=self._run_prog(prog,' '.join([args,"-T",fmt]))
         self.from_string(data)
