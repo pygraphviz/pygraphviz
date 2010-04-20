@@ -1233,9 +1233,14 @@ class AGraph(object):
     def draw(self,path=None,format=None,prog=None,args=''):
         """Output graph to path in specified format.
 
-        An attempt will be made to guess the output format based
-        on the file extension of path.  If that fails the format keyword
-        will be used.  
+        An attempt will be made to guess the output format based on the file
+        extension of `path`.  If that fails, then the `format` parameter will 
+        be used.
+
+        Note, if `path` is a file object returned by a call to os.fdopen(), 
+        then the method for discovering the format will not work.  In such 
+        cases, one should explicitly set the `format` parameter; otherwise, it 
+        will default to 'dot'.
         
         Formats (not all may be available on every system depending on
         how Graphviz was built)
@@ -1306,7 +1311,8 @@ class AGraph(object):
         if path is not None:
             fh=self._get_fh(path,'w+b')
             fh.write("".join(data))
-            fh.close()
+            if self._is_string_like(path):
+                fh.close()
             d=None
         else:
             d="".join( data )
@@ -1341,6 +1347,7 @@ class AGraph(object):
             else:
                 fh = file(path,mode=mode)
         elif hasattr(path, 'write'):
+            # Note, mode of file handle is unchanged.
             fh = path
         else:
             raise TypeError('path must be a string or file handle.')
