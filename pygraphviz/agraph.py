@@ -1511,8 +1511,8 @@ class Attribute(UserDict.DictMixin):
     # use for graph, node, and edge default attributes 
     # atype:graph=0, node=1,edge=3
     def __init__(self,handle,atype):
-        self.__dict__['handle']=handle
-        self.__dict__['type']=atype
+        self.handle=handle
+        self.type=atype
 
     def __setitem__(self, name, value):
         try: # try to set the attribute
@@ -1590,9 +1590,9 @@ class ItemAttribute(Attribute):
     # use for individual item attributes - either a node or an edge
     # graphs and default node and edge attributes use Attribute
     def __init__(self,handle,atype):
-        self.__dict__['handle']=handle
-        self.__dict__['type']=atype
-        self.__dict__['ghandle']=gv.agraphof(handle)
+        self.handle=handle
+        self.type=atype
+        self.ghandle=gv.agraphof(handle)
 
     def __setitem__(self, name, value):
         if not _is_string_like(value):  value=str(value)

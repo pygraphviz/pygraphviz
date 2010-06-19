@@ -42,13 +42,10 @@ def miles_graph():
 
     # open file miles_dat.txt.gz (or miles_dat.txt)
     try:
-        try:
-            import gzip
-            fh = gzip.open('miles_dat.txt.gz','r')
-        except:
-            fh=open("miles_dat.txt","r")
-    except IOError:
-        raise "File miles_dat.txt not found."
+        import gzip
+        fh = gzip.open('miles_dat.txt.gz','r')
+    except:
+        fh=open("miles_dat.txt","r")
 
     G=pgv.AGraph(name='miles_dat')
     G.node_attr['shape']='circle'
