@@ -539,8 +539,7 @@ class AGraph(object):
         else:                # if nbunch is a sequence of nodes
             try: bunch=[n for n in nbunch if n in self]
             except TypeError:
-                raise TypeError(
-                      "nbunch is not a node or a sequence of nodes.")
+                raise TypeError("nbunch is not a node or a sequence of nodes.")
             for n in nbunch:
                 try: 
                     nh=Node(self,n).handle
@@ -592,8 +591,7 @@ class AGraph(object):
         else:                # if nbunch is a sequence of nodes
             try: bunch=[n for n in nbunch if n in self]
             except TypeError:
-                raise TypeError(
-                      "nbunch is not a node or a sequence of nodes.")
+                raise TypeError("nbunch is not a node or a sequence of nodes.")
             for n in nbunch:
                 try: 
                     nh=Node(self,n).handle
@@ -1367,7 +1365,7 @@ class AGraph(object):
             match=glob.glob(os.path.join(path, name+exe))
             if match:
                 return match[0]
-        raise ValueError, "No prog %s in path."%name        
+        raise ValueError("No prog %s in path."%name)        
 
 
 
