@@ -377,7 +377,8 @@ class AGraph(object):
             self.add_node(v)
             vh=Node(self,v).handle
         try:
-            if not self._is_string_like(key):  key=str(key)
+            if key is not None:
+                if not self._is_string_like(key):  key=str(key)
             eh=gv.agedge(self.handle,uh,vh,key,_Action.create)
             e=Edge(self,eh=eh)
             e.attr.update(**attr)
@@ -413,7 +414,8 @@ class AGraph(object):
         With optional key argument will only get edge matching (u,v,key).
 
         """
-        if not self._is_string_like(key):  key=str(key)
+        if key is not None:
+            if not self._is_string_like(key):  key=str(key)
         return Edge(self,u,v,key)
 
 
@@ -1516,11 +1518,14 @@ class Attribute(UserDict.DictMixin):
 
     def __setitem__(self, name, value):
         try: # try to set the attribute
-            gv.agset(self.handle,name,value)
+#            gv.agset(self.handle,name,value)
+            gv.agattr(self.handle,self.type,name,value)
         except KeyError: # not in root graph default attribute set
+            print "key error",self.type
             ghandle=gv.agroot(self.handle) # get root graph
             # check if this is the root graph and set default for all items
             if self.handle==ghandle:
+                print "root graph",self.type
                 gv.agattr(ghandle,self.type,name,value) 
             else: # this is not the root graph
                 try:
