@@ -377,6 +377,7 @@ class AGraph(object):
             self.add_node(v)
             vh=Node(self,v).handle
         try:
+            if not self._is_string_like(key):  key=str(key)
             eh=gv.agedge(self.handle,uh,vh,key,_Action.create)
             e=Edge(self,eh=eh)
             e.attr.update(**attr)
@@ -412,6 +413,7 @@ class AGraph(object):
         With optional key argument will only get edge matching (u,v,key).
 
         """
+        if not self._is_string_like(key):  key=str(key)
         return Edge(self,u,v,key)
 
 
