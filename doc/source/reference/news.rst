@@ -2,6 +2,23 @@
 
 News
 ==== 
+
+pygraphviz-0.1.0
+-----------------
+Release date: 26 July 2010
+
+See: https://networkx.lanl.gov/trac/timeline
+
+ - Added to_string() and from_string methods
+ - Interface to graphviz "acyclic" and "tred"
+ - Better handling of user data on initialization of AGraph() object
+   to guess input type (AGraph object, file, dict-of-dicts, file)
+ - Add handling of default attributes for subgraphs
+ - Improved error handling when using non-string data
+ - Fix bug in default attribute handling
+ - Make sure file handles are closed correctly
+
+
 pygraphviz-0.99.1
 -----------------
 Release date: 7 December 2008

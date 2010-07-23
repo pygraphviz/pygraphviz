@@ -39,7 +39,7 @@ master_doc = 'contents'
 
 # General substitutions.
 project = 'PyGraphviz'
-copyright = '2008, Aric Hagberg'
+copyright = '2010, Aric Hagberg'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
