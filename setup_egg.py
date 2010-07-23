@@ -20,8 +20,15 @@ to run the tests.
 from setup import *
 
 # must occur after local import to override distutils.core.setup
-from setuptools import setup
+from setuptools import setup, Extension
 
+
+extension = [Extension("pygraphviz._graphviz",
+                      ["pygraphviz/graphviz_wrap.c"],
+                      include_dirs=include_dirs,
+                      library_dirs=library_dirs,
+                      runtime_library_dirs=library_dirs,
+                      libraries=["cgraph","cdt"])]
 
 if __name__ == "__main__":
 

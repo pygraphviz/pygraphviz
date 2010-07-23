@@ -3,8 +3,8 @@ include setup_egg.py
 include setup_extra.py
 include INSTALL.txt
 
-recursive-include examples *.py *.edgelist *.mbox *.gz *.bz2
-recursive-include doc *.py *.rst Makefile *.html *.png *.txt
+recursive-include examples *.py *.gz 
+recursive-include doc *.py *.rst Makefile *.html *.txt
 
 include pygraphviz/tests/*.txt
 
