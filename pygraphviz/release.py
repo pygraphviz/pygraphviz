@@ -63,7 +63,7 @@ def get_svn_revision():
         return None
 
 name = 'pygraphviz'
-version = '1.0rc1'
+version = '1.0rc2'
 
 # Declare current release as a development release.
 # Change to False before tagging a release; then change back.
@@ -91,7 +91,7 @@ authors = {'Hagberg' : ('Aric Hagberg','hagberg@lanl.gov'),
            }
 url = 'http://networkx.lanl.gov/pygraphviz'
 download_url="http://networkx.lanl.gov/download/pygraphviz"
-platforms = ['Linux','Mac OSX','Windows XP/2000/NT']
+platforms = ['Linux','Mac OSX']
 keywords = ['Networks', 'Graph Visualization', 'network', 'graph', 'graph drawing']
 classifiers = [
         'Development Status :: 4 - Beta',
