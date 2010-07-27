@@ -1518,21 +1518,18 @@ class Attribute(UserDict.DictMixin):
 
     def __setitem__(self, name, value):
         try: # try to set the attribute
-#            gv.agset(self.handle,name,value)
-            gv.agattr(self.handle,self.type,name,value)
+            gv.agattr_label(self.handle,self.type,name,value)
         except KeyError: # not in root graph default attribute set
-            print "key error",self.type
             ghandle=gv.agroot(self.handle) # get root graph
             # check if this is the root graph and set default for all items
             if self.handle==ghandle:
-                print "root graph",self.type
-                gv.agattr(ghandle,self.type,name,value) 
+                gv.agattr_label(ghandle,self.type,name,value) 
             else: # this is not the root graph
                 try:
                     # set graph default to be empty string
-                    gv.agattr(ghandle,self.type,name,'') 
+                    gv.agattr_label(ghandle,self.type,name,'') 
                     # set the attribute for this item
-                    gv.agset(self.handle,name,value)
+                    gv.agset_label(self.ghandle,self.handle,name,value)
                 except KeyError: # not sucessful
                     pass
         except TypeError:
