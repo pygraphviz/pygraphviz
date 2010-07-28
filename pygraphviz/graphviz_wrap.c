@@ -2820,7 +2820,7 @@ SWIG_FromCharPtr(const char *cptr)
   }
   
 
-int agset_label(Agraph_t *g, void *obj, char *name, char *val)
+  int agsafeset_label(Agraph_t *g, void *obj, char *name, char *val, char *def)
 {
     int len;
     char *hs;
@@ -2834,7 +2834,7 @@ int agset_label(Agraph_t *g, void *obj, char *name, char *val)
             free(hs);
         }
     }
-    return agset(obj, name, val);
+    return agsafeset(obj, name, val,def);
 }
   
 
@@ -3987,6 +3987,62 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_agsafeset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  void *arg1 = (void *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
+  char *arg4 = (char *) 0 ;
+  int res1 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  int res4 ;
+  char *buf4 = 0 ;
+  int alloc4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:agsafeset",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "agsafeset" "', argument " "1"" of type '" "void *""'"); 
+  }
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "agsafeset" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = (char *)(buf2);
+  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "agsafeset" "', argument " "3"" of type '" "char *""'");
+  }
+  arg3 = (char *)(buf3);
+  res4 = SWIG_AsCharPtrAndSize(obj3, &buf4, NULL, &alloc4);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "agsafeset" "', argument " "4"" of type '" "char *""'");
+  }
+  arg4 = (char *)(buf4);
+  result = (int)agsafeset(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_agattrname(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Agsym_t *arg1 = (Agsym_t *) 0 ;
@@ -4031,12 +4087,13 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_agset_label(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_agsafeset_label(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Agraph_t *arg1 = (Agraph_t *) 0 ;
   void *arg2 = (void *) 0 ;
   char *arg3 = (char *) 0 ;
   char *arg4 = (char *) 0 ;
+  char *arg5 = (char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 ;
@@ -4046,46 +4103,57 @@ SWIGINTERN PyObject *_wrap_agset_label(PyObject *SWIGUNUSEDPARM(self), PyObject 
   int res4 ;
   char *buf4 = 0 ;
   int alloc4 = 0 ;
+  int res5 ;
+  char *buf5 = 0 ;
+  int alloc5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:agset_label",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:agsafeset_label",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Agraph_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "agset_label" "', argument " "1"" of type '" "Agraph_t *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "agsafeset_label" "', argument " "1"" of type '" "Agraph_t *""'"); 
   }
   arg1 = (Agraph_t *)(argp1);
   res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "agset_label" "', argument " "2"" of type '" "void *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "agsafeset_label" "', argument " "2"" of type '" "void *""'"); 
   }
   res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "agset_label" "', argument " "3"" of type '" "char *""'");
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "agsafeset_label" "', argument " "3"" of type '" "char *""'");
   }
   arg3 = (char *)(buf3);
   res4 = SWIG_AsCharPtrAndSize(obj3, &buf4, NULL, &alloc4);
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "agset_label" "', argument " "4"" of type '" "char *""'");
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "agsafeset_label" "', argument " "4"" of type '" "char *""'");
   }
   arg4 = (char *)(buf4);
+  res5 = SWIG_AsCharPtrAndSize(obj4, &buf5, NULL, &alloc5);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "agsafeset_label" "', argument " "5"" of type '" "char *""'");
+  }
+  arg5 = (char *)(buf5);
   {
-    result = (int)agset_label(arg1,arg2,arg3,arg4);
+    result = (int)agsafeset_label(arg1,arg2,arg3,arg4,arg5);
     if (result==-1) {
-      PyErr_SetString(PyExc_KeyError,"agset_label: no key");
+      PyErr_SetString(PyExc_KeyError,"agsafeset_label: Error");
       return NULL;
     }
   }
   resultobj = SWIG_From_int((int)(result));
   if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
   if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  if (alloc5 == SWIG_NEWOBJ) free((char*)buf5);
   return resultobj;
 fail:
   if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
   if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  if (alloc5 == SWIG_NEWOBJ) free((char*)buf5);
   return NULL;
 }
 
@@ -4603,9 +4671,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"agxget", _wrap_agxget, METH_VARARGS, NULL},
 	 { (char *)"agset", _wrap_agset, METH_VARARGS, NULL},
 	 { (char *)"agxset", _wrap_agxset, METH_VARARGS, NULL},
+	 { (char *)"agsafeset", _wrap_agsafeset, METH_VARARGS, NULL},
 	 { (char *)"agattrname", _wrap_agattrname, METH_VARARGS, NULL},
 	 { (char *)"agattrdefval", _wrap_agattrdefval, METH_VARARGS, NULL},
-	 { (char *)"agset_label", _wrap_agset_label, METH_VARARGS, NULL},
+	 { (char *)"agsafeset_label", _wrap_agsafeset_label, METH_VARARGS, NULL},
 	 { (char *)"agattr_label", _wrap_agattr_label, METH_VARARGS, NULL},
 	 { (char *)"agsubg", _wrap_agsubg, METH_VARARGS, NULL},
 	 { (char *)"agfstsubg", _wrap_agfstsubg, METH_VARARGS, NULL},

@@ -46,11 +46,11 @@
   }
 } 
 
-/* agset_label returns -1 on error */
-%exception agset_label {
+/* agsetsafeset_label returns -1 on error */
+%exception agsafeset_label {
   $action
   if (result==-1) {
-     PyErr_SetString(PyExc_KeyError,"agset_label: no key");
+     PyErr_SetString(PyExc_KeyError,"agsafeset_label: Error");
      return NULL;
   }
 } 
@@ -156,6 +156,7 @@ char    *agget(void *obj, char *name);
 char    *agxget(void *obj, Agsym_t *sym);
 int      agset(void *obj, char *name, char *value);
 int      agxset(void *obj, Agsym_t *sym, char *value);
+int      agsafeset(void *obj, char *name, char *value, char *def);
 
 %inline %{
   char *agattrname(Agsym_t *atsym) {	
@@ -171,7 +172,7 @@ int      agxset(void *obj, Agsym_t *sym, char *value);
 
 /* styled from gv.cpp in Graphviz to handle <> html data in label */
 %inline %{
-int agset_label(Agraph_t *g, void *obj, char *name, char *val)
+  int agsafeset_label(Agraph_t *g, void *obj, char *name, char *val, char *def)
 {
     int len;
     char *hs;
@@ -185,9 +186,11 @@ int agset_label(Agraph_t *g, void *obj, char *name, char *val)
             free(hs);
         }
     }
-    return agset(obj, name, val);
+    return agsafeset(obj, name, val,def);
 }
   %}
+
+
 
 
 /* styled from gv.cpp in Graphviz to handle <> html data in label */

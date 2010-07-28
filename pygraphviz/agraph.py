@@ -1504,7 +1504,7 @@ class Attribute(UserDict.DictMixin):
     >>> G.graph_attr['splines']='true'
     >>> G.node_attr['shape']='circle'
     >>> G.edge_attr['color']='red'
-    
+   
     See
     http://graphviz.org/doc/info/attrs.html
     for a list of all attributes.
@@ -1515,25 +1515,15 @@ class Attribute(UserDict.DictMixin):
     def __init__(self,handle,atype):
         self.handle=handle
         self.type=atype
+        
 
     def __setitem__(self, name, value):
-        try: # try to set the attribute
+        if not _is_string_like(value):  value=str(value)
+        ghandle=gv.agroot(self.handle) # get root graph
+        if ghandle==self.handle:
             gv.agattr_label(self.handle,self.type,name,value)
-        except KeyError: # not in root graph default attribute set
-            ghandle=gv.agroot(self.handle) # get root graph
-            # check if this is the root graph and set default for all items
-            if self.handle==ghandle:
-                gv.agattr_label(ghandle,self.type,name,value) 
-            else: # this is not the root graph
-                try:
-                    # set graph default to be empty string
-                    gv.agattr_label(ghandle,self.type,name,'') 
-                    # set the attribute for this item
-                    gv.agset_label(self.ghandle,self.handle,name,value)
-                except KeyError: # not sucessful
-                    pass
-        except TypeError:
-            raise TypeError("Attribute value must be a string.")
+        else:
+            gv.agsafeset_label(ghandle,self.handle,name,value,'')
 
 
     def __getitem__(self, name):
@@ -1598,16 +1588,7 @@ class ItemAttribute(Attribute):
 
     def __setitem__(self, name, value):
         if not _is_string_like(value):  value=str(value)
-        try:
-            gv.agset_label(self.ghandle,self.handle,name,value)
-        except KeyError: # not in default dict, set default to be empty string
-            gv.agattr(self.ghandle,self.type,name,'')
-            try:
-                gv.agset_label(self.ghandle,self.handle,name,value)
-            except KeyError: # not sucessful
-                pass
-        except TypeError:
-            raise TypeError("Attribute value must be a string.")
+        gv.agsafeset_label(self.ghandle,self.handle,name,value,'')
 
     def __getitem__(self, name):
         return gv.agget(self.handle,name)
