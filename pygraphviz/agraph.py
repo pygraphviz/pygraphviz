@@ -1588,7 +1588,11 @@ class ItemAttribute(Attribute):
 
     def __setitem__(self, name, value):
         if not _is_string_like(value):  value=str(value)
-        gv.agsafeset_label(self.ghandle,self.handle,name,value,'')
+        if self.type==1 and name=='label':
+            default='\N'
+        else:
+            default=''
+        gv.agsafeset_label(self.ghandle,self.handle,name,value,default)
 
     def __getitem__(self, name):
         return gv.agget(self.handle,name)

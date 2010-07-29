@@ -134,6 +134,7 @@ Individual node attributes
 >>> A.add_node(1,label='test',spam='eggs')
 >>> print A.string().expandtabs()
 strict graph {
+        node [label="\N"];
         1        [label=test,
                 spam=eggs];
 }
@@ -152,6 +153,7 @@ True
 ['label', 'spam']
 >>> print A.string().expandtabs()
 strict graph {
+        node [label="\N"];
         1        [label=test,
                 spam=eggs];
 }
@@ -160,14 +162,16 @@ strict graph {
 >>> one.attr['spam']=''
 >>> print A.string().expandtabs()
 strict graph {
-        1;
+        node [label="\N"];
+        1        [label=""];
 }
 <BLANKLINE>
 >>> one.attr['label']='test'
 >>> del one.attr['label']
 >>> print A.string().expandtabs()
 strict graph {
-        1;
+        node [label="\N"];
+        1        [label=""];
 }
 <BLANKLINE>
 
@@ -243,6 +247,7 @@ HTML
 >>> print G.string().expandtabs()
 strict graph {
 	graph [label=<Hello<BR/>Graph>];
+        node [label="\N"];
 	{
 		graph [label=<Hello<BR/>Subgraph>];
 		sa		 [label=<Hello<BR/>Subgraph Node b>];
