@@ -3,7 +3,7 @@
 """
 Setup script for PyGraphviz
 """
-#    Copyright (C) 2006-2009 by 
+#    Copyright (C) 2006-2010 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/

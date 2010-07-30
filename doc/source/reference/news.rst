@@ -3,9 +3,9 @@
 News
 ==== 
 
-pygraphviz-0.1.0
+pygraphviz-1.0.0
 -----------------
-Release date: 26 July 2010
+Release date: 30 July 2010
 
 See: https://networkx.lanl.gov/trac/timeline
 

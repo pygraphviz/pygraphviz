@@ -17,7 +17,7 @@ Quick example::
 See pygraphviz.AGraph for detailed documentation.
 
 """
-#    Copyright (C) 2004-2009 by 
+#    Copyright (C) 2004-2010 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
