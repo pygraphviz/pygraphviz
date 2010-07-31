@@ -343,9 +343,13 @@ strict
 >>> A.add_edge(1,2) # silent falure
 >>> A.edges()
 [('1', '2')]
->>> A.add_edge(3,3) # self-loops not OK with strict
->>> A.edges()
-[('1', '2')]
+>>> A.add_edge(3,3) # self-loops OK with strict
+
+# but this breaks with older versions of libcgraph, 
+# OK with graphviz-2.26.3
+A.edges()
+[('1', '2'), ('3', '3')]
+
 >>> A.nodes()
 ['1', '2', '3']
 
