@@ -9,9 +9,9 @@ Python to access the Graphviz graph data structure and layout algorithms.
 
 PyGraphviz is distributed with a BSD license.
 
-Copyright (C) 2006-2008 by 
+Copyright (C) 2006-2010 by 
 Aric Hagberg <hagberg@lanl.gov>
 Dan Schult <dschult@colgate.edu>
 Manos Renieris, http://www.cs.brown.edu/~er/
 Distributed with BSD license.     
-All rights reserved, see LICENSE for details.
+All rights reserved, see LICENSE.txt for details.
