@@ -1173,7 +1173,7 @@ class AGraph(object):
         return "".join(data)
 
 
-    def layout(self,prog='neato',args='',fmt='dot'):
+    def layout(self,prog='neato',args=''):
         """Assign positions to nodes in graph.
         
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
@@ -1191,7 +1191,7 @@ class AGraph(object):
         import os
         from tempfile import TemporaryFile
 
-
+        fmt='dot'
         data=self._run_prog(prog,' '.join([args,"-T",fmt]))
         self.from_string(data)
         self.has_layout=True
