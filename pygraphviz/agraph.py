@@ -9,6 +9,7 @@ A Python interface to Graphviz.
 #    Manos Renieris, http://www.cs.brown.edu/~er/
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
+import re
 import subprocess
 import sys
 import threading
@@ -105,10 +106,9 @@ class AGraph(object):
         if hasattr(thing,'own'): # a Swig pointer - graph handle
             handle=thing
         if self._is_string_like(thing): 
-            if (thing.startswith("strict") or 
-                thing.startswith("digraph") or 
-                thing.startswith("graph")):
-               string=thing # this is a dot format graph in a string
+            pattern=re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',re.DOTALL)
+            if pattern.match(thing):
+                string=thing # this is a dot format graph in a string
             else:
                 file=thing  # assume this is a file name
 
