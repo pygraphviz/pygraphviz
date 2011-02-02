@@ -1115,7 +1115,8 @@ class AGraph(object):
         try:
             gvprogs=dict.fromkeys(\
                 ['neato','dot','twopi','circo','fdp','nop',
-                 'wc','acyclic','gvpr','gvcolor','ccomps','sccmap','tred'])
+                 'wc','acyclic','gvpr','gvcolor','ccomps','sccmap','tred',
+                 'sfdp'])
             p=gvprogs[prog]
         except KeyError:
             raise ValueError("Program %s is not one of: %s."%\
