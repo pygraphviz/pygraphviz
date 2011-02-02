@@ -282,7 +282,12 @@ class AGraph(object):
     delete_nodes_from=remove_nodes_from
 
     def nodes_iter(self):
-        """Return an iterator over all the nodes in the graph."""
+        """Return an iterator over all the nodes in the graph.
+
+        Note: modifying the graph structure while iterating over
+        the nodes may produce unpredictable results.  Use nodes()
+        as an alternative.
+        """
         nh=gv.agfstnode(self.handle)
         while nh is not None:
             yield Node(self,nh=nh)
@@ -491,7 +496,12 @@ class AGraph(object):
 
 
     def neighbors_iter(self,n):
-        """Return iterator over the nodes attached to n."""
+        """Return iterator over the nodes attached to n.
+
+        Note: modifying the graph structure while iterating over
+        node neighbors may produce unpredictable results.  Use neighbors()
+        as an alternative.
+        """
         n=Node(self,n)
         nh=n.handle
         eh=gv.agfstedge(self.handle,nh)
@@ -515,6 +525,10 @@ class AGraph(object):
 
         If the optional nbunch (container of nodes) only out edges
         adjacent to nodes in nbunch will be returned.
+
+        Note: modifying the graph structure while iterating over
+        edges may produce unpredictable results.  Use out_edges()
+        as an alternative.
         """
 
         if nbunch is None:   # all nodes
@@ -568,6 +582,10 @@ class AGraph(object):
 
         If the optional nbunch (container of nodes) only out edges
         adjacent to nodes in nbunch will be returned.
+
+        Note: modifying the graph structure while iterating over
+        edges may produce unpredictable results.  Use in_edges()
+        as an alternative.
         """
         if nbunch is None:   # all nodes
             nh=gv.agfstnode(self.handle)
@@ -634,7 +652,12 @@ class AGraph(object):
 
 
     def predecessors_iter(self,n):
-        """Return iterator over predecessor nodes of n."""
+        """Return iterator over predecessor nodes of n.
+
+        Note: modifying the graph structure while iterating over
+        node predecessors may produce unpredictable results.  Use 
+        predecessors() as an alternative.
+        """
         n=Node(self,n)
         nh=n.handle
         eh=gv.agfstin(self.handle,nh)
@@ -651,7 +674,12 @@ class AGraph(object):
     iterpred=predecessors_iter
 
     def successors_iter(self,n):
-        """Return iterator over successor nodes of n."""
+        """Return iterator over successor nodes of n.
+
+        Note: modifying the graph structure while iterating over
+        node successors may produce unpredictable results.  Use 
+        successors() as an alternative.
+        """
         n=Node(self,n)
         nh=n.handle
         eh=gv.agfstout(self.handle,nh)
