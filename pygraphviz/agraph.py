@@ -1152,7 +1152,7 @@ class AGraph(object):
         """Return string representation of graph in dot format.""" 
         # this will fail for graphviz-2.8 because of a broken nop
         # so use tempfile version below
-        return self.draw(format='dot',prog='nop')
+        return self.draw(format='dot',prog='nop').decode(self.encoding)
 
     def to_string(self):
         """Return a string containing the graph in dot format.""" 
@@ -1409,7 +1409,7 @@ class AGraph(object):
                 fh.close()
             d=None
         else:
-            d="".join( data ).decode(self.encoding)
+            d="".join( data )
         return d
 
     # some private helper functions
