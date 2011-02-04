@@ -127,7 +127,7 @@ class AGraph(object):
             elif hasattr(thing,'own'): # a Swig pointer - graph handle
                 handle=thing
             elif self._is_string_like(thing): 
-                pattern=re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',
+                pattern=re.compile('(u\')?(strict)?\s*(graph|digraph).*{.*}\s*',
                                    re.DOTALL)
                 if pattern.match(thing):
                     string=thing # this is a dot format graph in a string
@@ -136,18 +136,16 @@ class AGraph(object):
             else:
                 raise TypeError('Unrecognized input %s'%thing)
 
-        # if handle was specified, reference it
-        if handle is not None: # the graph pointer (handle)
+        if handle is not None:
+            # if handle was specified, reference it
             self.handle = handle
-        # otherwise, load new graph from file string or data, both of
-        # which result in a new handle being instantiated
         elif filename is not None:
+            # load new graph from file (creates self.handle)
             self.read(filename)
-
         elif string is not None:
-            # temporarily get the charset from the string, so we
-            # attempt to properly encode it for writing to the
-            # temporary file
+            # load new graph from string (creates self.handle)
+            # get the charset from the string to properly encode it for 
+            # writing to the temporary file in from_string()
             match = re.search(r'charset\s*=\s*"([^"]+)"', string)
             if match is not None:
                 self.encoding = match.group(1)
@@ -155,33 +153,32 @@ class AGraph(object):
                 self.encoding = _DEFAULT_ENCODING
             self.from_string(string)
         else:
+            # no handle, need to 
             self.handle = None
 
-        # if handle was specified or created, get the
-        # encoding from the "charset" graph attribute,
-        # and fall back to the default encoding
         if self.handle is not None:
+            # the handle was specified or created 
+            # get the encoding from the "charset" graph attribute 
             item=gv.agget(self.handle,'charset')
-            if item:
+            if item is not None:
                 self.encoding = item
             else:
                 self.encoding = _DEFAULT_ENCODING
-
-        # no handle was specified or created, so get
-        # encoding from the "charset" kwarg, and fall
-        # back to the default. then instantiate a new
-        # new graph.
         else:
+            # no handle was specified or created
+            # get encoding from the "charset" kwarg
             self.encoding = attr.get('charset', _DEFAULT_ENCODING)
             try:
                 # instantiate a new, empty graph
-                self.handle=gv.agraphnew(name.encode(self.encoding),strict,directed)
+                self.handle=gv.agraphnew(name.encode(self.encoding),
+                                         strict,directed)
             except TypeError:
                 raise TypeError("Graph name must be a string: %s"%name)
 
-            #
+            # encoding is already set but if it was specified explicitly
+            # as an attr, then set it explicitly for the graph
             if 'charset' in attr:
-                gv.agattr_label(self.handle,0, 'charset', attr['charset'])
+                gv.agattr_label(self.handle,0, 'charset', self.encoding)
 
             # if data is specified, populate the newly created graph
             if data is not None:
@@ -202,22 +199,14 @@ class AGraph(object):
         self.node_attr=Attribute(self.handle,1)  # default node attributes
         self.edge_attr=Attribute(self.handle,2)  # default edge attribtes
 
-    def __str__(self):
-        # print the name of the graph, see string() for dot representation
-        name=gv.agnameof(self.handle)
-        if name is None:
-            return ""
-        else:
-            return name.decode(self.encoding)
+    def __str__(self):  
+        return unicode(self).encode(self.encoding,'replace')
+
+    def __unicode__(self):
+        return self.string()
 
     def __repr__(self):
-        # display the dot format of the graph
-        # if it is too long, truncate to fit screen
-        s=self.string().splitlines()
-        if len(s)>15:
-            return "\n".join(s[:7]+["\n\t.......\n"]+s[-7:])
-        else:
-            return "\n".join(s)
+        return repr(unicode(self))
 
     def __eq__(self,other):
         # two graphs are equal if they have exact same string representation
@@ -1199,6 +1188,9 @@ class AGraph(object):
         """
         from tempfile import TemporaryFile
         fh = TemporaryFile()
+        if string.startswith("u'"):
+            # this is unicode inside a string
+            string = eval(string)
         fh.write(string.encode(self.encoding))
         fh.seek(0)
         # Cover TemporaryFile wart: on 'nt' we need the file member
@@ -1417,7 +1409,7 @@ class AGraph(object):
                 fh.close()
             d=None
         else:
-            d="".join( data )
+            d="".join( data ).decode(self.encoding)
         return d
 
     # some private helper functions
