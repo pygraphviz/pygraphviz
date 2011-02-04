@@ -931,7 +931,6 @@ class AGraph(object):
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
                          handle=handle,name=name,
-                         encoding=self.encoding,
                          **attr)
         if nbunch is None: return H
         # add induced subgraph on nodes in nbunch
@@ -968,7 +967,6 @@ class AGraph(object):
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
                          handle=handle,
-                         charset=self.encoding,
                          name=name)
         return H
     
@@ -980,7 +978,6 @@ class AGraph(object):
             return None
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
-                         charset=self.encoding,
                          handle=handle,name=name)
         return H
     
@@ -998,7 +995,6 @@ class AGraph(object):
             return None
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
-                         charset=self.encoding,
                          handle=handle)
         return H
         
@@ -1008,7 +1004,6 @@ class AGraph(object):
         while handle is not None:
             yield self.__class__(strict=self.strict,
                                  directed=self.directed,
-                                 charset=self.encoding,
                                  handle=handle)
             handle=gv.agnxtsubg(handle)
         raise StopIteration
@@ -1150,7 +1145,7 @@ class AGraph(object):
         fh.seek( 0 )
         data = fh.read()
         fh.close()
-        return data
+        return data.decode(self.encoding)
 
     def string(self):
         """Return a string containing the graph in dot format.""" 
@@ -1390,7 +1385,7 @@ class AGraph(object):
                 fh.close()
             d=None
         else:
-            d="".join( data )
+            d="".join( data ).decode(self.encoding)
         return d
 
     # some private helper functions

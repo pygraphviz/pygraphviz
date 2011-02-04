@@ -55,7 +55,7 @@ test __repr__
 
 >>> A=AGraph()
 >>> A.__repr__().expandtabs()
-u'strict graph {\n        graph [charset="UTF-8"];\n}'
+u'strict graph {\n}'
 
 test __eq__
 
@@ -124,7 +124,7 @@ test remove_node
 >>> A.remove_node(1)
 Traceback (most recent call last):
 ...
-KeyError: 'Node 1 not in graph.'
+KeyError: u'Node 1 not in graph.'
 
 
 test add_nodes_from and remove_nodes_from
@@ -139,7 +139,7 @@ test add_nodes_from and remove_nodes_from
 >>> A.remove_nodes_from(range(3))
 Traceback (most recent call last):
 ...
-KeyError: 'Node 0 not in graph.'
+KeyError: u'Node 0 not in graph.'
 
 test nodes and nodes_iter
 
@@ -497,6 +497,6 @@ True
 1
 
 >>> A.string()
-u'strict digraph {\n\tgraph [charset="UTF-8"];\n\t1 -> 2;\n\t2 -> 3;\n}\n'
+u'strict digraph {\n\t1 -> 2;\n\t2 -> 3;\n}\n'
 >>> A.reverse().string()
-u'strict digraph {\n\tgraph [charset="UTF-8"];\n\t2 -> 1;\n\t3 -> 2;\n}\n'
+u'strict digraph {\n\t2 -> 1;\n\t3 -> 2;\n}\n'

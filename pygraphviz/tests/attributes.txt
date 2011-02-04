@@ -14,13 +14,12 @@ True
 >>> A.graph_attr['label']
 u'test'
 >>> A.graph_attr.keys()
-[u'charset', u'label', u'spam']
+[u'label', u'spam']
 >>> sorted(list(A.graph_attr.iteritems()))
-[(u'charset', u'UTF-8'), (u'label', u'test'), (u'spam', u'eggs')]
+[(u'label', u'test'), (u'spam', u'eggs')]
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8",
-    label=test,
+  graph [label=test,
     spam=eggs
   ];
 }
@@ -29,7 +28,6 @@ strict graph {
 >>> A.graph_attr['spam']=''
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
 }
 <BLANKLINE>
 
@@ -37,15 +35,13 @@ strict graph {
 >>> del A.graph_attr['label']
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
 }
 <BLANKLINE>
 
 >>> A=AGraph(rankdir='LR',pack='true')
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8",
-    pack=true,
+  graph [pack=true,
     rankdir=LR
   ];
 }
@@ -68,14 +64,12 @@ u'test'
 [(u'label', u'test')]
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   node [label=test];
 }
 <BLANKLINE>
 >>> A.node_attr['label']=''
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
 }
 <BLANKLINE>
 
@@ -83,7 +77,6 @@ strict graph {
 >>> del A.node_attr['label']
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
 }
 <BLANKLINE>
 
@@ -92,9 +85,7 @@ strict graph {
 >>> A.edge_attr['fontname'] = 'edge font'
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8",
-    fontname="graph font"
-  ];
+  graph [fontname="graph font"];
   node [fontname="node font"];
   edge [fontname="edge font"];
 }
@@ -117,21 +108,18 @@ u'test'
 [(u'label', u'test')]
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   edge [label=test];
 }
 <BLANKLINE>
 >>> A.edge_attr['label']=''
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
 }
 <BLANKLINE>
 >>> A.edge_attr['label']='test'
 >>> del A.edge_attr['label']
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
 }
 <BLANKLINE>
 
@@ -142,7 +130,6 @@ Individual node attributes
 >>> A.add_node(1,label='test',spam='eggs')
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   node [label="\N"];
   1  [label=test,
     spam=eggs];
@@ -162,7 +149,6 @@ u'test'
 [u'label', u'spam']
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   node [label="\N"];
   1  [label=test,
     spam=eggs];
@@ -172,7 +158,6 @@ strict graph {
 >>> one.attr['spam']=''
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   node [label="\N"];
   1  [label=""];
 }
@@ -181,7 +166,6 @@ strict graph {
 >>> del one.attr['label']
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   node [label="\N"];
   1  [label=""];
 }
@@ -194,7 +178,6 @@ Individual edge attributes
 >>> A.add_edge(1,2,label='test',spam='eggs')
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   1 -- 2   [label=test,
     spam=eggs];
 }
@@ -212,7 +195,6 @@ u'test'
 [u'label', u'spam']
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   1 -- 2   [label=test,
     spam=eggs];
 }
@@ -221,7 +203,6 @@ strict graph {
 >>> one.attr['spam']=''
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   1 -- 2;
 }
 <BLANKLINE>
@@ -229,7 +210,6 @@ strict graph {
 >>> del one.attr['label']
 >>> print A.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   1 -- 2;
 }
 <BLANKLINE>
@@ -245,7 +225,6 @@ Anonymous edges and attributes
 >>> A=AGraph(fname)
 >>> print A.string().expandtabs(2)
 graph test {
-  graph [charset="UTF-8"];
   a -- b   [label=edge1];
   a -- b   [label=edge2];
 }
@@ -260,14 +239,10 @@ HTML
 >>> G.add_edge('a','b', label='<Hello<BR/>Edge>')
 >>> print G.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8",
-    label=<Hello<BR/>Graph>
-  ];
+  graph [label=<Hello<BR/>Graph>];
   node [label="\N"];
   {
-    graph [charset="UTF-8",
-      label=<Hello<BR/>Subgraph>
-    ];
+    graph [label=<Hello<BR/>Subgraph>];
     sa     [label=<Hello<BR/>Subgraph Node b>];
   }
   a  [label=<Hello<BR/>Node>];
@@ -284,13 +259,9 @@ Subgraphs
 >>> G.add_node('a')
 >>> print G.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8",
-    label=foo
-  ];
+  graph [label=foo];
   {
-    graph [charset="UTF-8",
-      label=<Hello<BR/>World>
-    ];
+    graph [label=<Hello<BR/>World>];
     sa;
   }
   a;
@@ -303,12 +274,9 @@ strict graph {
 >>> G.node_attr['foo']='baz'
 >>> print G.string().expandtabs(2)
 strict graph {
-  graph [charset="UTF-8"];
   node [foo=baz];
   subgraph cluster_a {
-    graph [charset="UTF-8",
-      foo=bar
-    ];
+    graph [foo=bar];
   }
   a;
 }

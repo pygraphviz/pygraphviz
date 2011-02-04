@@ -13,12 +13,11 @@ String representation
 
 >>> print A.string().expandtabs()
 strict graph {
-        graph [charset="UTF-8"];
 }
 <BLANKLINE>
 
 >>> A.__repr__() # test __repr__
-u'strict graph {\n\tgraph [charset="UTF-8"];\n}'
+u'strict graph {\n}'
 
 
 >>> A=AGraph(name='test')
@@ -27,13 +26,12 @@ u'strict graph {\n\tgraph [charset="UTF-8"];\n}'
 test
 >>> print A.string().expandtabs()
 strict graph test {
-        graph [charset="UTF-8"];
         1 -- 2;
 }
 <BLANKLINE>
 
 >>> A.__repr__() # test __repr__
-u'strict graph test {\n\tgraph [charset="UTF-8"];\n\t1 -- 2;\n}'
+u'strict graph test {\n\t1 -- 2;\n}'
 
 >>> A=AGraph(name='test graph')
 >>> A.add_path([1,2,3,4,5,6,7,8,9,10])
@@ -42,7 +40,6 @@ u'strict graph test {\n\tgraph [charset="UTF-8"];\n\t1 -- 2;\n}'
 test graph
 >>> print A.string().expandtabs()
 strict graph "test graph" {
-        graph [charset="UTF-8"];
         1 -- 2;
         2 -- 3;
         3 -- 4;
@@ -98,7 +95,7 @@ AttributeError: Graph has no layout information, see layout()
 
 >>> d=A.draw(prog='neato')
 >>> len(d.splitlines())
-12
+11
 >>> (fd,fname)=tempfile.mkstemp()
 >>> A.draw(fname,format='ps',prog='neato')
 >>> A.draw(fname,prog='neato')
