@@ -9,6 +9,8 @@ String representation
 
 >>> A=AGraph(name='')
 >>> print A
+strict graph {
+}
 <BLANKLINE>
 
 >>> print A.string().expandtabs()
@@ -17,13 +19,11 @@ strict graph {
 <BLANKLINE>
 
 >>> A.__repr__() # test __repr__
-u'strict graph {\n}'
+"u'strict graph {\\n}\\n'"
 
 
 >>> A=AGraph(name='test')
 >>> A.add_path([1,2])
->>> print A
-test
 >>> print A.string().expandtabs()
 strict graph test {
         1 -- 2;
@@ -31,13 +31,11 @@ strict graph test {
 <BLANKLINE>
 
 >>> A.__repr__() # test __repr__
-u'strict graph test {\n\t1 -- 2;\n}'
+"u'strict graph test {\\n\\t1 -- 2;\\n}\\n'"
 
 >>> A=AGraph(name='test graph')
 >>> A.add_path([1,2,3,4,5,6,7,8,9,10])
 >>> A.add_node(11)
->>> print A
-test graph
 >>> print A.string().expandtabs()
 strict graph "test graph" {
         1 -- 2;

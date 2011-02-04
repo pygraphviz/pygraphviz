@@ -45,17 +45,20 @@ test __str__
 
 >>> A = AGraph(name="test")
 >>> print A    
-test
-
+strict graph test {
+}
+<BLANKLINE>
 >>> A=AGraph()
 >>> print A
+strict graph {
+}
 <BLANKLINE>
 
 test __repr__
 
 >>> A=AGraph()
->>> A.__repr__().expandtabs()
-u'strict graph {\n}'
+>>> A.__repr__()
+"u'strict graph {\\n}\\n'"
 
 test __eq__
 

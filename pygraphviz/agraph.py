@@ -18,6 +18,8 @@ import UserDict
 
 import graphviz as gv
 
+_DEFAULT_ENCODING = 'UTF-8'
+
 def is_string_like(obj): # from John Hunter, types-free version
     try:
         obj + ''
@@ -134,38 +136,71 @@ class AGraph(object):
             else:
                 raise TypeError('Unrecognized input %s'%thing)
 
-        # get specified coding or set default
-        self.encoding=attr.get('charset','UTF-8')
+        # if handle was specified, reference it
+        if handle is not None: # the graph pointer (handle)
+            self.handle = handle
+        # otherwise, load new graph from file string or data, both of
+        # which result in a new handle being instantiated
+        elif filename is not None:
+            self.read(filename)
 
-        # input type guessed or specified 
-        if handle is None:  # the graph pointer (handle)
+        elif string is not None:
+            # temporarily get the charset from the string, so we
+            # attempt to properly encode it for writing to the
+            # temporary file
+            match = re.search(r'charset\s*=\s*"([^"]+)"', string)
+            if match is not None:
+                self.encoding = match.group(1)
+            else:
+                self.encoding = _DEFAULT_ENCODING
+            self.from_string(string)
+        else:
+            self.handle = None
+
+        # if handle was specified or created, get the
+        # encoding from the "charset" graph attribute,
+        # and fall back to the default encoding
+        if self.handle is not None:
+            item=gv.agget(self.handle,'charset')
+            if item:
+                self.encoding = item
+            else:
+                self.encoding = _DEFAULT_ENCODING
+
+        # no handle was specified or created, so get
+        # encoding from the "charset" kwarg, and fall
+        # back to the default. then instantiate a new
+        # new graph.
+        else:
+            self.encoding = attr.get('charset', _DEFAULT_ENCODING)
             try:
-                # new graph
-                self.handle=gv.agraphnew(name.encode(self.encoding),
-                                         strict,directed) 
+                # instantiate a new, empty graph
+                self.handle=gv.agraphnew(name.encode(self.encoding),strict,directed)
             except TypeError:
                 raise TypeError("Graph name must be a string: %s"%name)
-            # load new graph from file string or data
-            if filename is not None:
-                    self.read(filename)
-            elif string is not None:
-                self.from_string(string)
-            elif data is not None:
+
+            #
+            if 'charset' in attr:
+                gv.agattr_label(self.handle,0, 'charset', attr['charset'])
+
+            # if data is specified, populate the newly created graph
+            if data is not None:
                 # load from dict of dicts or dict of lists
                 for node in data:
                     for nbr in data[node]:
                         self.add_edge(node,nbr)
                 self.add_nodes_from(data.keys())        
-        else:
-            # use pointer to exisiting graph
-            self.handle=handle 
- 
+
+        # throw away the charset attribute, if one exists,
+        # since we've already set it, and now it should not be changed
+        if 'charset' in attr:
+            del attr['charset']
+
         # assign any attributes specified through keywords
         self.graph_attr=Attribute(self.handle,0) # default graph attributes
         self.graph_attr.update(attr) # apply attributes passed to init
         self.node_attr=Attribute(self.handle,1)  # default node attributes
         self.edge_attr=Attribute(self.handle,2)  # default edge attribtes
-
 
     def __str__(self):
         # print the name of the graph, see string() for dot representation
@@ -1128,7 +1163,7 @@ class AGraph(object):
         """Return string representation of graph in dot format.""" 
         # this will fail for graphviz-2.8 because of a broken nop
         # so use tempfile version below
-        return self.draw(format='dot',prog='nop') 
+        return self.draw(format='dot',prog='nop')
 
     def to_string(self):
         """Return a string containing the graph in dot format.""" 
@@ -1164,7 +1199,7 @@ class AGraph(object):
         """
         from tempfile import TemporaryFile
         fh = TemporaryFile()
-        fh.write(string)
+        fh.write(string.encode(self.encoding))
         fh.seek(0)
         # Cover TemporaryFile wart: on 'nt' we need the file member
         if hasattr(fh, 'file'):
@@ -1382,7 +1417,7 @@ class AGraph(object):
                 fh.close()
             d=None
         else:
-            d="".join( data ).decode(self.encoding)
+            d="".join( data )
         return d
 
     # some private helper functions
@@ -1599,9 +1634,11 @@ class Attribute(UserDict.DictMixin):
             ah=gv.agattr(root_handle,0,'charset',None)            
             self.encoding=gv.agattrdefval(ah)
         except KeyError:
-            self.encoding='UTF-8'
+            self.encoding=_DEFAULT_ENCODING
 
     def __setitem__(self, name, value):
+        if name == 'charset' and self.type == 0:
+            raise ValueError('Graph charset is immutable!')
         if not is_string_like(value):  
             value=str(value)
         ghandle=gv.agroot(self.handle) # get root graph
@@ -1683,7 +1720,7 @@ class ItemAttribute(Attribute):
             ah=gv.agattr(root_handle,0,'charset',None)            
             self.encoding=gv.agattrdefval(ah)
         except KeyError:
-            self.encoding='UTF-8'
+            self.encoding=_DEFAULT_ENCODING
 
     def __setitem__(self, name, value):
         if not is_string_like(value):  
