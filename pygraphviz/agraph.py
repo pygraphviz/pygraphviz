@@ -104,71 +104,68 @@ class AGraph(object):
       handle:  Swig pointer to an agraph_t data structure
 
     """
-    def __init__(self, thing=None, file=None, name='',
-                 data=None, string=None, strict=True, 
-                 directed=False, handle=None, **attr):
+    def __init__(self, thing=None, 
+                 filename=None, data=None, string=None, handle=None,
+                 name='', strict=True, directed=False, **attr):
+        # initialization can take no arguments (gives empty graph) or
+        # a file name
+        # a string of graphviz dot language 
+        # a swig pointer (handle) to a graph
+        # a dict of dicts (or dict of lists) data structure
 
-        # atttempt to guess input type
-        if isinstance(thing,dict):
-            data=thing # a dictionary of dictionaries (or lists)
-        if hasattr(thing,'own'): # a Swig pointer - graph handle
-            handle=thing
-        if self._is_string_like(thing): 
-            pattern=re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',re.DOTALL)
-            if pattern.match(thing):
-                string=thing # this is a dot format graph in a string
+        #  guess input type if specified as first (nonkeyword) argument
+        if thing is not None:
+            # can't specify first argument and also file,data,string,handle
+            filename=None
+            data=None
+            string=None
+            handle=None
+            if isinstance(thing,dict):
+                data=thing # a dictionary of dictionaries (or lists)
+            elif hasattr(thing,'own'): # a Swig pointer - graph handle
+                handle=thing
+            elif self._is_string_like(thing): 
+                pattern=re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',
+                                   re.DOTALL)
+                if pattern.match(thing):
+                    string=thing # this is a dot format graph in a string
+                else:
+                    filename=thing  # assume this is a file name
             else:
-                file=thing  # assume this is a file name
+                raise TypeError('Unrecognized input %s'%thing)
 
-        self.handle = None
+        # get specified coding or set default
+        self.encoding=attr.get('charset','UTF-8')
 
-        # input type guessed or specified - now init graph                
-        if file is not None or string is not None:
-            # read from filename
-            if file is not None:
-                self.read(file)
-
-            # load from string
-            if string is not None:
-                self.from_string(string)
-
-        elif handle is not None:
-            self.handle = handle
-
-        if self.handle is not None:
-            item=gv.agget(self.handle,'charset')
-            if item:
-                self.encoding = item
-            else:
-                self.encoding = 'UTF-8'
-
-            if 'charset' in attr:
-                del attr['charset']
-
-        else:
-            self.encoding = attr.get('charset', 'UTF-8')
+        # input type guessed or specified 
+        if handle is None:  # the graph pointer (handle)
             try:
                 # new graph
-                self.handle=gv.agraphnew(name.encode(self.encoding),strict,directed)
+                self.handle=gv.agraphnew(name.encode(self.encoding),
+                                         strict,directed) 
             except TypeError:
                 raise TypeError("Graph name must be a string: %s"%name)
-
-            if 'charset' in attr:
-                gv.agattr_label(self.handle,0, 'charset', attr['charset'])
-                del attr['charset']
-
+            # load new graph from file string or data
+            if filename is not None:
+                    self.read(filename)
+            elif string is not None:
+                self.from_string(string)
+            elif data is not None:
+                # load from dict of dicts or dict of lists
+                for node in data:
+                    for nbr in data[node]:
+                        self.add_edge(node,nbr)
+                self.add_nodes_from(data.keys())        
+        else:
+            # use pointer to exisiting graph
+            self.handle=handle 
+ 
         # assign any attributes specified through keywords
         self.graph_attr=Attribute(self.handle,0) # default graph attributes
         self.graph_attr.update(attr) # apply attributes passed to init
         self.node_attr=Attribute(self.handle,1)  # default node attributes
         self.edge_attr=Attribute(self.handle,2)  # default edge attribtes
 
-        # load from dict of dicts or dict of lists
-        if data is not None:
-            for node in data:
-                for nbr in data[node]:
-                    self.add_edge(node,nbr)
-            self.add_nodes_from(data.keys())        
 
     def __str__(self):
         # print the name of the graph, see string() for dot representation
@@ -888,7 +885,7 @@ class AGraph(object):
         self.write( fhandle )
         fh.seek( 0 )
 
-        return self.__class__( file=fhandle )
+        return self.__class__( filename=fhandle )
 
 
     def add_path(self, nlist):
@@ -1605,8 +1602,6 @@ class Attribute(UserDict.DictMixin):
             self.encoding='UTF-8'
 
     def __setitem__(self, name, value):
-        if name == 'charset' and self.type == 0:
-            raise ValueError('Graph charset is immutable!')
         if not is_string_like(value):  
             value=str(value)
         ghandle=gv.agroot(self.handle) # get root graph
