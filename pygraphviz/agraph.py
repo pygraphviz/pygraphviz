@@ -1601,8 +1601,10 @@ class Attribute(UserDict.DictMixin):
         self.handle=handle
         self.type=atype
         # get the encoding
+        ghandle=gv.agraphof(handle)
+        root_handle=gv.agroot(ghandle) # get root graph
         try:
-            ah=gv.agattr(handle,0,'charset',None)            
+            ah=gv.agattr(root_handle,0,'charset',None)            
             self.encoding=gv.agattrdefval(ah)
         except KeyError:
             self.encoding='UTF-8'
@@ -1685,10 +1687,13 @@ class ItemAttribute(Attribute):
         self.handle=handle
         self.type=atype
         self.ghandle=gv.agraphof(handle)
-        root_handle=gv.agroot(self.ghandle) # get root graph
         # get the encoding
-        ah=gv.agattr(root_handle,0,'charset',None)            
-        self.encoding=gv.agattrdefval(ah)
+        root_handle=gv.agroot(self.ghandle) # get root graph
+        try:
+            ah=gv.agattr(root_handle,0,'charset',None)            
+            self.encoding=gv.agattrdefval(ah)
+        except KeyError:
+            self.encoding='UTF-8'
 
     def __setitem__(self, name, value):
         if not is_string_like(value):  
