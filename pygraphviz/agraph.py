@@ -106,8 +106,7 @@ class AGraph(object):
     """
     def __init__(self, thing=None, file=None, name='',
                  data=None, string=None, strict=True, 
-                 directed=False, handle=None, encoding='UTF-8',
-                 **attr):
+                 directed=False, handle=None, **attr):
 
         # atttempt to guess input type
         if isinstance(thing,dict):
@@ -121,36 +120,42 @@ class AGraph(object):
             else:
                 file=thing  # assume this is a file name
 
+        self.handle = None
+
         # input type guessed or specified - now init graph                
-        if handle is None:  # the graph pointer (handle)
+        if file is not None or string is not None:
+            # read from filename
+            if file is not None:
+                self.read(file)
+
+            # load from string
+            if string is not None:
+                self.from_string(string)
+
+        elif handle is not None:
+            self.handle = handle
+
+        if self.handle is not None:
+            item=gv.agget(self.handle,'charset')
+            if item:
+                self.encoding = item
+            else:
+                self.encoding = 'UTF-8'
+
+            if 'charset' in attr:
+                del attr['charset']
+
+        else:
+            self.encoding = attr.get('charset', 'UTF-8')
             try:
                 # new graph
-                self.handle=gv.agraphnew(name.encode(encoding),strict,directed)
+                self.handle=gv.agraphnew(name.encode(self.encoding),strict,directed)
             except TypeError:
                 raise TypeError("Graph name must be a string: %s"%name)
-        else:
-            self.handle=handle # use pointer to exisiting graph
 
-        # read from filename
-        if file is not None:
-            self.read(file)
-
-        # Explictly set the character set (encoding)
-        self.encoding=encoding
-        gv.agattr_label(self.handle,0,'charset',encoding)
-
-
-        # load from dict of dicts or dict of lists
-        if data is not None:
-            for node in data:
-                for nbr in data[node]:
-                    self.add_edge(node,nbr)
-            self.add_nodes_from(data.keys())        
-
-        # load from string
-        if string is not None:
-            self.from_string(string)
-
+            if 'charset' in attr:
+                gv.agattr_label(self.handle,0, 'charset', attr['charset'])
+                del attr['charset']
 
         # assign any attributes specified through keywords
         self.graph_attr=Attribute(self.handle,0) # default graph attributes
@@ -158,6 +163,12 @@ class AGraph(object):
         self.node_attr=Attribute(self.handle,1)  # default node attributes
         self.edge_attr=Attribute(self.handle,2)  # default edge attribtes
 
+        # load from dict of dicts or dict of lists
+        if data is not None:
+            for node in data:
+                for nbr in data[node]:
+                    self.add_edge(node,nbr)
+            self.add_nodes_from(data.keys())        
 
     def __str__(self):
         # print the name of the graph, see string() for dot representation
@@ -274,12 +285,12 @@ class AGraph(object):
         """
         if not self._is_string_like(n):  
             n=str(n)
-        n.encode(self.encoding)
+        n=n.encode(self.encoding)
         try:
-            nh=gv.agnode(self.handle,n,_Action.find)
+            nh=gv.agnode(self.handle,n.encode(self.encoding),_Action.find)
             gv.agdelnode(self.handle,nh)
         except KeyError:
-            raise KeyError("Node %s not in graph."%n)
+            raise KeyError("Node %s not in graph."%n.decode(self.encoding))
 
     delete_node=remove_node
 
@@ -915,7 +926,7 @@ class AGraph(object):
         try:
             handle=gv.agsubg(self.handle,name, _Action.create)
         except TypeError:
-            raise TypeError("Subgraph name must be a string: %s"%name)
+            raise TypeError("Subgraph name must be a string: %s"%name.decode(self.encoding))
 
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
@@ -936,7 +947,7 @@ class AGraph(object):
     def remove_subgraph(self, name):
         """Remove subgraph with given name."""  
         try:
-            handle=gv.agsubg(self.handle,name.encode(self.encodign),
+            handle=gv.agsubg(self.handle,name.encode(self.encoding),
                              _Action.find)
         except TypeError:
             raise TypeError("Subgraph name must be a string: %s"%name)
@@ -957,7 +968,7 @@ class AGraph(object):
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
                          handle=handle,
-                         encoding=self.encoding,
+                         charset=self.encoding,
                          name=name)
         return H
     
@@ -969,7 +980,7 @@ class AGraph(object):
             return None
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
-                         encoding=self.encoding,
+                         charset=self.encoding,
                          handle=handle,name=name)
         return H
     
@@ -987,7 +998,7 @@ class AGraph(object):
             return None
         H=self.__class__(strict=self.strict,
                          directed=self.directed,
-                         encoding=self.encoding,
+                         charset=self.encoding,
                          handle=handle)
         return H
         
@@ -997,7 +1008,7 @@ class AGraph(object):
         while handle is not None:
             yield self.__class__(strict=self.strict,
                                  directed=self.directed,
-                                 encoding=self.encoding,
+                                 charset=self.encoding,
                                  handle=handle)
             handle=gv.agnxtsubg(handle)
         raise StopIteration
@@ -1137,7 +1148,7 @@ class AGraph(object):
         else:
             self.write( fh )
         fh.seek( 0 )
-        data = fh.read().decode(self.encoding)
+        data = fh.read()
         fh.close()
         return data
 
@@ -1379,7 +1390,7 @@ class AGraph(object):
                 fh.close()
             d=None
         else:
-            d="".join( data ).decode(self.encoding)
+            d="".join( data )
         return d
 
     # some private helper functions
@@ -1590,10 +1601,15 @@ class Attribute(UserDict.DictMixin):
         self.handle=handle
         self.type=atype
         # get the encoding
-        ah=gv.agattr(handle,0,'charset',None)            
-        self.encoding=gv.agattrdefval(ah)
+        try:
+            ah=gv.agattr(handle,0,'charset',None)            
+            self.encoding=gv.agattrdefval(ah)
+        except KeyError:
+            self.encoding='UTF-8'
 
     def __setitem__(self, name, value):
+        if name == 'charset' and self.type == 0:
+            raise ValueError('Graph charset is immutable!')
         if not is_string_like(value):  
             value=str(value)
         ghandle=gv.agroot(self.handle) # get root graph
