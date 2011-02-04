@@ -3,6 +3,17 @@
 News
 ==== 
 
+pygraphviz-1.1
+-----------------
+Release date: 9 February 2011
+
+ - Added unicode support for handling non-ASCII characters
+ - Better handling of user data on initialization of AGraph() object
+   to guess input type (AGraph object, file, dict-of-dicts, file)
+ - Add sfdp to layout options
+
+See https://networkx.lanl.gov/trac/query?group=status&milestone=pygraphviz-1.1
+
 pygraphviz-1.0.0
 -----------------
 Release date: 30 July 2010

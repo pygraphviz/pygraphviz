@@ -32,5 +32,5 @@ FAQ
        with Windows or would be willing to help test and distribute a
        Windows installer please drop us a note. 
        
-       See also ticket 67: https://networkx.lanl.gov/ticket/67
-
+       See also tickets: https://networkx.lanl.gov/trac/ticket/117
+        https://networkx.lanl.gov/trac/ticket/491

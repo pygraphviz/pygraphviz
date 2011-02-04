@@ -5,7 +5,7 @@ PyGraphviz License
 ------------------
 
 
-   Copyright (C) 2004-2006 by 
+   Copyright (C) 2004-2010 by 
    Aric Hagberg <hagberg@lanl.gov>
    Dan Schult <dschult@colgate.edu>
    Manos Renieris, http://www.cs.brown.edu/~er/

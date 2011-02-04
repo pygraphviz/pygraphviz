@@ -1,6 +1,26 @@
 API Notes
 =========
 
+pygraphviz-1.1
+--------------
+  Pygraphviz-1.1 adds unicode (graphviz charset) support.
+  The default Node type is now unicode.
+  See examples/utf8.py for an example of how to use non-ASCII characters.
+
+  The __str__ and  __repr__ methods have been rewritten and a __unicode__
+  method added.
+
+  If G is a pygraphviz.AGraph object then
+
+  - str(G) produces a dot-format string representation 
+    (some characters might not be represented correctly)
+  - unicode(G) produces a dot-format unicode representation
+  - repr(G) produces a string of the unicode representation.
+  - print G produces a formatted dot language output
+  
+
+pygraphivz-0.32
+---------------
   pygraphviz-0.32 is a rewrite of pygraphviz-0.2x  with some significant
   changes in the API and Graphviz wrapper.  It is not compatible with
   with earlier versions.
@@ -16,11 +36,11 @@ API Notes
   There are some important differences between the PyGraphviz
   and NetworkX API.  With PyGraphviz
 
-   - All nodes must be strings. An attempt will be made to convert other
-     types to a string.
+   - All nodes must be of string or unicode type. 
+     An attempt will be made to convert other types to a string.
 
    - Nodes and edges are custom Python objects.  Nodes are like
-     string objects and edges are like tuple objects.  (In NetworkX
+     unicode/string objects and edges are like tuple objects.  (In NetworkX
      nodes can be anything and edges are two- or three-tuples.)
 
    - Graphs, edges, and nodes may have attributes such as color,
