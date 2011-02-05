@@ -3,7 +3,7 @@
 A Python interface to Graphviz.  
 
 """
-#    Copyright (C) 2006-2010 by 
+#    Copyright (C) 2006-2011 by 
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
@@ -127,7 +127,7 @@ class AGraph(object):
             elif hasattr(thing,'own'): # a Swig pointer - graph handle
                 handle=thing
             elif self._is_string_like(thing): 
-                pattern=re.compile('(u\')?(strict)?\s*(graph|digraph).*{.*}\s*',
+                pattern=re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',
                                    re.DOTALL)
                 if pattern.match(thing):
                     string=thing # this is a dot format graph in a string
@@ -1149,13 +1149,13 @@ class AGraph(object):
 
 
     def string_nop(self):
-        """Return string representation of graph in dot format.""" 
+        """Return a string (unicode) representation of graph in dot format.""" 
         # this will fail for graphviz-2.8 because of a broken nop
         # so use tempfile version below
         return self.draw(format='dot',prog='nop').decode(self.encoding)
 
     def to_string(self):
-        """Return a string containing the graph in dot format.""" 
+        """Return a string (unicode) representation of graph in dot format.""" 
         from tempfile import TemporaryFile
         fh = TemporaryFile()
         # Cover TemporaryFile wart: on 'nt' we need the file member
@@ -1169,7 +1169,7 @@ class AGraph(object):
         return data.decode(self.encoding)
 
     def string(self):
-        """Return a string containing the graph in dot format.""" 
+        """Return a string (unicode) represetnation of graph in dot format.""" 
 #        return self.to_string()
         return self.string_nop()
 
@@ -1188,9 +1188,6 @@ class AGraph(object):
         """
         from tempfile import TemporaryFile
         fh = TemporaryFile()
-        if string.startswith("u'"):
-            # this is unicode inside a string
-            string = eval(string)
         fh.write(string.encode(self.encoding))
         fh.seek(0)
         # Cover TemporaryFile wart: on 'nt' we need the file member
