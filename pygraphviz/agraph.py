@@ -206,7 +206,10 @@ class AGraph(object):
         return self.string()
 
     def __repr__(self):
-        return repr(unicode(self))
+        name=gv.agnameof(self.handle)
+        if name is None:
+            return '<AGraph %s>' %(self.handle) 
+        return '<AGraph %s %s>' %(name,self.handle) 
 
     def __eq__(self,other):
         # two graphs are equal if they have exact same string representation

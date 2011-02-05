@@ -18,9 +18,8 @@ strict graph {
 }
 <BLANKLINE>
 
->>> A.__repr__() # test __repr__
-"u'strict graph {\\n}\\n'"
-
+>>> A.__repr__()[0:7]
+'<AGraph'
 
 >>> A=AGraph(name='test')
 >>> A.add_path([1,2])
@@ -30,8 +29,8 @@ strict graph test {
 }
 <BLANKLINE>
 
->>> A.__repr__() # test __repr__
-"u'strict graph test {\\n\\t1 -- 2;\\n}\\n'"
+>>> A.__repr__()[0:7]
+'<AGraph'
 
 >>> A=AGraph(name='test graph')
 >>> A.add_path([1,2,3,4,5,6,7,8,9,10])
