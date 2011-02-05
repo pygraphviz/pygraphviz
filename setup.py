@@ -51,6 +51,9 @@ include_path=None
 #library_path='/opt/local/lib/graphviz'
 #include_path='/opt/local/include/graphviz'
 
+# Windows
+# Unknown
+
 # Attempt to find Graphviz installation
 if library_path is None and include_path is None:
     print "Trying pkg-config"
@@ -62,10 +65,18 @@ if library_path is None and include_path is None:
 
 if library_path is None or include_path is None:
     print 
-    print  """Your graphviz installation could not be found.
+    print  """Your Graphviz installation could not be found.
 
-Either the graphviz package is missing on incomplete
-(binary packages graphviz-dev or graphviz-devel missing?).  
+1) You don't have Graphviz installed:
+   Install Graphviz (http://graphviz.org)
+
+2) Your Graphviz package might incomplete.
+   Install the binary development subpackage (e.g. libgraphviz-dev or similar.)
+
+3) You are using Windows
+   There are no PyGraphviz binary packages for Windows but you might be
+   able to build it from this source.  See
+   http://networkx.lanl.gov/pygraphviz/reference/faq.html
 
 If you think your installation is correct you will need to manually
 change the include_path and library_path variables in setup.py to
