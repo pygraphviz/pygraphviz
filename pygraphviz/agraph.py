@@ -57,7 +57,7 @@ class AGraph(object):
     
     >>> G=AGraph()         
     >>> G=AGraph(directed=True)
-    >>> G=AGraph("file.dot")   
+    >>> G=AGraph("file.dot")   # doctest: +SKIP 
     
     Graphviz graph keyword parameters are processed so you may add
     them like
@@ -85,9 +85,9 @@ class AGraph(object):
 
     >>> d={'1': {'2': None}, '2': {'1': None, '3': None}, '3': {'2': None}}
     >>> A=AGraph(d)
-    >>> s=AGraph.to_string()
+    >>> s=A.to_string()
     >>> B=AGraph(s)
-    >>> h=AGraph.handle
+    >>> h=B.handle
     >>> C=AGraph(h)
 
     Parameters:: 
@@ -250,10 +250,10 @@ class AGraph(object):
         >>> G=AGraph()
         >>> G.add_node('a')
         >>> G.nodes()
-        ['a']
+        [u'a']
         >>> G.add_node(1) # will be converted to a string
         >>> G.nodes()
-        ['a', '1']
+        [u'a', u'1']
         
         Attributes can be added to nodes on creation
         (attribute values must be strings)
@@ -285,7 +285,7 @@ class AGraph(object):
         >>> nlist=['a','b',1,'spam']
         >>> G.add_nodes_from(nlist)
         >>> sorted(G.nodes())
-        ['1', 'a', 'b', 'spam']
+        [u'1', u'a', u'b', u'spam']
         
 
         Attributes can be added to nodes on creation
@@ -400,7 +400,7 @@ class AGraph(object):
         >>> G=AGraph()
         >>> G.add_edge('a','b')
         >>> G.edges()
-        [('a', 'b')]
+        [(u'a', u'b')]
 
         The optional key argument allows assignment of a key to the
         edge.  This is especially useful to distinguish between
@@ -409,12 +409,12 @@ class AGraph(object):
         >>> G=AGraph(strict=False)
         >>> G.add_edge('a','b','first')
         >>> G.add_edge('a','b','second')
-        >>> sorted(G.edges())
-        [('a', 'b', 'first'), ('a', 'b', 'second')]
+        >>> sorted(G.edges(keys=True))
+        [(u'a', u'b', u'first'), (u'a', u'b', u'second')]
 
         Attributes can be added when edges are created
 
-        >>> G.add_edge('a','b',color='green')
+        >>> G.add_edge(u'a',u'b',color='green')
 
         Attributes must be valid strings.
 
@@ -468,7 +468,7 @@ class AGraph(object):
         >>> G.add_edge('a','b')
         >>> edge=G.get_edge('a','b')
         >>> print edge
-        ('a', 'b')
+        (u'a', u'b')
 
         With optional key argument will only get edge matching (u,v,key).
 
@@ -530,9 +530,9 @@ class AGraph(object):
         >>> G.add_edge('a','b')
         >>> G.add_edge('c','d')
         >>> print sorted(G.edges())
-        [('a', 'b'), ('c', 'd')]
+        [(u'a', u'b'), (u'c', u'd')]
         >>> print G.edges('a')
-        [('a', 'b')]
+        [(u'a', u'b')]
         """
         return list(self.edges_iter(nbunch=nbunch,keys=keys))
 
@@ -1185,7 +1185,7 @@ class AGraph(object):
         
         >>> s='digraph {1 -> 2}'
         >>> A=AGraph()
-        >>> A.from_string(s)
+        >>> t=A.from_string(s)
         >>> A=AGraph(string=s) # specify s is a string
         >>> A=AGraph(s)  # s assumed to be a string during initialization
         """
@@ -1223,13 +1223,11 @@ class AGraph(object):
         """Apply graphviz program to graph and return the result as a string.
 
         >>> A=AGraph()
-        >>> s=A._run_prog() # uses 'nop' by default
-        >>> s=A._run_prog(prog='acyclic')
+        >>> s=A._run_prog() # doctest: +SKIP 
+        >>> s=A._run_prog(prog='acyclic') # doctest: +SKIP 
 
         Use keyword args to add additional arguments to graphviz programs.
-
         """
-
         runprog=self._get_prog(prog)
         cmd=' '.join([runprog,args])
         p = subprocess.Popen(cmd, 
@@ -1295,7 +1293,7 @@ class AGraph(object):
         To create a new graph use 
 
         >>> A=AGraph()
-        >>> B=A.tred(copy=True)
+        >>> B=A.tred(copy=True) # doctest: +SKIP 
 
         See the graphviz "tred" program for details of the algorithm.
         """
@@ -1313,7 +1311,7 @@ class AGraph(object):
         To create a new graph use 
 
         >>> A=AGraph()
-        >>> B=A.acyclic(copy=True)
+        >>> B=A.acyclic(copy=True) # doctest: +SKIP 
 
         See the graphviz "acyclic" program for details of the algorithm.
         """

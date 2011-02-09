@@ -3,16 +3,16 @@ A Python wrapper for the graphviz Agraph data structure.
 
 Quick example::
 
- >>> from pygraphviz import *
- >>> G=AGraph()
- >>> G.add_node('a')
- >>> G.add_edge('b','c')
- >>> G
- strict graph {
-         a;
-         b -- c;
- }
-
+>>> from pygraphviz import *
+>>> G=AGraph()
+>>> G.add_node('a')
+>>> G.add_edge('b','c')
+>>> print G  # doctest: +SKIP 
+strict graph {
+    a;
+    b -- c;
+}
+<BLANKLINE>
 
 See pygraphviz.AGraph for detailed documentation.
 
