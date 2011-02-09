@@ -115,6 +115,8 @@ class AGraph(object):
         # a swig pointer (handle) to a graph
         # a dict of dicts (or dict of lists) data structure
 
+        # backward compability
+        filename=attr.get('file',filename)
         #  guess input type if specified as first (nonkeyword) argument
         if thing is not None:
             # can't specify first argument and also file,data,string,handle
