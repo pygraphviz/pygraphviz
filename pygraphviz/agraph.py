@@ -1585,7 +1585,6 @@ class Edge(tuple):
         tp.ghandle=graph.handle
         tp.handle=eh
         tp.attr=ItemAttribute(eh,3)
-        tp.key=key
         tp.encoding=graph.encoding
         return tp
 
@@ -1596,6 +1595,7 @@ class Edge(tuple):
         return name
 
     name=property(get_name)
+    key=property(get_name)
 
 
 class Attribute(UserDict.DictMixin):
