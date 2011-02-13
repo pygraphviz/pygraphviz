@@ -4,7 +4,7 @@ Tutorial
 The API is very similar to that of NetworkX.  Much of the 
 NetworkX tutorial at http://networkx.lanl.gov/tutorial/
 is applicable to PyGraphviz.  
-See https://networkx.lanl.gov/pygraphviz/api_notes.html for major differences.
+See https://networkx.lanl.gov/pygraphviz/reference/api_notes.html for major differences.
 
 Start-up
 --------
@@ -34,7 +34,7 @@ parallel edges and self-loops use
 
 You may specify a dot format file to be read on initialization:
 
->>> G=pgv.AGraph("Petersen.dot")
+>>> G=pgv.AGraph("Petersen.dot") 
 
 
 Other options for intializing a graph are

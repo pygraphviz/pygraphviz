@@ -4,7 +4,6 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-#SPHINXBUILD   = python /home/pauli/koodi/proj/numpy-doc/sphinx/work/sphinx-build.py
 PAPER         =
 
 # Internal variables.
@@ -12,7 +11,7 @@ PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d build/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
-.PHONY: help clean html web pickle htmlhelp latex changes linkcheck
+.PHONY: help clean html web pickle htmlhelp latex changes linkcheck doctest
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -99,3 +98,9 @@ linkcheck: generate
 	@echo
 	@echo "Link check complete; look for any errors in the above output " \
 	      "or in build/linkcheck/output.txt."
+
+doctest: generate
+	mkdir -p build/linkcheck build/doctrees
+	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) build/doctest
+	@echo "Testing of doctests in the sources finished, look at the " \
+	      "results in build/doctest/output.txt."

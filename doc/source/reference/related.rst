@@ -1,7 +1,7 @@
 Related Pacakges
 ----------------
 
-   - Python bindings distributed with Graphviz (graphviz-python):  http://www.graphviz.org/Download_linux.php
+   - Python bindings distributed with Graphviz (graphviz-python):  http://www.graphviz.org/
 
    - Pydot: http://dkbza.org/pydot.html
 
