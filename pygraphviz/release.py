@@ -78,10 +78,7 @@ if dev:
 
 description = "Python interface to Graphviz"
 long_description = """\
-A Python wrapper for the Graphviz Agraph data structure.
-
-PyGraphviz can be used to create and draw networks and graphs with Graphviz.
-
+PyGraphviz is a Python interface to the Graphviz graph layout and visualization package. With PyGraphviz you can create, edit, read, write, and draw graphs using Python to access the Graphviz graph data structure and layout algorithms. PyGraphviz is independent from NetworkX but provides a similar programming interface. 
 """
 license = 'BSD'
 
