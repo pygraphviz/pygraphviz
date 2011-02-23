@@ -1727,7 +1727,10 @@ class ItemAttribute(Attribute):
                            default.encode(self.encoding))
 
     def __getitem__(self, name):
-        return gv.agget(self.handle,name.encode(self.encoding)).decode(self.encoding)
+        val = gv.agget(self.handle,name.encode(self.encoding))
+        if val is not None:
+            val = val.decode(self.encoding)
+        return val
 
     def __delitem__(self, name):
         gv.agset(self.handle,name.encode(self.encoding),'')
