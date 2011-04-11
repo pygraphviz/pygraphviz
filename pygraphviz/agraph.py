@@ -109,6 +109,7 @@ class AGraph(object):
     def __init__(self, thing=None, 
                  filename=None, data=None, string=None, handle=None,
                  name='', strict=True, directed=False, **attr):
+        self.handle=None  # assign first in case the __init__ bombs
         # initialization can take no arguments (gives empty graph) or
         # a file name
         # a string of graphviz dot language 
