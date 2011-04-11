@@ -1192,6 +1192,11 @@ class AGraph(object):
         >>> A=AGraph(string=s) # specify s is a string
         >>> A=AGraph(s)  # s assumed to be a string during initialization
         """
+        # allow either unicode or encoded string
+        try:
+            string = string.decode(self.encoding)
+        except UnicodeEncodeError:
+            pass
         from tempfile import TemporaryFile
         fh = TemporaryFile()
         fh.write(string.encode(self.encoding))
