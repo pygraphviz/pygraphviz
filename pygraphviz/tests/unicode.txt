@@ -42,3 +42,18 @@ u'strict graph {\n\tgraph [encoding="UTF-8"];\n\t\u05e9\u05dc\u05d5\u05dd -- \u0
 True
 >>> e.attr
 {u'hello': u'\u05e9\u05dc\u05d5\u05dd'}
+
+# test unicode in from_string()
+
+>>> t = u'测试'
+>>> G =AGraph()
+>>> G.add_node(t)
+>>> ug = unicode(G)
+>>> sg = str(G)
+>>> G1 = AGraph(ug)
+>>> G2 = AGraph(sg)
+>>> unicode(G1)
+u'strict graph {\n\t\xe6\xb5\x8b\xe8\xaf\x95;\n}\n'
+>>> unicode(G2)
+u'strict graph {\n\t\xe6\xb5\x8b\xe8\xaf\x95;\n}\n'
+
