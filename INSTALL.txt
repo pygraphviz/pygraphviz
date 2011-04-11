@@ -73,7 +73,7 @@ Requirements
 GraphViz
 --------
 
-To use PyGraphviz you need GraphViz version 2.0 or later.
+To use PyGraphviz you need GraphViz version 2.16 or later.
 Some versions have known bugs that have been fixed; get the latest
 release available for best results.
 
