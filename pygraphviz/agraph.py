@@ -243,6 +243,14 @@ class AGraph(object):
 #    def __setitem__(self,u,v):
 #        self.add_edge(u,v)
 
+    def get_name(self):
+       name=gv.agnameof(self.handle)
+       if name is not None:
+           name=name.decode(self.encoding)
+       return name
+
+    name=property(get_name)
+
     def add_node(self, n, **attr):
         """Add a single node n.
 

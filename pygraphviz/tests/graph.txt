@@ -503,3 +503,10 @@ True
 u'strict digraph {\n\t1 -> 2;\n\t2 -> 3;\n}\n'
 >>> A.reverse().string()
 u'strict digraph {\n\t2 -> 1;\n\t3 -> 2;\n}\n'
+
+test name
+---------
+
+>>> A=AGraph(name='test')
+>>> A.name
+u'test'
