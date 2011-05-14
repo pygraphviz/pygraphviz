@@ -34,16 +34,11 @@ parallel edges and self-loops use
 
 You may specify a dot format file to be read on initialization:
 
->>> G=pgv.AGraph("Petersen.dot") 
+>>> G=pgv.AGraph("Petersen.dot")  # doctest: +SKIP 
 
+Other options for intializing a graph are using a string,
 
-Other options for intializing a graph are
-
-using a string,
-
->>> l=open("ER.dot").readlines() # read file as list 
->>> s=' '.join(l) # make a string by joining list
->>> G=pgv.AGraph(s)
+>>> G=pgv.AGraph('graph {1 - 2}')
 
 using a dict of dicts,
 
@@ -52,7 +47,7 @@ using a dict of dicts,
 
 or using a SWIG pointer to the AGraph datastructure,
 
->>> h=AGraph.handle
+>>> h=A.handle
 >>> C=pgv.AGraph(h)
 
 
@@ -89,8 +84,12 @@ Graph attributes can be set when initializing the graph
 
 >>> G=pgv.AGraph(ranksep='0.1')
 
-Individual node and edge attributes can be set through their attr
-dictionary 
+Attributes can be added when adding nodes or edges,
+
+>>> G.add_node(1, color='red')
+>>> G.add_edge('b','c',color='blue')
+
+or through the node or edge attr dictionaries, 
 
 >>> n=G.get_node(1)
 >>> n.attr['shape']='box'
@@ -99,21 +98,13 @@ dictionary
 >>> e=G.get_edge('b','c')
 >>> e.attr['color']='green'
 
-Attributes can be added when adding nodes or edges
-
->>> G.add_node('a',color='red')
->>> G.add_edge('a','b',color='blue')
-
-
 Layout and Drawing
 ------------------
-
 Pygraphviz provides several methods for layout and drawing of graphs.
 
 To store and print the graph in dot format as a Python string use
 
 >>> s=G.string()
->>> print s
 
 To write to a file use
 
