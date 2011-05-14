@@ -55,6 +55,7 @@ class AGraph(object):
     
     Example use
     
+    >>> from pygraphviz import *
     >>> G=AGraph()         
     >>> G=AGraph(directed=True)
     >>> G=AGraph("file.dot")   # doctest: +SKIP 
