@@ -1245,7 +1245,7 @@ class AGraph(object):
 
         Use keyword args to add additional arguments to graphviz programs.
         """
-        runprog=self._get_prog(prog)
+        runprog=r'"%s"'%self._get_prog(prog)
         cmd=' '.join([runprog,args])
         p = subprocess.Popen(cmd, 
                              shell=True,
