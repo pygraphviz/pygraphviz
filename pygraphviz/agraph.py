@@ -10,6 +10,7 @@ A Python interface to Graphviz.
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
 import re
+import shlex
 import subprocess
 import sys
 import threading
@@ -1247,8 +1248,9 @@ class AGraph(object):
         """
         runprog=r'"%s"'%self._get_prog(prog)
         cmd=' '.join([runprog,args])
-        p = subprocess.Popen(cmd, 
-                             shell=True,
+        dotargs = shlex.split(cmd)
+        p = subprocess.Popen(dotargs,
+                             shell=False,
                              stdin=subprocess.PIPE, 
                              stdout=subprocess.PIPE, 
                              stderr=subprocess.PIPE, 
