@@ -174,6 +174,8 @@ class AGraph(object):
             # get encoding from the "charset" kwarg
             self.encoding = attr.get('charset', _DEFAULT_ENCODING)
             try:
+                if name is None:
+                    name = ''
                 # instantiate a new, empty graph
                 self.handle=gv.agraphnew(name.encode(self.encoding),
                                          strict,directed)
@@ -850,7 +852,7 @@ class AGraph(object):
         """Return copy of directed graph with edge directions reversed."""
         if self.directed:
             # new empty DiGraph
-            H=self.__class__(strict=self.strict,directed=True) 
+            H=self.__class__(strict=self.strict,directed=True,name=self.name)
             H.graph_attr.update(self.graph_attr)
             H.node_attr.update(self.node_attr)
             H.edge_attr.update(self.edge_attr)

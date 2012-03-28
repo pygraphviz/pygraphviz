@@ -510,3 +510,6 @@ test name
 >>> A=AGraph(name='test')
 >>> A.name
 u'test'
+>>> B=A.reverse()
+>>> B.name
+u'test'
