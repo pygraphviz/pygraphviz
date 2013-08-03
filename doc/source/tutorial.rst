@@ -2,9 +2,9 @@ Tutorial
 ========
 
 The API is very similar to that of NetworkX.  Much of the 
-NetworkX tutorial at http://networkx.lanl.gov/tutorial/
+NetworkX tutorial at http://networkx.github.io/documentation/latest/tutorial/
 is applicable to PyGraphviz.  
-See https://networkx.lanl.gov/pygraphviz/reference/api_notes.html for major differences.
+See http://pygraphviz.github.io/documentation/latest/reference/api_notes.html  for major differences.
 
 Start-up
 --------
