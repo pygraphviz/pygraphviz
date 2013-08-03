@@ -13,8 +13,8 @@ Documentation
 ~~~~~~~~~~~~~
 *PDF*
 
-http://networkx.github.io/documentation/latest/pygraphviz.pdf
+http://pygraphviz.github.io/documentation/latest/pygraphviz.pdf
 
 *HTML in zip file*
 
-http://networkx.github.io/documentation/latest/pygraphviz-documentation.zip
+http://pygraphviz.github.io/documentation/latest/pygraphviz-documentation.zip
