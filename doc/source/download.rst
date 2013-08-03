@@ -2,31 +2,19 @@
 Download
 --------
 
-Source and Binary Releases
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Software
+~~~~~~~~
+Source and binary releases: https://pypi.python.org/pypi/pygraphviz
 
-http://cheeseshop.python.org/pypi/pygraphviz/
+Github (latest development): https://github.com/pygraphviz/pygraphviz
 
-http://networkx.lanl.gov/download/pygraphviz/
-
-
-Subversion Source Code Repository
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*Anonymous*          
-
-svn checkout http://networkx.lanl.gov/svn/pygraphviz/trunk pygraphviz
-
-*Authenticated* 
-
-svn checkout https://networkx.lanl.gov/svn/pygraphviz/trunk pygraphviz
 
 Documentation
 ~~~~~~~~~~~~~
-
 *PDF*
 
-http://networkx.lanl.gov/pygraphviz/pygraphviz.pdf
+http://networkx.github.io/documentation/latest/pygraphviz.pdf
 
 *HTML in zip file*
 
-http://networkx.lanl.gov/pygraphviz/pygraphviz-documentation.zip
+http://networkx.github.io/documentation/latest/pygraphviz-documentation.zip
