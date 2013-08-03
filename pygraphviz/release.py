@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Release data for PyGraphviz."""
 
-#    Copyright (C) 2006-2011 by 
-#    Aric Hagberg <hagberg@lanl.gov>
+#    Copyright (C) 2006-2013 by 
+#    Aric Hagberg <aric.hagberg@gmail.com>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
 #    Distributed with BSD license.     
@@ -82,12 +82,12 @@ PyGraphviz is a Python interface to the Graphviz graph layout and visualization 
 """
 license = 'BSD'
 
-authors = {'Hagberg' : ('Aric Hagberg','hagberg@lanl.gov'),
+authors = {'Hagberg' : ('Aric Hagberg','aric.hagberg@gmali.com'),
            'Schult' : ('Dan Schult','dschult@colgate.edu'),
            'Renieris' : ('Manos Renieris','')
            }
-url = 'http://networkx.lanl.gov/pygraphviz'
-download_url="http://networkx.lanl.gov/download/pygraphviz"
+url = 'http://pygraphviz.github.io'
+download_url="https://pypi.python.org/pypi/pygraphviz"
 platforms = ['Linux','Mac OSX']
 keywords = ['Networks', 'Graph Visualization', 'network', 'graph', 'graph drawing']
 classifiers = [

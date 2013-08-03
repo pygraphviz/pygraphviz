@@ -3,8 +3,8 @@
 """
 Setup script for PyGraphviz
 """
-#    Copyright (C) 2006-2010 by 
-#    Aric Hagberg <hagberg@lanl.gov>
+#    Copyright (C) 2006-2013 by 
+#    Aric Hagberg <aric.hagberg@gmail.com>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
 #    Distributed with BSD license.     
