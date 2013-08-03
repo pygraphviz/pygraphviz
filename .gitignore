@@ -1,0 +1,17 @@
+*.pyc
+__pycache__
+*~
+.DS_Store
+build/*
+doc/source/pygraphviz-documentation.zip
+doc/source/pygraphviz.pdf
+doc/gh-pages
+doc/build
+
+# Generated while building documentation.
+doc/source/static/examples/*
+doc/source/reference/generated/*
+doc/source/examples/*
+
+# Generated when 'python setup_egg.py'
+pygraphviz.egg-info/

@@ -43,13 +43,19 @@ dist: html
 	make -C build/latex all-pdf
 	-rm -rf build/dist
 	(cd build/html; cp -r . ../../build/dist)
-	-rm -f build/dist/_downloads/*
-	cp build/latex/*.pdf build/dist/_downloads
-	(cd build/dist && ln -s _downloads/* .)
-	(cd build/dist && tar czf ../dist.tar.gz .)
+#	-rm -f build/dist/_downloads/*
+#	-mkdir  build/dist/_downloads
+#	(cd build/html && zip -9r ../dist/_downloads/pygraphviz-documentation.zip .)
+	(cd build/html && zip -9r ../dist/pygraphviz-documentation.zip .)
+#	cp build/latex/*.pdf build/dist/_downloads
+	cp build/latex/*.pdf build/dist/
+#	(cd build/dist && ln -s _downloads/* .)
+#	(cd build/dist && tar czf ../dist.tar.gz .)
 
 
 html: generate
+	touch source/pygraphviz.pdf      
+	touch source/pygraphviz-documentation.zip
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) build/html
 	@echo
 	@echo "Build finished. The HTML pages are in build/html."
@@ -113,7 +119,7 @@ doctest: generate
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in build/doctest/output.txt."
 
-gh-pages: clean html
+gh-pages: clean dist
 	python gh-pages.py $(tag)
 
 gitwash-update:

@@ -125,7 +125,7 @@ latex_paper_size = 'letter'
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
-latex_documents = [('contents', 'pygraphviz.tex', 'PyGraphviz Documentation',
+latex_documents = [('index', 'pygraphviz.tex', 'PyGraphviz Documentation',
                     'Aric Hagberg, Dan Schult', 'manual', 1)]
 
 
