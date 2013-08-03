@@ -3,6 +3,13 @@
 News
 ==== 
 
+pygraphviz-1.2
+-----------------
+Release date: 3 August 2013
+
+ - Quote Graphviz program names to work with space (Windows fix)
+ - Keep name in reverse()
+
 pygraphviz-1.1
 -----------------
 Release date: 9 February 2011

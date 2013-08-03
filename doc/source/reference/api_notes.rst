@@ -1,6 +1,10 @@
 API Notes
 =========
 
+pygraphviz-1.2
+--------------
+  No API changes
+
 pygraphviz-1.1
 --------------
   Pygraphviz-1.1 adds unicode (graphviz charset) support.
