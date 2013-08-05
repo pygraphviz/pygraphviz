@@ -957,8 +957,7 @@ class AGraph(object):
         return bunch
 
 
-    def add_subgraph(self, nbunch=None, name=None,
-            graph_class=None, **attr):
+    def add_subgraph(self, nbunch=None, name=None, **attr):
         """Return subgraph induced by nodes in nbunch.
         """
         if name is not None:
@@ -968,9 +967,7 @@ class AGraph(object):
         except TypeError:
             raise TypeError("Subgraph name must be a string: %s"%name.decode(self.encoding))
 
-        if graph_class is None:
-            graph_class = self.__class__
-        H=graph_class(strict=self.strict,
+        H=self.__class__(strict=self.strict,
                          directed=self.directed,
                          handle=handle,name=name,
                          **attr)
