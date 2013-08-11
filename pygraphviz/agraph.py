@@ -644,7 +644,6 @@ class AGraph(object):
 
 
     iteroutedges=out_edges_iter
-    iteredges=out_edges_iter
 
     def in_edges_iter(self, nbunch=None, keys=False):
         """Return iterator over out edges in the graph.
@@ -698,11 +697,36 @@ class AGraph(object):
                     eh=gv.agnxtin(self.handle,eh)
         raise StopIteration
 
+    def edges_iter(self, nbunch=None, keys=False):
+        """Return iterator over edges in the graph.
+
+        If the optional nbunch (container of nodes) only edges
+        adjacent to nodes in nbunch will be returned.
+
+        Note: modifying the graph structure while iterating over
+        edges may produce unpredictable results.  Use edges()
+        as an alternative.
+        """
+        if nbunch is None:      # all nodes
+            for e in self.out_edges_iter(keys=keys):
+                yield e
+        elif nbunch in self:    # only one node
+            for e in self.out_edges_iter(nbunch, keys=keys):
+                yield e
+            for e in self.in_edges_iter(nbunch, keys=keys):
+                yield e
+        else:                   # a group of nodes
+            used = set()
+            for e in self.out_edges_iter(nbunch, keys=keys):
+                yield e
+                used.add(e)
+            for e in self.in_edges_iter(nbunch, keys=keys):
+                if e not in used:
+                    yield e
 
     iterinedges=in_edges_iter
 
-    # define edges to be out_edges implicitly since edges uses edges_iter
-    edges_iter=out_edges_iter
+    iteredges=edges_iter
 
     def out_edges(self, nbunch=None, keys=False):
         """Return list of out edges in the graph.
