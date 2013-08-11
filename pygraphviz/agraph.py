@@ -714,7 +714,8 @@ class AGraph(object):
             for e in self.out_edges_iter(nbunch, keys=keys):
                 yield e
             for e in self.in_edges_iter(nbunch, keys=keys):
-                yield e
+                if e != (nbunch, nbunch):
+                    yield e
         else:                   # a group of nodes
             used = set()
             for e in self.out_edges_iter(nbunch, keys=keys):
