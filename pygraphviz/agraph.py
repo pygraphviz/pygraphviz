@@ -326,7 +326,7 @@ class AGraph(object):
             n=str(n)
         n=n.encode(self.encoding)
         try:
-            nh=gv.agnode(self.handle,n.encode(self.encoding),_Action.find)
+            nh=gv.agnode(self.handle,n,_Action.find)
             gv.agdelnode(self.handle,nh)
         except KeyError:
             raise KeyError("Node %s not in graph."%n.decode(self.encoding))
