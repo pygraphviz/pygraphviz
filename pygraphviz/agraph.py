@@ -206,6 +206,12 @@ class AGraph(object):
         self.node_attr=Attribute(self.handle,1)  # default node attributes
         self.edge_attr=Attribute(self.handle,2)  # default edge attribtes
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, ext_type, exc_value, traceback):
+        self.close()
+
     def __str__(self):
         return unicode(self).encode(self.encoding,'replace')
 
@@ -1169,6 +1175,8 @@ class AGraph(object):
         """
         fh=self._get_fh(path)
         try:
+            if self.handle is not None:
+                gv.agclose(self.handle)
             self.handle = gv.agread(fh,None)
         except IOError:
             print "IO error reading file"
