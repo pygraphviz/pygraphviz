@@ -23,12 +23,17 @@ from setup import *
 from setuptools import setup, Extension
 
 
-extension = [Extension("pygraphviz._graphviz",
-                      ["pygraphviz/graphviz_wrap.c"],
-                      include_dirs=include_dirs,
-                      library_dirs=library_dirs,
-                      runtime_library_dirs=library_dirs,
-                      libraries=["cgraph","cdt"])]
+extension = [
+    Extension(
+        "pygraphviz._graphviz",
+        ["pygraphviz/graphviz_wrap.c"],
+        include_dirs=include_dirs,
+        library_dirs=library_dirs,
+        libraries=["cgraph", "cdt"],
+        define_macros=define_macros,
+        **extension_args
+    )
+]
 
 if __name__ == "__main__":
 

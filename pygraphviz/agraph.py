@@ -9,6 +9,8 @@ A Python interface to Graphviz.
 #    Manos Renieris, http://www.cs.brown.edu/~er/
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
+from __future__ import print_function
+
 import re
 import shlex
 import subprocess
@@ -21,6 +23,7 @@ import graphviz as gv
 
 _DEFAULT_ENCODING = 'UTF-8'
 
+
 def is_string_like(obj): # from John Hunter, types-free version
     try:
         obj + ''
@@ -32,6 +35,7 @@ def is_string_like(obj): # from John Hunter, types-free version
 class PipeReader(threading.Thread):
     """Read and write pipes using threads.
     """
+
     def __init__(self, result, pipe):
         threading.Thread.__init__(self)
         self.result = result
@@ -43,13 +47,14 @@ class PipeReader(threading.Thread):
                 chunk = self.pipe.read()
                 if not chunk:
                     break
-                self.result.append( chunk )
+                self.result.append(chunk)
         finally:
             self.pipe.close()
 
 
-class _Action:
-    find, create = 0,1
+class _Action(object):
+    find, create = 0, 1
+
 
 class AGraph(object):
     """Class for Graphviz agraph type.
@@ -108,38 +113,41 @@ class AGraph(object):
       handle:  Swig pointer to an agraph_t data structure
 
     """
+
     def __init__(self, thing=None,
                  filename=None, data=None, string=None, handle=None,
                  name='', strict=True, directed=False, **attr):
-        self.handle=None  # assign first in case the __init__ bombs
+        self.handle = None  # assign first in case the __init__ bombs
         # initialization can take no arguments (gives empty graph) or
         # a file name
         # a string of graphviz dot language
         # a swig pointer (handle) to a graph
         # a dict of dicts (or dict of lists) data structure
 
+        self.has_layout = False  # avoid creating members outside of init
+
         # backward compability
-        filename=attr.get('file',filename)
+        filename = attr.get('file', filename)
         #  guess input type if specified as first (nonkeyword) argument
         if thing is not None:
             # can't specify first argument and also file,data,string,handle
-            filename=None
-            data=None
-            string=None
-            handle=None
-            if isinstance(thing,dict):
-                data=thing # a dictionary of dictionaries (or lists)
-            elif hasattr(thing,'own'): # a Swig pointer - graph handle
-                handle=thing
+            filename = None
+            data = None
+            string = None
+            handle = None
+            if isinstance(thing, dict):
+                data = thing # a dictionary of dictionaries (or lists)
+            elif hasattr(thing, 'own'):  # a Swig pointer - graph handle
+                handle = thing
             elif self._is_string_like(thing):
-                pattern=re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',
-                                   re.DOTALL)
+                pattern = re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',
+                                     re.DOTALL)
                 if pattern.match(thing):
-                    string=thing # this is a dot format graph in a string
+                    string = thing  # this is a dot format graph in a string
                 else:
-                    filename=thing  # assume this is a file name
+                    filename = thing  # assume this is a file name
             else:
-                raise TypeError('Unrecognized input %s'%thing)
+                raise TypeError('Unrecognized input %s' % thing)
 
         if handle is not None:
             # if handle was specified, reference it
@@ -164,7 +172,7 @@ class AGraph(object):
         if self.handle is not None:
             # the handle was specified or created
             # get the encoding from the "charset" graph attribute
-            item=gv.agget(self.handle,'charset')
+            item = gv.agget(self.handle, 'charset')
             if item is not None:
                 self.encoding = item
             else:
@@ -176,23 +184,23 @@ class AGraph(object):
             try:
                 if name is None:
                     name = ''
-                # instantiate a new, empty graph
-                self.handle=gv.agraphnew(name.encode(self.encoding),
-                                         strict,directed)
+                    # instantiate a new, empty graph
+                self.handle = gv.agraphnew(name.encode(self.encoding),
+                                           strict, directed)
             except TypeError:
-                raise TypeError("Graph name must be a string: %s"%name)
+                raise TypeError("Graph name must be a string: %s" % name)
 
             # encoding is already set but if it was specified explicitly
             # as an attr, then set it explicitly for the graph
             if 'charset' in attr:
-                gv.agattr_label(self.handle,0, 'charset', self.encoding)
+                gv.agattr_label(self.handle, 0, 'charset', self.encoding)
 
             # if data is specified, populate the newly created graph
             if data is not None:
                 # load from dict of dicts or dict of lists
                 for node in data:
                     for nbr in data[node]:
-                        self.add_edge(node,nbr)
+                        self.add_edge(node, nbr)
                 self.add_nodes_from(data.keys())
 
         # throw away the charset attribute, if one exists,
@@ -201,10 +209,10 @@ class AGraph(object):
             del attr['charset']
 
         # assign any attributes specified through keywords
-        self.graph_attr=Attribute(self.handle,0) # default graph attributes
-        self.graph_attr.update(attr) # apply attributes passed to init
-        self.node_attr=Attribute(self.handle,1)  # default node attributes
-        self.edge_attr=Attribute(self.handle,2)  # default edge attribtes
+        self.graph_attr = Attribute(self.handle, 0)  # default graph attributes
+        self.graph_attr.update(attr)  # apply attributes passed to init
+        self.node_attr = Attribute(self.handle, 1)  # default node attributes
+        self.edge_attr = Attribute(self.handle, 2)  # default edge attribtes
 
     def __enter__(self):
         return self
@@ -213,21 +221,21 @@ class AGraph(object):
         self.close()
 
     def __str__(self):
-        return unicode(self).encode(self.encoding,'replace')
+        return unicode(self).encode(self.encoding, 'replace')
 
     def __unicode__(self):
         return self.string()
 
     def __repr__(self):
-        name=gv.agnameof(self.handle)
+        name = gv.agnameof(self.handle)
         if name is None:
-            return '<AGraph %s>' %(self.handle)
-        return '<AGraph %s %s>' %(name,self.handle)
+            return '<AGraph %s>' % self.handle
+        return '<AGraph %s %s>' % (name, self.handle)
 
-    def __eq__(self,other):
+    def __eq__(self, other):
         # two graphs are equal if they have exact same string representation
         # this is not graph isomorphism
-        return self.string()==other.string()
+        return self.string() == other.string()
 
     def __hash__(self):
         # hash the string representation for id
@@ -238,28 +246,28 @@ class AGraph(object):
         # provide "for n in G"
         return self.nodes_iter()
 
-    def __contains__(self,n):
+    def __contains__(self, n):
         # provide "n in G"
         return self.has_node(n)
 
     def __len__(self):
         return self.number_of_nodes()
 
-    def __getitem__(self,n):
+    def __getitem__(self, n):
         # "G[n]" returns nodes attached to n
         return self.neighbors(n)
 
-# not implemented, but could be...
-#    def __setitem__(self,u,v):
-#        self.add_edge(u,v)
+    # not implemented, but could be...
+    #    def __setitem__(self,u,v):
+    #        self.add_edge(u,v)
 
     def get_name(self):
-       name=gv.agnameof(self.handle)
-       if name is not None:
-           name=name.decode(self.encoding)
-       return name
+        name = gv.agnameof(self.handle)
+        if name is not None:
+            name = name.decode(self.encoding)
+        return name
 
-    name=property(get_name)
+    name = property(get_name)
 
     def add_node(self, n, **attr):
         """Add a single node n.
@@ -288,13 +296,13 @@ class AGraph(object):
 
         """
         if not self._is_string_like(n):
-            n=str(n)
-        n=n.encode(self.encoding)
+            n = str(n)
+        n = n.encode(self.encoding)
         try:
-            nh=gv.agnode(self.handle,n,_Action.find)
+            nh = gv.agnode(self.handle, n, _Action.find)
         except KeyError:
-            nh=gv.agnode(self.handle,n,_Action.create)
-            node=Node(self,nh=nh)
+            nh = gv.agnode(self.handle, n, _Action.create)
+            node = Node(self, nh=nh)
             node.attr.update(**attr)
 
     def add_nodes_from(self, nbunch, **attr):
@@ -315,9 +323,9 @@ class AGraph(object):
 
         """
         for n in nbunch:
-            self.add_node(n,**attr)
+            self.add_node(n, **attr)
 
-    def remove_node(self,n):
+    def remove_node(self, n):
         """Remove the single node n.
 
         Attempting to remove a node that isn't in the graph will produce
@@ -329,17 +337,17 @@ class AGraph(object):
 
         """
         if not self._is_string_like(n):
-            n=str(n)
-        n=n.encode(self.encoding)
+            n = str(n)
+        n = n.encode(self.encoding)
         try:
-            nh=gv.agnode(self.handle,n,_Action.find)
-            gv.agdelnode(self.handle,nh)
+            nh = gv.agnode(self.handle, n, _Action.find)
+            gv.agdelnode(self.handle, nh)
         except KeyError:
-            raise KeyError("Node %s not in graph."%n.decode(self.encoding))
+            raise KeyError("Node %s not in graph." % n.decode(self.encoding))
 
-    delete_node=remove_node
+    delete_node = remove_node
 
-    def remove_nodes_from(self,nbunch):
+    def remove_nodes_from(self, nbunch):
         """Remove nodes from a container nbunch.
 
         nbunch can be any iterable container such as a list or dictionary
@@ -352,7 +360,7 @@ class AGraph(object):
         for n in nbunch:
             self.remove_node(n)
 
-    delete_nodes_from=remove_nodes_from
+    delete_nodes_from = remove_nodes_from
 
     def nodes_iter(self):
         """Return an iterator over all the nodes in the graph.
@@ -361,13 +369,13 @@ class AGraph(object):
         the nodes may produce unpredictable results.  Use nodes()
         as an alternative.
         """
-        nh=gv.agfstnode(self.handle)
+        nh = gv.agfstnode(self.handle)
         while nh is not None:
-            yield Node(self,nh=nh)
-            nh=gv.agnxtnode(self.handle,nh)
+            yield Node(self, nh=nh)
+            nh = gv.agnxtnode(self.handle, nh)
         raise StopIteration
 
-    iternodes=nodes_iter
+    iternodes = nodes_iter
 
     def nodes(self):
         """Return a list of all nodes in the graph."""
@@ -381,7 +389,7 @@ class AGraph(object):
         """Return the number of nodes in the graph."""
         return self.number_of_nodes()
 
-    def has_node(self,n):
+    def has_node(self, n):
         """Return True if n is in the graph or False if not.
 
         >>> G=AGraph()
@@ -393,23 +401,23 @@ class AGraph(object):
 
         """
         try:
-            node=Node(self,n)
+            node = Node(self, n)
             return True
         except KeyError:
             return False
 
-    def get_node(self,n):
+    def get_node(self, n):
         """Return a node object (Node) corresponding to node n.
 
         >>> G=AGraph()
         >>> G.add_node('a')
         >>> node=G.get_node('a')
-        >>> print node
+        >>> print(node)
         a
         """
-        return Node(self,n)
+        return Node(self, n)
 
-    def add_edge(self,u,v=None,key=None,**attr):
+    def add_edge(self, u, v=None, key=None, **attr):
         """Add a single edge between nodes u and v.
 
         If the nodes u and v are not in the graph they will added.
@@ -443,24 +451,25 @@ class AGraph(object):
         for a list of attributes.
 
         """
-        if v is None: (u,v)=u  # no v given, assume u is an edge tuple
+        if v is None:
+            (u, v) = u  # no v given, assume u is an edge tuple
         try:
-            uh=Node(self,u).handle
+            uh = Node(self, u).handle
         except:
             self.add_node(u)
-            uh=Node(self,u).handle
+            uh = Node(self, u).handle
         try:
-            vh=Node(self,v).handle
+            vh = Node(self, v).handle
         except:
             self.add_node(v)
-            vh=Node(self,v).handle
+            vh = Node(self, v).handle
         try:
             if key is not None:
                 if not self._is_string_like(key):
-                    key=str(key)
-                key=key.encode(self.encoding)
-            eh=gv.agedge(self.handle,uh,vh,key,_Action.create)
-            e=Edge(self,eh=eh)
+                    key = str(key)
+                key = key.encode(self.encoding)
+            eh = gv.agedge(self.handle, uh, vh, key, _Action.create)
+            e = Edge(self, eh=eh)
             e.attr.update(**attr)
         except KeyError:
             return None # silent failure for strict graph, already added
@@ -480,7 +489,7 @@ class AGraph(object):
 
         """
         for e in ebunch:
-            self.add_edge(e,**attr)
+            self.add_edge(e, **attr)
 
     def get_edge(self, u, v, key=None):
         """Return an edge object (Edge) corresponding to edge (u,v).
@@ -488,14 +497,13 @@ class AGraph(object):
         >>> G=AGraph()
         >>> G.add_edge('a','b')
         >>> edge=G.get_edge('a','b')
-        >>> print edge
+        >>> print(edge)
         (u'a', u'b')
 
         With optional key argument will only get edge matching (u,v,key).
 
         """
-        return Edge(self,u,v,key)
-
+        return Edge(self, u, v, key)
 
     def remove_edge(self, u, v=None, key=None):
         """Remove edge between nodes u and v from the graph.
@@ -505,21 +513,21 @@ class AGraph(object):
 
         """
         if v is None:
-            (u,v)=u  # no v given, assume u is an edge tuple
-        e=Edge(self,u,v,key)
+            (u, v) = u  # no v given, assume u is an edge tuple
+        e = Edge(self, u, v, key)
         try:
-            gv.agdeledge(self.handle,e.handle)
+            gv.agdeledge(self.handle, e.handle)
         except KeyError:
-            raise KeyError("Edge %s-%s not in graph."%(u,v))
+            raise KeyError("Edge %s-%s not in graph." % (u, v))
 
-    delete_edge=remove_edge
+    delete_edge = remove_edge
 
     def remove_edges_from(self, ebunch):
         """Remove edges from ebunch (a container of edges)."""
         for e in ebunch:
             self.remove_edge(e)
 
-    delete_edges_from=remove_edges_from
+    delete_edges_from = remove_edges_from
 
     def has_edge(self, u, v=None, key=None):
         """Return True an edge u-v is in the graph or False if not.
@@ -534,9 +542,9 @@ class AGraph(object):
         """
 
         if v is None:
-            (u,v)=u  # no v given, assume u is an edge tuple
+            (u, v) = u  # no v given, assume u is an edge tuple
         try:
-            Edge(self,u,v,key)
+            Edge(self, u, v, key)
             return True
         except KeyError:
             return False
@@ -550,12 +558,12 @@ class AGraph(object):
         >>> G=AGraph()
         >>> G.add_edge('a','b')
         >>> G.add_edge('c','d')
-        >>> print sorted(G.edges())
+        >>> print(sorted(G.edges()))
         [(u'a', u'b'), (u'c', u'd')]
-        >>> print G.edges('a')
+        >>> print(G.edges('a'))
         [(u'a', u'b')]
         """
-        return list(self.edges_iter(nbunch=nbunch,keys=keys))
+        return list(self.edges_iter(nbunch=nbunch, keys=keys))
 
     def has_neighbor(self, u, v, key=None):
         """Return True if u has an edge to v or False if not.
@@ -567,33 +575,33 @@ class AGraph(object):
 
         Optional key argument will only find edges (u,v,key).
         """
-        return self.has_edge(u,v)
+        return self.has_edge(u, v)
 
 
-    def neighbors_iter(self,n):
+    def neighbors_iter(self, n):
         """Return iterator over the nodes attached to n.
 
         Note: modifying the graph structure while iterating over
         node neighbors may produce unpredictable results.  Use neighbors()
         as an alternative.
         """
-        n=Node(self,n)
-        nh=n.handle
-        eh=gv.agfstedge(self.handle,nh)
+        n = Node(self, n)
+        nh = n.handle
+        eh = gv.agfstedge(self.handle, nh)
         while eh is not None:
-            (s,t)=Edge(self,eh=eh)
-            if s==n:
-                yield Node(self,t)
+            (s, t) = Edge(self, eh=eh)
+            if s == n:
+                yield Node(self, t)
             else:
-                yield Node(self,s)
-            eh=gv.agnxtedge(self.handle,eh,nh)
+                yield Node(self, s)
+            eh = gv.agnxtedge(self.handle, eh, nh)
         raise StopIteration
 
     def neighbors(self, n):
         """Return a list of the nodes attached to n."""
         return list(self.neighbors_iter(n))
 
-    iterneighbors=neighbors_iter
+    iterneighbors = neighbors_iter
 
     def out_edges_iter(self, nbunch=None, keys=False):
         """Return iterator over out edges in the graph.
@@ -607,49 +615,50 @@ class AGraph(object):
         """
 
         if nbunch is None:   # all nodes
-            nh=gv.agfstnode(self.handle)
+            nh = gv.agfstnode(self.handle)
             while nh is not None:
-                eh=gv.agfstout(self.handle,nh)
+                eh = gv.agfstout(self.handle, nh)
                 while eh is not None:
-                    e=Edge(self,eh=eh)
+                    e = Edge(self, eh=eh)
                     if keys:
-                        yield (e[0],e[1],e.name)
+                        yield (e[0], e[1], e.name)
                     else:
                         yield e
-                    eh=gv.agnxtout(self.handle,eh)
-                nh=gv.agnxtnode(self.handle,nh)
+                    eh = gv.agnxtout(self.handle, eh)
+                nh = gv.agnxtnode(self.handle, nh)
         elif nbunch in self: # if nbunch is a single node
-            n=Node(self,nbunch)
-            nh=n.handle
-            eh=gv.agfstout(self.handle,nh)
+            n = Node(self, nbunch)
+            nh = n.handle
+            eh = gv.agfstout(self.handle, nh)
             while eh is not None:
-                e=Edge(self,eh=eh)
+                e = Edge(self, eh=eh)
                 if keys:
-                    yield (e[0],e[1],e.name)
+                    yield (e[0], e[1], e.name)
                 else:
                     yield e
-                eh=gv.agnxtout(self.handle,eh)
+                eh = gv.agnxtout(self.handle, eh)
         else:                # if nbunch is a sequence of nodes
-            try: bunch=[n for n in nbunch if n in self]
+            try:
+                bunch = [n for n in nbunch if n in self]
             except TypeError:
                 raise TypeError("nbunch is not a node or a sequence of nodes.")
             for n in nbunch:
                 try:
-                    nh=Node(self,n).handle
+                    nh = Node(self, n).handle
                 except KeyError:
                     continue
-                eh=gv.agfstout(self.handle,nh)
+                eh = gv.agfstout(self.handle, nh)
                 while eh is not None:
-                    e=Edge(self,eh=eh)
+                    e = Edge(self, eh=eh)
                     if keys:
-                        yield (e[0],e[1],e.name)
+                        yield (e[0], e[1], e.name)
                     else:
                         yield e
-                    eh=gv.agnxtout(self.handle,eh)
+                    eh = gv.agnxtout(self.handle, eh)
         raise StopIteration
 
 
-    iteroutedges=out_edges_iter
+    iteroutedges = out_edges_iter
 
     def in_edges_iter(self, nbunch=None, keys=False):
         """Return iterator over out edges in the graph.
@@ -662,45 +671,46 @@ class AGraph(object):
         as an alternative.
         """
         if nbunch is None:   # all nodes
-            nh=gv.agfstnode(self.handle)
+            nh = gv.agfstnode(self.handle)
             while nh is not None:
-                eh=gv.agfstin(self.handle,nh)
+                eh = gv.agfstin(self.handle, nh)
                 while eh is not None:
-                    e=Edge(self,eh=eh)
+                    e = Edge(self, eh=eh)
                     if keys:
-                        yield (e[0],e[1],e.name)
+                        yield (e[0], e[1], e.name)
                     else:
                         yield e
-                    eh=gv.agnxtin(self.handle,eh)
-                nh=gv.agnxtnode(self.handle,nh)
+                    eh = gv.agnxtin(self.handle, eh)
+                nh = gv.agnxtnode(self.handle, nh)
         elif nbunch in self: # if nbunch is a single node
-            n=Node(self,nbunch)
-            nh=n.handle
-            eh=gv.agfstin(self.handle,nh)
+            n = Node(self, nbunch)
+            nh = n.handle
+            eh = gv.agfstin(self.handle, nh)
             while eh is not None:
-                e=Edge(self,eh=eh)
+                e = Edge(self, eh=eh)
                 if keys:
-                    yield (e[0],e[1],e.name)
+                    yield (e[0], e[1], e.name)
                 else:
                     yield e
-                eh=gv.agnxtin(self.handle,eh)
+                eh = gv.agnxtin(self.handle, eh)
         else:                # if nbunch is a sequence of nodes
-            try: bunch=[n for n in nbunch if n in self]
+            try:
+                bunch = [n for n in nbunch if n in self]
             except TypeError:
                 raise TypeError("nbunch is not a node or a sequence of nodes.")
             for n in nbunch:
                 try:
-                    nh=Node(self,n).handle
+                    nh = Node(self, n).handle
                 except KeyError:
                     continue
-                eh=gv.agfstin(self.handle,nh)
+                eh = gv.agfstin(self.handle, nh)
                 while eh is not None:
-                    e=Edge(self,eh=eh)
+                    e = Edge(self, eh=eh)
                     if keys:
-                        yield (e[0],e[1],e.name)
+                        yield (e[0], e[1], e.name)
                     else:
                         yield e
-                    eh=gv.agnxtin(self.handle,eh)
+                    eh = gv.agnxtin(self.handle, eh)
         raise StopIteration
 
     def edges_iter(self, nbunch=None, keys=False):
@@ -731,9 +741,9 @@ class AGraph(object):
                 if e not in used:
                     yield e
 
-    iterinedges=in_edges_iter
+    iterinedges = in_edges_iter
 
-    iteredges=edges_iter
+    iteredges = edges_iter
 
     def out_edges(self, nbunch=None, keys=False):
         """Return list of out edges in the graph.
@@ -741,58 +751,58 @@ class AGraph(object):
         If the optional nbunch (container of nodes) only out edges
         adjacent to nodes in nbunch will be returned.
         """
-        return list(self.out_edges_iter(nbunch=nbunch,keys=keys))
+        return list(self.out_edges_iter(nbunch=nbunch, keys=keys))
 
     def in_edges(self, nbunch=None, keys=False):
         """Return list of in edges in the graph.
         If the optional nbunch (container of nodes) only in edges
         adjacent to nodes in nbunch will be returned.
         """
-        return list(self.in_edges_iter(nbunch=nbunch,keys=keys))
+        return list(self.in_edges_iter(nbunch=nbunch, keys=keys))
 
 
-    def predecessors_iter(self,n):
+    def predecessors_iter(self, n):
         """Return iterator over predecessor nodes of n.
 
         Note: modifying the graph structure while iterating over
         node predecessors may produce unpredictable results.  Use
         predecessors() as an alternative.
         """
-        n=Node(self,n)
-        nh=n.handle
-        eh=gv.agfstin(self.handle,nh)
+        n = Node(self, n)
+        nh = n.handle
+        eh = gv.agfstin(self.handle, nh)
         while eh is not None:
-            (s,t)=Edge(self,eh=eh)
-            if s==n:
-                yield Node(self,t)
+            (s, t) = Edge(self, eh=eh)
+            if s == n:
+                yield Node(self, t)
             else:
-                yield Node(self,s)
-            eh=gv.agnxtin(self.handle,eh)
+                yield Node(self, s)
+            eh = gv.agnxtin(self.handle, eh)
         raise StopIteration
 
 
-    iterpred=predecessors_iter
+    iterpred = predecessors_iter
 
-    def successors_iter(self,n):
+    def successors_iter(self, n):
         """Return iterator over successor nodes of n.
 
         Note: modifying the graph structure while iterating over
         node successors may produce unpredictable results.  Use
         successors() as an alternative.
         """
-        n=Node(self,n)
-        nh=n.handle
-        eh=gv.agfstout(self.handle,nh)
+        n = Node(self, n)
+        nh = n.handle
+        eh = gv.agfstout(self.handle, nh)
         while eh is not None:
-            (s,t)=Edge(self,eh=eh)
-            if s==n:
-                yield Node(self,t)
+            (s, t) = Edge(self, eh=eh)
+            if s == n:
+                yield Node(self, t)
             else:
-                yield Node(self,s)
-            eh=gv.agnxtout(self.handle,eh)
+                yield Node(self, s)
+            eh = gv.agnxtout(self.handle, eh)
         raise StopIteration
 
-    itersucc=successors_iter
+    itersucc = successors_iter
 
     def successors(self, n):
         """Return list of successor nodes of n."""
@@ -804,10 +814,10 @@ class AGraph(object):
         return list(self.predecessors_iter(n))
 
     # digraph definitions
-    out_neighbors=successors
-    in_neighbors=predecessors
+    out_neighbors = successors
+    in_neighbors = predecessors
 
-    def degree_iter(self,nbunch=None,indeg=True,outdeg=True):
+    def degree_iter(self, nbunch=None, indeg=True, outdeg=True):
         """Return an iterator over the degree of the nodes given in
         nbunch container.
 
@@ -815,38 +825,39 @@ class AGraph(object):
         """
         # prepare nbunch
         if nbunch is None:   # include all nodes via iterator
-            bunch=[n for n in self.nodes_iter()]
+            bunch = [n for n in self.nodes_iter()]
         elif nbunch in self: # if nbunch is a single node
-            bunch=[Node(self,nbunch)]
+            bunch = [Node(self, nbunch)]
         else:                # if nbunch is a sequence of nodes
-            try: bunch=[Node(self,n) for n in nbunch if n in self]
+            try:
+                bunch = [Node(self, n) for n in nbunch if n in self]
             except TypeError:
                 raise TypeError("nbunch is not a node or a sequence of nodes.")
         for n in bunch:
-            yield (Node(self,n),gv.agdegree(self.handle,
-                                            n.handle,indeg,outdeg))
+            yield (Node(self, n), gv.agdegree(self.handle,
+                                              n.handle, indeg, outdeg))
 
-    def in_degree_iter(self,nbunch=None):
+    def in_degree_iter(self, nbunch=None):
         """Return an iterator over the in-degree of the nodes given in
         nbunch container.
 
         Returns paris of (node,degree).
         """
-        return self.degree_iter(nbunch,indeg=True,outdeg=False)
+        return self.degree_iter(nbunch, indeg=True, outdeg=False)
 
-    def out_degree_iter(self,nbunch=None):
+    def out_degree_iter(self, nbunch=None):
         """Return an iterator over the out-degree of the nodes given in
         nbunch container.
 
         Returns paris of (node,degree).
 
         """
-        return self.degree_iter(nbunch,indeg=False,outdeg=True)
+        return self.degree_iter(nbunch, indeg=False, outdeg=True)
 
-    iteroutdegree=out_degree_iter
-    iterindegree=in_degree_iter
+    iteroutdegree = out_degree_iter
+    iterindegree = in_degree_iter
 
-    def out_degree(self,nbunch=None, with_labels=False):
+    def out_degree(self, nbunch=None, with_labels=False):
         """Return the out-degree of nodes given in nbunch container.
 
         Using optional with_labels=True returns a dictionary
@@ -855,14 +866,14 @@ class AGraph(object):
         if with_labels:
             return dict(self.out_degree_iter(nbunch))
         else:
-            dlist=list(d for n,d in self.out_degree_iter(nbunch))
+            dlist = list(d for n, d in self.out_degree_iter(nbunch))
             if nbunch in self:
                 return dlist[0]
             else:
                 return dlist
 
 
-    def in_degree(self,nbunch=None, with_labels=False):
+    def in_degree(self, nbunch=None, with_labels=False):
         """Return the in-degree of nodes given in nbunch container.
 
         Using optional with_labels=True returns a dictionary
@@ -870,9 +881,9 @@ class AGraph(object):
         """
 
         if with_labels:
-            return dict(self.in_degree_iter(nbunch,with_labels))
+            return dict(self.in_degree_iter(nbunch, with_labels))
         else:
-            dlist=list(d for n,d in self.in_degree_iter(nbunch))
+            dlist = list(d for n, d in self.in_degree_iter(nbunch))
             if nbunch in self:
                 return dlist[0]
             else:
@@ -883,25 +894,25 @@ class AGraph(object):
         """Return copy of directed graph with edge directions reversed."""
         if self.directed:
             # new empty DiGraph
-            H=self.__class__(strict=self.strict,directed=True,name=self.name)
+            H = self.__class__(strict=self.strict, directed=True, name=self.name)
             H.graph_attr.update(self.graph_attr)
             H.node_attr.update(self.node_attr)
             H.edge_attr.update(self.edge_attr)
             for n in self.nodes():
                 H.add_node(n)
-                new_n=Node(H,n)
+                new_n = Node(H, n)
                 new_n.attr.update(n.attr)
             for e in self.edges():
-                (u,v)=e
-                H.add_edge(v,u)
-                uv=H.get_edge(v,u)
+                (u, v) = e
+                H.add_edge(v, u)
+                uv = H.get_edge(v, u)
                 uv.attr.update(e.attr)
             return H
         else:
             return self
 
 
-    def degree(self,nbunch=None,with_labels=False):
+    def degree(self, nbunch=None, with_labels=False):
         """Return the degree of nodes given in nbunch container.
 
         Using optional with_labels=True returns a dictionary
@@ -911,13 +922,13 @@ class AGraph(object):
         if with_labels:
             return dict(self.degree_iter(nbunch))
         else:
-            dlist=list(d for n,d in self.degree_iter(nbunch))
+            dlist = list(d for n, d in self.degree_iter(nbunch))
             if nbunch in self:
                 return dlist[0]
             else:
                 return dlist
 
-    iterdegree=degree_iter
+    iterdegree = degree_iter
 
     def number_of_edges(self):
         """Return the number of edges in the graph."""
@@ -934,11 +945,11 @@ class AGraph(object):
         self.node_attr.clear()
         self.graph_attr.clear()
         # now "close" existing graph and create a new graph
-        name=gv.agnameof(self.handle)
-        strict=self.strict
-        directed=self.directed
+        name = gv.agnameof(self.handle)
+        strict = self.strict
+        directed = self.directed
         gv.agclose(self.handle)
-        self.handle=gv.agraphnew(name,strict,directed)
+        self.handle = gv.agraphnew(name, strict, directed)
 
     def close(self):
         # may be useful to clean up graphviz data
@@ -948,67 +959,67 @@ class AGraph(object):
     def copy(self):
         """Return a copy of the graph."""
         from tempfile import TemporaryFile
+
         fh = TemporaryFile()
         # Cover TemporaryFile wart: on 'nt' we need the file member
-        if hasattr( fh, 'file' ):
+        if hasattr(fh, 'file'):
             fhandle = fh.file
         else:
             fhandle = fh
 
-        self.write( fhandle )
-        fh.seek( 0 )
+        self.write(fhandle)
+        fh.seek(0)
 
-        return self.__class__( filename=fhandle )
+        return self.__class__(filename=fhandle)
 
 
     def add_path(self, nlist):
         """Add the path of nodes given in nlist."""
         fromv = nlist.pop(0)
         while len(nlist) > 0:
-            tov=nlist.pop(0)
-            self.add_edge(fromv,tov)
-            fromv=tov
+            tov = nlist.pop(0)
+            self.add_edge(fromv, tov)
+            fromv = tov
 
     def add_cycle(self, nlist):
         """Add the cycle of nodes given in nlist."""
-        self.add_path(nlist+[nlist[0]])
+        self.add_path(nlist + [nlist[0]])
 
-    def prepare_nbunch(self,nbunch=None):
+    def prepare_nbunch(self, nbunch=None):
         # private function to build bunch from nbunch
         if nbunch is None:   # include all nodes via iterator
-            bunch=self.nodes_iter()
+            bunch = self.nodes_iter()
         elif nbunch in self: # if nbunch is a single node
-            bunch=[Node(self,nbunch)]
+            bunch = [Node(self, nbunch)]
         else:                # if nbunch is a sequence of nodes
             try:   # capture error for nonsequence/iterator entries.
-                bunch=[Node(self,n) for n in nbunch if n in self]
+                bunch = [Node(self, n) for n in nbunch if n in self]
                 # bunch=(n for n in nbunch if n in self) # need python 2.4
             except TypeError:
-               raise TypeError("nbunch is not a node or a sequence of nodes.")
+                raise TypeError("nbunch is not a node or a sequence of nodes.")
         return bunch
-
 
     def add_subgraph(self, nbunch=None, name=None, **attr):
         """Return subgraph induced by nodes in nbunch.
         """
         if name is not None:
-            name=name.encode(self.encoding)
+            name = name.encode(self.encoding)
         try:
-            handle=gv.agsubg(self.handle,name, _Action.create)
+            handle = gv.agsubg(self.handle, name, _Action.create)
         except TypeError:
-            raise TypeError("Subgraph name must be a string: %s"%name.decode(self.encoding))
+            raise TypeError("Subgraph name must be a string: %s" % name.decode(self.encoding))
 
-        H=self.__class__(strict=self.strict,
-                         directed=self.directed,
-                         handle=handle,name=name,
-                         **attr)
+        H = self.__class__(strict=self.strict,
+                           directed=self.directed,
+                           handle=handle, name=name,
+                           **attr)
         if nbunch is None: return H
         # add induced subgraph on nodes in nbunch
-        bunch=self.prepare_nbunch(nbunch)
+        bunch = self.prepare_nbunch(nbunch)
         H.add_nodes_from(bunch)
-        for (u,v) in self.edges():
+        for (u, v) in self.edges():
             if u in H and v in H:
-                H.add_edge(u,v)
+                H.add_edge(u, v)
 
         return H
 
@@ -1016,66 +1027,66 @@ class AGraph(object):
     def remove_subgraph(self, name):
         """Remove subgraph with given name."""
         try:
-            handle=gv.agsubg(self.handle,name.encode(self.encoding),
-                             _Action.find)
+            handle = gv.agsubg(self.handle, name.encode(self.encoding),
+                               _Action.find)
         except TypeError:
-            raise TypeError("Subgraph name must be a string: %s"%name)
+            raise TypeError("Subgraph name must be a string: %s" % name)
         if handle is None:
-            raise KeyError("Subgraph %s not in graph."%name)
-        gv.agdelsubg(self.handle,handle)
+            raise KeyError("Subgraph %s not in graph." % name)
+        gv.agdelsubg(self.handle, handle)
 
-    delete_subgraph=remove_subgraph
+    delete_subgraph = remove_subgraph
 
-    subgraph=add_subgraph
+    subgraph = add_subgraph
 
     def subgraph_parent(self, nbunch=None, name=None):
         """Return parent graph of subgraph or None if graph is root graph.
         """
-        handle=gv.agparent(self.handle)
+        handle = gv.agparent(self.handle)
         if handle is None:
             return None
-        H=self.__class__(strict=self.strict,
-                         directed=self.directed,
-                         handle=handle,
-                         name=name)
+        H = self.__class__(strict=self.strict,
+                           directed=self.directed,
+                           handle=handle,
+                           name=name)
         return H
 
     def subgraph_root(self, nbunch=None, name=None):
         """Return root graph of subgraph or None if graph is root graph.
         """
-        handle=gv.agroot(self.handle)
+        handle = gv.agroot(self.handle)
         if handle is None:
             return None
-        H=self.__class__(strict=self.strict,
-                         directed=self.directed,
-                         handle=handle,name=name)
+        H = self.__class__(strict=self.strict,
+                           directed=self.directed,
+                           handle=handle, name=name)
         return H
 
-    def get_subgraph(self,name):
+    def get_subgraph(self, name):
         """Return existing subgraph with specified name or None if it
         doesn't exist.
         """
         try:
-            handle=gv.agsubg(self.handle,name.encode(self.encoding)
-                             ,_Action.find)
+            handle = gv.agsubg(self.handle, name.encode(self.encoding)
+                , _Action.find)
         except TypeError:
-            raise TypeError("Subgraph name must be a string: %s"%name)
+            raise TypeError("Subgraph name must be a string: %s" % name)
 
         if handle is None:
             return None
-        H=self.__class__(strict=self.strict,
-                         directed=self.directed,
-                         handle=handle)
+        H = self.__class__(strict=self.strict,
+                           directed=self.directed,
+                           handle=handle)
         return H
 
     def subgraphs_iter(self):
         """Iterator over subgraphs."""
-        handle=gv.agfstsubg(self.handle)
+        handle = gv.agfstsubg(self.handle)
         while handle is not None:
             yield self.__class__(strict=self.strict,
                                  directed=self.directed,
                                  handle=handle)
-            handle=gv.agnxtsubg(handle)
+            handle = gv.agnxtsubg(handle)
         raise StopIteration
 
     def subgraphs(self):
@@ -1090,25 +1101,25 @@ class AGraph(object):
 
         Strict graphs do not allow parallel edges or self loops.
         """
-        if gv.agisstrict(self.handle)==1:
+        if gv.agisstrict(self.handle) == 1:
             return True
         else:
             return False
 
-    strict=property(is_strict)
+    strict = property(is_strict)
 
     def is_directed(self):
         """Return True if graph is directed or False if not."""
-        if gv.agisdirected(self.handle)==1:
+        if gv.agisdirected(self.handle) == 1:
             return True
         else:
             return False
 
-    directed=property(is_directed)
+    directed = property(is_directed)
 
     def is_undirected(self):
         """Return True if graph is undirected or False if not."""
-        if gv.agisundirected(self.handle)==1:
+        if gv.agisundirected(self.handle) == 1:
             return True
         else:
             return False
@@ -1118,43 +1129,43 @@ class AGraph(object):
         if not self.directed:
             return self.copy()
         else:
-            U=AGraph(strict=self.strict)
+            U = AGraph(strict=self.strict)
             U.graph_attr.update(self.graph_attr)
             U.node_attr.update(self.node_attr)
             U.edge_attr.update(self.edge_attr)
             for n in self.nodes():
                 U.add_node(n)
-                new_n=Node(U,n)
+                new_n = Node(U, n)
                 new_n.attr.update(n.attr)
             for e in self.edges():
-                (u,v)=e
-                U.add_edge(u,v)
-                uv=U.get_edge(u,v)
+                (u, v) = e
+                U.add_edge(u, v)
+                uv = U.get_edge(u, v)
                 uv.attr.update(e.attr)
             return U
 
 
-    def to_directed(self,**kwds):
+    def to_directed(self, **kwds):
         """Return directed copy of graph.
 
         Each undirected edge u-v is represented as two directed
         edges u->v and v->u.
         """
         if not self.directed:
-            D=AGraph(strict=self.strict,directed=True)
+            D = AGraph(strict=self.strict, directed=True)
             D.graph_attr.update(self.graph_attr)
             D.node_attr.update(self.node_attr)
             D.edge_attr.update(self.edge_attr)
             for n in self.nodes():
                 D.add_node(n)
-                new_n=Node(D,n)
+                new_n = Node(D, n)
                 new_n.attr.update(n.attr)
             for e in self.edges():
-                (u,v)=e
-                D.add_edge(u,v)
-                D.add_edge(v,u)
-                uv=D.get_edge(u,v)
-                vu=D.get_edge(v,u)
+                (u, v) = e
+                D.add_edge(u, v)
+                D.add_edge(v, u)
+                uv = D.get_edge(u, v)
+                vu = D.get_edge(v, u)
                 uv.attr.update(e.attr)
                 uv.attr.update(e.attr)
                 vu.attr.update(e.attr)
@@ -1173,13 +1184,13 @@ class AGraph(object):
            G.read('file.dot')
 
         """
-        fh=self._get_fh(path)
+        fh = self._get_fh(path)
         try:
             if self.handle is not None:
                 gv.agclose(self.handle)
-            self.handle = gv.agread(fh,None)
+            self.handle = gv.agread(fh, None)
         except IOError:
-            print "IO error reading file"
+            print("IO error reading file")
 
     def write(self, path=None):
         """Write graph in dot format to file on path.
@@ -1191,40 +1202,41 @@ class AGraph(object):
            G.write('file.dot')
         """
         if path is None:
-            path=sys.stdout
-        fh=self._get_fh(path,'w')
+            path = sys.stdout
+        fh = self._get_fh(path, 'w')
         try:
-            gv.agwrite(self.handle,fh)
+            gv.agwrite(self.handle, fh)
         except IOError:
-            print "IO error writing file"
+            print("IO error writing file")
 
 
     def string_nop(self):
         """Return a string (unicode) representation of graph in dot format."""
         # this will fail for graphviz-2.8 because of a broken nop
         # so use tempfile version below
-        return self.draw(format='dot',prog='nop').decode(self.encoding)
+        return self.draw(format='dot', prog='nop').decode(self.encoding)
 
     def to_string(self):
         """Return a string (unicode) representation of graph in dot format."""
         from tempfile import TemporaryFile
+
         fh = TemporaryFile()
         # Cover TemporaryFile wart: on 'nt' we need the file member
-        if hasattr( fh, 'file' ):
-            self.write( fh.file )
+        if hasattr(fh, 'file'):
+            self.write(fh.file)
         else:
-            self.write( fh )
-        fh.seek( 0 )
+            self.write(fh)
+        fh.seek(0)
         data = fh.read()
         fh.close()
         return data.decode(self.encoding)
 
     def string(self):
         """Return a string (unicode) represetnation of graph in dot format."""
-#        return self.to_string()
+        #        return self.to_string()
         return self.string_nop()
 
-    def from_string(self,string):
+    def from_string(self, string):
         """Load a graph from a string in dot format.
 
         Overwrites any existing graph.
@@ -1243,6 +1255,7 @@ class AGraph(object):
         except UnicodeEncodeError:
             pass
         from tempfile import TemporaryFile
+
         fh = TemporaryFile()
         fh.write(string.encode(self.encoding))
         fh.seek(0)
@@ -1254,35 +1267,33 @@ class AGraph(object):
         fh.close()
         return self
 
-    def _get_prog(self,prog):
+    def _get_prog(self, prog):
         # private: get path of graphviz program
-        try:
-            gvprogs=dict.fromkeys(\
-                ['neato','dot','twopi','circo','fdp','nop',
-                 'wc','acyclic','gvpr','gvcolor','ccomps','sccmap','tred',
-                 'sfdp'])
-            p=gvprogs[prog]
-        except KeyError:
-            raise ValueError("Program %s is not one of: %s."%\
-                           (prog,', '.join(gvprogs.keys())))
+        progs = ['neato', 'dot', 'twopi', 'circo', 'fdp', 'nop',
+                 'wc', 'acyclic', 'gvpr', 'gvcolor', 'ccomps', 'sccmap', 'tred',
+                 'sfdp']
+        if prog not in progs:
+            raise ValueError("Program %s is not one of: %s." %
+                            (prog, ', '.join(progs)))
 
-        try: # user must pick one of the graphviz programs...
+        try:  # user must pick one of the graphviz programs...
             runprog = self._which(prog)
         except:
-            raise ValueError("Program %s not found in path."%prog)
+            raise ValueError("Program %s not found in path." % prog)
+
         return runprog
 
-    def _run_prog(self,prog='nop',args=''):
+    def _run_prog(self, prog='nop', args=''):
         """Apply graphviz program to graph and return the result as a string.
 
-        >>> A=AGraph()
-        >>> s=A._run_prog() # doctest: +SKIP
-        >>> s=A._run_prog(prog='acyclic') # doctest: +SKIP
+        >>> A = AGraph()
+        >>> s = A._run_prog() # doctest: +SKIP
+        >>> s = A._run_prog(prog='acyclic') # doctest: +SKIP
 
         Use keyword args to add additional arguments to graphviz programs.
         """
-        runprog=r'"%s"'%self._get_prog(prog)
-        cmd=' '.join([runprog,args])
+        runprog = r'"%s"' % self._get_prog(prog)
+        cmd = ' '.join([runprog, args])
         dotargs = shlex.split(cmd)
         p = subprocess.Popen(dotargs,
                              shell=False,
@@ -1307,16 +1318,15 @@ class AGraph(object):
         for t in threads:
             t.join()
 
-        if data==[]:
+        if not data:
             raise IOError("".join(errors))
 
-        if len(errors)>0:
-            warnings.warn("".join(errors),RuntimeWarning)
+        if len(errors) > 0:
+            warnings.warn("".join(errors), RuntimeWarning)
 
         return "".join(data)
 
-
-    def layout(self,prog='neato',args=''):
+    def layout(self, prog='neato', args=''):
         """Assign positions to nodes in graph.
 
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
@@ -1331,17 +1341,13 @@ class AGraph(object):
         The layout might take a long time on large graphs.
 
         """
-        import os
-        from tempfile import TemporaryFile
-
-        fmt='dot'
-        data=self._run_prog(prog,' '.join([args,"-T",fmt]))
+        fmt = 'dot'
+        data = self._run_prog(prog, ' '.join([args, "-T", fmt]))
         self.from_string(data)
-        self.has_layout=True
+        self.has_layout = True
         return
 
-
-    def tred(self,args='',copy=False):
+    def tred(self, args='', copy=False):
         """Transitive reduction of graph.  Modifies existing graph.
 
         To create a new graph use
@@ -1351,14 +1357,14 @@ class AGraph(object):
 
         See the graphviz "tred" program for details of the algorithm.
         """
-        data=self._run_prog('tred',args)
+        data = self._run_prog('tred', args)
         if copy:
             return self.__class__(string=data)
         else:
             return self.from_string(data)
 
 
-    def acyclic(self,args='',copy=False):
+    def acyclic(self, args='', copy=False):
         """Reverse sufficient edges in digraph to make graph acyclic.
         Modifies existing graph.
 
@@ -1369,14 +1375,13 @@ class AGraph(object):
 
         See the graphviz "acyclic" program for details of the algorithm.
         """
-        data=self._run_prog('acyclic',args)
+        data = self._run_prog('acyclic', args)
         if copy:
             return self.__class__(string=data)
         else:
             return self.from_string(data)
 
-
-    def draw(self,path=None,format=None,prog=None,args=''):
+    def draw(self, path=None, format=None, prog=None, args=''):
         """Output graph to path in specified format.
 
         An attempt will be made to guess the output format based on the file
@@ -1405,7 +1410,7 @@ class AGraph(object):
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
         will use specified graphviz layout method.
 
-        >>> G=AGraph()
+        >>> G = AGraph()
         >>> G.layout()
 
         # use current node positions, output ps in 'file.ps'
@@ -1424,55 +1429,55 @@ class AGraph(object):
 
         # try to guess format from extension
         if format is None and path is not None:
-            fh=self._get_fh(path,'w+b')
-            format=os.path.splitext(fh.name)[-1].lower()[1:]
+            p = path
+            # in case we got a file handle get its name instead
+            if not self._is_string_like(p):
+                p = path.name
+            format = os.path.splitext(p)[-1].lower()[1:]
 
-        if format is None or format=='':
+        if format is None or format == '':
             format = 'dot'
 
         if prog is None:
-            try:
-                self.has_layout==True
-                prog='neato'
-                args+="-n2"
-            except:
-                raise AttributeError(\
-                    """Graph has no layout information, see layout()
-                or specify prog=%s."""%\
-                ("|".join(['neato','dot','twopi','circo','fdp','nop'])))
+            if self.has_layout:
+                prog = 'neato'
+                args += "-n2"
+            else:
+                raise AttributeError(
+                    """Graph has no layout information, see layout() or specify prog=%s.""" %
+                    ("|".join(['neato', 'dot', 'twopi', 'circo', 'fdp', 'nop'])))
 
         else:
-            if self.number_of_nodes()>1000:
-                sys.stderr.write(\
-              "Warning: graph has %s nodes...layout may take a long time.\n"%\
-              self.number_of_nodes())
+            if self.number_of_nodes() > 1000:
+                sys.stderr.write(
+                    "Warning: graph has %s nodes...layout may take a long time.\n" %
+                    self.number_of_nodes())
 
-        if prog=='nop': # nop takes no switches
-            args=''
+        if prog == 'nop':  # nop takes no switches
+            args = ''
         else:
-            args=' '.join([args,"-T"+format])
+            args = ' '.join([args, "-T" + format])
 
-        data=self._run_prog(prog,args)
+        data = self._run_prog(prog, args)
 
         if path is not None:
-            fh=self._get_fh(path,'w+b')
+            fh = self._get_fh(path, 'w+b')
             fh.write("".join(data))
             if self._is_string_like(path):
                 fh.close()
-            d=None
+            d = None
         else:
-            d="".join( data )
+            d = "".join(data)
         return d
 
     # some private helper functions
 
-    def _is_string_like(self,obj): # from John Hunter, types-free version
+    def _is_string_like(self, obj):  # from John Hunter, types-free version
         try:
             obj + ''
         except (TypeError, ValueError):
             return False
         return True
-
 
     def _get_fh(self, path, mode='r'):
         """ Return a file handle for given path.
@@ -1481,17 +1486,18 @@ class AGraph(object):
         Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
         """
         import os
+
         if self._is_string_like(path):
             if path.endswith('.gz'):
-#                import gzip
-#                fh = gzip.open(path,mode=mode)  # doesn't return real fh
-                 fh=os.popen("gzcat "+path) # probably not portable
+                #import gzip
+                #fh = gzip.open(path,mode=mode)  # doesn't return real fh
+                fh = os.popen("gzcat " + path)  # probably not portable
             elif path.endswith('.bz2'):
-#                import bz2
-#                fh = bz2.BZ2File(path,mode=mode) # doesn't return real fh
-                 fh=os.popen("bzcat "+path) # probably not portable
+                #import bz2
+                #fh = bz2.BZ2File(path,mode=mode) # doesn't return real fh
+                fh = os.popen("bzcat " + path)  # probably not portable
             else:
-                fh = file(path,mode=mode)
+                fh = open(path, mode=mode)
         elif hasattr(path, 'write'):
             # Note, mode of file handle is unchanged.
             fh = path
@@ -1499,22 +1505,21 @@ class AGraph(object):
             raise TypeError('path must be a string or file handle.')
         return fh
 
-
-    def _which(self,name):
+    def _which(self, name):
         """Searches for name in exec path and returns full path"""
         import os
         import glob
+
         paths = os.environ["PATH"]
         if os.name == "nt":
             exe = ".exe"
         else:
             exe = ""
         for path in paths.split(os.pathsep):
-            match=glob.glob(os.path.join(path, name+exe))
+            match = glob.glob(os.path.join(path, name + exe))
             if match:
                 return match[0]
-        raise ValueError("No prog %s in path."%name)
-
+        raise ValueError("No prog %s in path." % name)
 
 
 class Node(unicode):
@@ -1545,35 +1550,36 @@ class Node(unicode):
     >>> node.attr['color']='red'
 
     """
-    def __new__(self,graph,name=None,nh=None):
-        if nh is not None:
-            n=unicode.__new__(self,gv.agnameof(nh),graph.encoding)
-        else:
-            n=unicode.__new__(self,name)
-            try:
-                nh=gv.agnode(graph.handle,n.encode(graph.encoding),_Action.find)
-            except KeyError:
-                raise KeyError("Node %s not in graph."%n)
 
-        n.ghandle=graph.handle
-        n.attr=ItemAttribute(nh,1)
-        n.handle=nh
-        n.encoding=graph.encoding
+    def __new__(self, graph, name=None, nh=None):
+        if nh is not None:
+            n = unicode.__new__(self, gv.agnameof(nh), graph.encoding)
+        else:
+            n = unicode.__new__(self, name)
+            try:
+                nh = gv.agnode(graph.handle, n.encode(graph.encoding), _Action.find)
+            except KeyError:
+                raise KeyError("Node %s not in graph." % n)
+
+        n.ghandle = graph.handle
+        n.attr = ItemAttribute(nh, 1)
+        n.handle = nh
+        n.encoding = graph.encoding
         return n
 
     def get_handle(self):
         """Return pointer to graphviz node object."""
-        return gv.agnode(self.ghandle,self.encode(self.encoding),_Action.find)
+        return gv.agnode(self.ghandle, self.encode(self.encoding), _Action.find)
 
-#    handle=property(get_handle)
+    #    handle=property(get_handle)
 
     def get_name(self):
-        name=gv.agnameof(self.handle)
+        name = gv.agnameof(self.handle)
         if name is not None:
-            name=name.decode(self.encoding)
+            name = name.decode(self.encoding)
         return name
 
-    name=property(get_name)
+    name = property(get_name)
 
 
 class Edge(tuple):
@@ -1610,44 +1616,45 @@ class Edge(tuple):
     >>> edge.attr['color']='red'
 
     """
-    def __new__(self,graph,source=None,target=None,key=None,eh=None):
+
+    def __new__(self, graph, source=None, target=None, key=None, eh=None):
         # edge handle given, reconstruct node object
         if eh is not None:
-            (source,target)=(gv.agtail(eh),gv.aghead(eh))
-            s=Node(graph,nh=source)
-            t=Node(graph,nh=target)
+            (source, target) = (gv.agtail(eh), gv.aghead(eh))
+            s = Node(graph, nh=source)
+            t = Node(graph, nh=target)
         # no edge handle, search for edge and construct object
         else:
-            s=Node(graph,source)
-            t=Node(graph,target)
+            s = Node(graph, source)
+            t = Node(graph, target)
             if key is not None:
                 if not is_string_like(key):
-                    key=str(key)
-                key=key.encode(graph.encoding)
+                    key = str(key)
+                key = key.encode(graph.encoding)
             try:
-                eh=gv.agedge(graph.handle,
-                             s.handle,
-                             t.handle,
-                             key,
-                             _Action.find)
+                eh = gv.agedge(graph.handle,
+                               s.handle,
+                               t.handle,
+                               key,
+                               _Action.find)
             except KeyError:
-                raise KeyError("Edge %s-%s not in graph."%(source,target))
+                raise KeyError("Edge %s-%s not in graph." % (source, target))
 
-        tp=tuple.__new__(self,(s,t))
-        tp.ghandle=graph.handle
-        tp.handle=eh
-        tp.attr=ItemAttribute(eh,3)
-        tp.encoding=graph.encoding
+        tp = tuple.__new__(self, (s, t))
+        tp.ghandle = graph.handle
+        tp.handle = eh
+        tp.attr = ItemAttribute(eh, 3)
+        tp.encoding = graph.encoding
         return tp
 
     def get_name(self):
-        name=gv.agnameof(self.handle)
+        name = gv.agnameof(self.handle)
         if name is not None:
-            name=name.decode(self.encoding)
+            name = name.decode(self.encoding)
         return name
 
-    name=property(get_name)
-    key=property(get_name)
+    name = property(get_name)
+    key = property(get_name)
 
 
 class Attribute(UserDict.DictMixin):
@@ -1668,45 +1675,45 @@ class Attribute(UserDict.DictMixin):
     """
     # use for graph, node, and edge default attributes
     # atype:graph=0, node=1,edge=3
-    def __init__(self,handle,atype):
-        self.handle=handle
-        self.type=atype
+    def __init__(self, handle, atype):
+        self.handle = handle
+        self.type = atype
         # get the encoding
-        ghandle=gv.agraphof(handle)
-        root_handle=gv.agroot(ghandle) # get root graph
+        ghandle = gv.agraphof(handle)
+        root_handle = gv.agroot(ghandle) # get root graph
         try:
-            ah=gv.agattr(root_handle,0,'charset',None)
-            self.encoding=gv.agattrdefval(ah)
+            ah = gv.agattr(root_handle, 0, 'charset', None)
+            self.encoding = gv.agattrdefval(ah)
         except KeyError:
-            self.encoding=_DEFAULT_ENCODING
+            self.encoding = _DEFAULT_ENCODING
 
     def __setitem__(self, name, value):
         if name == 'charset' and self.type == 0:
             raise ValueError('Graph charset is immutable!')
         if not is_string_like(value):
-            value=str(value)
-        ghandle=gv.agroot(self.handle) # get root graph
-        if ghandle==self.handle:
-            gv.agattr_label(self.handle,self.type,
+            value = str(value)
+        ghandle = gv.agroot(self.handle) # get root graph
+        if ghandle == self.handle:
+            gv.agattr_label(self.handle, self.type,
                             name.encode(self.encoding),
                             value.encode(self.encoding))
         else:
-            gv.agsafeset_label(ghandle,self.handle,
+            gv.agsafeset_label(ghandle, self.handle,
                                name.encode(self.encoding),
-                               value.encode(self.encoding),'')
+                               value.encode(self.encoding), '')
 
 
     def __getitem__(self, name):
-        item=gv.agget(self.handle,name.encode(self.encoding))
+        item = gv.agget(self.handle, name.encode(self.encoding))
         if item is None:
-            ah=gv.agattr(self.handle,self.type,
-                         name.encode(self.encoding),
-                         None)
-            item=gv.agattrdefval(ah)
+            ah = gv.agattr(self.handle, self.type,
+                           name.encode(self.encoding),
+                           None)
+            item = gv.agattrdefval(ah)
         return item.decode(self.encoding)
 
     def __delitem__(self, name):
-        gv.agattr(self.handle,self.type,name.encode(self.encoding),'')
+        gv.agattr(self.handle, self.type, name.encode(self.encoding), '')
 
     def __contains__(self, name):
         try:
@@ -1719,21 +1726,22 @@ class Attribute(UserDict.DictMixin):
         return self.__contains__(name)
 
     def keys(self):
-        return(list(self.__iter__()))
+        return list(self.__iter__())
 
     def __iter__(self):
-        for (k,v) in self.iteritems():
+        for (k, v) in self.iteritems():
             yield k
 
     def iteritems(self):
-        ah=None
+        ah = None
         while True:
             try:
-                ah=gv.agnxtattr(self.handle,self.type,ah)
+                ah = gv.agnxtattr(self.handle, self.type, ah)
                 yield (gv.agattrname(ah).decode(self.encoding),
                        gv.agattrdefval(ah).decode(self.encoding))
             except KeyError: # gv.agattrdefval returned KeyError, skip
                 continue
+
 
 class ItemAttribute(Attribute):
     """Attributes for individual nodes and edges.
@@ -1754,61 +1762,61 @@ class ItemAttribute(Attribute):
     """
     # use for individual item attributes - either a node or an edge
     # graphs and default node and edge attributes use Attribute
-    def __init__(self,handle,atype):
-        self.handle=handle
-        self.type=atype
-        self.ghandle=gv.agraphof(handle)
+    def __init__(self, handle, atype):
+        self.handle = handle
+        self.type = atype
+        self.ghandle = gv.agraphof(handle)
         # get the encoding
-        root_handle=gv.agroot(self.ghandle) # get root graph
+        root_handle = gv.agroot(self.ghandle) # get root graph
         try:
-            ah=gv.agattr(root_handle,0,'charset',None)
-            self.encoding=gv.agattrdefval(ah)
+            ah = gv.agattr(root_handle, 0, 'charset', None)
+            self.encoding = gv.agattrdefval(ah)
         except KeyError:
-            self.encoding=_DEFAULT_ENCODING
+            self.encoding = _DEFAULT_ENCODING
 
     def __setitem__(self, name, value):
         if not is_string_like(value):
-            value=str(value)
-        if self.type==1 and name=='label':
-            default='\N'
+            value = str(value)
+        if self.type == 1 and name == 'label':
+            default = '\N'
         else:
-            default=''
-        gv.agsafeset_label(self.ghandle,self.handle,
+            default = ''
+        gv.agsafeset_label(self.ghandle, self.handle,
                            name.encode(self.encoding),
                            value.encode(self.encoding),
                            default.encode(self.encoding))
 
     def __getitem__(self, name):
-        val = gv.agget(self.handle,name.encode(self.encoding))
+        val = gv.agget(self.handle, name.encode(self.encoding))
         if val is not None:
             val = val.decode(self.encoding)
         return val
 
     def __delitem__(self, name):
-        gv.agset(self.handle,name.encode(self.encoding),'')
+        gv.agset(self.handle, name.encode(self.encoding), '')
 
     def iteritems(self):
-        ah=None
+        ah = None
         while 1:
             try:
-                ah=gv.agnxtattr(self.ghandle,self.type,ah)
-                value=gv.agxget(self.handle,ah)
+                ah = gv.agnxtattr(self.ghandle, self.type, ah)
+                value = gv.agxget(self.handle, ah)
                 try:
-                    defval=gv.agattrdefval(ah) # default value
-                    if defval==value:
+                    defval = gv.agattrdefval(ah) # default value
+                    if defval == value:
                         continue # don't report default
                 except: # no default, gv.getattrdefval raised error
                     pass
-                # unique value for this edge
+                    # unique value for this edge
                 yield (gv.agattrname(ah).decode(self.encoding),
                        value.decode(self.encoding))
             except KeyError: # gv.agxget returned KeyError, skip
                 continue
 
 
-
 def _test_suite():
     import doctest
+
     suite = doctest.DocFileSuite('tests/graph.txt',
                                  'tests/attributes.txt',
                                  'tests/layout_draw.txt',
@@ -1822,10 +1830,11 @@ if __name__ == "__main__":
     import os
     import sys
     import unittest
+
     if sys.version_info[:2] < (2, 4):
-        print "Python version 2.4 or later required for tests (%d.%d detected)." %  sys.version_info[:2]
+        print("Python version 2.4 or later required for tests (%d.%d detected)." % sys.version_info[:2])
         sys.exit(-1)
-    # directory of package (relative to this)
-    nxbase=sys.path[0]+os.sep+os.pardir
-    sys.path.insert(0,nxbase) # prepend to search path
+        # directory of package (relative to this)
+    nxbase = sys.path[0] + os.sep + os.pardir
+    sys.path.insert(0, nxbase) # prepend to search path
     unittest.TextTestRunner().run(_test_suite())
