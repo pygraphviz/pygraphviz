@@ -15,3 +15,14 @@ doc/source/examples/*
 
 # Generated when 'python setup_egg.py'
 pygraphviz.egg-info/
+
+dist/
+*.pyd
+.noseids
+*.dll
+pygraphviz/version.py
+_b/
+
+.idea/
+file
+*.ps

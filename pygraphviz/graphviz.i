@@ -8,7 +8,7 @@
 %module graphviz
 
 %{
-#include "cgraph.h"
+#include "graphviz/cgraph.h"
 %}
 
 
@@ -222,7 +222,7 @@ Agraph_t *agfstsubg(Agraph_t *g);
 Agraph_t *agnxtsubg(Agraph_t *subg);
 Agraph_t *agparent(Agraph_t *g);  
 Agraph_t *agroot(Agraph_t *g);
-Agedge_t *agsubedge(Agraph_t *g, Agedge_t *e, int createflag);
+/* Agedge_t *agsubedge(Agraph_t *g, Agedge_t *e, int createflag); */
 long      agdelsubg(Agraph_t *g, Agraph_t *sub);
 
 
