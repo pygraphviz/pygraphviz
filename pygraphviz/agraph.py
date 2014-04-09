@@ -1232,7 +1232,7 @@ class AGraph(object):
         return data.decode(self.encoding)
 
     def string(self):
-        """Return a string (unicode) represetnation of graph in dot format."""
+        """Return a string (unicode) representation of graph in dot format."""
         #        return self.to_string()
         return self.string_nop()
 
