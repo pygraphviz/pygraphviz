@@ -53,7 +53,7 @@ Source Archive File
 Github
 ------
 
-  1. Clone the pygraphviz repostitory
+  1. Clone the pygraphviz repository
 
        git clone https://github.com/pygraphviz/pygraphviz.git
 
