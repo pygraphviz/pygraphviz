@@ -11,13 +11,33 @@
 #include "graphviz/cgraph.h"
 %}
 
+%{
+#if PY_VERSION_HEX >= 0x03000000
+extern PyTypeObject PyIOBase_Type;
+#endif
+%}
 
 %typemap(in) FILE* {
+%#if PY_VERSION_HEX >= 0x03000000
+    if (!PyObject_IsInstance($input, (PyObject *)&PyIOBase_Type)) {
+        PyErr_SetString(PyExc_TypeError, "not a file handle");
+        return NULL;
+    }
+    // work around to get hold of FILE*
+    int fd = PyObject_AsFileDescriptor($input);
+    PyObject *mode_obj = PyObject_GetAttrString($input, "mode");
+    PyObject *mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+    char *mode = PyBytes_AsString(mode_byte_obj);
+    Py_DECREF(mode_obj);
+    Py_DECREF(mode_byte_obj);
+    $1 = fdopen(fd, mode);
+%#else
     if (!PyFile_Check($input)) {
         PyErr_SetString(PyExc_TypeError, "not a file handle");
         return NULL;
     }
     $1 = PyFile_AsFile($input);
+%#endif
 }
 
 
@@ -100,14 +120,14 @@ Agraph_t *agopen(char *name, Agdesc_t kind, Agdisc_t *disc);
 def agraphnew(name,strict=False,directed=False):
     if strict:
        if directed:
-            return _graphviz.agopen(name,cvar.Agstrictdirected,None)
+            return _graphviz.agopen(name,_graphviz.cvar.Agstrictdirected,None)
        else:
-            return _graphviz.agopen(name,cvar.Agstrictundirected,None)
+            return _graphviz.agopen(name,_graphviz.cvar.Agstrictundirected,None)
     else:
         if directed:
-            return _graphviz.agopen(name,cvar.Agdirected,None)
+            return _graphviz.agopen(name,_graphviz.cvar.Agdirected,None)
         else:		 
-            return _graphviz.agopen(name,cvar.Agundirected,None)
+            return _graphviz.agopen(name,_graphviz.cvar.Agundirected,None)
 %}
 
 int       agclose(Agraph_t *g);
@@ -247,7 +267,7 @@ def agnameof(handle):
   name=_graphviz.agnameof(handle)
   if name is None:
      return None
-  if name=='' or name.startswith('%'):
+  if name==b'' or name.startswith(b'%'):
     return None
   else:
     return name 

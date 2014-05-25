@@ -74,14 +74,14 @@ agopen = _graphviz.agopen
 def agraphnew(name,strict=False,directed=False):
     if strict:
        if directed:
-            return _graphviz.agopen(name,cvar.Agstrictdirected,None)
+            return _graphviz.agopen(name,_graphviz.cvar.Agstrictdirected,None)
        else:
-            return _graphviz.agopen(name,cvar.Agstrictundirected,None)
+            return _graphviz.agopen(name,_graphviz.cvar.Agstrictundirected,None)
     else:
         if directed:
-            return _graphviz.agopen(name,cvar.Agdirected,None)
+            return _graphviz.agopen(name,_graphviz.cvar.Agdirected,None)
         else:		 
-            return _graphviz.agopen(name,cvar.Agundirected,None)
+            return _graphviz.agopen(name,_graphviz.cvar.Agundirected,None)
 
 
 def agclose(*args):
@@ -283,7 +283,7 @@ def agnameof(handle):
   name=_graphviz.agnameof(handle)
   if name is None:
      return None
-  if name=='' or name.startswith('%'):
+  if name==b'' or name.startswith(b'%'):
     return None
   else:
     return name 
@@ -294,10 +294,3 @@ AGOUTEDGE = _graphviz.AGOUTEDGE
 AGINEDGE = _graphviz.AGINEDGE
 AGEDGE = _graphviz.AGEDGE
 # This file is compatible with both classic and new-style classes.
-
-cvar = _graphviz.cvar
-Agdirected = cvar.Agdirected
-Agstrictdirected = cvar.Agstrictdirected
-Agundirected = cvar.Agundirected
-Agstrictundirected = cvar.Agstrictundirected
-

@@ -25,7 +25,7 @@ class TestGraph:
     def test_data(self):
         d = {'a':'b','b':'c'}
         A = pgv.AGraph(data=d) # with data
-        assert_equal(A.nodes(), [u'a', u'b', u'c'])
+        assert_equal(sorted(A.nodes()), [u'a', u'b', u'c'])
         assert_equal(sorted(A.edges()), [(u'a', u'b'), (u'b', u'c')])
 
 

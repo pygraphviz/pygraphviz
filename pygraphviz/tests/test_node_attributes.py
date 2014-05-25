@@ -8,7 +8,7 @@ def test_node_attribute():
     A.add_node(1,label='test',spam='eggs')
     assert_equal(A.string().expandtabs(2),
 """strict graph {
-  node [label="\N"];
+  node [label="\\N"];
   1  [label=test,
     spam=eggs];
 }
@@ -25,7 +25,7 @@ def test_node_attributes2():
     assert_equal(sorted(one.attr.keys()), [u'label', u'spam'])
     assert_equal(A.string().expandtabs(2),
 """strict graph {
-  node [label="\N"];
+  node [label="\\N"];
   1  [label=test,
     spam=eggs];
 }
@@ -35,7 +35,7 @@ def test_node_attributes2():
     one.attr['spam'] = ''
     assert_equal(A.string().expandtabs(2),
 """strict graph {
-  node [label="\N"];
+  node [label="\\N"];
   1  [label=""];
 }
 """.replace('\n', linesep))
@@ -43,7 +43,7 @@ def test_node_attributes2():
     del one.attr['label']
     assert_equal(A.string().expandtabs(2),
 """strict graph {
-  node [label="\N"];
+  node [label="\\N"];
   1  [label=""];
 }
 """.replace('\n', linesep))

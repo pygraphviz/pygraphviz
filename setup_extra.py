@@ -18,10 +18,10 @@ def pkg_config():
     try:
         import subprocess as S
     except ImportError:
-        print """-- Missing subprocess package:
+        print("""-- Missing subprocess package:
         Install subprocess from
         http://effbot.org/downloads/#subprocess
-        or set the graphviz paths manually as described below."""
+        or set the graphviz paths manually as described below.""")
 
     library_path=None
     include_path=None
@@ -39,7 +39,7 @@ def pkg_config():
         if output:
             include_path=output.strip()[2:]
     except:
-        print "Failed to find pkg-config"
+        print("Failed to find pkg-config")
     return include_path,library_path
 
 def dotneato_config():
@@ -50,10 +50,10 @@ def dotneato_config():
     try:
         import subprocess as S
     except ImportError:
-        print """-- Missing subprocess package:
+        print("""-- Missing subprocess package:
         Install subprocess from
         http://effbot.org/downloads/#subprocess
-        or set the graphviz paths manually as described below."""
+        or set the graphviz paths manually as described below.""")
     library_path=None
     include_path=None
     try:
@@ -71,7 +71,7 @@ def dotneato_config():
                 library_path=library_path.strip()[2:]
                 include_path=include_path.strip()[2:]
     except:
-        print "Failed to find dotneato-config"
+        print("Failed to find dotneato-config")
     return include_path,library_path
 
 

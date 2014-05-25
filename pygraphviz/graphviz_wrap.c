@@ -2969,6 +2969,11 @@ static swig_module_info swig_module = {swig_types, 8, 0, 0, 0, 0};
 #include "graphviz/cgraph.h"
 
 
+#if PY_VERSION_HEX >= 0x03000000
+extern PyTypeObject PyIOBase_Type;
+#endif
+
+
 SWIGINTERN swig_type_info*
 SWIG_pchar_descriptor(void)
 {
@@ -2986,21 +2991,13 @@ SWIGINTERN int
 SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
 {
 #if PY_VERSION_HEX>=0x03000000
-  if (PyUnicode_Check(obj))
+  if (PyBytes_Check(obj))
 #else  
   if (PyString_Check(obj))
 #endif
   {
     char *cstr; Py_ssize_t len;
 #if PY_VERSION_HEX>=0x03000000
-    if (!alloc && cptr) {
-        /* We can't allow converting without allocation, since the internal
-           representation of string in Python 3 is UCS-2/UCS-4 but we require
-           a UTF-8 representation.
-           TODO(bhy) More detailed explanation */
-        return SWIG_RuntimeError;
-    }
-    obj = PyUnicode_AsUTF8String(obj);
     PyBytes_AsStringAndSize(obj, &cstr, &len);
     if(alloc) *alloc = SWIG_NEWOBJ;
 #else
@@ -3031,16 +3028,10 @@ SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
 	  *alloc = SWIG_OLDOBJ;
 	}
       } else {
-        #if PY_VERSION_HEX>=0x03000000
-        assert(0); /* Should never reach here in Python 3 */
-        #endif
 	*cptr = SWIG_Python_str_AsChar(obj);
       }
     }
     if (psize) *psize = len + 1;
-#if PY_VERSION_HEX>=0x03000000
-    Py_XDECREF(obj);
-#endif
     return SWIG_OK;
   } else {
     swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
@@ -3282,7 +3273,7 @@ SWIG_FromCharPtrAndSize(const char* carray, size_t size)
 	SWIG_InternalNewPointerObj((char *)(carray), pchar_descriptor, 0) : SWIG_Py_Void();
     } else {
 #if PY_VERSION_HEX >= 0x03000000
-      return PyUnicode_FromStringAndSize(carray, (int)(size));
+      return PyBytes_FromStringAndSize(carray, (int)(size));
 #else
       return PyString_FromStringAndSize(carray, (int)(size));
 #endif
@@ -3434,11 +3425,26 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
   
   if (!PyArg_ParseTuple(args,(char *)"OO:agread",&obj0,&obj1)) SWIG_fail;
   {
+#if PY_VERSION_HEX >= 0x03000000
+    if (!PyObject_IsInstance(obj0, (PyObject *)&PyIOBase_Type)) {
+      PyErr_SetString(PyExc_TypeError, "not a file handle");
+      return NULL;
+    }
+    // work around to get hold of FILE*
+    int fd = PyObject_AsFileDescriptor(obj0);
+    PyObject *mode_obj = PyObject_GetAttrString(obj0, "mode");
+    PyObject *mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+    char *mode = PyBytes_AsString(mode_byte_obj);
+    Py_DECREF(mode_obj);
+    Py_DECREF(mode_byte_obj);
+    arg1 = fdopen(fd, mode);
+#else
     if (!PyFile_Check(obj0)) {
       PyErr_SetString(PyExc_TypeError, "not a file handle");
       return NULL;
     }
     arg1 = PyFile_AsFile(obj0);
+#endif
   }
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Agdisc_t, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
@@ -3470,11 +3476,26 @@ SWIGINTERN PyObject *_wrap_agwrite(PyObject *SWIGUNUSEDPARM(self), PyObject *arg
   }
   arg1 = (Agraph_t *)(argp1);
   {
+#if PY_VERSION_HEX >= 0x03000000
+    if (!PyObject_IsInstance(obj1, (PyObject *)&PyIOBase_Type)) {
+      PyErr_SetString(PyExc_TypeError, "not a file handle");
+      return NULL;
+    }
+    // work around to get hold of FILE*
+    int fd = PyObject_AsFileDescriptor(obj1);
+    PyObject *mode_obj = PyObject_GetAttrString(obj1, "mode");
+    PyObject *mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+    char *mode = PyBytes_AsString(mode_byte_obj);
+    Py_DECREF(mode_obj);
+    Py_DECREF(mode_byte_obj);
+    arg2 = fdopen(fd, mode);
+#else
     if (!PyFile_Check(obj1)) {
       PyErr_SetString(PyExc_TypeError, "not a file handle");
       return NULL;
     }
     arg2 = PyFile_AsFile(obj1);
+#endif
   }
   result = (int)agwrite(arg1,arg2);
   resultobj = SWIG_From_int((int)(result));
