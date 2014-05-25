@@ -17,19 +17,19 @@ extern PyTypeObject PyIOBase_Type;
 #endif
 %}
 
-%typemap(in) FILE* {
+%typemap(in) FILE* (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
 %#if PY_VERSION_HEX >= 0x03000000
     if (!PyObject_IsInstance($input, (PyObject *)&PyIOBase_Type)) {
         PyErr_SetString(PyExc_TypeError, "not a file handle");
         return NULL;
     }
     // work around to get hold of FILE*
-    int fd = PyObject_AsFileDescriptor($input);
-    PyObject *mode_obj = PyObject_GetAttrString($input, "mode");
-    PyObject *mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
-    char *mode = PyBytes_AsString(mode_byte_obj);
-    Py_DECREF(mode_obj);
-    Py_DECREF(mode_byte_obj);
+    fd = PyObject_AsFileDescriptor($input);
+    mode_obj = PyObject_GetAttrString($input, "mode");
+    mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+    mode = PyBytes_AsString(mode_byte_obj);
+    Py_XDECREF(mode_obj);
+    Py_XDECREF(mode_byte_obj);
     $1 = fdopen(fd, mode);
 %#else
     if (!PyFile_Check($input)) {

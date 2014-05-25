@@ -3402,6 +3402,10 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
   PyObject *resultobj = 0;
   FILE *arg1 = (FILE *) 0 ;
   Agdisc_t *arg2 = (Agdisc_t *) 0 ;
+  int fd1 ;
+  PyObject *mode_obj1 ;
+  PyObject *mode_byte_obj1 ;
+  char *mode1 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
@@ -3416,13 +3420,13 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
       return NULL;
     }
     // work around to get hold of FILE*
-    int fd = PyObject_AsFileDescriptor(obj0);
-    PyObject *mode_obj = PyObject_GetAttrString(obj0, "mode");
-    PyObject *mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
-    char *mode = PyBytes_AsString(mode_byte_obj);
-    Py_DECREF(mode_obj);
-    Py_DECREF(mode_byte_obj);
-    arg1 = fdopen(fd, mode);
+    fd1 = PyObject_AsFileDescriptor(obj0);
+    mode_obj1 = PyObject_GetAttrString(obj0, "mode");
+    mode_byte_obj1 = PyUnicode_AsUTF8String(mode_obj1);
+    mode1 = PyBytes_AsString(mode_byte_obj1);
+    Py_XDECREF(mode_obj1);
+    Py_XDECREF(mode_byte_obj1);
+    arg1 = fdopen(fd1, mode1);
 #else
     if (!PyFile_Check(obj0)) {
       PyErr_SetString(PyExc_TypeError, "not a file handle");
@@ -3450,6 +3454,10 @@ SWIGINTERN PyObject *_wrap_agwrite(PyObject *SWIGUNUSEDPARM(self), PyObject *arg
   FILE *arg2 = (FILE *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  int fd2 ;
+  PyObject *mode_obj2 ;
+  PyObject *mode_byte_obj2 ;
+  char *mode2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   int result;
@@ -3467,13 +3475,13 @@ SWIGINTERN PyObject *_wrap_agwrite(PyObject *SWIGUNUSEDPARM(self), PyObject *arg
       return NULL;
     }
     // work around to get hold of FILE*
-    int fd = PyObject_AsFileDescriptor(obj1);
-    PyObject *mode_obj = PyObject_GetAttrString(obj1, "mode");
-    PyObject *mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
-    char *mode = PyBytes_AsString(mode_byte_obj);
-    Py_DECREF(mode_obj);
-    Py_DECREF(mode_byte_obj);
-    arg2 = fdopen(fd, mode);
+    fd2 = PyObject_AsFileDescriptor(obj1);
+    mode_obj2 = PyObject_GetAttrString(obj1, "mode");
+    mode_byte_obj2 = PyUnicode_AsUTF8String(mode_obj2);
+    mode2 = PyBytes_AsString(mode_byte_obj2);
+    Py_XDECREF(mode_obj2);
+    Py_XDECREF(mode_byte_obj2);
+    arg2 = fdopen(fd2, mode2);
 #else
     if (!PyFile_Check(obj1)) {
       PyErr_SetString(PyExc_TypeError, "not a file handle");
