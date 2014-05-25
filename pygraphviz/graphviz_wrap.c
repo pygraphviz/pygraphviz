@@ -3424,9 +3424,9 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
     mode_obj1 = PyObject_GetAttrString(obj0, "mode");
     mode_byte_obj1 = PyUnicode_AsUTF8String(mode_obj1);
     mode1 = PyBytes_AsString(mode_byte_obj1);
+    arg1 = fdopen(fd1, mode1);
     Py_XDECREF(mode_obj1);
     Py_XDECREF(mode_byte_obj1);
-    arg1 = fdopen(fd1, mode1);
 #else
     if (!PyFile_Check(obj0)) {
       PyErr_SetString(PyExc_TypeError, "not a file handle");
@@ -3479,9 +3479,9 @@ SWIGINTERN PyObject *_wrap_agwrite(PyObject *SWIGUNUSEDPARM(self), PyObject *arg
     mode_obj2 = PyObject_GetAttrString(obj1, "mode");
     mode_byte_obj2 = PyUnicode_AsUTF8String(mode_obj2);
     mode2 = PyBytes_AsString(mode_byte_obj2);
+    arg2 = fdopen(fd2, mode2);
     Py_XDECREF(mode_obj2);
     Py_XDECREF(mode_byte_obj2);
-    arg2 = fdopen(fd2, mode2);
 #else
     if (!PyFile_Check(obj1)) {
       PyErr_SetString(PyExc_TypeError, "not a file handle");

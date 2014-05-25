@@ -28,9 +28,9 @@ extern PyTypeObject PyIOBase_Type;
     mode_obj = PyObject_GetAttrString($input, "mode");
     mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
     mode = PyBytes_AsString(mode_byte_obj);
+    $1 = fdopen(fd, mode);
     Py_XDECREF(mode_obj);
     Py_XDECREF(mode_byte_obj);
-    $1 = fdopen(fd, mode);
 %#else
     if (!PyFile_Check($input)) {
         PyErr_SetString(PyExc_TypeError, "not a file handle");
