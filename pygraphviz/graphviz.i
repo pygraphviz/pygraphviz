@@ -120,14 +120,14 @@ Agraph_t *agopen(char *name, Agdesc_t kind, Agdisc_t *disc);
 def agraphnew(name,strict=False,directed=False):
     if strict:
        if directed:
-            return _graphviz.agopen(name,_graphviz.cvar.Agstrictdirected,None)
+            return _graphviz.agopen(name,cvar.Agstrictdirected,None)
        else:
-            return _graphviz.agopen(name,_graphviz.cvar.Agstrictundirected,None)
+            return _graphviz.agopen(name,cvar.Agstrictundirected,None)
     else:
         if directed:
-            return _graphviz.agopen(name,_graphviz.cvar.Agdirected,None)
+            return _graphviz.agopen(name,cvar.Agdirected,None)
         else:		 
-            return _graphviz.agopen(name,_graphviz.cvar.Agundirected,None)
+            return _graphviz.agopen(name,cvar.Agundirected,None)
 %}
 
 int       agclose(Agraph_t *g);
