@@ -450,7 +450,7 @@ class AGraph(object):
 
         Attributes can be added when edges are created
 
-        >>> G.add_edge(u'a',u'b',color='green')
+        >>> G.add_edge('a','b',color='green')
 
         Attributes must be valid strings.
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from nose.tools import *
 import pygraphviz as pgv
 from os import linesep
@@ -21,8 +22,8 @@ def test_node_attributes2():
     one.attr['label'] = 'test'
     one.attr['spam'] = 'eggs'
     assert_true('label' in one.attr)
-    assert_equal(one.attr['label'],u'test')
-    assert_equal(sorted(one.attr.keys()), [u'label', u'spam'])
+    assert_equal(one.attr['label'],'test')
+    assert_equal(sorted(one.attr.keys()), ['label', 'spam'])
     assert_equal(A.string().expandtabs(2),
 """strict graph {
   node [label="\\N"];

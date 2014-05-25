@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from nose.tools import *
 import pygraphviz as pgv
 from os import linesep
@@ -8,10 +9,10 @@ def test_default_attributes():
     A.graph_attr['label'] = 'test'
     A.graph_attr['spam'] = 'eggs'
     assert_true('label' in A.graph_attr)
-    assert_equal(A.graph_attr['label'], u'test')
-    assert_equal(A.graph_attr.keys(), [u'label', u'spam'])
+    assert_equal(A.graph_attr['label'], 'test')
+    assert_equal(A.graph_attr.keys(), ['label', 'spam'])
     assert_equal(sorted(list(A.graph_attr.iteritems())),
-                 [(u'label', u'test'), (u'spam', u'eggs')])
+                 [('label', 'test'), ('spam', 'eggs')])
     assert_equal(A.string().expandtabs(2),
 """strict graph {
   graph [label=test,
@@ -50,10 +51,10 @@ def test_node_defaults():
     A = pgv.AGraph()
     A.node_attr['label']='test'
     assert_true('label' in A.node_attr)
-    assert_equal(A.node_attr['label'], u'test')
-    assert_equal(A.node_attr.keys(), [u'label'])
-    assert_equal(A.node_attr, {u'label': u'test'})
-    assert_equal(list(A.node_attr.iteritems()), [(u'label', u'test')])
+    assert_equal(A.node_attr['label'], 'test')
+    assert_equal(A.node_attr.keys(), ['label'])
+    assert_equal(A.node_attr, {'label': 'test'})
+    assert_equal(list(A.node_attr.iteritems()), [('label', 'test')])
     assert_equal(A.string().expandtabs(2),
 """strict graph {
   node [label=test];
@@ -90,10 +91,10 @@ def test_edge_defaults():
     A = pgv.AGraph()
     A.edge_attr['label'] = 'test'
     assert_true('label' in A.edge_attr)
-    assert_equal(A.edge_attr['label'], u'test')
-    assert_equal(A.edge_attr.keys(), [u'label'])
-    assert_equal(A.edge_attr, {u'label': u'test'})
-    assert_equal(list(A.edge_attr.iteritems()), [(u'label', u'test')])
+    assert_equal(A.edge_attr['label'], 'test')
+    assert_equal(A.edge_attr.keys(), ['label'])
+    assert_equal(A.edge_attr, {'label': 'test'})
+    assert_equal(list(A.edge_attr.iteritems()), [('label', 'test')])
     assert_equal(A.string().expandtabs(2),
 """strict graph {
   edge [label=test];

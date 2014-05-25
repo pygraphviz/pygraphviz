@@ -1,28 +1,29 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from nose.tools import *
 import pygraphviz as pgv
 from pygraphviz.agraph import _TEXT_TYPE
 
 def test_name_unicode():
-    A = pgv.AGraph(name=u'unicode')
-    assert_equal(A.name,u'unicode')
+    A = pgv.AGraph(name='unicode')
+    assert_equal(A.name,'unicode')
 
 def test_node_encoding():
     A = pgv.AGraph(encoding='UTF-8')
-    hello=u'Здравствуйте!'
+    hello='Здравствуйте!'
     A.add_node(hello)
     n=A.get_node(hello)
     assert_equal(n.name, hello)
 
-    n.attr['goodbye']=u"До свидания"
-    assert_equal(n.attr['goodbye'],u"До свидания")
+    n.attr['goodbye']="До свидания"
+    assert_equal(n.attr['goodbye'],"До свидания")
 
 def test_edge_encoding():
     A = pgv.AGraph(encoding='UTF-8')
-    hello=u"שלום"
+    hello="שלום"
     A.add_edge(hello,hello,key=1) # self loop
     e=A.get_edge(hello,hello)
-    assert_equal(e.name,u'1')
+    assert_equal(e.name,'1')
     assert_equal(e,(hello,hello))
 
     e.attr['hello']=hello
@@ -30,7 +31,7 @@ def test_edge_encoding():
 
 def test_from_string():
     # test unicode in from_string()
-    t = u'测试'
+    t = '测试'
     G =pgv.AGraph()
     G.add_node(t)
     ug = _TEXT_TYPE(G)
