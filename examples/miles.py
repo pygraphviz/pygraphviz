@@ -22,6 +22,12 @@ References.
 
 
 """
+
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 #    Copyright (C) 2006-2007 by 
 #    Aric Hagberg <hagberg@lanl.gov>
@@ -103,11 +109,11 @@ if __name__ == '__main__':
     warnings.simplefilter('ignore', RuntimeWarning)
 
     G=miles_graph()
-    print "Loaded miles_dat.txt containing 128 cities."
+    print("Loaded miles_dat.txt containing 128 cities.")
    
     G.string()
     G.write("miles.dot")
-    print "Wrote miles.dot"
+    print("Wrote miles.dot")
     G.draw("miles.png",prog='neato',args='-n2')
-    print "Wrote miles.png"
+    print("Wrote miles.png")
 
