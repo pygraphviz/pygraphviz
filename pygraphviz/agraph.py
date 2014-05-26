@@ -17,19 +17,22 @@ import subprocess
 import sys
 import threading
 import warnings
-import UserDict
+try:
+    from UserDict import DictMixin
+except ImportError:
+    # Python 3
+    from collections import MutableMapping as DictMixin
 
-import graphviz as gv
+from . import graphviz as gv
 
 _DEFAULT_ENCODING = 'UTF-8'
+_PY2 = sys.version_info[0] == 2
+_TEXT_TYPE = unicode if _PY2 else str
+_STRING_TYPES = (basestring,) if _PY2 else (str,)
 
 
-def is_string_like(obj): # from John Hunter, types-free version
-    try:
-        obj + ''
-    except (TypeError, ValueError):
-        return False
-    return True
+def is_string_like(obj):
+    return isinstance(obj, _STRING_TYPES)
 
 
 class PipeReader(threading.Thread):
@@ -139,7 +142,7 @@ class AGraph(object):
                 data = thing # a dictionary of dictionaries (or lists)
             elif hasattr(thing, 'own'):  # a Swig pointer - graph handle
                 handle = thing
-            elif self._is_string_like(thing):
+            elif is_string_like(thing):
                 pattern = re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',
                                      re.DOTALL)
                 if pattern.match(thing):
@@ -172,7 +175,7 @@ class AGraph(object):
         if self.handle is not None:
             # the handle was specified or created
             # get the encoding from the "charset" graph attribute
-            item = gv.agget(self.handle, 'charset')
+            item = gv.agget(self.handle, b'charset')
             if item is not None:
                 self.encoding = item
             else:
@@ -220,11 +223,15 @@ class AGraph(object):
     def __exit__(self, ext_type, exc_value, traceback):
         self.close()
 
-    def __str__(self):
-        return unicode(self).encode(self.encoding, 'replace')
+    if _PY2:
+        def __unicode__(self):
+            return self.string()
 
-    def __unicode__(self):
-        return self.string()
+        def __str__(self):
+            return unicode(self).encode(self.encoding, 'replace')
+    else:
+        def __str__(self):
+            return self.string()
 
     def __repr__(self):
         name = gv.agnameof(self.handle)
@@ -278,10 +285,10 @@ class AGraph(object):
 
         >>> G=AGraph()
         >>> G.add_node('a')
-        >>> G.nodes()
+        >>> G.nodes()  # doctest: +IGNORE_UNICODE
         [u'a']
         >>> G.add_node(1) # will be converted to a string
-        >>> G.nodes()
+        >>> G.nodes()  # doctest: +IGNORE_UNICODE
         [u'a', u'1']
 
         Attributes can be added to nodes on creation
@@ -295,7 +302,7 @@ class AGraph(object):
         Anonymous Graphviz nodes are currently not implemented.
 
         """
-        if not self._is_string_like(n):
+        if not is_string_like(n):
             n = str(n)
         n = n.encode(self.encoding)
         try:
@@ -313,7 +320,7 @@ class AGraph(object):
         >>> G=AGraph()
         >>> nlist=['a','b',1,'spam']
         >>> G.add_nodes_from(nlist)
-        >>> sorted(G.nodes())
+        >>> sorted(G.nodes())  # doctest: +IGNORE_UNICODE
         [u'1', u'a', u'b', u'spam']
 
 
@@ -336,7 +343,7 @@ class AGraph(object):
         >>> G.remove_node('a')
 
         """
-        if not self._is_string_like(n):
+        if not is_string_like(n):
             n = str(n)
         n = n.encode(self.encoding)
         try:
@@ -428,7 +435,7 @@ class AGraph(object):
 
         >>> G=AGraph()
         >>> G.add_edge('a','b')
-        >>> G.edges()
+        >>> G.edges()  # doctest: +IGNORE_UNICODE
         [(u'a', u'b')]
 
         The optional key argument allows assignment of a key to the
@@ -438,12 +445,12 @@ class AGraph(object):
         >>> G=AGraph(strict=False)
         >>> G.add_edge('a','b','first')
         >>> G.add_edge('a','b','second')
-        >>> sorted(G.edges(keys=True))
+        >>> sorted(G.edges(keys=True))  # doctest: +IGNORE_UNICODE
         [(u'a', u'b', u'first'), (u'a', u'b', u'second')]
 
         Attributes can be added when edges are created
 
-        >>> G.add_edge(u'a',u'b',color='green')
+        >>> G.add_edge('a','b',color='green')
 
         Attributes must be valid strings.
 
@@ -465,7 +472,7 @@ class AGraph(object):
             vh = Node(self, v).handle
         try:
             if key is not None:
-                if not self._is_string_like(key):
+                if not is_string_like(key):
                     key = str(key)
                 key = key.encode(self.encoding)
             eh = gv.agedge(self.handle, uh, vh, key, _Action.create)
@@ -497,7 +504,7 @@ class AGraph(object):
         >>> G=AGraph()
         >>> G.add_edge('a','b')
         >>> edge=G.get_edge('a','b')
-        >>> print(edge)
+        >>> print(edge)  # doctest: +IGNORE_UNICODE
         (u'a', u'b')
 
         With optional key argument will only get edge matching (u,v,key).
@@ -558,9 +565,9 @@ class AGraph(object):
         >>> G=AGraph()
         >>> G.add_edge('a','b')
         >>> G.add_edge('c','d')
-        >>> print(sorted(G.edges()))
+        >>> print(sorted(G.edges()))  # doctest: +IGNORE_UNICODE
         [(u'a', u'b'), (u'c', u'd')]
-        >>> print(G.edges('a'))
+        >>> print(G.edges('a'))  # doctest: +IGNORE_UNICODE
         [(u'a', u'b')]
         """
         return list(self.edges_iter(nbunch=nbunch, keys=keys))
@@ -1252,7 +1259,7 @@ class AGraph(object):
         # allow either unicode or encoded string
         try:
             string = string.decode(self.encoding)
-        except UnicodeEncodeError:
+        except (UnicodeEncodeError, AttributeError):
             pass
         from tempfile import TemporaryFile
 
@@ -1319,12 +1326,12 @@ class AGraph(object):
             t.join()
 
         if not data:
-            raise IOError("".join(errors))
+            raise IOError(b"".join(errors))
 
         if len(errors) > 0:
-            warnings.warn("".join(errors), RuntimeWarning)
+            warnings.warn(b"".join(errors), RuntimeWarning)
 
-        return "".join(data)
+        return b"".join(data)
 
     def layout(self, prog='neato', args=''):
         """Assign positions to nodes in graph.
@@ -1431,7 +1438,7 @@ class AGraph(object):
         if format is None and path is not None:
             p = path
             # in case we got a file handle get its name instead
-            if not self._is_string_like(p):
+            if not is_string_like(p):
                 p = path.name
             format = os.path.splitext(p)[-1].lower()[1:]
 
@@ -1462,22 +1469,15 @@ class AGraph(object):
 
         if path is not None:
             fh = self._get_fh(path, 'w+b')
-            fh.write("".join(data))
-            if self._is_string_like(path):
+            fh.write(data)
+            if is_string_like(path):
                 fh.close()
             d = None
         else:
-            d = "".join(data)
+            d = data
         return d
 
     # some private helper functions
-
-    def _is_string_like(self, obj):  # from John Hunter, types-free version
-        try:
-            obj + ''
-        except (TypeError, ValueError):
-            return False
-        return True
 
     def _get_fh(self, path, mode='r'):
         """ Return a file handle for given path.
@@ -1487,7 +1487,7 @@ class AGraph(object):
         """
         import os
 
-        if self._is_string_like(path):
+        if is_string_like(path):
             if path.endswith('.gz'):
                 #import gzip
                 #fh = gzip.open(path,mode=mode)  # doesn't return real fh
@@ -1522,7 +1522,7 @@ class AGraph(object):
         raise ValueError("No prog %s in path." % name)
 
 
-class Node(unicode):
+class Node(_TEXT_TYPE):
     """Node object based on unicode.
 
     If G is a graph
@@ -1553,9 +1553,9 @@ class Node(unicode):
 
     def __new__(self, graph, name=None, nh=None):
         if nh is not None:
-            n = unicode.__new__(self, gv.agnameof(nh), graph.encoding)
+            n = super(Node, self).__new__(self, gv.agnameof(nh), graph.encoding)
         else:
-            n = unicode.__new__(self, name)
+            n = super(Node, self).__new__(self, name)
             try:
                 nh = gv.agnode(graph.handle, n.encode(graph.encoding), _Action.find)
             except KeyError:
@@ -1657,7 +1657,7 @@ class Edge(tuple):
     key = property(get_name)
 
 
-class Attribute(UserDict.DictMixin):
+class Attribute(DictMixin):
     """Default attributes for graphs.
 
     Assigned on initialization of AGraph class.
@@ -1682,7 +1682,7 @@ class Attribute(UserDict.DictMixin):
         ghandle = gv.agraphof(handle)
         root_handle = gv.agroot(ghandle) # get root graph
         try:
-            ah = gv.agattr(root_handle, 0, 'charset', None)
+            ah = gv.agattr(root_handle, 0, b'charset', None)
             self.encoding = gv.agattrdefval(ah)
         except KeyError:
             self.encoding = _DEFAULT_ENCODING
@@ -1700,7 +1700,7 @@ class Attribute(UserDict.DictMixin):
         else:
             gv.agsafeset_label(ghandle, self.handle,
                                name.encode(self.encoding),
-                               value.encode(self.encoding), '')
+                               value.encode(self.encoding), b'')
 
 
     def __getitem__(self, name):
@@ -1713,7 +1713,7 @@ class Attribute(UserDict.DictMixin):
         return item.decode(self.encoding)
 
     def __delitem__(self, name):
-        gv.agattr(self.handle, self.type, name.encode(self.encoding), '')
+        gv.agattr(self.handle, self.type, name.encode(self.encoding), b'')
 
     def __contains__(self, name):
         try:
@@ -1721,6 +1721,9 @@ class Attribute(UserDict.DictMixin):
             return True
         except:
             return False
+
+    def __len__(self):
+        return len(self.__iter__())
 
     def has_key(self, name):
         return self.__contains__(name)
@@ -1769,7 +1772,7 @@ class ItemAttribute(Attribute):
         # get the encoding
         root_handle = gv.agroot(self.ghandle) # get root graph
         try:
-            ah = gv.agattr(root_handle, 0, 'charset', None)
+            ah = gv.agattr(root_handle, 0, b'charset', None)
             self.encoding = gv.agattrdefval(ah)
         except KeyError:
             self.encoding = _DEFAULT_ENCODING
@@ -1778,7 +1781,7 @@ class ItemAttribute(Attribute):
         if not is_string_like(value):
             value = str(value)
         if self.type == 1 and name == 'label':
-            default = '\N'
+            default = '\\N'
         else:
             default = ''
         gv.agsafeset_label(self.ghandle, self.handle,
@@ -1793,7 +1796,7 @@ class ItemAttribute(Attribute):
         return val
 
     def __delitem__(self, name):
-        gv.agset(self.handle, name.encode(self.encoding), '')
+        gv.agset(self.handle, name.encode(self.encoding), b'')
 
     def iteritems(self):
         ah = None

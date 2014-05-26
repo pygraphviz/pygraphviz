@@ -10,6 +10,12 @@ Create and draw a star with varying node properties.
 #    Manos Renieris, http://www.cs.brown.edu/~er/
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
+
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 
 from pygraphviz import *
@@ -30,8 +36,8 @@ for i in range(16):
     n.attr['height']="%s"%(i/16.0+0.5)
     n.attr['width']="%s"%(i/16.0+0.5)
 
-print A.string() # print to screen
+print(A.string()) # print to screen
 A.write("star.dot") # write to simple.dot
-print "Wrote star.dot"
+print("Wrote star.dot")
 A.draw('star.png',prog="circo") # draw to png using circo
-print "Wrote star.png"
+print("Wrote star.png")

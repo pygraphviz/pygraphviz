@@ -12,7 +12,7 @@ def test_html():
     assert_equal(G.string().expandtabs(2),
 """strict graph {
   graph [label=<Hello<BR/>Graph>];
-  node [label="\N"];
+  node [label="\\N"];
   {
     graph [label=<Hello<BR/>Subgraph>];
     sa     [label=<Hello<BR/>Subgraph Node b>];

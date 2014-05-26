@@ -11,13 +11,33 @@
 #include "graphviz/cgraph.h"
 %}
 
+%{
+#if PY_VERSION_HEX >= 0x03000000
+extern PyTypeObject PyIOBase_Type;
+#endif
+%}
 
-%typemap(in) FILE* {
+%typemap(in) FILE* (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
+%#if PY_VERSION_HEX >= 0x03000000
+    if (!PyObject_IsInstance($input, (PyObject *)&PyIOBase_Type)) {
+        PyErr_SetString(PyExc_TypeError, "not a file handle");
+        return NULL;
+    }
+    // work around to get hold of FILE*
+    fd = PyObject_AsFileDescriptor($input);
+    mode_obj = PyObject_GetAttrString($input, "mode");
+    mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+    mode = PyBytes_AsString(mode_byte_obj);
+    $1 = fdopen(fd, mode);
+    Py_XDECREF(mode_obj);
+    Py_XDECREF(mode_byte_obj);
+%#else
     if (!PyFile_Check($input)) {
         PyErr_SetString(PyExc_TypeError, "not a file handle");
         return NULL;
     }
     $1 = PyFile_AsFile($input);
+%#endif
 }
 
 
@@ -247,7 +267,7 @@ def agnameof(handle):
   name=_graphviz.agnameof(handle)
   if name is None:
      return None
-  if name=='' or name.startswith('%'):
+  if name==b'' or name.startswith(b'%'):
     return None
   else:
     return name 
