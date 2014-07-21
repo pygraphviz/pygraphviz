@@ -35,7 +35,7 @@ if release.revision is None:
     # we probably not running in an svn directory   
     try:
         # use release data stored at installatation time.
-        import version
+        from . import version
         __version__ = version.__version__
         __revision__ = version.__revision__
         __date__ = version.__date__
