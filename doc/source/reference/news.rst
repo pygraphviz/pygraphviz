@@ -2,6 +2,13 @@
 
 News
 ==== 
+pygraphviz-1.3
+--------------
+Release date: TBD
+
+ - Python 3 support
+ - Encoding bugfixes
+
 
 pygraphviz-1.2
 -----------------
