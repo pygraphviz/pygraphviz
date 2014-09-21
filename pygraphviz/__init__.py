@@ -66,5 +66,4 @@ __all__=[
     ]
 
 
-# import tests: run as pygraphviz.test()
-# from .tests import run as test
+from pygraphviz.tests.test import run as test

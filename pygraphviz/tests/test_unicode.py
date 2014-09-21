@@ -2,7 +2,10 @@
 from __future__ import unicode_literals
 from nose.tools import *
 import pygraphviz as pgv
-from pygraphviz.agraph import _TEXT_TYPE
+import sys
+_PY2 = sys.version_info[0] == 2
+_TEXT_TYPE = unicode if _PY2 else str
+
 
 def test_name_unicode():
     A = pgv.AGraph(name='unicode')
