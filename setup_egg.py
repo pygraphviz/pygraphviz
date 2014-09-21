@@ -54,8 +54,8 @@ if __name__ == "__main__":
         data_files       = data,
         ext_modules      = extension,
         package_data     = package_data,
-        install_requires=['setuptools'],
         include_package_data = True,
-        test_suite       = "pygraphviz.tests.test.test_suite", 
+        test_suite       = 'nose.collector',
+        tests_require    = ['nose>=0.10.1'],
         )
 
