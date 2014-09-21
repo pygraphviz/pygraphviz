@@ -6,8 +6,6 @@ include INSTALL.txt
 recursive-include examples *.py *.gz 
 recursive-include doc *.py *.rst Makefile *.html *.txt
 
-include pygraphviz/tests/*.txt
-
 global-exclude *~
 global-exclude *.pyc
 global-exclude .svn
