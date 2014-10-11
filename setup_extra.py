@@ -10,11 +10,6 @@ Setup helpers for PyGraphviz.
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
 import os
-import locale
-
-
-system_encoding = locale.getdefaultlocale()[1]
-
 
 def pkg_config():
     # attempt to find graphviz installation with pkg-config
@@ -34,14 +29,12 @@ def pkg_config():
                    S.Popen('pkg-config --libs-only-L libcgraph',
                            shell=True, stdin=S.PIPE, stdout=S.PIPE,
                            close_fds=True).communicate()
-        output = output.decode(system_encoding)
         if output:
             library_path=output.strip()[2:]
         output,err = \
                    S.Popen('pkg-config --cflags-only-I libcgraph',
                            shell=True, stdin=S.PIPE, stdout=S.PIPE,
                            close_fds=True).communicate()
-        output = output.decode(system_encoding)
         if output:
             include_path=output.strip()[2:]
     except:
@@ -65,7 +58,6 @@ def dotneato_config():
     try:
         output = S.Popen(['dotneato-config','--ldflags','--cflags'],
                          stdout=S.PIPE).communicate()[0]
-        output = output.decode(system_encoding)
         if output:
             include_path,library_path=output.split()
             library_path=library_path.strip()[2:]
@@ -73,7 +65,6 @@ def dotneato_config():
         else:
             output = S.Popen(['dotneato-config','--libs','--cflags'],
                          stdout=S.PIPE).communicate()[0]
-            output = output.decode(system_encoding)
             if output:
                 include_path,library_path=output.split('\n',1)
                 library_path=library_path.strip()[2:]
