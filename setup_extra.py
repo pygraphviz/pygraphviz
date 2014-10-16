@@ -47,7 +47,7 @@ def pkg_config():
             include_path=output.strip()[2:]
     except:
         print("Failed to find pkg-config")
-    return include_path,library_path
+    return b(include_path),b(library_path)
 
 def dotneato_config():
     # find graphviz configuration with dotneato-config
