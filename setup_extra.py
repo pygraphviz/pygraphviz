@@ -11,6 +11,14 @@ Setup helpers for PyGraphviz.
 #    All rights reserved, see LICENSE for details.
 import os
 
+import sys
+if sys.version < '3':
+    def b(x):
+        return x
+else:
+    def b(x):
+        return x.decode('utf-8')
+
 def pkg_config():
     # attempt to find graphviz installation with pkg-config
     # should work with modern versions of graphviz
