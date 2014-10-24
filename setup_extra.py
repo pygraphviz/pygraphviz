@@ -29,6 +29,7 @@ def pkg_config():
                    S.Popen('pkg-config --libs-only-L libcgraph',
                            shell=True, stdin=S.PIPE, stdout=S.PIPE,
                            close_fds=True).communicate()
+        output = output.decode("utf-8")
         if output:
             library_path=output.strip()[2:]
         output,err = \
