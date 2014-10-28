@@ -10,6 +10,7 @@ Setup helpers for PyGraphviz.
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
 import os
+import sys
 
 def pkg_config():
     # attempt to find graphviz installation with pkg-config
@@ -29,12 +30,14 @@ def pkg_config():
                    S.Popen('pkg-config --libs-only-L libcgraph',
                            shell=True, stdin=S.PIPE, stdout=S.PIPE,
                            close_fds=True).communicate()
+        output = output.decode(sys.stdout.encoding)
         if output:
             library_path=output.strip()[2:]
         output,err = \
                    S.Popen('pkg-config --cflags-only-I libcgraph',
                            shell=True, stdin=S.PIPE, stdout=S.PIPE,
                            close_fds=True).communicate()
+        output = output.decode(sys.stdout.encoding)
         if output:
             include_path=output.strip()[2:]
     except:
