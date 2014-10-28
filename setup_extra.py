@@ -12,6 +12,14 @@ Setup helpers for PyGraphviz.
 import os
 import sys
 
+import sys
+if sys.version < '3':
+    def b(x):
+        return x
+else:
+    def b(x):
+        return x.decode('utf-8')
+
 def pkg_config():
     # attempt to find graphviz installation with pkg-config
     # should work with modern versions of graphviz
@@ -42,7 +50,7 @@ def pkg_config():
             include_path=output.strip()[2:]
     except:
         print("Failed to find pkg-config")
-    return include_path,library_path
+    return b(include_path),b(library_path)
 
 def dotneato_config():
     # find graphviz configuration with dotneato-config
