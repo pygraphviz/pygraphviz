@@ -1026,9 +1026,11 @@ class AGraph(object):
         # add induced subgraph on nodes in nbunch
         bunch = self.prepare_nbunch(nbunch)
         H.add_nodes_from(bunch)
-        for (u, v) in self.edges():
-            if u in H and v in H:
-                H.add_edge(u, v)
+        
+        ## With this modification, adding a subgraph copies edge attributes for existing edges
+        for e in self.edges():
+            if e[0] in H and e[1] in H:
+                H.add_edge(e[0], e[1], e.key, **(e.attr))
 
         return H
 
