@@ -293,7 +293,7 @@ class AGraph(object):
         >>> G.nodes()  # doctest: +IGNORE_UNICODE
         [u'a', u'1']
 
-        Attributes can be added to nodes on creation
+        Attributes can be added to nodes on creation or updated after creation
         (attribute values must be strings)
 
         >>> G.add_node(2,color='red')
@@ -311,8 +311,8 @@ class AGraph(object):
             nh = gv.agnode(self.handle, n, _Action.find)
         except KeyError:
             nh = gv.agnode(self.handle, n, _Action.create)
-            node = Node(self, nh=nh)
-            node.attr.update(**attr)
+        node = Node(self, nh=nh)
+        node.attr.update(**attr)
 
     def add_nodes_from(self, nbunch, **attr):
         """Add nodes from a container nbunch.
