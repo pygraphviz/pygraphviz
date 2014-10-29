@@ -19,7 +19,7 @@ to run the tests.
 # local import, might need modification for 2.6/3.0
 from setup import *
 
-# must occur after local import to override distutils.core.setup
+# must occur after local import to override
 from setuptools import setup, Extension
 
 

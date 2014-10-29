@@ -12,7 +12,7 @@ import os
 import sys
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 from setup_extra import pkg_config, dotneato_config
 
