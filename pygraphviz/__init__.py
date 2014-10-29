@@ -55,14 +55,15 @@ __author__   = '%s <%s>\n%s <%s>\n%s <%s>' % \
                 release.authors['Renieris'] )
 __license__  = release.license
 
-from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute
+from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute, DotError
 
 __all__=[
     'AGraph',
     'Node',
     'Edge',
     'Attribute',
-    'ItemAttribute'
+    'ItemAttribute',
+    'DotError'
     ]
 
 
