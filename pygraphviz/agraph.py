@@ -326,7 +326,7 @@ class AGraph(object):
         [u'1', u'a', u'b', u'spam']
 
 
-        Attributes can be added to nodes on creation
+        Attributes can be added to nodes on creation or updated after creation
 
         >>> G.add_nodes_from(nlist, color='red') # set all nodes in nlist red
 
@@ -450,7 +450,7 @@ class AGraph(object):
         >>> sorted(G.edges(keys=True))  # doctest: +IGNORE_UNICODE
         [(u'a', u'b', u'first'), (u'a', u'b', u'second')]
 
-        Attributes can be added when edges are created
+        Attributes can be added when edges are created or updated after creation
 
         >>> G.add_edge('a','b',color='green')
 
@@ -494,10 +494,9 @@ class AGraph(object):
         >>> elist=[('a','b'),('b','c')]
         >>> G.add_edges_from(elist)
 
-        Attributes can be added when edges are created
+        Attributes can be added when edges are created or updated after creation
 
         >>> G.add_edges_from(elist, color='green')
-
         """
         for e in ebunch:
             self.add_edge(e, **attr)
