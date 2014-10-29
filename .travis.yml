@@ -11,6 +11,6 @@ install:
   - pip install coveralls
   - python setup.py develop
 script:
-  - coverage run --source=pygraphviz nosetests
+  - nosetests --with-coverage --cover-package=pygraphviz
 after_success:
   - coveralls
