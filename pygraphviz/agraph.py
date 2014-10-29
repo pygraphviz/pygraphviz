@@ -1025,10 +1025,13 @@ class AGraph(object):
         if nbunch is None: return H
         # add induced subgraph on nodes in nbunch
         bunch = self.prepare_nbunch(nbunch)
-        H.add_nodes_from(bunch)
-        for (u, v) in self.edges():
+        for n in bunch:
+            node = Node(self, n)
+            nh = gv.agsubnode(self.handle, node.handle, _Action.create)
+        for (u, v, k) in self.edges(keys=True):
             if u in H and v in H:
-                H.add_edge(u, v)
+                edge = Edge(self, u, v, k)
+                eh = gv.agsubedge(self.handle, edge.handle, _Action.create)
 
         return H
 
