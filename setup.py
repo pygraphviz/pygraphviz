@@ -149,6 +149,5 @@ if __name__ == "__main__":
         packages=packages,
         data_files=data,
         ext_modules=extension,
-        package_data=package_data,
-        test_suite="pygraphviz.tests."
+        package_data=package_data
     )
