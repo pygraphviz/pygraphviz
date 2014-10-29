@@ -1,0 +1,11 @@
+language: python
+python:
+  - "2.7"
+  - "3.4"
+before_install:
+  # We need GraphViz
+  - "sudo apt-get install graphviz 2>&1 | tail -n 2"
+  - pip install nose
+  - pip install doctest-ignore-unicode
+script:
+  - nosetests

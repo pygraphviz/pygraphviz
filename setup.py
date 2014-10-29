@@ -12,7 +12,7 @@ import os
 import sys
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 from setup_extra import pkg_config, dotneato_config
 
@@ -149,5 +149,6 @@ if __name__ == "__main__":
         packages=packages,
         data_files=data,
         ext_modules=extension,
-        package_data=package_data
+        package_data=package_data,
+        test_suite="pygraphviz.tests."
     )
