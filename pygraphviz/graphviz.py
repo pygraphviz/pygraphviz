@@ -13,9 +13,10 @@ if version_info >= (2,6,0):
     def swig_import_helper():
         from os.path import dirname
         import imp
+        import site
         fp = None
         try:
-            fp, pathname, description = imp.find_module('_graphviz', [dirname(__file__)])
+            fp, pathname, description = imp.find_module('_graphviz', list(site._init_pathinfo()))
         except ImportError:
             import _graphviz
             return _graphviz
