@@ -15,7 +15,8 @@ if version_info >= (2,6,0):
         import imp
         import site
         try:
-            fp, pathname, description = imp.find_module('_graphviz', list(site._init_pathinfo()) + [dirname(__file__), join(dirname(__file__),'pyvizgraph')])
+            fp, pathname, description = imp.find_module('_graphviz', list(site._init_pathinfo()) +
+                [dirname(__file__), join(dirname(__file__),'pyvizgraph')])
         except ImportError:
             import _graphviz
             return _graphviz

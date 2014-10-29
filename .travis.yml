@@ -8,9 +8,9 @@ before_install:
 install:
   - pip install nose
   - pip install doctest-ignore-unicode
+  - pip install coveralls
   - python setup.py develop
 script:
-  - pip freeze
-  - pwd
-  - ls
-  - nosetests
+  - coverage run --source=pygraphviz nosetests
+after_success:
+  - coveralls
