@@ -14,13 +14,12 @@ if version_info >= (2,6,0):
         from os.path import dirname
         import imp
         import site
-        fp = None
         try:
             fp, pathname, description = imp.find_module('_graphviz', list(site._init_pathinfo()))
         except ImportError:
             import _graphviz
             return _graphviz
-        if fp is not None:
+        if fp:
             try:
                 _mod = imp.load_module('_graphviz', fp, pathname, description)
             finally:

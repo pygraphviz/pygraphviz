@@ -8,8 +8,7 @@ before_install:
 install:
   - pip install nose
   - pip install doctest-ignore-unicode
-  - python setup.py build
-  - python setup.py install
+  - python setup.py develop
 script:
   - pip freeze
   - pwd
