@@ -110,6 +110,13 @@ extern PyTypeObject PyIOBase_Type;
   }
 }
 
+%exception agread {
+  $action
+  if (!result) {
+     PyErr_SetString(PyExc_ValueError,"agread: bad input data");
+     return NULL;
+  }
+}
 
 
 /* graphs */

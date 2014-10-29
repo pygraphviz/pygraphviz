@@ -58,6 +58,8 @@ class PipeReader(threading.Thread):
 class _Action(object):
     find, create = 0, 1
 
+class DotError(ValueError):
+    """Dot data parsing error"""
 
 class AGraph(object):
     """Class for Graphviz agraph type.
@@ -1195,7 +1197,11 @@ class AGraph(object):
         try:
             if self.handle is not None:
                 gv.agclose(self.handle)
-            self.handle = gv.agread(fh, None)
+            try:
+                self.handle = gv.agread(fh, None)
+            except ValueError:
+                raise DotError
+            
         except IOError:
             print("IO error reading file")
 
@@ -1815,7 +1821,6 @@ class ItemAttribute(Attribute):
                        value.decode(self.encoding))
             except KeyError: # gv.agxget returned KeyError, skip
                 continue
-
 
 def _test_suite():
     import doctest
