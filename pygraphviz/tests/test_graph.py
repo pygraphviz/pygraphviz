@@ -248,7 +248,7 @@ class TestGraph:
         A = pgv.AGraph(strict=False)
         assert_false(A.is_strict())
         A.add_node(1)
-        A.add_node(1)  # silent failure
+        A.add_node(1)  # nop
         assert_equal(A.nodes(), ['1'])
         A.add_edge(1,2)
         A.add_edge(1,2)

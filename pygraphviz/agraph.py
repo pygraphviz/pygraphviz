@@ -472,16 +472,18 @@ class AGraph(object):
         except:
             self.add_node(v)
             vh = Node(self, v).handle
+        if key is not None:
+            if not is_string_like(key):
+                key = str(key)
+            key = key.encode(self.encoding)
         try:
-            if key is not None:
-                if not is_string_like(key):
-                    key = str(key)
-                key = key.encode(self.encoding)
+            # new
             eh = gv.agedge(self.handle, uh, vh, key, _Action.create)
-            e = Edge(self, eh=eh)
-            e.attr.update(**attr)
         except KeyError:
-            return None # silent failure for strict graph, already added
+            # for strict graph, or already added
+            eh = gv.agedge(self.handle, uh, vh, key, _Action.find)
+        e = Edge(self, eh=eh)
+        e.attr.update(**attr)
 
     def add_edges_from(self, ebunch, **attr):
         """Add nodes to graph from a container ebunch.
