@@ -12,4 +12,6 @@ install:
   - python setup.py install
 script:
   - pip freeze
+  - echo $TRAVIS_BUILD_DIR
+  - cd pygraphviz
   - nosetests
