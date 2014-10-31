@@ -302,7 +302,6 @@ class AGraph(object):
         for a list of attributes.
 
         Anonymous Graphviz nodes are currently not implemented.
-
         """
         if not is_string_like(n):
             n = str(n)
@@ -329,7 +328,6 @@ class AGraph(object):
         Attributes can be added to nodes on creation or updated after creation
 
         >>> G.add_nodes_from(nlist, color='red') # set all nodes in nlist red
-
         """
         for n in nbunch:
             self.add_node(n, **attr)
@@ -343,7 +341,6 @@ class AGraph(object):
         >>> G=AGraph()
         >>> G.add_node('a')
         >>> G.remove_node('a')
-
         """
         if not is_string_like(n):
             n = str(n)
