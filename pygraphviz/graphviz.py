@@ -11,15 +11,16 @@
 from sys import version_info
 if version_info >= (2,6,0):
     def swig_import_helper():
-        from os.path import dirname
+        from os.path import dirname, join
         import imp
-        fp = None
+        import site
         try:
-            fp, pathname, description = imp.find_module('_graphviz', [dirname(__file__)])
+            fp, pathname, description = imp.find_module('_graphviz', list(site._init_pathinfo()) +
+                [dirname(__file__), join(dirname(__file__),'pyvizgraph')])
         except ImportError:
             import _graphviz
             return _graphviz
-        if fp is not None:
+        if fp:
             try:
                 _mod = imp.load_module('_graphviz', fp, pathname, description)
             finally:
