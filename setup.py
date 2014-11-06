@@ -13,6 +13,7 @@ import os
 from setuptools import setup, Extension
 import sys
 
+from setup_commands import AddExtensionDevelopCommand, AddExtensionBuildCommand, AddExtensionInstallCommand
 from setup_extra import get_graphviz_dirs
 
 
@@ -45,18 +46,16 @@ data = [
 package_data = {'': ['*.txt'], }
 
 if __name__ == "__main__":
-    include_dirs, library_dirs, define_macros = get_graphviz_dirs()
-
-    extension_args = {}
-    if sys.platform != "win32":
-        extension_args['runtime_library_dirs'] = library_dirs
+    define_macros = []
+    if sys.platform == "win32":
+        define_macros = define_macros.append(('GVDLL', None))
 
     extension = [
         Extension(
             "pygraphviz._graphviz",
             ["pygraphviz/graphviz_wrap.c"],
-            include_dirs=include_dirs,
-            library_dirs=library_dirs,
+            include_dirs=[],
+            library_dirs=[],
             libraries=["cgraph", "cdt"],
             define_macros=define_macros,
             **extension_args
@@ -79,6 +78,11 @@ if __name__ == "__main__":
         packages=packages,
         data_files=data,
         ext_modules=extension,
+        cmdclass={
+            'install': AddExtensionInstallCommand,
+            'develop': AddExtensionDevelopCommand,
+            'build_ext': AddExtensionBuildCommand,
+            },
         package_data=package_data,
         include_package_data = True,
         test_suite='nose.collector',

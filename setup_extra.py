@@ -10,84 +10,78 @@ Setup helpers for PyGraphviz.
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
 
-from optparse import OptionParser
+from __future__ import print_function
+from __future__ import absolute_import
+import subprocess as S
 import sys
+
+
+def _b2str(buffer):
+    result = u''
+    if sys.version_info >= (3, 0):
+        encoding = sys.getfilesystemencoding()
+        if not encoding:
+            # can be run without stdout
+            if sys.stdout and sys.stdout.encoding:
+                # encoding is nont None only staring Python 3.2
+                encoding = sys.stdout.encoding
+            else:
+                # fall back to default encoding ( normally it should not happen)
+                encoding = 'utf8'
+        if buffer:
+            result = buffer.decode(encoding)
+        return result
+    else:
+        return buffer
+
 
 def _pkg_config():
     # attempt to find graphviz installation with pkg-config
     # should work with modern versions of graphviz
-    try:
-        import subprocess as S
-    except ImportError:
-        print("""-- Missing subprocess package:
-        Install subprocess from
-        http://effbot.org/downloads/#subprocess
-        or set the graphviz paths manually as described below.""")
-
     library_path=None
     include_path=None
     try:
-        output,err = \
-                   S.Popen('pkg-config --libs-only-L libcgraph',
-                           shell=True, stdin=S.PIPE, stdout=S.PIPE,
-                           close_fds=True).communicate()
-        output = output.decode(sys.stdout.encoding)
+        output = S.check_output(['pkg-config', '--libs-only-L', 'libcgraph'])
+        output = _b2str(output)
         if output:
             library_path=output.strip()[2:]
-        output,err = \
-                   S.Popen('pkg-config --cflags-only-I libcgraph',
-                           shell=True, stdin=S.PIPE, stdout=S.PIPE,
-                           close_fds=True).communicate()
-        output = output.decode(sys.stdout.encoding)
+        output = S.check_output(['pkg-config', '--cflags-only-I', 'libcgraph'])
+        output = _b2str(output)
         if output:
             include_path=output.strip()[2:]
-    except:
+    except OSError:
         print("Failed to find pkg-config")
-    return include_path,library_path
+    return include_path, library_path
 
 def _dotneato_config():
     # find graphviz configuration with dotneato-config
     # works with older versions of graphviz
     # attempt to find graphviz installation with pkg-config
     # should work with modern versions of graphviz
-    try:
-        import subprocess as S
-    except ImportError:
-        print("""-- Missing subprocess package:
-        Install subprocess from
-        http://effbot.org/downloads/#subprocess
-        or set the graphviz paths manually as described below.""")
     library_path=None
     include_path=None
     try:
-        output = S.Popen(['dotneato-config','--ldflags','--cflags'],
-                         stdout=S.PIPE).communicate()[0]
-        output = output.decode(sys.stdout.encoding)
+        output = S.check_output(['dotneato-config', '--ldflags', '--cflags'])
+        output = _b2str(output)
         if output:
-            include_path,library_path=output.split()
-            library_path=library_path.strip()[2:]
-            include_path=include_path.strip()[2:]
-        else:
-            output = S.Popen(['dotneato-config','--libs','--cflags'],
-                         stdout=S.PIPE).communicate()[0]
-            output = output.decode(sys.stdout.encoding)
-            if output:
-                include_path,library_path=output.split('\n',1)
-                library_path=library_path.strip()[2:]
-                include_path=include_path.strip()[2:]
-    except:
+            include_path, library_path = output.split()
+            library_path = library_path.strip()[2:]
+            include_path = include_path.strip()[2:]
+    except OSError:
         print("Failed to find dotneato-config")
-    return include_path,library_path
+        # fall through and test the other syntax
+    if not include_path and not library_path:
+        try:
+            output = S.check_output(['dotneato-config', '--libs', '--cflags'])
+            output = _b2str(output)
+            if output:
+                include_path, library_path = output.split('\n',1)
+                library_path = library_path.strip()[2:]
+                include_path = include_path.strip()[2:]
+        except OSError:
+            print("Failed to find dotneato-config")
 
-def _parse_options():
-    parser = OptionParser(usage="--library_path=/my/lib/path --include_path=/my/include/path")
-    parser.add_option('--include_path', help='Graphviz include path',
-                      dest='include_dir', action='store', default=None)
-
-    parser.add_option('--library_path', help='Graphviz library path',
-                      dest='library_dir', action='store', default=None)
-    opts, args = parser.parse_args()
-    return opts.include_dir, opts.library_dir
+    return include_path, library_path
 
 def get_graphviz_dirs():
     """
@@ -119,12 +113,8 @@ def get_graphviz_dirs():
     # Unknown - use command line -I and -L switches to set
     include_dirs = None
     library_dirs = None
-    define_macros = []
-    include_dirs, library_dirs = _parse_options()
 
-    if sys.platform == "win32":
-        define_macros = define_macros.append(('GVDLL', None))
-    else:
+    if sys.platform != "win32":
         # Attempt to find Graphviz installation
         if library_dirs is None and include_dirs is None:
             print("Trying pkg-config")
@@ -159,14 +149,9 @@ def get_graphviz_dirs():
             print()
             raise OSError("Error locating graphviz.")
 
-    print("library_dirs=%s" % library_dirs)
     print("include_dirs=%s" % include_dirs)
+    print("library_dirs=%s" % library_dirs)
 
-    if library_dirs:
-        library_dirs = [library_dirs]
 
-    if include_dirs:
-        include_dirs = [include_dirs]
-
-    return include_dirs, library_dirs, define_macros
+    return include_dirs, library_dirs
 
