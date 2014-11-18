@@ -305,7 +305,7 @@ class AGraph(object):
 
         """
         if not is_string_like(n):
-            n = str(n)
+            n = unicode(n)
         n = n.encode(self.encoding)
         try:
             nh = gv.agnode(self.handle, n, _Action.find)
