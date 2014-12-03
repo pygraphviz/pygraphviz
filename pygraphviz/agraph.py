@@ -1027,11 +1027,11 @@ class AGraph(object):
         bunch = self.prepare_nbunch(nbunch)
         for n in bunch:
             node = Node(self, n)
-            nh = gv.agsubnode(self.handle, node.handle, _Action.create)
+            nh = gv.agsubnode(handle, node.handle, _Action.create)
         for (u, v, k) in self.edges(keys=True):
             if u in H and v in H:
                 edge = Edge(self, u, v, k)
-                eh = gv.agsubedge(self.handle, edge.handle, _Action.create)
+                eh = gv.agsubedge(handle, edge.handle, _Action.create)
 
         return H
 

@@ -3,6 +3,21 @@ from nose.tools import *
 import pygraphviz as pgv
 from os import linesep
 
+def test_subgraph():
+    G = pgv.AGraph()
+    G.add_edge(1,2)
+    s = G.add_subgraph((1,2),label='foo')
+    assert_equal(G.string().expandtabs(2),
+"""strict graph {
+  {
+    graph [label=foo];
+    1 -- 2;
+  }
+}
+""".replace('\n', linesep))
+
+
+
 def test_subgraph_cluster():
     G = pgv.AGraph(label='foo')
     s = G.subgraph('cluster_a', label='<Hello<BR/>World>')
