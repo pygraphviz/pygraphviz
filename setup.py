@@ -57,8 +57,7 @@ if __name__ == "__main__":
             include_dirs=[],
             library_dirs=[],
             libraries=["cgraph", "cdt"],
-            define_macros=define_macros,
-            **extension_args
+            define_macros=define_macros
         )
     ]
 
