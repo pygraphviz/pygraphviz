@@ -43,10 +43,11 @@ def add_extensions(command_subclass):
         # if there is no library_path and include_path passed form command line then try identify them
         if (not self.include_path) or (not self.library_path):
             self.include_path, self.library_path = get_graphviz_dirs()
-        for m in self.ext_modules:
-            if m.name == 'pygraphviz._graphviz':
-                m.include_dirs.extend(self.include_path)
-                m.library_dirs.append(self.library_path)
+        if self.distribution and self.distribution.ext_modules:
+            for m in self.distribution.ext_modules:
+                if m.name == 'pygraphviz._graphviz':
+                    m.include_dirs.append(self.include_path)
+                    m.library_dirs.append(self.library_path)
         orig_run(self)
 
     command_subclass.__init__ = __init__
@@ -64,6 +65,6 @@ class AddExtensionDevelopCommand(develop):
 class AddExtensionInstallCommand(install):
     pass
 
-@add_extensions
-class AddExtensionBuildCommand(build_ext):
-    pass
+#@add_extensions
+#class AddExtensionBuildCommand(build_ext):
+#    pass
