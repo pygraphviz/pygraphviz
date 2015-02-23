@@ -64,3 +64,26 @@ def _test_anonymous_edges():
 }
 """.replace('\n', linesep))
     os.unlink(fname)
+
+def test_edge_attribute_update():
+    A = pgv.AGraph(strict=True)
+    A.add_edge(1,2,label='test',spam='eggs')
+    A.add_edge(1,2,label='update',spam='')
+    assert_equal(A.string().expandtabs(2),
+"""strict graph {
+  1 -- 2   [label=update];
+}
+""".replace('\n', linesep)
+)
+
+def test_edge_attribute_update_nonstrict():
+    A = pgv.AGraph(strict=False)
+    A.add_edge(1,2,label='test',spam='eggs',key='one')
+    A.add_edge(1,2,label='update',spam='',key='one')
+    assert_equal(A.string().expandtabs(2),
+"""graph {
+  1 -- 2 [key=one,
+  label=update];
+}
+""".replace('\n', linesep)
+)

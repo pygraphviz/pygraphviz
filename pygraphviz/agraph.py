@@ -293,7 +293,7 @@ class AGraph(object):
         >>> G.nodes()  # doctest: +IGNORE_UNICODE
         [u'a', u'1']
 
-        Attributes can be added to nodes on creation
+        Attributes can be added to nodes on creation or updated after creation
         (attribute values must be strings)
 
         >>> G.add_node(2,color='red')
@@ -302,7 +302,6 @@ class AGraph(object):
         for a list of attributes.
 
         Anonymous Graphviz nodes are currently not implemented.
-
         """
         if not is_string_like(n):
             n = str(n)
@@ -311,8 +310,8 @@ class AGraph(object):
             nh = gv.agnode(self.handle, n, _Action.find)
         except KeyError:
             nh = gv.agnode(self.handle, n, _Action.create)
-            node = Node(self, nh=nh)
-            node.attr.update(**attr)
+        node = Node(self, nh=nh)
+        node.attr.update(**attr)
 
     def add_nodes_from(self, nbunch, **attr):
         """Add nodes from a container nbunch.
@@ -326,10 +325,9 @@ class AGraph(object):
         [u'1', u'a', u'b', u'spam']
 
 
-        Attributes can be added to nodes on creation
+        Attributes can be added to nodes on creation or updated after creation
 
         >>> G.add_nodes_from(nlist, color='red') # set all nodes in nlist red
-
         """
         for n in nbunch:
             self.add_node(n, **attr)
@@ -343,7 +341,6 @@ class AGraph(object):
         >>> G=AGraph()
         >>> G.add_node('a')
         >>> G.remove_node('a')
-
         """
         if not is_string_like(n):
             n = str(n)
@@ -450,7 +447,7 @@ class AGraph(object):
         >>> sorted(G.edges(keys=True))  # doctest: +IGNORE_UNICODE
         [(u'a', u'b', u'first'), (u'a', u'b', u'second')]
 
-        Attributes can be added when edges are created
+        Attributes can be added when edges are created or updated after creation
 
         >>> G.add_edge('a','b',color='green')
 
@@ -472,16 +469,18 @@ class AGraph(object):
         except:
             self.add_node(v)
             vh = Node(self, v).handle
+        if key is not None:
+            if not is_string_like(key):
+                key = str(key)
+            key = key.encode(self.encoding)
         try:
-            if key is not None:
-                if not is_string_like(key):
-                    key = str(key)
-                key = key.encode(self.encoding)
+            # new
             eh = gv.agedge(self.handle, uh, vh, key, _Action.create)
-            e = Edge(self, eh=eh)
-            e.attr.update(**attr)
         except KeyError:
-            return None # silent failure for strict graph, already added
+            # for strict graph, or already added
+            eh = gv.agedge(self.handle, uh, vh, key, _Action.find)
+        e = Edge(self, eh=eh)
+        e.attr.update(**attr)
 
     def add_edges_from(self, ebunch, **attr):
         """Add nodes to graph from a container ebunch.
@@ -492,10 +491,9 @@ class AGraph(object):
         >>> elist=[('a','b'),('b','c')]
         >>> G.add_edges_from(elist)
 
-        Attributes can be added when edges are created
+        Attributes can be added when edges are created or updated after creation
 
         >>> G.add_edges_from(elist, color='green')
-
         """
         for e in ebunch:
             self.add_edge(e, **attr)
