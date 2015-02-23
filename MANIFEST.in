@@ -4,7 +4,7 @@ include setup_extra.py
 include INSTALL.txt
 
 recursive-include examples *.py *.gz 
-recursive-include doc *.py *.rst Makefile *.html *.txt
+recursive-include doc *.py *.rst Makefile *.html *.txt *.css 
 
 global-exclude *~
 global-exclude *.pyc
