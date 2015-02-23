@@ -3291,7 +3291,7 @@ SWIG_FromCharPtr(const char *cptr)
     int len;
     char *hs;
 
-    if (val[0] == '<' && strcmp(name, "label") == 0) {
+    if (val[0] == '<' && (strcmp(name, "label") == 0 || strcmp(name, "xlabel") == 0)) {
         len = strlen(val);
         if (val[len-1] == '>') {
             hs = strdup(val+1);
@@ -3309,7 +3309,7 @@ SWIG_FromCharPtr(const char *cptr)
     int len;
     char *hs;
 
-    if (val[0] == '<' && strcmp(name, "label") == 0) {
+    if (val[0] == '<' && (strcmp(name, "label") == 0 || strcmp(name, "xlabel") == 0)) {
         len = strlen(val);
         if (val[len-1] == '>') {
             hs = strdup(val+1);
