@@ -111,7 +111,7 @@ class AGraph(object):
       directed: True|False
 
       data: Dictionary of dictionaries or dictionary of lists
-      representing nodes or edges to load into intial graph
+      representing nodes or edges to load into initial graph
 
       string:  String containing a dot format graph
 
