@@ -86,5 +86,5 @@ if __name__ == "__main__":
         package_data=package_data,
         include_package_data = True,
         test_suite='nose.collector',
-        tests_require=['nose>=0.10.1'],
+        tests_require=['nose>=0.10.1', 'doctest-ignore-unicode>=0.1.0',],
     )
