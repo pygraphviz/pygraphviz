@@ -30,6 +30,21 @@ or install it with::
 and an attempt will be made to find and install an appropriate version
 that matches your operating system and Python version. 
 
+Providing path to graphviz
+--------------------------
+
+We tried our best to discover graphviz location automatically, but if you 
+would like specify specific location for graphviz you may provide additrional parameters to specify graphviz location
+
+
+include-path= path to graphviz include files
+library-path= path to graphviz library files
+
+For example
+
+::
+
+    python setup.py install --include-path=/usr/local/Cellar/graphviz/2.38.0/include/graphviz --library-path=/usr/local/Cellar/graphviz/2.38.0/lib
 
 Installing from Source
 ======================
