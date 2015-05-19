@@ -14,7 +14,6 @@ from setuptools import setup, Extension
 import sys
 
 from setup_commands import AddExtensionDevelopCommand, AddExtensionInstallCommand
-#from setup_commands import AddExtensionBuildCommand
 from setup_extra import get_graphviz_dirs
 
 
@@ -81,7 +80,6 @@ if __name__ == "__main__":
         cmdclass={
             'install': AddExtensionInstallCommand,
             'develop': AddExtensionDevelopCommand,
-#            'build_ext': AddExtensionBuildCommand,
             },
         package_data=package_data,
         include_package_data = True,

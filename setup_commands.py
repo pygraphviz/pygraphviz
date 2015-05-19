@@ -15,7 +15,6 @@ Setup commands for PyGraphviz.
 
 from setuptools.command.develop import develop
 from setuptools.command.install import install
-from setuptools.command.build_ext import build_ext
 
 from setup_extra import get_graphviz_dirs
 
@@ -64,7 +63,3 @@ class AddExtensionDevelopCommand(develop):
 @add_extensions
 class AddExtensionInstallCommand(install):
     pass
-
-#@add_extensions
-#class AddExtensionBuildCommand(build_ext):
-#    pass
