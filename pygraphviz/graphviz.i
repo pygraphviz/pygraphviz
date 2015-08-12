@@ -297,6 +297,15 @@ extern const Agdesc_t Agstrictdirected = { 1, 1, 0, 1 };
 extern const Agdesc_t Agundirected = { 0, 0, 0, 1 };
 extern const Agdesc_t Agstrictundirected = { 0, 1, 0, 1 };
 
+%{
+#ifdef PYPY_VERSION
+Agdesc_t Agdirected = { 1, 0, 0, 1 };
+Agdesc_t Agstrictdirected = { 1, 1, 0, 1 };
+Agdesc_t Agundirected = { 0, 0, 0, 1 };
+Agdesc_t Agstrictundirected = { 0, 1, 0, 1 };
+#endif
+%}
+
 
 #define AGRAPH      0               /* can't exceed 2 bits. see Agtag_t. */
 #define AGNODE      1
