@@ -5154,21 +5154,8 @@ fail:
 }
 
 
-SWIGINTERN int Swig_var_Agdirected_set(PyObject *_val) {
-  {
-    void *argp = 0;
-    int res = SWIG_ConvertPtr(_val, &argp, SWIGTYPE_p_Agdesc_t,  0 );
-    if (!SWIG_IsOK(res)) {
-      SWIG_exception_fail(SWIG_ArgError(res), "in variable '""Agdirected""' of type '""Agdesc_t""'");
-    }
-    if (!argp) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""Agdirected""' of type '""Agdesc_t""'");
-    } else {
-      Agdirected = *((Agdesc_t *)(argp));
-    }
-  }
-  return 0;
-fail:
+SWIGINTERN int Swig_var_Agdirected_set(PyObject *_val SWIGUNUSED) {
+  SWIG_Error(SWIG_AttributeError,"Variable Agdirected is read-only.");
   return 1;
 }
 
@@ -5181,21 +5168,8 @@ SWIGINTERN PyObject *Swig_var_Agdirected_get(void) {
 }
 
 
-SWIGINTERN int Swig_var_Agstrictdirected_set(PyObject *_val) {
-  {
-    void *argp = 0;
-    int res = SWIG_ConvertPtr(_val, &argp, SWIGTYPE_p_Agdesc_t,  0 );
-    if (!SWIG_IsOK(res)) {
-      SWIG_exception_fail(SWIG_ArgError(res), "in variable '""Agstrictdirected""' of type '""Agdesc_t""'");
-    }
-    if (!argp) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""Agstrictdirected""' of type '""Agdesc_t""'");
-    } else {
-      Agstrictdirected = *((Agdesc_t *)(argp));
-    }
-  }
-  return 0;
-fail:
+SWIGINTERN int Swig_var_Agstrictdirected_set(PyObject *_val SWIGUNUSED) {
+  SWIG_Error(SWIG_AttributeError,"Variable Agstrictdirected is read-only.");
   return 1;
 }
 
@@ -5208,21 +5182,8 @@ SWIGINTERN PyObject *Swig_var_Agstrictdirected_get(void) {
 }
 
 
-SWIGINTERN int Swig_var_Agundirected_set(PyObject *_val) {
-  {
-    void *argp = 0;
-    int res = SWIG_ConvertPtr(_val, &argp, SWIGTYPE_p_Agdesc_t,  0 );
-    if (!SWIG_IsOK(res)) {
-      SWIG_exception_fail(SWIG_ArgError(res), "in variable '""Agundirected""' of type '""Agdesc_t""'");
-    }
-    if (!argp) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""Agundirected""' of type '""Agdesc_t""'");
-    } else {
-      Agundirected = *((Agdesc_t *)(argp));
-    }
-  }
-  return 0;
-fail:
+SWIGINTERN int Swig_var_Agundirected_set(PyObject *_val SWIGUNUSED) {
+  SWIG_Error(SWIG_AttributeError,"Variable Agundirected is read-only.");
   return 1;
 }
 
@@ -5235,21 +5196,8 @@ SWIGINTERN PyObject *Swig_var_Agundirected_get(void) {
 }
 
 
-SWIGINTERN int Swig_var_Agstrictundirected_set(PyObject *_val) {
-  {
-    void *argp = 0;
-    int res = SWIG_ConvertPtr(_val, &argp, SWIGTYPE_p_Agdesc_t,  0 );
-    if (!SWIG_IsOK(res)) {
-      SWIG_exception_fail(SWIG_ArgError(res), "in variable '""Agstrictundirected""' of type '""Agdesc_t""'");
-    }
-    if (!argp) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""Agstrictundirected""' of type '""Agdesc_t""'");
-    } else {
-      Agstrictundirected = *((Agdesc_t *)(argp));
-    }
-  }
-  return 0;
-fail:
+SWIGINTERN int Swig_var_Agstrictundirected_set(PyObject *_val SWIGUNUSED) {
+  SWIG_Error(SWIG_AttributeError,"Variable Agstrictundirected is read-only.");
   return 1;
 }
 

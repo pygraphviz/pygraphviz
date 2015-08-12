@@ -331,4 +331,8 @@ AGEDGE = _graphviz.AGEDGE
 # This file is compatible with both classic and new-style classes.
 
 cvar = _graphviz.cvar
+Agdirected = cvar.Agdirected
+Agstrictdirected = cvar.Agstrictdirected
+Agundirected = cvar.Agundirected
+Agstrictundirected = cvar.Agstrictundirected
 
