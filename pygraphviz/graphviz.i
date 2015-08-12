@@ -289,15 +289,15 @@ def agnameof(handle):
 
 
 
-
-/* Agdesc_t Agdirected, Agstrictdirected, Agundirected, Agstrictundirected;  */
+Agdesc_t Agdirected, Agstrictdirected, Agundirected, Agstrictundirected;
 /* constants are safer */
 /* directed, strict, noloops, maingraph */
+/*
 const Agdesc_t Agdirected = { 1, 0, 0, 1 };
 const Agdesc_t Agstrictdirected = { 1, 1, 0, 1 };
 const Agdesc_t Agundirected = { 0, 0, 0, 1 };
 const Agdesc_t Agstrictundirected = { 0, 1, 0, 1 };
-
+*/
 
 #define AGRAPH      0               /* can't exceed 2 bits. see Agtag_t. */
 #define AGNODE      1
