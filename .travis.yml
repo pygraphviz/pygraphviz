@@ -9,11 +9,13 @@ before_install:
   # We need a newer PyPy
   - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then sudo add-apt-repository -y ppa:pypy/ppa && sudo apt-get update -q && sudo apt-get install pypy pypy-dev; fi
 install:
-  - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then virtualenv -p /usr/bin/pypy pypy; source pypy/bin/activate; export LDFLAGS="-lcdt -lcgraph"; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then virtualenv -p /usr/bin/pypy pypy; source pypy/bin/activate; fi
+  - cc --version
   - pip install nose
   - pip install doctest-ignore-unicode
   - pip install coveralls
   - python setup.py develop
+  - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then ls -l /usr/lib/libcdt.so; ldd /home/travis/build/NextThought/pygraphviz/pygraphviz/_graphviz.pypy-26.so; export LD_PRELOAD="/usr/lib/libcdt.so /usr/lib/libcgraph.so"; fi
 script:
   - nosetests --with-coverage --cover-package=pygraphviz
 after_success:
