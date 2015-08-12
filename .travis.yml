@@ -9,7 +9,7 @@ before_install:
   # We need a newer PyPy
   - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then sudo add-apt-repository -y ppa:pypy/ppa && sudo apt-get update -q && sudo apt-get install pypy; fi
 install:
-  - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then virtualenv -p `which pypy` pypy; source pypy/bin/activate; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then virtualenv -p /usr/bin/pypy pypy; source pypy/bin/activate; fi
   - pip install nose
   - pip install doctest-ignore-unicode
   - pip install coveralls
