@@ -3357,14 +3357,6 @@ SWIG_FromCharPtr(const char *cptr)
 
   #define SWIG_From_long   PyLong_FromLong 
 
-
-#ifdef PYPY_VERSION
-Agdesc_t Agdirected = { 1, 0, 0, 1 };
-Agdesc_t Agstrictdirected = { 1, 1, 0, 1 };
-Agdesc_t Agundirected = { 0, 0, 0, 1 };
-Agdesc_t Agstrictundirected = { 0, 1, 0, 1 };
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
