@@ -29,7 +29,7 @@ extern PyTypeObject PyIOBase_Type;
 %#endif
     mode_obj = PyObject_GetAttrString($input, "mode");
 %#if !defined(PYPY_VERSION)
-    mode_byte_obj = PyUnicode_AsUTF8String(mode_obj2);
+    mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
 %#else
     mode_byte_obj = mode_obj;
     Py_INCREF(mode_byte_obj);
