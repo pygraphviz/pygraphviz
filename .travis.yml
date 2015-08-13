@@ -6,9 +6,7 @@ python:
 before_install:
   # We need GraphViz
   - "sudo apt-get install graphviz 2>&1 | tail -n 2"
-  - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then sudo add-apt-repository -y ppa:pypy/ppa && sudo apt-get update -q && sudo apt-get install pypy pypy-dev; fi
 install:
-  - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then virtualenv -p /usr/bin/pypy pypy; source pypy/bin/activate; fi
   - pip install nose
   - pip install doctest-ignore-unicode
   - pip install coveralls
