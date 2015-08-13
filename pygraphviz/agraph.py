@@ -1311,44 +1311,48 @@ class AGraph(object):
         runprog = r'"%s"' % self._get_prog(prog)
         cmd = ' '.join([runprog, args])
         dotargs = shlex.split(cmd)
+        env = None
+        if hasattr(sys, 'pypy_version_info') and sys.platform.startswith('linux'):
+            # If we set LD_PRELOAD to workaround the issue loading the
+            # library, we have to undo that when we fork, otherwise
+            # the programs fail to even start
+            import os
+            if 'LD_PRELOAD' in os.environ:
+                env = dict(os.environ)
+                env.pop('LD_PRELOAD')
+
         p = subprocess.Popen(dotargs,
                              shell=False,
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
-                             close_fds=False)
-        if prog != 'nop' and hasattr(sys, 'pypy_version_info') and sys.platform.startswith('linux'):
-            as_str = self.string()
-            data, errors = p.communicate(as_str)
-        else:
-            (child_stdin,
-             child_stdout,
-             child_stderr) = (p.stdin, p.stdout, p.stderr)
-            # Use threading to avoid blocking
-            data = []
-            errors = []
-            threads = [PipeReader(data, child_stdout),
-                       PipeReader(errors, child_stderr)]
-            for t in threads:
-                t.start()
+                             close_fds=False,
+                             env=env)
 
-            self.write(child_stdin)
-            child_stdin.close()
+        (child_stdin,
+         child_stdout,
+         child_stderr) = (p.stdin, p.stdout, p.stderr)
+        # Use threading to avoid blocking
+        data = []
+        errors = []
+        threads = [PipeReader(data, child_stdout),
+                   PipeReader(errors, child_stderr)]
+        for t in threads:
+            t.start()
 
-            for t in threads:
-                t.join()
+        self.write(child_stdin)
+        child_stdin.close()
 
-            data = b"".join(data)
-            errors = b"".join(errors)
-
+        for t in threads:
+            t.join()
 
         if not data:
-            raise IOError(errors)
+            raise IOError(b"".join(errors))
 
         if len(errors) > 0:
-            warnings.warn(errors, RuntimeWarning)
+            warnings.warn(b"".join(errors), RuntimeWarning)
 
-        return data
+        return b"".join(data)
 
     def layout(self, prog='neato', args=''):
         """Assign positions to nodes in graph.
