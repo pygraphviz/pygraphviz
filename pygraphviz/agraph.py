@@ -1312,36 +1312,43 @@ class AGraph(object):
         cmd = ' '.join([runprog, args])
         dotargs = shlex.split(cmd)
         p = subprocess.Popen(dotargs,
-                             bufsize=-1,
                              shell=False,
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
                              close_fds=False)
-        (child_stdin,
-         child_stdout,
-         child_stderr) = (p.stdin, p.stdout, p.stderr)
-        # Use threading to avoid blocking
-        data = []
-        errors = []
-        threads = [PipeReader(data, child_stdout),
-                   PipeReader(errors, child_stderr)]
-        for t in threads:
-            t.start()
+        if prog != 'nop' and hasattr(sys, 'pypy_version_info') and sys.platform.startswith('linux'):
+            as_str = self.string()
+            data, errors = p.communicate(as_str)
+        else:
+            (child_stdin,
+             child_stdout,
+             child_stderr) = (p.stdin, p.stdout, p.stderr)
+            # Use threading to avoid blocking
+            data = []
+            errors = []
+            threads = [PipeReader(data, child_stdout),
+                       PipeReader(errors, child_stderr)]
+            for t in threads:
+                t.start()
 
-        self.write(child_stdin)
-        child_stdin.close()
+            self.write(child_stdin)
+            child_stdin.close()
 
-        for t in threads:
-            t.join()
+            for t in threads:
+                t.join()
+
+            data = b"".join(data)
+            errors = b"".join(errors)
+
 
         if not data:
-            raise IOError(b"".join(errors))
+            raise IOError(errors)
 
         if len(errors) > 0:
-            warnings.warn(b"".join(errors), RuntimeWarning)
+            warnings.warn(errors, RuntimeWarning)
 
-        return b"".join(data)
+        return data
 
     def layout(self, prog='neato', args=''):
         """Assign positions to nodes in graph.
