@@ -1311,23 +1311,12 @@ class AGraph(object):
         runprog = r'"%s"' % self._get_prog(prog)
         cmd = ' '.join([runprog, args])
         dotargs = shlex.split(cmd)
-        env = None
-        if hasattr(sys, 'pypy_version_info') and sys.platform.startswith('linux'):
-            # If we set LD_PRELOAD to workaround the issue loading the
-            # library, we have to undo that when we fork, otherwise
-            # the programs fail to even start
-            import os
-            if 'LD_PRELOAD' in os.environ:
-                env = dict(os.environ)
-                env.pop('LD_PRELOAD')
-
         p = subprocess.Popen(dotargs,
                              shell=False,
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
-                             close_fds=False,
-                             env=env)
+                             close_fds=False)
 
         (child_stdin,
          child_stdout,

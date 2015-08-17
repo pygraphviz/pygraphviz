@@ -11,7 +11,6 @@ install:
   - pip install doctest-ignore-unicode
   - pip install coveralls
   - python setup.py develop
-  - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then ls -l /usr/lib/libcdt.so; ldd /home/travis/build/NextThought/pygraphviz/pygraphviz/_graphviz.pypy-26.so; export LD_PRELOAD="/usr/lib/libcdt.so /usr/lib/libcgraph.so"; fi
 script:
   - nosetests --with-coverage --cover-package=pygraphviz
 after_success:
