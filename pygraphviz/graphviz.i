@@ -1,10 +1,10 @@
-#    Copyright (C) 2004-2006 by 
-#    Aric Hagberg <hagberg@lanl.gov>
-#    Dan Schult <dschult@colgate.edu>
-#    Manos Renieris, http://www.cs.brown.edu/~er/
-#    Distributed with BSD license.     
-#    All rights reserved, see LICENSE for details.
-
+/* #    Copyright (C) 2004-2006 by
+   #    Aric Hagberg <hagberg@lanl.gov>
+   #    Dan Schult <dschult@colgate.edu>
+   #    Manos Renieris, http://www.cs.brown.edu/~er/
+   #    Distributed with BSD license.
+   #    All rights reserved, see LICENSE for details.
+*/
 %module graphviz
 
 %{
@@ -18,15 +18,28 @@ extern PyTypeObject PyIOBase_Type;
 %}
 
 %typemap(in) FILE* (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
-%#if PY_VERSION_HEX >= 0x03000000
+%#if PY_VERSION_HEX >= 0x03000000 || defined(PYPY_VERSION)
+%#if !defined(PYPY_VERSION)
     if (!PyObject_IsInstance($input, (PyObject *)&PyIOBase_Type)) {
         PyErr_SetString(PyExc_TypeError, "not a file handle");
         return NULL;
     }
     // work around to get hold of FILE*
     fd = PyObject_AsFileDescriptor($input);
+%#else
+    fd = PyObject_AsFileDescriptor($input);
+    if (fd < 0)  {
+        PyErr_SetString(PyExc_TypeError, "not a file handle");
+        return NULL;
+    }
+%#endif
     mode_obj = PyObject_GetAttrString($input, "mode");
+%#if !defined(PYPY_VERSION)
     mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+%#else
+    mode_byte_obj = mode_obj;
+    Py_INCREF(mode_byte_obj);
+%#endif
     mode = PyBytes_AsString(mode_byte_obj);
     $1 = fdopen(fd, mode);
     Py_XDECREF(mode_obj);
@@ -64,7 +77,7 @@ extern PyTypeObject PyIOBase_Type;
      PyErr_SetString(PyExc_KeyError,"agset: no key");
      return NULL;
   }
-} 
+}
 
 /* agsetsafeset_label returns -1 on error */
 %exception agsafeset_label {
@@ -73,7 +86,7 @@ extern PyTypeObject PyIOBase_Type;
      PyErr_SetString(PyExc_KeyError,"agsafeset_label: Error");
      return NULL;
   }
-} 
+}
 
 
 /* agdelnode returns -1 on error */
@@ -133,7 +146,7 @@ def agraphnew(name,strict=False,directed=False):
     else:
         if directed:
             return _graphviz.agopen(name,cvar.Agdirected,None)
-        else:		 
+        else:
             return _graphviz.agopen(name,cvar.Agundirected,None)
 %}
 
@@ -149,15 +162,15 @@ int       agisstrict(Agraph_t * g);
 
 /* nodes */
 Agnode_t *agnode(Agraph_t *g, char *name, int createflag);
-Agnode_t *agidnode(Agraph_t * g, unsigned long id, int createflag); 
+Agnode_t *agidnode(Agraph_t * g, unsigned long id, int createflag);
 Agnode_t *agsubnode(Agraph_t *g, Agnode_t *n, int createflag);
 Agnode_t *agfstnode(Agraph_t *g);
 Agnode_t *agnxtnode(Agraph_t *g, Agnode_t *n);
-Agnode_t *aglstnode(Agraph_t * g); 
-Agnode_t *agprvnode(Agraph_t * g, Agnode_t * n); 
+Agnode_t *aglstnode(Agraph_t * g);
+Agnode_t *agprvnode(Agraph_t * g, Agnode_t * n);
 /* Agsubnode_t *agsubrep(Agraph_t * g, Agnode_t * n); */
 
-/* edges */ 
+/* edges */
 
 Agedge_t *agedge(Agraph_t * g, Agnode_t * t, Agnode_t * h,
  		char *name, int createflag);
@@ -186,7 +199,7 @@ int      agxset(void *obj, Agsym_t *sym, char *value);
 int      agsafeset(void *obj, char *name, char *value, char *def);
 
 %inline %{
-  char *agattrname(Agsym_t *atsym) {	
+  char *agattrname(Agsym_t *atsym) {
     return atsym->name;
   }
   %}
@@ -245,9 +258,9 @@ int      agsafeset(void *obj, char *name, char *value, char *def);
 
 /* subgraphs */
 Agraph_t *agsubg(Agraph_t *g, char *name, int createflag);
-Agraph_t *agfstsubg(Agraph_t *g); 
+Agraph_t *agfstsubg(Agraph_t *g);
 Agraph_t *agnxtsubg(Agraph_t *subg);
-Agraph_t *agparent(Agraph_t *g);  
+Agraph_t *agparent(Agraph_t *g);
 Agraph_t *agroot(Agraph_t *g);
 /* Agedge_t *agsubedge(Agraph_t *g, Agedge_t *e, int createflag); */
 long      agdelsubg(Agraph_t *g, Agraph_t *sub);
@@ -277,13 +290,12 @@ def agnameof(handle):
   if name==b'' or name.startswith(b'%'):
     return None
   else:
-    return name 
+    return name
 %}
 
 
 
-
-/* Agdesc_t Agdirected, Agstrictdirected, Agundirected, Agstrictundirected;  */
+/* Agdesc_t Agdirected, Agstrictdirected, Agundirected, Agstrictundirected; */
 /* constants are safer */
 /* directed, strict, noloops, maingraph */
 const Agdesc_t Agdirected = { 1, 0, 0, 1 };
@@ -297,6 +309,3 @@ const Agdesc_t Agstrictundirected = { 0, 1, 0, 1 };
 #define AGOUTEDGE   2
 #define AGINEDGE    3               /* (1 << 1) indicates an edge tag.   */
 #define AGEDGE      AGOUTEDGE       /* synonym in object kind args */
-
-
-
