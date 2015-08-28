@@ -17,6 +17,7 @@ PyGraphviz documentation
    :maxdepth: 2
 
    
+   download
    install
    tutorial
    reference/index

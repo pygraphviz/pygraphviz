@@ -110,6 +110,13 @@ extern PyTypeObject PyIOBase_Type;
   }
 }
 
+%exception agread {
+  $action
+  if (!result) {
+     PyErr_SetString(PyExc_ValueError,"agread: bad input data");
+     return NULL;
+  }
+}
 
 
 /* graphs */
@@ -197,7 +204,7 @@ int      agsafeset(void *obj, char *name, char *value, char *def);
     int len;
     char *hs;
 
-    if (val[0] == '<' && strcmp(name, "label") == 0) {
+    if (val[0] == '<' && (strcmp(name, "label") == 0 || strcmp(name, "xlabel") == 0)) {
         len = strlen(val);
         if (val[len-1] == '>') {
             hs = strdup(val+1);
@@ -220,7 +227,7 @@ int      agsafeset(void *obj, char *name, char *value, char *def);
     int len;
     char *hs;
 
-    if (val[0] == '<' && strcmp(name, "label") == 0) {
+    if (val[0] == '<' && (strcmp(name, "label") == 0 || strcmp(name, "xlabel") == 0)) {
         len = strlen(val);
         if (val[len-1] == '>') {
             hs = strdup(val+1);

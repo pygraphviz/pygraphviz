@@ -106,8 +106,7 @@ Requirements
 Python
 ------
 
-To use PyGraphviz you need Python version 2.6.x or 2.7.x.
-PyGraphviz does not work with Python 3
+PyGraphviz is tested and works with Python 2.7 and Python 3.4. It may work correctly with other Python 3.x versions.
 
 The easiest way to get Python and most optional packages is to install
 the Enthought Python distribution "Canopy"

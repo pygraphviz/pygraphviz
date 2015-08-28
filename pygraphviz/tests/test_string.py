@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from nose.tools import *
+from nose.tools import assert_equal, raises
 import pygraphviz as pgv
 from os import linesep
+
 
 def test_name():
     A = pgv.AGraph(name='')
@@ -47,3 +48,7 @@ def test_string_representation_large():
         11;
 }
 """.replace('\n', linesep))
+
+@raises(pgv.DotError)
+def test_bad_dot_input():
+    A = pgv.AGraph(string='graph {1--1')
