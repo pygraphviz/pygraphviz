@@ -948,8 +948,8 @@ class AGraph(object):
 
     def clear(self):
         """Remove all nodes, edges, and attributes from the graph."""
-        self.edge_attr.clear()
-        self.node_attr.clear()
+        self.remove_edges_from(self.edges())
+        self.remove_nodes_from(self.nodes())
         self.graph_attr.clear()
         # now "close" existing graph and create a new graph
         name = gv.agnameof(self.handle)
