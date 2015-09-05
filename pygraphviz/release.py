@@ -63,7 +63,7 @@ def get_svn_revision():
         return None
 
 name = 'pygraphviz'
-version = '1.3rc2'
+version = '1.3'
 
 # Declare current release as a development release.
 # Change to False before tagging a release; then change back.
@@ -88,7 +88,7 @@ authors = {'Hagberg' : ('Aric Hagberg','aric.hagberg@gmail.com'),
            }
 url = 'http://pygraphviz.github.io'
 download_url="https://pypi.python.org/pypi/pygraphviz"
-platforms = ['Linux','Mac OSX']
+platforms = ['Linux','Mac OSX','Microsoft :: Windows']
 keywords = ['Networks', 'Graph Visualization', 'network', 'graph', 'graph drawing']
 classifiers = [
         'Development Status :: 4 - Beta',
@@ -98,11 +98,8 @@ classifiers = [
         'Programming Language :: C',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Scientific/Engineering :: Information Analysis',
