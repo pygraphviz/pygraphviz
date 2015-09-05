@@ -4,10 +4,12 @@ News
 ==== 
 pygraphviz-1.3
 --------------
-Release date: TBD
+Release date: 5 September 2015
 
  - Python 3 support
  - Encoding bugfixes
+
+https://github.com/pygraphviz/pygraphviz/issues?q=milestone%3Apygraphivz-1.3+is%3Aclosed
 
 
 pygraphviz-1.2
