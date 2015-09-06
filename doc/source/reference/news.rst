@@ -2,6 +2,14 @@
 
 News
 ==== 
+pygraphviz-1.3.1
+----------------
+Release date: 6 September 2015
+
+ - Update manifest to include missing files
+
+
+
 pygraphviz-1.3
 --------------
 Release date: 5 September 2015
