@@ -1201,7 +1201,7 @@ class AGraph(object):
                 self.handle = gv.agread(fh, None)
             except ValueError:
                 raise DotError
-            
+
         except IOError:
             print("IO error reading file")
 
@@ -1221,7 +1221,9 @@ class AGraph(object):
             gv.agwrite(self.handle, fh)
         except IOError:
             print("IO error writing file")
-
+        finally:
+            if hasattr(fh, 'close') and not hasattr(path, 'write'):
+                fh.close()
 
     def string_nop(self):
         """Return a string (unicode) representation of graph in dot format."""
@@ -1314,6 +1316,7 @@ class AGraph(object):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
                              close_fds=False)
+
         (child_stdin,
          child_stdout,
          child_stderr) = (p.stdin, p.stdout, p.stderr)

@@ -322,18 +322,20 @@ class TestDiGraphOnly(TestGraph):
         assert_equal(A.in_degree(2), 1)
         assert_equal(A.out_degree(2), 1)
 
-        assert_equal(A.string().expandtabs(0),
+        # Have to use expandtabs(1) not 0 because of PyPy bug
+        # https://bitbucket.org/pypy/pypy/issues/2113/calling-strexpandtabs-0-crashes-with-a
+        assert_equal(A.string().expandtabs(1),
 """strict digraph {
-1 -> 2;
-2 -> 3;
+ 1 -> 2;
+ 2 -> 3;
 }
 """.replace('\n', linesep)
 )
 
-        assert_equal(A.reverse().string().expandtabs(0),
+        assert_equal(A.reverse().string().expandtabs(1),
 """strict digraph {
-2 -> 1;
-3 -> 2;
+ 2 -> 1;
+ 3 -> 2;
 }
 """.replace('\n', linesep)
 )
