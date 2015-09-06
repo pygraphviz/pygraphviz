@@ -1,8 +1,15 @@
 include MANIFEST.in
-include setup_extra.py
 include INSTALL.txt
 include README.rst
+include LICENSE
 
+include *.py
+include *.swg
+include Makefile
+include tox.ini
+
+recursive-include doc *.png
+recursive-include pygraphviz *.i
 recursive-include examples *.py *.gz 
 recursive-include doc *.py *.rst Makefile *.html *.txt *.css 
 
