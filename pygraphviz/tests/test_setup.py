@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0,'../..')
 import setup_extra
 from nose.tools import *
-from unittest.mock import patch
+from mock import patch
 
 
 def _get_values():
