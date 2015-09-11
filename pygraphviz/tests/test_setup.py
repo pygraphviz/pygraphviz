@@ -1,8 +1,13 @@
 import sys
-sys.path.insert(0,'../..')
-import setup_extra
 from nose.tools import *
 from mock import patch
+
+# inside distributed version, there is no setup_extra files already
+sys.path.insert(0,'../..')
+try:
+    setup_extra = __import__('setup_extra')
+except ImportError:
+    setup_extra = None
 
 
 def _get_values():
@@ -20,21 +25,27 @@ def _get_dpkg_output():
 
 
 def test_try():
-    i, l = None, None
-    i, l = setup_extra._try_configure(i, l, _get_values)
-    assert_equals(i, None)
-    assert_equals(l, 'library')
+    if setup_extra:
+        i, l = None, None
+        i, l = setup_extra._try_configure(i, l, _get_values)
+        assert_equals(i, None)
+        assert_equals(l, 'library')
 
 
 @patch('subprocess.check_output')
 def test_dpkg_config(subprocess_mock):
-    subprocess_mock.return_value = _get_dpkg_output()
-    i, l = setup_extra._dpkg_config()
-    assert_equal(i, '/usr/local/include/graphviz')
-    assert_equal(l, '/usr/local/lib/graphviz')
-
+    if setup_extra:
+        subprocess_mock.return_value = _get_dpkg_output()
+        i, l = setup_extra._dpkg_config()
+        assert_equal(i, '/usr/local/include/graphviz')
+        assert_equal(l, '/usr/local/lib/graphviz')
 
 
 def test_b2str():
-    s = setup_extra._b2str(bytes('abc', encoding='utf8'))
-    assert_equal(s, u'abc')
+    if setup_extra:
+        if sys.version_info >= (3, 0):
+            r = bytes('abc', encoding='utf8')
+        else:
+            r = str('abc')
+        s = setup_extra._b2str(r)
+        assert_equal(s, u'abc')
