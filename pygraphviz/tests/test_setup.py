@@ -10,8 +10,12 @@ def _get_values():
 
 
 def _get_dpkg_output():
-    s = bytes("""libgvc: /usr/local/include/graphviz/gvc.h
-                 gphviz: /usr/local/lib/graphviz/graphviz.so""", encoding='utf8')
+    r = """libgvc: /usr/local/include/graphviz/gvc.h
+                     gphviz: /usr/local/lib/graphviz/graphviz.so"""
+    if sys.version_info >= (3, 0):
+        s = bytes(r, encoding='utf8')
+    else:
+        s = str(r)
     return s
 
 
