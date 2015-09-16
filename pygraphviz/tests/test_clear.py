@@ -11,7 +11,6 @@ def test_del():
     assert_equal(len(A), 0)
 
 def test_clear_node_with_attributes():
-    import pdb; pdb.set_trace()
     A = pgv.AGraph()
     A.add_node(1,foo='bar')
     # For some reasons after porting to Python 3 clear often cause infinite loop
