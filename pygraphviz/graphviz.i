@@ -18,15 +18,28 @@ extern PyTypeObject PyIOBase_Type;
 %}
 
 %typemap(in) FILE* (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
-%#if PY_VERSION_HEX >= 0x03000000
+%#if PY_VERSION_HEX >= 0x03000000 || defined(PYPY_VERSION)
+%#if !defined(PYPY_VERSION)
     if (!PyObject_IsInstance($input, (PyObject *)&PyIOBase_Type)) {
         PyErr_SetString(PyExc_TypeError, "not a file handle");
         return NULL;
     }
     // work around to get hold of FILE*
     fd = PyObject_AsFileDescriptor($input);
+%#else
+    fd = PyObject_AsFileDescriptor($input);
+    if (fd < 0)  {
+        PyErr_SetString(PyExc_TypeError, "not a file handle");
+        return NULL;
+    }
+%#endif
     mode_obj = PyObject_GetAttrString($input, "mode");
-    mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+%#if !defined(PYPY_VERSION)
+     mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+%#else
+    mode_byte_obj = mode_obj;
+    Py_INCREF(mode_byte_obj);
+%#endif
     mode = PyBytes_AsString(mode_byte_obj);
     $1 = fdopen(fd, mode);
     Py_XDECREF(mode_obj);
