@@ -956,6 +956,9 @@ class AGraph(object):
         directed = self.directed
         gv.agclose(self.handle)
         self.handle = gv.agraphnew(name, strict, directed)
+        self.graph_attr.handle = self.handle
+        self.node_attr.handle = self.handle
+        self.edge_attr.handle = self.handle
 
     def close(self):
         # may be useful to clean up graphviz data
@@ -1201,7 +1204,7 @@ class AGraph(object):
                 self.handle = gv.agread(fh, None)
             except ValueError:
                 raise DotError
-            
+
         except IOError:
             print("IO error reading file")
 
