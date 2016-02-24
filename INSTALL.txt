@@ -34,7 +34,7 @@ Providing path to graphviz
 --------------------------
 
 We tried our best to discover graphviz location automatically, but if you 
-would like specify specific location for graphviz you may provide additrional parameters to specify graphviz location
+would like specify specific location for graphviz you may provide additional parameters to specify graphviz location
 
 
 include-path= path to graphviz include files
@@ -44,7 +44,7 @@ For example
 
 ::
 
-    python setup.py install --include-path=/usr/local/Cellar/graphviz/2.38.0/include/graphviz --library-path=/usr/local/Cellar/graphviz/2.38.0/lib
+    python setup.py install --include-path=/usr/local/Cellar/graphviz/2.38.0/include --library-path=/usr/local/Cellar/graphviz/2.38.0/lib
 
 Installing from Source
 ======================
