@@ -45,8 +45,10 @@ def add_extensions(command_subclass):
         if self.distribution and self.distribution.ext_modules:
             for m in self.distribution.ext_modules:
                 if m.name == 'pygraphviz._graphviz':
-                    m.include_dirs.append(self.include_path)
-                    m.library_dirs.append(self.library_path)
+                    if self.include_path:
+                        m.include_dirs.append(self.include_path)
+                    if self.library_path:
+                        m.library_dirs.append(self.library_path)
         orig_run(self)
 
     command_subclass.__init__ = __init__
