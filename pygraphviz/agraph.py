@@ -1337,10 +1337,10 @@ class AGraph(object):
             t.join()
 
         if not data:
-            raise IOError(b"".join(errors))
+            raise IOError(b"".join(errors).decode(self.encoding))
 
         if len(errors) > 0:
-            warnings.warn(b"".join(errors), RuntimeWarning)
+            warnings.warn(b"".join(errors).decode(self.encoding), RuntimeWarning)
 
         return b"".join(data)
 
