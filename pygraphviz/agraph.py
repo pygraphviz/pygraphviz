@@ -1340,7 +1340,7 @@ class AGraph(object):
             raise IOError(b"".join(errors))
 
         if len(errors) > 0:
-            warnings.warn(b"".join(errors), RuntimeWarning)
+            warnings.warn(b"".join(errors).decode('utf-8', 'ignore'), RuntimeWarning)
 
         return b"".join(data)
 
