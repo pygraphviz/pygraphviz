@@ -1337,11 +1337,10 @@ class AGraph(object):
             t.join()
 
         if not data:
-            raise IOError(b"".join(errors))
+            raise IOError(b"".join(errors).decode(self.encoding))
 
         if len(errors) > 0:
-            warnings.warn(b"".join(errors).decode('utf-8', 'ignore'), RuntimeWarning)
-
+            warnings.warn(b"".join(errors).decode(self.encoding), RuntimeWarning)
         return b"".join(data)
 
     def layout(self, prog='neato', args=''):
