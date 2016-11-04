@@ -314,6 +314,8 @@ class TestDiGraphOnly(TestGraph):
         assert_equal(sorted(A.out_degree_iter()),
                      [('1', 1), ('2', 1), ('3', 0)])
         assert_equal(sorted(A.in_degree()), [0, 1, 1])
+        assert_equal(sorted(A.in_degree(with_labels=True).values()),
+                     [0, 1, 1])
         assert_equal(sorted(A.in_degree_iter()),
                      [('1', 0), ('2', 1), ('3', 1)])
 

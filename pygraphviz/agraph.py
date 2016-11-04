@@ -888,7 +888,7 @@ class AGraph(object):
         """
 
         if with_labels:
-            return dict(self.in_degree_iter(nbunch, with_labels))
+            return dict(self.in_degree_iter(nbunch))
         else:
             dlist = list(d for n, d in self.in_degree_iter(nbunch))
             if nbunch in self:
