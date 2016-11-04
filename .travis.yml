@@ -8,6 +8,7 @@ before_install:
   # We need GraphViz
   - "sudo apt-get install graphviz 2>&1 | tail -n 2"
 install:
+  - pip install mock
   - pip install nose
   - pip install doctest-ignore-unicode
   - pip install coveralls
