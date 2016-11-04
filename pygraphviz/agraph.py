@@ -132,7 +132,7 @@ class AGraph(object):
         self.has_layout = False  # avoid creating members outside of init
 
         # backward compability
-        filename = attr.get('file', filename)
+        filename = attr.pop('file', filename)
         #  guess input type if specified as first (nonkeyword) argument
         if thing is not None:
             # can't specify first argument and also file,data,string,handle
