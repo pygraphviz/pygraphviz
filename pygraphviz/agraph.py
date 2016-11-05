@@ -17,11 +17,7 @@ import subprocess
 import sys
 import threading
 import warnings
-try:
-    from UserDict import DictMixin
-except ImportError:
-    # Python 3
-    from collections import MutableMapping as DictMixin
+from collections import MutableMapping
 
 from . import graphviz as gv
 
@@ -1667,7 +1663,7 @@ class Edge(tuple):
     key = property(get_name)
 
 
-class Attribute(DictMixin):
+class Attribute(MutableMapping):
     """Default attributes for graphs.
 
     Assigned on initialization of AGraph class.
@@ -1733,7 +1729,7 @@ class Attribute(DictMixin):
             return False
 
     def __len__(self):
-        return len(self.__iter__())
+        return len(list(self.__iter__()))
 
     def has_key(self, name):
         return self.__contains__(name)
