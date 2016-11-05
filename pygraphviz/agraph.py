@@ -937,11 +937,6 @@ class AGraph(object):
         """Return the number of edges in the graph."""
         return gv.agnedges(self.handle)
 
-    def size(self):
-        """Return the number of edges in the graph."""
-        return self.number_of_edges()
-
-
     def clear(self):
         """Remove all nodes, edges, and attributes from the graph."""
         self.remove_edges_from(self.edges())

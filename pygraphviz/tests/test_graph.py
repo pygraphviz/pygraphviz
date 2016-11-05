@@ -198,11 +198,6 @@ class TestGraph:
         assert_equal(A.degree(1), 1)
         assert_equal(A.degree(2), 2)
 
-    def test_size(self):
-        A = pgv.AGraph()
-        A.add_edges_from([(1,2),(2,3)])
-        assert_equal(A.number_of_edges(), 2)
-        assert_equal(A.size(), 2)
 
     def test_clear(self):
         A = pgv.AGraph()
