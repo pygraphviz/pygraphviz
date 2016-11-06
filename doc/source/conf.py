@@ -23,7 +23,7 @@ sys.path.append(os.path.abspath('../sphinxext'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.addons.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.pngmath','sphinx.ext.doctest']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.imgmath','sphinx.ext.doctest']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['templates']
@@ -39,7 +39,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'PyGraphviz'
-copyright = '2013, PyGraphviz Developers'
+copyright = '2016, PyGraphviz Developers'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
