@@ -23,8 +23,8 @@ if sys.argv[-1] == 'setup.py':
     print("To install, run 'python setup.py install'")
     print()
 
-if sys.version_info[:2] < (2, 6):
-    print("PyGraphviz requires Python version 2.6 or later (%d.%d detected)." %
+if sys.version_info[:2] < (2, 7):
+    print("PyGraphviz requires Python version 2.7 or later (%d.%d detected)." %
           sys.version_info[:2])
     sys.exit(-1)
 

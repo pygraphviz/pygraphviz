@@ -3,6 +3,7 @@ python:
   - "2.7"
   - "3.4"
   - "3.5"
+  - "3.6-dev"
   - "pypy"
 before_install:
   # We need GraphViz
