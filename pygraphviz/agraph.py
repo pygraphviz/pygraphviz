@@ -1367,7 +1367,7 @@ class AGraph(object):
         """
         data = self._run_prog('tred', args)
         if copy:
-            return self.__class__(string=data)
+            return self.__class__(string=data.decode(self.encoding))
         else:
             return self.from_string(data)
 
@@ -1385,7 +1385,7 @@ class AGraph(object):
         """
         data = self._run_prog('acyclic', args)
         if copy:
-            return self.__class__(string=data)
+            return self.__class__(string=data.decode(self.encoding))
         else:
             return self.from_string(data)
 
