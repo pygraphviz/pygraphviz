@@ -62,7 +62,7 @@ Source Archive File
 
   3. Run "python setup.py install" to build and install 
 
-  4. (optional) Run "python setup_egg.py nosetests" to execute the tests
+  4. (optional) Run "python setup.py test" to execute the tests
 
 
 Github
@@ -78,7 +78,7 @@ Github
 
   3.  Run "python setup.py install" to build and install
 
-  4. (optional) Run "python setup_egg.py nosetests" to execute the tests
+  4. (optional) Run "python setup.py test" to execute the tests
 
 
 If you don't have permission to install software on your
