@@ -3,8 +3,7 @@ from nose.tools import *
 import pygraphviz as pgv
 from os import linesep
 
-long_html_string = '''
-<<TABLE BORDER=0>
+long_html_string = '''<<TABLE BORDER=0>
   <TR>
       <TD> meow </TD>
   </TR>
@@ -34,8 +33,7 @@ long_html_string = '''
         </TABLE>
       </TD>
   </TR>
-</TABLE>>
-'''
+</TABLE>>'''
 
 def test_long_html_string():
     G = pgv.AGraph(label='<Hello<BR/>Graph>')
