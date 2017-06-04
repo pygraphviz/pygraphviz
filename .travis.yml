@@ -17,10 +17,7 @@ matrix:
   allow_failures:
     - os: osx
 install:
-  - pip install mock
-  - pip install nose
-  - pip install doctest-ignore-unicode
-  - pip install coveralls
+  - pip install mock nose doctest-ignore-unicode coveralls
   - python setup.py develop
 script:
   - nosetests --with-coverage --cover-package=pygraphviz
