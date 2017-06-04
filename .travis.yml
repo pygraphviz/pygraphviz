@@ -14,6 +14,8 @@ matrix:
     - os: osx
       language: generic
       before_install: brew install graphviz
+  allow_failures:
+    - os: osx
 install:
   - pip install mock
   - pip install nose
