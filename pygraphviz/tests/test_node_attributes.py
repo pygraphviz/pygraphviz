@@ -8,7 +8,7 @@ def test_node_attribute():
     A = pgv.AGraph()
     A.add_node(1,label='test',spam='eggs')
     assert_equal(A.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   node [label="\\N"];
   1  [label=test,
     spam=eggs];
@@ -25,7 +25,7 @@ def test_node_attributes2():
     assert_equal(one.attr['label'],'test')
     assert_equal(sorted(one.attr.keys()), ['label', 'spam'])
     assert_equal(A.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   node [label="\\N"];
   1  [label=test,
     spam=eggs];
@@ -35,7 +35,7 @@ def test_node_attributes2():
     one.attr['label'] = ''
     one.attr['spam'] = ''
     assert_equal(A.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   node [label="\\N"];
   1  [label=""];
 }
@@ -43,7 +43,7 @@ def test_node_attributes2():
     one.attr['label'] = 'test'
     del one.attr['label']
     assert_equal(A.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   node [label="\\N"];
   1  [label=""];
 }
@@ -54,7 +54,7 @@ def test_node_attribute_update():
     A.add_node(1,label='test',spam='eggs')
     A.add_node(1,label='updated')
     assert_equal(A.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   node [label="\\N"];
   1  [label=updated,
     spam=eggs];
@@ -66,7 +66,7 @@ def test_node_attribute_remove():
     A.add_node(1,label='test',spam='eggs')
     A.add_node(1,label=r'\N',spam='') # use \N to signify null label, otherwise ''
     assert_equal(A.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   node [label="\\N"];
   1;
 }

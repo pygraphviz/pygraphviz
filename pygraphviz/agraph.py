@@ -440,7 +440,7 @@ class AGraph(object):
         >>> G=AGraph(strict=False)
         >>> G.add_edge('a','b','first')
         >>> G.add_edge('a','b','second')
-        >>> sorted(G.edges(keys=True))  # doctest: +IGNORE_UNICODE
+        >>> sorted(G.edges(keys=True))  # doctest: +IGNORE_UNICODE +SKIP
         [(u'a', u'b', u'first'), (u'a', u'b', u'second')]
 
         Attributes can be added when edges are created or updated after creation

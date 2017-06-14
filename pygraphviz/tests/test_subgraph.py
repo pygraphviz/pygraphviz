@@ -8,7 +8,7 @@ def test_subgraph():
     G.add_edge(1,2)
     s = G.add_subgraph((1,2),label='foo')
     assert_equal(G.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   {
     graph [label=foo];
     1 -- 2;
@@ -24,7 +24,7 @@ def test_subgraph_cluster():
     s.add_node('sa')
     G.add_node('a')
     assert_equal(G.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   graph [label=foo];
   {
     graph [label=<Hello<BR/>World>];
@@ -41,7 +41,7 @@ def test_subgraph_cluster_attribute():
     G.add_node('a')
     G.node_attr['foo']='baz'
     assert_equal(G.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   node [foo=baz];
   subgraph cluster_a {
     graph [foo=bar];

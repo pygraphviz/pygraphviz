@@ -7,13 +7,13 @@ from os import linesep
 def test_name():
     A = pgv.AGraph(name='')
     assert_equal(A.string(),
-"""strict graph {
+"""strict graph "" {
 }
 """.replace('\n', linesep))
 
 
     assert_equal(A.string().expandtabs(),
-"""strict graph {
+"""strict graph "" {
 }
 """.replace('\n', linesep))
 

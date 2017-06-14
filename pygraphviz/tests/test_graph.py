@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import unittest
 from nose.tools import *
 import pygraphviz as pgv
 from os import linesep
@@ -39,7 +40,7 @@ class TestGraph:
 )
         A = pgv.AGraph()
         assert_equal(A.string(),
-"""strict graph {
+"""strict graph "" {
 }
 """.replace('\n', linesep)
 )
@@ -239,6 +240,7 @@ class TestGraph:
         assert_equal(A.edges(), [('1', '2'), ('3', '3')])
         assert_equal(A.nodes(), ['1', '2', '3'])
 
+    @unittest.skip('Parallel edges in non-strict graphs broken in graphviz 2.40.1')
     def test_graph_not_strict(self):
         A = pgv.AGraph(strict=False)
         assert_false(A.is_strict())
@@ -322,7 +324,7 @@ class TestDiGraphOnly(TestGraph):
         # Have to use expandtabs(1) not 0 because of PyPy bug
         # https://bitbucket.org/pypy/pypy/issues/2113/calling-strexpandtabs-0-crashes-with-a
         assert_equal(A.string().expandtabs(1),
-"""strict digraph {
+"""strict digraph "" {
  1 -> 2;
  2 -> 3;
 }
@@ -330,7 +332,7 @@ class TestDiGraphOnly(TestGraph):
 )
 
         assert_equal(A.reverse().string().expandtabs(1),
-"""strict digraph {
+"""strict digraph "" {
  2 -> 1;
  3 -> 2;
 }
