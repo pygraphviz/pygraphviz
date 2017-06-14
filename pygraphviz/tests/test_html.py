@@ -10,7 +10,7 @@ def test_html():
     s.add_node('sa', label='<Hello<BR/>Subgraph Node b>')
     G.add_edge('a','b', label='<Hello<BR/>Edge>')
     assert_equal(G.string().expandtabs(2),
-"""strict graph {
+"""strict graph "" {
   graph [label=<Hello<BR/>Graph>];
   node [label="\\N"];
   {

@@ -39,7 +39,7 @@ class TestGraph:
 )
         A = pgv.AGraph()
         assert_equal(A.string(),
-"""strict graph {
+"""strict graph "" {
 }
 """.replace('\n', linesep)
 )
@@ -322,7 +322,7 @@ class TestDiGraphOnly(TestGraph):
         # Have to use expandtabs(1) not 0 because of PyPy bug
         # https://bitbucket.org/pypy/pypy/issues/2113/calling-strexpandtabs-0-crashes-with-a
         assert_equal(A.string().expandtabs(1),
-"""strict digraph {
+"""strict digraph "" {
  1 -> 2;
  2 -> 3;
 }
@@ -330,7 +330,7 @@ class TestDiGraphOnly(TestGraph):
 )
 
         assert_equal(A.reverse().string().expandtabs(1),
-"""strict digraph {
+"""strict digraph "" {
  2 -> 1;
  3 -> 2;
 }
