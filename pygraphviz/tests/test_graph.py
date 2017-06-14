@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import unittest
 from nose.tools import *
 import pygraphviz as pgv
 from os import linesep
@@ -239,6 +240,7 @@ class TestGraph:
         assert_equal(A.edges(), [('1', '2'), ('3', '3')])
         assert_equal(A.nodes(), ['1', '2', '3'])
 
+    @unittest.skip('Parallel edges in non-strict graphs broken in graphviz 2.40.1')
     def test_graph_not_strict(self):
         A = pgv.AGraph(strict=False)
         assert_false(A.is_strict())
