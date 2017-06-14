@@ -947,9 +947,7 @@ class AGraph(object):
         directed = self.directed
         gv.agclose(self.handle)
         self.handle = gv.agraphnew(name, strict, directed)
-        self.graph_attr.handle = self.handle
-        self.node_attr.handle = self.handle
-        self.edge_attr.handle = self.handle
+        self._update_handle_references()
 
     def close(self):
         # may be useful to clean up graphviz data
@@ -1195,6 +1193,8 @@ class AGraph(object):
                 self.handle = gv.agread(fh, None)
             except ValueError:
                 raise DotError
+            else:
+                self._update_handle_references()
 
         except IOError:
             print("IO error reading file")
@@ -1521,6 +1521,14 @@ class AGraph(object):
             if match:
                 return match[0]
         raise ValueError("No prog %s in path." % name)
+
+    def _update_handle_references(self):
+        try:
+            self.graph_attr.handle = self.handle
+            self.node_attr.handle = self.handle
+            self.edge_attr.handle = self.handle
+        except AttributeError:
+            pass  # ignore as likely still in __init__()
 
 
 class Node(_TEXT_TYPE):
