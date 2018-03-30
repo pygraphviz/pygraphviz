@@ -1280,7 +1280,7 @@ class AGraph(object):
         # private: get path of graphviz program
         progs = ['neato', 'dot', 'twopi', 'circo', 'fdp', 'nop',
                  'wc', 'acyclic', 'gvpr', 'gvcolor', 'ccomps', 'sccmap', 'tred',
-                 'sfdp']
+                 'sfdp', 'unflatten']
         if prog not in progs:
             raise ValueError("Program %s is not one of: %s." %
                             (prog, ', '.join(progs)))
@@ -1333,6 +1333,19 @@ class AGraph(object):
         if len(errors) > 0:
             warnings.warn(b"".join(errors).decode(self.encoding), RuntimeWarning)
         return b"".join(data)
+
+    def unflatten(self, args=''):
+        """Adjust directed graphs to improve layout aspect ratio.
+
+        >>> A=AGraph()
+        >>> A.unflatten('-f -l 3')
+        >>> A.unflatten('-f -l 1').layout()
+
+        Use keyword args to add additional arguments to graphviz programs.
+        """
+        data = self._run_prog('unflatten', args)
+        self.from_string(data)
+        return self
 
     def layout(self, prog='neato', args=''):
         """Assign positions to nodes in graph.
