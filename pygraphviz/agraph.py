@@ -1337,8 +1337,8 @@ class AGraph(object):
     def unflatten(self, args=''):
         """Adjust directed graphs to improve layout aspect ratio.
 
-        >>> A=AGraph()
-        >>> A.unflatten('-f -l 3')
+        >>> A = AGraph()
+        >>> A_unflattened = A.unflatten('-f -l 3')
         >>> A.unflatten('-f -l 1').layout()
 
         Use keyword args to add additional arguments to graphviz programs.
