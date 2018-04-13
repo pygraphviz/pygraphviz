@@ -1326,6 +1326,7 @@ class AGraph(object):
 
         for t in threads:
             t.join()
+        p.wait()
 
         if not data:
             raise IOError(b"".join(errors).decode(self.encoding))
