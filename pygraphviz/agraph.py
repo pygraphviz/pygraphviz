@@ -1327,12 +1327,12 @@ class AGraph(object):
             for t in threads:
                 t.join()
 
-            if not data:
-                raise IOError(b"".join(errors).decode(self.encoding))
+        if not data:
+            raise IOError(b"".join(errors).decode(self.encoding))
 
-            if len(errors) > 0:
-                warnings.warn(b"".join(errors).decode(self.encoding), RuntimeWarning)
-            return b"".join(data)
+        if len(errors) > 0:
+            warnings.warn(b"".join(errors).decode(self.encoding), RuntimeWarning)
+        return b"".join(data)
 
     def layout(self, prog='neato', args=''):
         """Assign positions to nodes in graph.
