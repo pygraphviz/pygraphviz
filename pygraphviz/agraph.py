@@ -375,7 +375,6 @@ class AGraph(object):
         while nh is not None:
             yield Node(self, nh=nh)
             nh = gv.agnxtnode(self.handle, nh)
-        raise StopIteration
 
     iternodes = nodes_iter
 
@@ -598,7 +597,6 @@ class AGraph(object):
             else:
                 yield Node(self, s)
             eh = gv.agnxtedge(self.handle, eh, nh)
-        raise StopIteration
 
     def neighbors(self, n):
         """Return a list of the nodes attached to n."""
@@ -658,7 +656,6 @@ class AGraph(object):
                     else:
                         yield e
                     eh = gv.agnxtout(self.handle, eh)
-        raise StopIteration
 
 
     iteroutedges = out_edges_iter
@@ -714,7 +711,6 @@ class AGraph(object):
                     else:
                         yield e
                     eh = gv.agnxtin(self.handle, eh)
-        raise StopIteration
 
     def edges_iter(self, nbunch=None, keys=False):
         """Return iterator over edges in the graph.
@@ -781,7 +777,6 @@ class AGraph(object):
             else:
                 yield Node(self, s)
             eh = gv.agnxtin(self.handle, eh)
-        raise StopIteration
 
 
     iterpred = predecessors_iter
@@ -803,7 +798,6 @@ class AGraph(object):
             else:
                 yield Node(self, s)
             eh = gv.agnxtout(self.handle, eh)
-        raise StopIteration
 
     itersucc = successors_iter
 
@@ -1090,7 +1084,6 @@ class AGraph(object):
                                  directed=self.directed,
                                  handle=handle)
             handle = gv.agnxtsubg(handle)
-        raise StopIteration
 
     def subgraphs(self):
         """Return a list of all subgraphs in the graph."""
