@@ -374,8 +374,10 @@ class AGraph(object):
         nh = gv.agfstnode(self.handle)
         while nh is not None:
             yield Node(self, nh=nh)
-            nh = gv.agnxtnode(self.handle, nh)
-        raise StopIteration
+            try:
+                nh = gv.agnxtnode(self.handle, nh)
+            except StopIteration:
+                return
 
     iternodes = nodes_iter
 
@@ -597,8 +599,10 @@ class AGraph(object):
                 yield Node(self, t)
             else:
                 yield Node(self, s)
-            eh = gv.agnxtedge(self.handle, eh, nh)
-        raise StopIteration
+            try:
+                eh = gv.agnxtedge(self.handle, eh, nh)
+            except StopIteration:
+                return
 
     def neighbors(self, n):
         """Return a list of the nodes attached to n."""
@@ -627,8 +631,14 @@ class AGraph(object):
                         yield (e[0], e[1], e.name)
                     else:
                         yield e
-                    eh = gv.agnxtout(self.handle, eh)
-                nh = gv.agnxtnode(self.handle, nh)
+                    try:
+                        eh = gv.agnxtout(self.handle, eh)
+                    except StopIteration:
+                        break
+                try:
+                    nh = gv.agnxtnode(self.handle, nh)
+                except StopIteration:
+                    return
         elif nbunch in self: # if nbunch is a single node
             n = Node(self, nbunch)
             nh = n.handle
@@ -639,7 +649,10 @@ class AGraph(object):
                     yield (e[0], e[1], e.name)
                 else:
                     yield e
-                eh = gv.agnxtout(self.handle, eh)
+                try:
+                    eh = gv.agnxtout(self.handle, eh)
+                except StopIteration:
+                    return
         else:                # if nbunch is a sequence of nodes
             try:
                 bunch = [n for n in nbunch if n in self]
@@ -657,8 +670,10 @@ class AGraph(object):
                         yield (e[0], e[1], e.name)
                     else:
                         yield e
-                    eh = gv.agnxtout(self.handle, eh)
-        raise StopIteration
+                    try:
+                        eh = gv.agnxtout(self.handle, eh)
+                    except StopIteration:
+                        break
 
 
     iteroutedges = out_edges_iter
@@ -683,8 +698,14 @@ class AGraph(object):
                         yield (e[0], e[1], e.name)
                     else:
                         yield e
-                    eh = gv.agnxtin(self.handle, eh)
-                nh = gv.agnxtnode(self.handle, nh)
+                    try:
+                        eh = gv.agnxtin(self.handle, eh)
+                    except StopIteration:
+                        break
+                try:
+                    nh = gv.agnxtnode(self.handle, nh)
+                except StopIteration:
+                    return
         elif nbunch in self: # if nbunch is a single node
             n = Node(self, nbunch)
             nh = n.handle
@@ -695,7 +716,10 @@ class AGraph(object):
                     yield (e[0], e[1], e.name)
                 else:
                     yield e
-                eh = gv.agnxtin(self.handle, eh)
+                try:
+                    eh = gv.agnxtin(self.handle, eh)
+                except StopIteration:
+                    break
         else:                # if nbunch is a sequence of nodes
             try:
                 bunch = [n for n in nbunch if n in self]
@@ -713,8 +737,10 @@ class AGraph(object):
                         yield (e[0], e[1], e.name)
                     else:
                         yield e
-                    eh = gv.agnxtin(self.handle, eh)
-        raise StopIteration
+                    try:
+                        eh = gv.agnxtin(self.handle, eh)
+                    except StopIteration:
+                        break
 
     def edges_iter(self, nbunch=None, keys=False):
         """Return iterator over edges in the graph.
@@ -780,8 +806,10 @@ class AGraph(object):
                 yield Node(self, t)
             else:
                 yield Node(self, s)
-            eh = gv.agnxtin(self.handle, eh)
-        raise StopIteration
+            try:
+                eh = gv.agnxtin(self.handle, eh)
+            except StopIteration:
+                return
 
 
     iterpred = predecessors_iter
@@ -802,8 +830,11 @@ class AGraph(object):
                 yield Node(self, t)
             else:
                 yield Node(self, s)
-            eh = gv.agnxtout(self.handle, eh)
-        raise StopIteration
+            try:
+                eh = gv.agnxtout(self.handle, eh)
+            except StopIteration:
+                return
+
 
     itersucc = successors_iter
 
@@ -1089,8 +1120,10 @@ class AGraph(object):
             yield self.__class__(strict=self.strict,
                                  directed=self.directed,
                                  handle=handle)
-            handle = gv.agnxtsubg(handle)
-        raise StopIteration
+            try:
+                handle = gv.agnxtsubg(handle)
+            except StopIteration:
+                return
 
     def subgraphs(self):
         """Return a list of all subgraphs in the graph."""
@@ -1194,7 +1227,7 @@ class AGraph(object):
             try:
                 self.handle = gv.agread(fh, None)
             except ValueError:
-                raise DotError
+                raise DotError("Invalid Input")
 
         except IOError:
             print("IO error reading file")
@@ -1745,6 +1778,8 @@ class Attribute(MutableMapping):
                        gv.agattrdefval(ah).decode(self.encoding))
             except KeyError: # gv.agattrdefval returned KeyError, skip
                 continue
+            except StopIteration:  # gv.agnxtattr is done, as are we
+                return
 
 
 class ItemAttribute(Attribute):
@@ -1816,6 +1851,8 @@ class ItemAttribute(Attribute):
                        value.decode(self.encoding))
             except KeyError: # gv.agxget returned KeyError, skip
                 continue
+            except StopIteration:  # gv.agnxtattr is done, as are we
+                return
 
 def _test_suite():
     import doctest
