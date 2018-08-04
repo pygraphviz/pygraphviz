@@ -58,6 +58,8 @@ def _dpkg_config():
                 break
     except OSError:
         print("Failed to find dpkg")
+    except S.CalledProcessError:
+        print("Could not run dpkg")
     return include_dirs, library_dirs
 
 
@@ -151,19 +153,19 @@ def get_graphviz_dirs():
 
     if sys.platform != "win32":
         # Attempt to find Graphviz installation
-        if library_dirs is None or include_dirs is None:
+        if library_dirs is None and include_dirs is None:
             print("Trying dpkg")
             include_dirs, library_dirs = _try_configure(include_dirs, library_dirs, _dpkg_config)
 
-        if library_dirs is None or include_dirs is None:
+        if library_dirs is None and include_dirs is None:
             print("Trying pkg-config")
             include_dirs, library_dirs = _try_configure(include_dirs, library_dirs, _pkg_config)
 
-        if library_dirs is None or include_dirs is None:
+        if library_dirs is None and include_dirs is None:
             print("Trying dotneato-config")
             include_dirs, library_dirs = _try_configure(include_dirs, library_dirs, _dotneato_config)
 
-        if library_dirs is None or include_dirs is None:
+        if library_dirs is None and include_dirs is None:
             print()
             print("""Your Graphviz installation could not be found.
 

@@ -3,18 +3,28 @@ python:
   - "2.7"
   - "3.4"
   - "3.5"
-  - "3.6-dev"
+  - "3.6"
   - "pypy"
-before_install:
-  # We need GraphViz
-  - "sudo apt-get install graphviz 2>&1 | tail -n 2"
+addons:
+  apt:
+    packages:
+      - graphviz
+matrix:
+  include:
+    - os: linux
+      python: 3.7
+      dist: xenial
+      sudo: true
+    - os: osx
+      language: generic
+      before_install: brew install graphviz
+  allow_failures:
+    - os: osx
 install:
-  - pip install mock
-  - pip install nose
-  - pip install doctest-ignore-unicode
-  - pip install coveralls
+  - pip install mock nose doctest-ignore-unicode coveralls
   - python setup.py develop
 script:
   - nosetests --with-coverage --cover-package=pygraphviz
+  - python setup.py bdist_wheel
 after_success:
   - coveralls
