@@ -20,16 +20,6 @@ You can install the development version (at github.com) with::
   pip install git://github.com/pygraphviz/pygraphviz.git#egg=pygraphviz
 
 
-Get PyGraphviz from the Python Package Index at
-http://pypi.python.org/pypi/pygraphviz
-
-or install it with::
-
-   easy_install pygraphviz
-
-and an attempt will be made to find and install an appropriate version
-that matches your operating system and Python version. 
-
 Providing path to graphviz
 --------------------------
 
@@ -106,11 +96,7 @@ Requirements
 Python
 ------
 
-PyGraphviz is tested and works with Python 2.7 and Python 3.4. It may work correctly with other Python 3.x versions.
-
-The easiest way to get Python and most optional packages is to install
-the Enthought Python distribution "Canopy"
-https://www.enthought.com/products/canopy/
+PyGraphviz is tested and works with Python 2.7, 3.5, 3.6, and 3.7.
 
 There are several other distributions that contain the key packages you need for scientific computing.  See the following link for a list: http://scipy.org/install.html
 
