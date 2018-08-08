@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Release data for PyGraphviz."""
 
-#    Copyright (C) 2006-2013 by 
+#    Copyright (C) 2006-2018 by 
 #    Aric Hagberg <aric.hagberg@gmail.com>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
@@ -100,8 +100,9 @@ classifiers = [
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Software Development :: Libraries :: Python Modules',
