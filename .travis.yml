@@ -1,7 +1,6 @@
 language: python
 python:
   - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
   - "pypy"
@@ -21,8 +20,15 @@ matrix:
   allow_failures:
     - os: osx
 install:
-  - pip install mock nose doctest-ignore-unicode coveralls
-  - python setup.py develop
+  # install required packages
+  - pip install --upgrade pip
+  - pip install -r requirements/test.txt
+  # install pygraphviz
+  - printenv PWD
+  - pip install .
+  # show what's installed
+  - python --version
+  - pip list
 script:
   - nosetests --with-coverage --cover-package=pygraphviz
   - python setup.py bdist_wheel
