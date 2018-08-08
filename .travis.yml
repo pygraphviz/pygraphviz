@@ -19,13 +19,18 @@ matrix:
       before_install: brew install graphviz
   allow_failures:
     - os: osx
+
+before_install:
+  # create new empty venv
+  - virtualenv -p python ~/venv
+  - source ~/venv/bin/activate
 install:
   # install required packages
   - pip install --upgrade pip
   - pip install -r requirements/test.txt
   # install pygraphviz
   - printenv PWD
-  - pip install .
+  - pip install -e .
   # show what's installed
   - python --version
   - pip list
