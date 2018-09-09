@@ -12,6 +12,7 @@
 # serve to show the default value.
 
 import sys, os, re
+from datetime import date
 
 # If your extensions are in another directory, add it here.
 #sys.path.append(os.path.dirname(__file__))
@@ -39,7 +40,8 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'PyGraphviz'
-copyright = '2016, PyGraphviz Developers'
+copyright = '2004-{}, PyGraphviz Developers'.format(date.today().year)
+
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
@@ -70,7 +72,7 @@ add_module_names = False
 show_authors = True
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'friendly'
+pygments_style = 'sphinx'
 
 
 # Options for HTML output
@@ -79,12 +81,12 @@ pygments_style = 'friendly'
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
-html_style = 'sphinxdoc.css'
+#html_style = 'sphinxdoc.css'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['static']
+#html_static_path = ['static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.

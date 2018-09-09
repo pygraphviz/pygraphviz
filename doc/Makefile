@@ -46,7 +46,7 @@ dist: html
 #	-rm -f build/dist/_downloads/*
 #	-mkdir  build/dist/_downloads
 #	(cd build/html && zip -9r ../dist/_downloads/pygraphviz-documentation.zip .)
-	(cd build/html && zip -9r ../dist/pygraphviz-documentation.zip .)
+#	(cd build/html && zip -9r ../dist/pygraphviz-documentation.zip .)
 #	cp build/latex/*.pdf build/dist/_downloads
 	cp build/latex/*.pdf build/dist/
 #	(cd build/dist && ln -s _downloads/* .)
@@ -54,8 +54,9 @@ dist: html
 
 
 html: generate
-	touch source/pygraphviz.pdf      
-	touch source/pygraphviz-documentation.zip
+	#make latex
+	#make -C build/latex all-pdf
+	#cp build/latex/pygraphviz.pdf source/.
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) build/html
 	@echo
 	@echo "Build finished. The HTML pages are in build/html."
@@ -118,9 +119,6 @@ doctest: generate
 	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) build/doctest
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in build/doctest/output.txt."
-
-gh-pages: clean dist
-	python gh-pages.py $(tag)
 
 gitwash-update:
 	python gitwash_dumper.py source/developer pygraphviz \

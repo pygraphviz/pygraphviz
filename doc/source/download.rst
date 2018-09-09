@@ -14,7 +14,3 @@ Documentation
 *PDF*
 
 http://pygraphviz.github.io/documentation/latest/pygraphviz.pdf
-
-*HTML in zip file*
-
-http://pygraphviz.github.io/documentation/latest/pygraphviz-documentation.zip

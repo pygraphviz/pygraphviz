@@ -9,8 +9,7 @@ PyGraphviz documentation
     :Release: |version|
     :Date: |today|
 
-    Download `PDF <http://networkx.lanl.gov/pygraphviz/pygraphviz.pdf>`_
-    `HTML <http://networkx.lanl.gov/pygraphviz/pygraphviz-documentation.zip>`_
+    Download `PDF <http://pygraphviz.github.io/documentation/latest/pygraphviz.pdf>`_
 
 
 .. toctree::
