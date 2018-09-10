@@ -41,19 +41,7 @@ How to make a new release of ``pygraphviz``
   The documentation is kept in a separate repo: pygraphviz/documentation
 
   - Sync your branch with the remote repo: ``git pull``.
-  - Copy the documentation built by Travis.
-    Assuming you are at the top-level of the ``documentation`` repo::
-
-      cp -a latest pygraphviz-<major>.<minor> 
-      git add pygraphviz-<major>.<minor>
-      ln -sfn pygraphviz-<major>.<minor> stable
-      git commit -m "Add <major>.<minor> docs"
-      # maybe squash all the Deploy GitHub Pages commits
-      # git rebase -i HEAD~XX where XX is the number of commits back
-      # check you didn't break anything
-      # diff -r latest pygraphviz-<major>.<minor>
-      # you will then need to force the push so be careful!
-      git push
+  - Copy the built documentation.
 
  - Increase the version number
 
@@ -67,7 +55,6 @@ How to make a new release of ``pygraphviz``
     If you try to ``make github`` when your branch is out of sync, it
     creates headaches.
   - Update ``_templates/sidebar_versions.html``.
-  - Edit ``_static/docversions.js`` and commit
   - Push your changes to the repo.
   - Deploy using ``make github``.
 
