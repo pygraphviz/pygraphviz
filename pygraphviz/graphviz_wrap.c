@@ -3537,7 +3537,7 @@ SWIGINTERN PyObject *_wrap_agwrite(PyObject *SWIGUNUSEDPARM(self), PyObject *arg
     }
 #endif
     mode_obj2 = PyObject_GetAttrString(obj1, "mode");
-#if !defined(PYPY_VERSION)
+#if PY_VERSION_HEX >= 0x03000000
     mode_byte_obj2 = PyUnicode_AsUTF8String(mode_obj2);
 #else
     mode_byte_obj2 = mode_obj2;
