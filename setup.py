@@ -12,6 +12,7 @@ from glob import glob
 import os
 import sys
 from os.path import join
+from os.path import relpath
 
 def ensure_versionfile(repodir):
     """ Write the version information. """
@@ -28,18 +29,24 @@ repodir = os.path.dirname(__file__)
 
 packages = ["pygraphviz", "pygraphviz.tests"]
 
+def relglob(pattern):
+    return [relpath(p, repodir) for p in glob(join(repodir, pattern))]
+
 
 release = ensure_versionfile(repodir)
 docdirbase = 'share/doc/pygraphviz-%s' % release.version
 data = [
-    (docdirbase, glob(join(repodir, "*.txt"))),
-    (join(docdirbase, 'examples'), glob(join(repodir, "examples/*.py"))),
-    (join(docdirbase, 'examples'), glob(join(repodir, "examples/*.dat"))),
-    (join(docdirbase, 'examples'), glob(join(repodir, "examples/*.dat.gz"))),
+    (docdirbase, relglob("*.txt")),
+    (join(docdirbase, 'examples'), relglob("examples/*.py")),
+    (join(docdirbase, 'examples'), relglob("examples/*.dat")),
+    (join(docdirbase, 'examples'), relglob("examples/*.dat.gz")),
 ]
 package_data = {'pygraphviz': ['*.txt'], }
 
 if __name__ == "__main__":
+    print('data')
+    print(data)
+
     # skbuild replaces 'from setuptools import setup'
     # extension and build_ext are no longer necessary, CMake handles it.
     from skbuild import setup
