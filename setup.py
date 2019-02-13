@@ -40,44 +40,12 @@ data = [
 package_data = {'pygraphviz': ['*.txt'], }
 
 if __name__ == "__main__":
+    # skbuild replaces 'from setuptools import setup'
+    # extension and build_ext are no longer necessary, CMake handles it.
+    from skbuild import setup
+
     if os.path.exists('MANIFEST'):
         os.remove('MANIFEST')
-
-    setupkw = {}
-    try:
-        import skbuild
-    except ImportError:
-        from setuptools import setup, Extension
-        from setup_commands import AddExtensionDevelopCommand, AddExtensionInstallCommand
-        from setup_extra import get_graphviz_dirs
-
-        define_macros = []
-        if sys.platform == "win32":
-            define_macros = define_macros.append(('GVDLL', None))
-        setupkw['extension'] = [
-            Extension(
-                "pygraphviz._graphviz",
-                ["pygraphviz/graphviz_wrap.c"],
-                include_dirs=[],
-                library_dirs=[],
-                # cdt does not link to cgraph, whereas cgraph links to cdt.
-                # thus, cdt needs to come first in the library list to be sure
-                # that both libraries are linked in the final built .so (if cgraph
-                # is first, the implicit inclusion of cdt can lead to an incomplete
-                # link list, having only cdt and preventing the module from being loaded with
-                # undefined symbol errors. seen under PyPy on Linux.)
-                libraries=["cdt", "cgraph"],
-                define_macros=define_macros
-            )
-        ]
-        setupkw['cmdclass'] = {
-            'install': AddExtensionInstallCommand,
-            'develop': AddExtensionDevelopCommand,
-            },
-    else:
-        # skbuild replaces 'from setuptools import setup'
-        # extension and build_ext are no longer necessary, CMake handles it.
-        from skbuild import setup
 
     setup(
         name=release.name,
@@ -98,5 +66,4 @@ if __name__ == "__main__":
         include_package_data=True,
         test_suite='nose.collector',
         tests_require=['nose>=1.3.7', 'doctest-ignore-unicode>=0.1.2', 'mock>=2.0.0'],
-        **setupkw
     )
