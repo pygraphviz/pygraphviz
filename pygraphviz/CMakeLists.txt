@@ -1,7 +1,7 @@
 find_package(Graphviz)
 
 set(sources "graphviz_wrap.c")
-set(module_name "graphviz_wrap")
+set(module_name "_graphviz")
 
 # Create C++ library. Specify include dirs and link libs as normal
 add_library(${module_name} MODULE ${sources})
