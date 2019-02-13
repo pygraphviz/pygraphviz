@@ -27,6 +27,7 @@ before_install:
 install:
   # install required packages
   - pip install --upgrade pip
+  - pip install -r requirements/build.txt
   - pip install -r requirements/test.txt
   # install pygraphviz
   - printenv PWD
