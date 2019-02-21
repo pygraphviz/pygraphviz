@@ -17,7 +17,12 @@ import subprocess
 import sys
 import threading
 import warnings
-from collections.abc import MutableMapping
+try:
+    # Python 3
+    from collections.abc import MutableMapping
+except ImportError:
+    # Python 2.7
+    from collections import MutableMapping
 
 from . import graphviz as gv
 
