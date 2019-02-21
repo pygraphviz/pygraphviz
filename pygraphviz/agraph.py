@@ -17,7 +17,12 @@ import subprocess
 import sys
 import threading
 import warnings
-from collections import MutableMapping
+try:
+    # Python 3
+    from collections.abc import MutableMapping
+except ImportError:
+    # Python 2.7
+    from collections import MutableMapping
 
 from . import graphviz as gv
 
@@ -141,7 +146,7 @@ class AGraph(object):
             elif hasattr(thing, 'own'):  # a Swig pointer - graph handle
                 handle = thing
             elif is_string_like(thing):
-                pattern = re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',
+                pattern = re.compile(r'(strict)?\s*(graph|digraph).*{.*}\s*',
                                      re.DOTALL)
                 if pattern.match(thing):
                     string = thing  # this is a dot format graph in a string
