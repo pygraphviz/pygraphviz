@@ -79,5 +79,5 @@ if __name__ == "__main__":
         include_package_data=True,
         test_suite='nose.collector',
         tests_require=['nose>=1.3.7', 'doctest-ignore-unicode>=0.1.2', 'mock>=2.0.0'],
-        **compile_setup_kw,
+        **compile_setup_kw
     )
