@@ -54,6 +54,12 @@ if __name__ == "__main__":
     if os.path.exists('MANIFEST'):
         os.remove('MANIFEST')
 
+    compile_setup_kw = dict(
+        cmake_languages=('C', 'CXX'),
+        cmake_source_dir='.',
+        # cmake_args=['-DSOME_FEATURE:BOOL=OFF'],
+    )
+
     setup(
         name=release.name,
         version=release.version,
@@ -73,4 +79,5 @@ if __name__ == "__main__":
         include_package_data=True,
         test_suite='nose.collector',
         tests_require=['nose>=1.3.7', 'doctest-ignore-unicode>=0.1.2', 'mock>=2.0.0'],
+        **compile_setup_kw,
     )
