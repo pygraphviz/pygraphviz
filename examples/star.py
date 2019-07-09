@@ -29,7 +29,7 @@ A.node_attr['fixedsize']='true'
 A.node_attr['fontcolor']='#FFFFFF'
 
 # make a star in shades of red
-for i in range(16):
+for i in range(1, 16):
     A.add_edge(0,i)
     n=A.get_node(i)
     n.attr['fillcolor']="#%2x0000"%(i*16)
