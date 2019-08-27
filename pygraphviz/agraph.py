@@ -1742,8 +1742,7 @@ class Attribute(MutableMapping):
         ghandle = gv.agraphof(handle)
         root_handle = gv.agroot(ghandle) # get root graph
         try:
-            ah = gv.agattr(root_handle, 0, b'charset', None)
-            item = gv.agattrdefval(ah)
+            item = gv.agattrdefval(gv.agattr(root_handle, 0, b'charset', None))
             self.encoding = item if type(item) is not bytes else item.decode('utf-8')
         except KeyError:
             self.encoding = _DEFAULT_ENCODING
@@ -1835,8 +1834,7 @@ class ItemAttribute(Attribute):
         # get the encoding
         root_handle = gv.agroot(self.ghandle) # get root graph
         try:
-            ah = gv.agattr(root_handle, 0, b'charset', None)
-            item = gv.agattrdefval(ah)
+            item = gv.agattrdefval(gv.agattr(root_handle, 0, b'charset', None))
             self.encoding = item if type(item) is not bytes else item.decode('utf-8')
         except KeyError:
             self.encoding = _DEFAULT_ENCODING
