@@ -179,10 +179,8 @@ class AGraph(object):
             # the handle was specified or created
             # get the encoding from the "charset" graph attribute
             item = gv.agget(self.handle, b'charset')
-            if type(item) is bytes:
-                item = item.decode('utf-8')
             if item is not None:
-                self.encoding = item
+                self.encoding = item if type(item) is not bytes else item.decode('utf-8')
             else:
                 self.encoding = _DEFAULT_ENCODING
         else:
@@ -1746,10 +1744,7 @@ class Attribute(MutableMapping):
         try:
             ah = gv.agattr(root_handle, 0, b'charset', None)
             item = gv.agattrdefval(ah)
-            if type(item) is bytes:
-                self.encoding = item.decode('utf-8')
-            else:
-                self.encoding = item
+            self.encoding = item if type(item) is not bytes else item.decode('utf-8')
         except KeyError:
             self.encoding = _DEFAULT_ENCODING
 
@@ -1842,10 +1837,7 @@ class ItemAttribute(Attribute):
         try:
             ah = gv.agattr(root_handle, 0, b'charset', None)
             item = gv.agattrdefval(ah)
-            if type(item) is bytes:
-                self.encoding = item.decode('utf-8')
-            else:
-                self.encoding = item
+            self.encoding = item if type(item) is not bytes else item.decode('utf-8')
         except KeyError:
             self.encoding = _DEFAULT_ENCODING
 
