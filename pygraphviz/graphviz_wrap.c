@@ -3463,7 +3463,7 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
     }
 #endif
     mode_obj1 = PyObject_GetAttrString(obj0, "mode");
-#if !defined(PYPY_VERSION)
+#if PY_VERSION_HEX >= 0x03000000
     mode_byte_obj1 = PyUnicode_AsUTF8String(mode_obj1);
 #else
     mode_byte_obj1 = mode_obj1;
