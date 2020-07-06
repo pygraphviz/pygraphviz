@@ -1,4 +1,4 @@
-Related Pacakges
+Related Packages
 ----------------
 
    - Python bindings distributed with Graphviz (graphviz-python):  http://www.graphviz.org/
