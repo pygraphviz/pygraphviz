@@ -19,6 +19,7 @@ matrix:
       before_install: brew install graphviz
   allow_failures:
     - os: osx
+    - python: "pypy3.6-7.1.1"
 
 before_install:
   # create new empty venv
