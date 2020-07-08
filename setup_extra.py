@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 Setup helpers for PyGraphviz.
 """
@@ -10,31 +9,25 @@ Setup helpers for PyGraphviz.
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
 
-from __future__ import print_function
-from __future__ import absolute_import
 import subprocess as S
 import sys
 import os
 
 
 def _b2str(buffer):
-    result = u''
-    if sys.version_info >= (3, 0):
-        encoding = sys.getfilesystemencoding()
-        if not encoding:
-            # can be run without stdout
-            if sys.stdout and sys.stdout.encoding:
-                # encoding is not None only staring Python 3.2
-                encoding = sys.stdout.encoding
-            else:
-                # fall back to default encoding ( normally it should not happen)
-                encoding = 'utf8'
-        if buffer:
-            result = buffer.decode(encoding)
-        return result
-    else:
-        # in Python 2 conversion is implicit
-        return buffer
+    result = ''
+    encoding = sys.getfilesystemencoding()
+    if not encoding:
+        # can be run without stdout
+        if sys.stdout and sys.stdout.encoding:
+            # encoding is not None only staring Python 3.2
+            encoding = sys.stdout.encoding
+        else:
+            # fall back to default encoding ( normally it should not happen)
+            encoding = 'utf8'
+    if buffer:
+        result = buffer.decode(encoding)
+    return result
 
 
 def _dpkg_config():

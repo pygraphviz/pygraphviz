@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 A Python interface to Graphviz.
 
@@ -9,7 +8,6 @@ A Python interface to Graphviz.
 #    Manos Renieris, http://www.cs.brown.edu/~er/
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
-from __future__ import print_function
 
 import re
 import shlex
@@ -17,12 +15,7 @@ import subprocess
 import sys
 import threading
 import warnings
-try:
-    # Python 3
-    from collections.abc import MutableMapping
-except ImportError:
-    # Python 2.7
-    from collections import MutableMapping
+from collections.abc import MutableMapping
 
 from . import graphviz as gv
 
@@ -56,13 +49,13 @@ class PipeReader(threading.Thread):
             self.pipe.close()
 
 
-class _Action(object):
+class _Action:
     find, create = 0, 1
 
 class DotError(ValueError):
     """Dot data parsing error"""
 
-class AGraph(object):
+class AGraph:
     """Class for Graphviz agraph type.
 
     Example use
@@ -240,7 +233,7 @@ class AGraph(object):
         name = gv.agnameof(self.handle)
         if name is None:
             return '<AGraph %s>' % self.handle
-        return '<AGraph %s %s>' % (name, self.handle)
+        return f'<AGraph {name} {self.handle}>'
 
     def __eq__(self, other):
         # two graphs are equal if they have exact same string representation
@@ -528,7 +521,7 @@ class AGraph(object):
         try:
             gv.agdeledge(self.handle, e.handle)
         except KeyError:
-            raise KeyError("Edge %s-%s not in graph." % (u, v))
+            raise KeyError(f"Edge {u}-{v} not in graph.")
 
     delete_edge = remove_edge
 
@@ -1233,7 +1226,7 @@ class AGraph(object):
                 raise DotError("Invalid Input")
             else:
                 self._update_handle_references()
-        except IOError:
+        except OSError:
             print("IO error reading file")
 
     def write(self, path=None):
@@ -1250,7 +1243,7 @@ class AGraph(object):
         fh = self._get_fh(path, 'w')
         try:
             gv.agwrite(self.handle, fh)
-        except IOError:
+        except OSError:
             print("IO error writing file")
         finally:
             if hasattr(fh, 'close') and not hasattr(path, 'write'):
@@ -1366,7 +1359,7 @@ class AGraph(object):
         p.wait()
 
         if not data:
-            raise IOError(b"".join(errors).decode(self.encoding))
+            raise OSError(b"".join(errors).decode(self.encoding))
 
         if len(errors) > 0:
             warnings.warn(b"".join(errors).decode(self.encoding), RuntimeWarning)
@@ -1613,9 +1606,9 @@ class Node(_TEXT_TYPE):
 
     def __new__(self, graph, name=None, nh=None):
         if nh is not None:
-            n = super(Node, self).__new__(self, gv.agnameof(nh), graph.encoding)
+            n = super().__new__(self, gv.agnameof(nh), graph.encoding)
         else:
-            n = super(Node, self).__new__(self, name)
+            n = super().__new__(self, name)
             try:
                 nh = gv.agnode(graph.handle, n.encode(graph.encoding), _Action.find)
             except KeyError:
@@ -1698,7 +1691,7 @@ class Edge(tuple):
                                key,
                                _Action.find)
             except KeyError:
-                raise KeyError("Edge %s-%s not in graph." % (source, target))
+                raise KeyError(f"Edge {source}-{target} not in graph.")
 
         tp = tuple.__new__(self, (s, t))
         tp.ghandle = graph.handle
@@ -1897,8 +1890,8 @@ if __name__ == "__main__":
     import sys
     import unittest
 
-    if sys.version_info[:2] < (2, 4):
-        print("Python version 2.4 or later required for tests (%d.%d detected)." % sys.version_info[:2])
+    if sys.version_info[:2] < (3, 6):
+        print("Python version 3.6 or later required for tests (%d.%d detected)." % sys.version_info[:2])
         sys.exit(-1)
         # directory of package (relative to this)
     nxbase = sys.path[0] + os.sep + os.pardir

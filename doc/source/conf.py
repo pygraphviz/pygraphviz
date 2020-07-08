@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Sphinx documentation build configuration file, created by
 # sphinx-quickstart.py on Sat Mar  8 21:47:50 2008.
@@ -40,7 +39,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'PyGraphviz'
-copyright = '2004-{}, PyGraphviz Developers'.format(date.today().year)
+copyright = f'2004-{date.today().year}, PyGraphviz Developers'
 
 
 # The default replacements for |version| and |release|, also used in various
