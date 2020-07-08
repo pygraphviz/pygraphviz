@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from nose.tools import *
 import pygraphviz as pgv
 from os import linesep

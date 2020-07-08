@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Example showing use of unicode and UTF-8 encoding.
 """
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
 
 import pygraphviz as pgv
 # specify UTF-8 encoding (it is the default)
