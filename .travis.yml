@@ -3,7 +3,7 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
-  - "pypy"
+  - "pypy3.6-7.1.1"
 addons:
   apt:
     packages:
