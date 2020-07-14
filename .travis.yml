@@ -11,22 +11,11 @@ addons:
       - graphviz
 matrix:
   include:
-    - os: linux
-      python: 3.7
-      dist: xenial
-      sudo: true
     - os: osx
       osx_image: xcode12
       language: generic
-      before_install:
-          - sudo mkdir -p /usr/local/man
-          - sudo chown -R "${USER}:admin" /usr/local/man
-          - brew install graphviz
-          # set up Python and virtualenv on OSX
-          - git clone https://github.com/matthew-brett/multibuild
-          - source multibuild/osx_utils.sh
-          - get_macpython_environment 3.7 venv
-
+      env: TRAVIS_PYTHON_VERSION=3.8
+      before_install: brew install graphviz
   allow_failures:
     - os: osx
     - python: "3.9-dev"
@@ -34,8 +23,14 @@ matrix:
 
 before_install:
   # create new empty venv
-  - virtualenv -p python ~/venv
-  - source ~/venv/bin/activate
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+      - git clone https://github.com/matthew-brett/multibuild;
+      - source multibuild/osx_utils.sh;
+      - get_macpython_environment $TRAVIS_PYTHON_VERSION venv;
+    else
+      - virtualenv -p python ~/venv;
+      - source ~/venv/bin/activate;
+    fi
 install:
   # install required packages
   - pip install --upgrade pip
