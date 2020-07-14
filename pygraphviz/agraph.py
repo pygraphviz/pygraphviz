@@ -152,6 +152,8 @@ class AGraph(object):
                     string = thing  # this is a dot format graph in a string
                 else:
                     filename = thing  # assume this is a file name
+            elif hasattr(thing, 'open'):
+                filename = thing  # assume this is a file name (in a path obj)
             else:
                 raise TypeError('Unrecognized input %s' % thing)
 
