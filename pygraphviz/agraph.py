@@ -145,6 +145,8 @@ class AGraph:
                     string = thing  # this is a dot format graph in a string
                 else:
                     filename = thing  # assume this is a file name
+            elif hasattr(thing, 'open'):
+                filename = thing  # assume this is a file name (in a path obj)
             else:
                 raise TypeError('Unrecognized input %s' % thing)
 
@@ -1527,7 +1529,7 @@ class AGraph:
     def _get_fh(self, path, mode='r'):
         """ Return a file handle for given path.
 
-        Path can be a string or a file handle.
+        Path can be a string, pathlib.Path, or a file handle.
         Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
         """
         import os
@@ -1546,8 +1548,10 @@ class AGraph:
         elif hasattr(path, 'write'):
             # Note, mode of file handle is unchanged.
             fh = path
+        elif hasattr(path, 'open'):
+            fh = path.open(mode=mode)
         else:
-            raise TypeError('path must be a string or file handle.')
+            raise TypeError('path must be a string, path, or file handle.')
         return fh
 
     def _which(self, name):
