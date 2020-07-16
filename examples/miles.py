@@ -19,10 +19,6 @@ References.
     ACM Press, New York, 1993.
 [2] http://www-cs-faculty.stanford.edu/~knuth/sgb.html
 """
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
 import fileinput
 __author__ = """Aric Hagberg (aric.hagberg@gmail.com)"""
 
@@ -50,7 +46,7 @@ def miles_graph():
     for line in gzip.open("miles_dat.txt.gz",'rt'):
         if line.startswith("*"): # skip comments
             continue
-        numfind=re.compile("^\d+") 
+        numfind=re.compile(r"^\d+") 
 
         if numfind.match(line): # this line is distances
             dist=line.split()

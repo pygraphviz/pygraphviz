@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Sphinx documentation build configuration file, created by
 # sphinx-quickstart.py on Sat Mar  8 21:47:50 2008.
@@ -40,7 +39,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'PyGraphviz'
-copyright = '2004-{}, PyGraphviz Developers'.format(date.today().year)
+copyright = f'2004-{date.today().year}, PyGraphviz Developers'
 
 
 # The default replacements for |version| and |release|, also used in various
@@ -190,7 +189,7 @@ def parse_event(env, sig, signode):
 def setup(app):
     from sphinx.ext.autodoc import cut_lines
     app.connect('autodoc-process-docstring', cut_lines(4, what=['module']))
-    app.add_description_unit('directive', 'dir', 'pair: %s; directive', parse_directive)
-    app.add_description_unit('role', 'role', 'pair: %s; role', parse_role)
-    app.add_description_unit('confval', 'confval', 'pair: %s; configuration value')
-    app.add_description_unit('event', 'event', 'pair: %s; event', parse_event)
+    app.add_object_type('directive', 'dir', 'pair: %s; directive', parse_directive)
+    app.add_object_type('role', 'role', 'pair: %s; role', parse_role)
+    app.add_object_type('confval', 'confval', 'pair: %s; configuration value')
+    app.add_object_type('event', 'event', 'pair: %s; event', parse_event)

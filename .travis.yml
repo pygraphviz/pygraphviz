@@ -1,9 +1,10 @@
 language: python
 python:
-  - "2.7"
-  - "3.5"
   - "3.6"
-  - "pypy"
+  - "3.7"
+  - "3.8"
+  - "3.9-dev"
+  - "pypy3"
 addons:
   apt:
     packages:
@@ -19,6 +20,8 @@ matrix:
       before_install: brew install graphviz
   allow_failures:
     - os: osx
+    - python: "3.9-dev"
+    - python: "pypy3"
 
 before_install:
   # create new empty venv

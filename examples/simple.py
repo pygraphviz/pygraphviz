@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 A simple example to create a graphviz dot file and draw a graph.
 
@@ -11,10 +10,6 @@ A simple example to create a graphviz dot file and draw a graph.
 #    Distributed with BSD license.     
 #    All rights reserved, see LICENSE for details.
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
 
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 
