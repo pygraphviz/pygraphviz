@@ -124,6 +124,7 @@ class AGraph(object):
                  filename=None, data=None, string=None, handle=None,
                  name='', strict=True, directed=False, **attr):
         self.handle = None  # assign first in case the __init__ bombs
+        self._owns_handle = True
         # initialization can take no arguments (gives empty graph) or
         # a file name
         # a string of graphviz dot language
@@ -158,6 +159,7 @@ class AGraph(object):
         if handle is not None:
             # if handle was specified, reference it
             self.handle = handle
+            self._owns_handle = False
         elif filename is not None:
             # load new graph from file (creates self.handle)
             self.read(filename)
@@ -990,12 +992,18 @@ class AGraph(object):
     def close(self):
         self._close_handle()
 
+
     def _close_handle(self):
         # may be useful to clean up graphviz data
         # this should completely remove all of the existing graphviz data
-        if self.handle is not None:
-            gv.agclose(self.handle)
+        if self._owns_handle:
+            if self.handle is not None:
+                gv.agclose(self.handle)
+                self.handle = None
+            self._owns_handle = False
+        else:
             self.handle = None
+
 
     def copy(self):
         """Return a copy of the graph."""
