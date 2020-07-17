@@ -273,7 +273,7 @@ class AGraph(object):
     #        self.add_edge(u,v)
 
     def __del__(self):
-        self.close()
+        self._close_handle()
 
     def get_name(self):
         name = gv.agnameof(self.handle)
@@ -987,6 +987,7 @@ class AGraph(object):
         directed = self.directed
         self._close_handle()
         self.handle = gv.agraphnew(name, strict, directed)
+        self._owns_handle = True
         self._update_handle_references()
 
     def close(self):
@@ -1246,6 +1247,7 @@ class AGraph(object):
             except ValueError:
                 raise DotError("Invalid Input")
             else:
+                self._owns_handle = True
                 self._update_handle_references()
         except IOError:
             print("IO error reading file")
