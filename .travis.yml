@@ -16,8 +16,17 @@ matrix:
       dist: xenial
       sudo: true
     - os: osx
+      osx_image: xcode12
       language: generic
-      before_install: brew install graphviz
+      before_install:
+          - sudo mkdir -p /usr/local/man
+          - sudo chown -R "${USER}:admin" /usr/local/man
+          - brew install graphviz
+          # set up Python and virtualenv on OSX
+          - git clone https://github.com/matthew-brett/multibuild
+          - source multibuild/osx_utils.sh
+          - get_macpython_environment 3.7 venv
+
   allow_failures:
     - os: osx
     - python: "3.9-dev"
