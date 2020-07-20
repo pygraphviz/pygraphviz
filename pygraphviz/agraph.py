@@ -117,6 +117,7 @@ class AGraph:
                  filename=None, data=None, string=None, handle=None,
                  name='', strict=True, directed=False, **attr):
         self.handle = None  # assign first in case the __init__ bombs
+        self._owns_handle = True
         # initialization can take no arguments (gives empty graph) or
         # a file name
         # a string of graphviz dot language
@@ -153,6 +154,7 @@ class AGraph:
         if handle is not None:
             # if handle was specified, reference it
             self.handle = handle
+            self._owns_handle = False
         elif filename is not None:
             # load new graph from file (creates self.handle)
             self.read(filename)
@@ -219,7 +221,7 @@ class AGraph:
         return self
 
     def __exit__(self, ext_type, exc_value, traceback):
-        self.close()
+        pass
 
     if _PY2:
         def __unicode__(self):
@@ -246,7 +248,6 @@ class AGraph:
         # hash the string representation for id
         return hash(self.string())
 
-
     def __iter__(self):
         # provide "for n in G"
         return self.nodes_iter()
@@ -265,6 +266,9 @@ class AGraph:
     # not implemented, but could be...
     #    def __setitem__(self,u,v):
     #        self.add_edge(u,v)
+
+    def __del__(self):
+        self._close_handle()
 
     def get_name(self):
         name = gv.agnameof(self.handle)
@@ -976,14 +980,26 @@ class AGraph:
         name = gv.agnameof(self.handle)
         strict = self.strict
         directed = self.directed
-        gv.agclose(self.handle)
+        self._close_handle()
         self.handle = gv.agraphnew(name, strict, directed)
+        self._owns_handle = True
         self._update_handle_references()
 
     def close(self):
+        self._close_handle()
+
+
+    def _close_handle(self):
         # may be useful to clean up graphviz data
         # this should completely remove all of the existing graphviz data
-        gv.agclose(self.handle)
+        if self._owns_handle:
+            if self.handle is not None:
+                gv.agclose(self.handle)
+                self.handle = None
+            self._owns_handle = False
+        else:
+            self.handle = None
+
 
     def copy(self):
         """Return a copy of the graph."""
@@ -1220,13 +1236,13 @@ class AGraph:
         """
         fh = self._get_fh(path)
         try:
-            if self.handle is not None:
-                gv.agclose(self.handle)
+            self._close_handle()
             try:
                 self.handle = gv.agread(fh, None)
             except ValueError:
                 raise DotError("Invalid Input")
             else:
+                self._owns_handle = True
                 self._update_handle_references()
         except OSError:
             print("IO error reading file")
