@@ -14,8 +14,15 @@ matrix:
     - os: osx
       osx_image: xcode12
       language: generic
+      env: TRAVIS_PYTHON_VERSION=3.6
+    - os: osx
+      osx_image: xcode12
+      language: generic
+      env: TRAVIS_PYTHON_VERSION=3.7
+    - os: osx
+      osx_image: xcode12
+      language: generic
       env: TRAVIS_PYTHON_VERSION=3.8
-      before_install: brew install graphviz
   allow_failures:
     - os: osx
     - python: "3.9-dev"
@@ -24,6 +31,7 @@ matrix:
 before_install:
   # create new empty venv
   - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+      - brew install graphviz
       - git clone https://github.com/matthew-brett/multibuild;
       - source multibuild/osx_utils.sh;
       - get_macpython_environment $TRAVIS_PYTHON_VERSION venv;
