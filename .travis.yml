@@ -31,6 +31,8 @@ matrix:
 before_install:
   # create new empty venv
   - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+      - uname -a
+      - printenv
       - brew install graphviz
       - git clone https://github.com/matthew-brett/multibuild;
       - source multibuild/osx_utils.sh;
