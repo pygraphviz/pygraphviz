@@ -31,15 +31,15 @@ matrix:
 before_install:
   # create new empty venv
   - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-      - uname -a
-      - printenv
-      - brew install graphviz
-      - git clone https://github.com/matthew-brett/multibuild;
-      - source multibuild/osx_utils.sh;
-      - get_macpython_environment $TRAVIS_PYTHON_VERSION venv;
+      uname -a;
+      printenv;
+      brew install graphviz;
+      git clone https://github.com/matthew-brett/multibuild;
+      source multibuild/osx_utils.sh;
+      get_macpython_environment $TRAVIS_PYTHON_VERSION venv;
     else
-      - virtualenv -p python ~/venv;
-      - source ~/venv/bin/activate;
+      virtualenv -p python ~/venv;
+      source ~/venv/bin/activate;
     fi
 install:
   # install required packages
