@@ -2676,9 +2676,7 @@ static swig_module_info swig_module = {swig_types, 8, 0, 0, 0, 0};
 #include "graphviz/cgraph.h"
 
 
-#if PY_VERSION_HEX >= 0x03000000
 extern PyTypeObject PyIOBase_Type;
-#endif
 
 
 SWIGINTERN swig_type_info*
@@ -3129,39 +3127,20 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
   
   if (!SWIG_Python_UnpackTuple(args, "agread", 2, 2, swig_obj)) SWIG_fail;
   {
-#if PY_VERSION_HEX >= 0x03000000 || defined(PYPY_VERSION)
-#if !defined(PYPY_VERSION)
     if (!PyObject_IsInstance(swig_obj[0], (PyObject *)&PyIOBase_Type)) {
       PyErr_SetString(PyExc_TypeError, "not a file handle");
       return NULL;
     }
     // work around to get hold of FILE*
     fd1 = PyObject_AsFileDescriptor(swig_obj[0]);
-#else
-    fd1 = PyObject_AsFileDescriptor(swig_obj[0]);
-    if (fd1 < 0)  {
-      PyErr_SetString(PyExc_TypeError, "not a file handle");
-      return NULL;
-    }
-#endif
+    
     mode_obj1 = PyObject_GetAttrString(swig_obj[0], "mode");
-#if !defined(PYPY_VERSION)
     mode_byte_obj1 = PyUnicode_AsUTF8String(mode_obj1);
-#else
-    mode_byte_obj1 = mode_obj1;
-    Py_INCREF(mode_byte_obj1);
-#endif
+    
     mode1 = PyBytes_AsString(mode_byte_obj1);
     arg1 = fdopen(fd1, mode1);
     Py_XDECREF(mode_obj1);
     Py_XDECREF(mode_byte_obj1);
-#else
-    if (!PyFile_Check(swig_obj[0])) {
-      PyErr_SetString(PyExc_TypeError, "not a file handle");
-      return NULL;
-    }
-    arg1 = PyFile_AsFile(swig_obj[0]);
-#endif
   }
   res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_Agdisc_t, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
@@ -3202,39 +3181,20 @@ SWIGINTERN PyObject *_wrap_agwrite(PyObject *SWIGUNUSEDPARM(self), PyObject *arg
   }
   arg1 = (Agraph_t *)(argp1);
   {
-#if PY_VERSION_HEX >= 0x03000000 || defined(PYPY_VERSION)
-#if !defined(PYPY_VERSION)
     if (!PyObject_IsInstance(swig_obj[1], (PyObject *)&PyIOBase_Type)) {
       PyErr_SetString(PyExc_TypeError, "not a file handle");
       return NULL;
     }
     // work around to get hold of FILE*
     fd2 = PyObject_AsFileDescriptor(swig_obj[1]);
-#else
-    fd2 = PyObject_AsFileDescriptor(swig_obj[1]);
-    if (fd2 < 0)  {
-      PyErr_SetString(PyExc_TypeError, "not a file handle");
-      return NULL;
-    }
-#endif
+    
     mode_obj2 = PyObject_GetAttrString(swig_obj[1], "mode");
-#if !defined(PYPY_VERSION)
     mode_byte_obj2 = PyUnicode_AsUTF8String(mode_obj2);
-#else
-    mode_byte_obj2 = mode_obj2;
-    Py_INCREF(mode_byte_obj2);
-#endif
+    
     mode2 = PyBytes_AsString(mode_byte_obj2);
     arg2 = fdopen(fd2, mode2);
     Py_XDECREF(mode_obj2);
     Py_XDECREF(mode_byte_obj2);
-#else
-    if (!PyFile_Check(swig_obj[1])) {
-      PyErr_SetString(PyExc_TypeError, "not a file handle");
-      return NULL;
-    }
-    arg2 = PyFile_AsFile(swig_obj[1]);
-#endif
   }
   result = (int)agwrite(arg1,arg2);
   resultobj = SWIG_From_int((int)(result));
