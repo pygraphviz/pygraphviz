@@ -24,7 +24,6 @@ matrix:
       language: generic
       env: TRAVIS_PYTHON_VERSION=3.8
   allow_failures:
-    - os: osx
     - python: "3.9-dev"
     - python: "pypy3"
 
