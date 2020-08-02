@@ -60,5 +60,5 @@ script:
   - python setup.py bdist_wheel
 after_success:
   - if [[ "${TRAVIS_OS_NAME}" != "osx" ]]; then
-      coveralls
+      coveralls;
     fi
