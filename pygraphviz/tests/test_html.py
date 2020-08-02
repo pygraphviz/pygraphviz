@@ -1,6 +1,5 @@
 from nose.tools import *
 import pygraphviz as pgv
-from os import linesep
 
 
 def stringify(agraph):
