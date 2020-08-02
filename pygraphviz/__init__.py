@@ -7,7 +7,7 @@ Quick example::
 >>> G=AGraph()
 >>> G.add_node('a')
 >>> G.add_edge('b','c')
->>> print G  # doctest: +SKIP 
+>>> print G  # doctest: +SKIP
 strict graph {
     a;
     b -- c;
@@ -17,11 +17,11 @@ strict graph {
 See pygraphviz.AGraph for detailed documentation.
 
 """
-#    Copyright (C) 2004-2010 by 
+#    Copyright (C) 2004-2010 by
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
-#    Distributed with BSD license.     
+#    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
 
 
@@ -29,7 +29,7 @@ See pygraphviz.AGraph for detailed documentation.
 from . import release
 
 if release.revision is None:
-    # we probably not running in an svn directory   
+    # we probably not running in an svn directory
     try:
         # use release data stored at installatation time.
         from . import version
@@ -52,7 +52,14 @@ __author__   = '%s <%s>\n%s <%s>\n%s <%s>' % \
                 release.authors['Renieris'] )
 __license__  = release.license
 
-from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute, DotError
+try:
+    from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute, DotError
+except Exception:
+    import sys
+    if getattr(sys, '_in_pygraphviz_setup', False):
+        AGraph = Node = Edge = Attribute = ItemAttribute = DotError = None
+    else:
+        raise
 
 __all__=[
     'AGraph',
@@ -64,4 +71,11 @@ __all__=[
     ]
 
 
-from pygraphviz.tests.test import run as test
+try:
+    from pygraphviz.tests.test import run as test
+except Exception:
+    import sys
+    if getattr(sys, '_in_pygraphviz_setup', False):
+        test = None
+    else:
+        raise

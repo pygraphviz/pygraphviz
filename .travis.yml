@@ -42,15 +42,17 @@ before_install:
 install:
   # install required packages
   - pip install --upgrade pip
+  - pip install -r requirements/build.txt
   - pip install -r requirements/test.txt
   # install pygraphviz
   - printenv PWD
-  - pip install -e .
+  - pip install -e . --verbose
   # show what's installed
   - python --version
   - pip list
 script:
   - nosetests --with-coverage --cover-package=pygraphviz
+  - python setup.py clean  # try cleaning before building
   - python setup.py bdist_wheel
 after_success:
   - coveralls
