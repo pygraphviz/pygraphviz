@@ -53,9 +53,9 @@ install:
   - pip list
 script:
   - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-      nosetests -v
+      nosetests -v;
     else
-      nosetests --with-coverage --cover-package=pygraphviz
+      nosetests --with-coverage --cover-package=pygraphviz;
     fi
   - python setup.py bdist_wheel
 after_success:
