@@ -24,7 +24,7 @@ matrix:
       language: generic
       env: TRAVIS_PYTHON_VERSION=3.8
   allow_failures:
-    - os: osx
+
 
 before_install:
   # create new empty venv
@@ -50,7 +50,13 @@ install:
   - python --version
   - pip list
 script:
-  - nosetests --with-coverage --cover-package=pygraphviz
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+      nosetests -v;
+    else
+      nosetests --with-coverage --cover-package=pygraphviz;
+    fi
   - python setup.py bdist_wheel
 after_success:
-  - coveralls
+  - if [[ "${TRAVIS_OS_NAME}" != "osx" ]]; then
+      coveralls;
+    fi
