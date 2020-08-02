@@ -34,14 +34,14 @@ def test_default_attributes():
 
 
 def test_graph_defaults():
-    A = pgv. AGraph(rankdir='LR',pack='true')
+    A = pgv. AGraph(rankdir='LR', pack='true')
     ans = """strict graph { graph [pack=true, rankdir=LR ]; }"""
     assert_equal(stringify(A), " ".join(ans.split()))
 
 
 def test_node_defaults():
     A = pgv.AGraph()
-    A.node_attr['label']='test'
+    A.node_attr['label'] = 'test'
     assert_true('label' in A.node_attr)
     assert_equal(A.node_attr['label'], 'test')
     assert_equal(A.node_attr.keys(), ['label'])
