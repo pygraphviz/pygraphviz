@@ -2,19 +2,28 @@ from nose.tools import *
 import pygraphviz as pgv
 from os import linesep
 
+
+def stringify(agraph):
+    result = agraph.string().split()
+    if '""' in result:
+        result.remove('""')
+    return " ".join(result)
+
+
 class TestGraph:
     def setUp(self):
         self.null = pgv.AGraph()
         self.K1 = pgv.AGraph()
         self.K1.add_node(1)
         self.K3 = pgv.AGraph()
-        self.K3.add_edges_from([(1,2),(1,3),(2,3)])
+        self.K3.add_edges_from([(1, 2), (1, 3), (2, 3)])
         self.K5 = pgv.AGraph()
-        self.K5.add_edges_from([(1,2),(1,3),(1,4),(1,5),(2,3),(2,4),(2,5),(3,4),(3,5),(4,5)])
+        self.K5.add_edges_from([(1, 2), (1, 3), (1, 4), (1, 5), (2, 3),
+                                (2, 4), (2, 5), (3, 4), (3, 5), (4, 5)])
         self.P3 = pgv.AGraph()
-        self.P3.add_path([1,2,3])
+        self.P3.add_path([1, 2, 3])
         self.P5 = pgv.AGraph()
-        self.P5.add_path([1,2,3,4,5])
+        self.P5.add_path([1, 2, 3, 4, 5])
 
 
     def test_strict(self):
@@ -22,8 +31,9 @@ class TestGraph:
         assert_true(A.is_strict())
         assert_equal(A.nodes(), [])
 
+
     def test_data(self):
-        d = {'a':'b','b':'c'}
+        d = {'a': 'b', 'b': 'c'}
         A = pgv.AGraph(data=d) # with data
         assert_equal(sorted(A.nodes()), ['a', 'b', 'c'])
         assert_equal(sorted(A.edges()), [('a', 'b'), ('b', 'c')])
@@ -31,17 +41,9 @@ class TestGraph:
 
     def test_str(self):
         A = pgv.AGraph(name="test")
-        assert_equal(A.string(),
-"""strict graph test {
-}
-""".replace('\n', linesep)
-)
+        assert_equal(stringify(A), "strict graph test { }")
         A = pgv.AGraph()
-        assert_equal(A.string(),
-"""strict graph {
-}
-""".replace('\n', linesep)
-)
+        assert_equal(stringify(A), "strict graph { }")
 
     def test_repr(self):
         A = pgv.AGraph()
@@ -323,23 +325,11 @@ class TestDiGraphOnly(TestGraph):
         assert_equal(A.in_degree(2), 1)
         assert_equal(A.out_degree(2), 1)
 
-        # Have to use expandtabs(1) not 0 because of PyPy bug
-        # https://bitbucket.org/pypy/pypy/issues/2113/calling-strexpandtabs-0-crashes-with-a
-        assert_equal(A.string().expandtabs(1),
-"""strict digraph {
- 1 -> 2;
- 2 -> 3;
-}
-""".replace('\n', linesep)
-)
+        ans = """strict digraph { 1 -> 2; 2 -> 3; }"""
+        assert_equal(stringify(A), ans)
 
-        assert_equal(A.reverse().string().expandtabs(1),
-"""strict digraph {
- 2 -> 1;
- 3 -> 2;
-}
-""".replace('\n', linesep)
-)
+        ans = """strict digraph { 2 -> 1; 3 -> 2; }"""
+        assert_equal(stringify(A.reverse()), ans)
 
     def test_name(self):
         A = pgv.AGraph(name='test')

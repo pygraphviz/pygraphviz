@@ -1,20 +1,21 @@
 from nose.tools import assert_equal, raises
 import pygraphviz as pgv
 from os import linesep
+empty_quotes = '""' # if 'osx' else '' if 'win'
 
 
 def test_name():
     A = pgv.AGraph(name='')
     assert_equal(A.string(),
-"""strict graph {
+"""strict graph "" {
 }
-""".replace('\n', linesep))
+""".replace('\n', linesep).replace('""', empty_quotes))
 
 
     assert_equal(A.string().expandtabs(),
-"""strict graph {
+"""strict graph "" {
 }
-""".replace('\n', linesep))
+""".replace('\n', linesep).replace('""', empty_quotes))
 
     assert_equal( A.__repr__()[0:7],'<AGraph')
 
@@ -26,7 +27,7 @@ def test_string_representation_small():
 """strict graph test {
         1 -- 2;
 }
-""".replace('\n', linesep)
+""".replace('\n', linesep).replace('""', empty_quotes)
 )
 
 def test_string_representation_large():
@@ -46,7 +47,7 @@ def test_string_representation_large():
         9 -- 10;
         11;
 }
-""".replace('\n', linesep))
+""".replace('\n', linesep).replace('""', empty_quotes))
 
 @raises(pgv.DotError)
 def test_bad_dot_input():

@@ -2,16 +2,20 @@ from nose.tools import *
 import pygraphviz as pgv
 from os import linesep
 
+
+def stringify(agraph):
+    result = agraph.string().split()
+    if '""' in result:
+        result.remove('""')
+    return " ".join(result)
+
+
 def test_edge_attributes():
     A = pgv.AGraph()
     A.add_edge(1,2,label='test',spam='eggs')
-    assert_equal(A.string().expandtabs(2),
-"""strict graph {
-  1 -- 2   [label=test,
-    spam=eggs];
-}
-""".replace('\n', linesep)
-)
+    ans = """strict graph { 1 -- 2 [label=test, spam=eggs]; }"""
+    assert_equal(stringify(A), " ".join(ans.split()))
+
 
 def test_edge_attributes2():
     A = pgv.AGraph()
@@ -22,66 +26,46 @@ def test_edge_attributes2():
     assert_true('label' in one.attr)
     assert_equal(one.attr['label'], 'test')
     assert_equal(sorted(one.attr.keys()), ['label', 'spam'])
-    assert_equal(A.string().expandtabs(2),
-"""strict graph {
-  1 -- 2   [label=test,
-    spam=eggs];
-}
-""".replace('\n', linesep)
-)
+
+    ans = """strict graph { 1 -- 2 [label=test, spam=eggs]; }"""
+    assert_equal(stringify(A), " ".join(ans.split()))
+
     one.attr['label'] = ''
     one.attr['spam'] = ''
-    assert_equal(A.string().expandtabs(2),
-"""strict graph {
-  1 -- 2;
-}
-""".replace('\n', linesep)
-)
+    ans = """strict graph { 1 -- 2; }"""
+    assert_equal(stringify(A), " ".join(ans.split()))
+
     one.attr['label'] = 'test'
     del one.attr['label']
-    assert_equal(A.string().expandtabs(2),
-"""strict graph {
-  1 -- 2;
-}
-""".replace('\n', linesep)
-)
+    ans = """strict graph { 1 -- 2; }"""
+    assert_equal(stringify(A), " ".join(ans.split()))
 
-def _test_anonymous_edges():
-    """graph test {\n a -- b [label="edge1"];\n a -- b [label="edge2"];\n }"""
+
+def test_anonymous_edges():
+    text_graph = b"""graph test {\n a -- b [label="edge1"];\n a -- b [label="edge2"];\n }"""
 
     import os,tempfile
     fd, fname = tempfile.mkstemp()
-    #os.write(d)
-    #os.close(fd)
-    #A = AGraph(fname)
+    os.write(fd, text_graph)
+    os.close(fd)
+    A = pgv.AGraph(fname)
 
-    assert_equal(A.string().expandtabs(2),
-"""graph test {
-   a -- b   [label=edge1];
-   a -- b   [label=edge2];
-}
-""".replace('\n', linesep))
+    ans = """graph test { a -- b [label=edge1]; a -- b [label=edge2]; }"""
+    assert_equal(stringify(A), " ".join(ans.split()))
     os.unlink(fname)
+
 
 def test_edge_attribute_update():
     A = pgv.AGraph(strict=True)
     A.add_edge(1,2,label='test',spam='eggs')
     A.add_edge(1,2,label='update',spam='')
-    assert_equal(A.string().expandtabs(2),
-"""strict graph {
-  1 -- 2   [label=update];
-}
-""".replace('\n', linesep)
-)
+    ans = """strict graph { 1 -- 2 [label=update]; }"""
+    assert_equal(stringify(A), " ".join(ans.split()))
+
 
 def test_edge_attribute_update_nonstrict():
     A = pgv.AGraph(strict=False)
     A.add_edge(1,2,label='test',spam='eggs',key='one')
     A.add_edge(1,2,label='update',spam='',key='one')
-    assert_equal(A.string().expandtabs(2),
-"""graph {
-  1 -- 2 [key=one,
-  label=update];
-}
-""".replace('\n', linesep)
-)
+    ans = """graph { 1 -- 2 [key=one, label=update]; }"""
+    assert_equal(stringify(A), " ".join(ans.split()))
