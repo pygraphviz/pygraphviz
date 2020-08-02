@@ -1,11 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 Setup script for PyGraphviz
 """
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
 
 from glob import glob
 
@@ -32,6 +28,11 @@ packages = ["pygraphviz", "pygraphviz.tests"]
 def relglob(pattern):
     return [relpath(p, repodir) for p in glob(join(repodir, pattern))]
 
+
+if sys.version_info[:2] < (3, 6):
+    print("PyGraphviz requires Python version 3.6 or later (%d.%d detected)." %
+          sys.version_info[:2])
+    sys.exit(-1)
 
 release = ensure_versionfile(repodir)
 docdirbase = 'share/doc/pygraphviz-%s' % release.version
@@ -78,6 +79,7 @@ if __name__ == "__main__":
         package_data=package_data,
         include_package_data=True,
         test_suite='nose.collector',
+        python_requires='>=3.6',
         tests_require=['nose>=1.3.7', 'doctest-ignore-unicode>=0.1.2', 'mock>=2.0.0'],
         **compile_setup_kw
     )

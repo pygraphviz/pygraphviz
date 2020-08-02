@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 A Python interface to Graphviz.
 
@@ -9,7 +8,6 @@ A Python interface to Graphviz.
 #    Manos Renieris, http://www.cs.brown.edu/~er/
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
-from __future__ import print_function
 
 import re
 import shlex
@@ -17,7 +15,7 @@ import subprocess
 import sys
 import threading
 import warnings
-from collections import MutableMapping
+from collections.abc import MutableMapping
 
 from . import graphviz as gv
 
@@ -51,13 +49,13 @@ class PipeReader(threading.Thread):
             self.pipe.close()
 
 
-class _Action(object):
+class _Action:
     find, create = 0, 1
 
 class DotError(ValueError):
     """Dot data parsing error"""
 
-class AGraph(object):
+class AGraph:
     """Class for Graphviz agraph type.
 
     Example use
@@ -119,6 +117,7 @@ class AGraph(object):
                  filename=None, data=None, string=None, handle=None,
                  name='', strict=True, directed=False, **attr):
         self.handle = None  # assign first in case the __init__ bombs
+        self._owns_handle = True
         # initialization can take no arguments (gives empty graph) or
         # a file name
         # a string of graphviz dot language
@@ -141,18 +140,21 @@ class AGraph(object):
             elif hasattr(thing, 'own'):  # a Swig pointer - graph handle
                 handle = thing
             elif is_string_like(thing):
-                pattern = re.compile('(strict)?\s*(graph|digraph).*{.*}\s*',
+                pattern = re.compile(r'(strict)?\s*(graph|digraph).*{.*}\s*',
                                      re.DOTALL)
                 if pattern.match(thing):
                     string = thing  # this is a dot format graph in a string
                 else:
                     filename = thing  # assume this is a file name
+            elif hasattr(thing, 'open'):
+                filename = thing  # assume this is a file name (in a path obj)
             else:
                 raise TypeError('Unrecognized input %s' % thing)
 
         if handle is not None:
             # if handle was specified, reference it
             self.handle = handle
+            self._owns_handle = False
         elif filename is not None:
             # load new graph from file (creates self.handle)
             self.read(filename)
@@ -219,7 +221,7 @@ class AGraph(object):
         return self
 
     def __exit__(self, ext_type, exc_value, traceback):
-        self.close()
+        pass
 
     if _PY2:
         def __unicode__(self):
@@ -235,7 +237,7 @@ class AGraph(object):
         name = gv.agnameof(self.handle)
         if name is None:
             return '<AGraph %s>' % self.handle
-        return '<AGraph %s %s>' % (name, self.handle)
+        return f'<AGraph {name} {self.handle}>'
 
     def __eq__(self, other):
         # two graphs are equal if they have exact same string representation
@@ -245,7 +247,6 @@ class AGraph(object):
     def __hash__(self):
         # hash the string representation for id
         return hash(self.string())
-
 
     def __iter__(self):
         # provide "for n in G"
@@ -265,6 +266,9 @@ class AGraph(object):
     # not implemented, but could be...
     #    def __setitem__(self,u,v):
     #        self.add_edge(u,v)
+
+    def __del__(self):
+        self._close_handle()
 
     def get_name(self):
         name = gv.agnameof(self.handle)
@@ -523,7 +527,7 @@ class AGraph(object):
         try:
             gv.agdeledge(self.handle, e.handle)
         except KeyError:
-            raise KeyError("Edge %s-%s not in graph." % (u, v))
+            raise KeyError(f"Edge {u}-{v} not in graph.")
 
     delete_edge = remove_edge
 
@@ -976,14 +980,26 @@ class AGraph(object):
         name = gv.agnameof(self.handle)
         strict = self.strict
         directed = self.directed
-        gv.agclose(self.handle)
+        self._close_handle()
         self.handle = gv.agraphnew(name, strict, directed)
+        self._owns_handle = True
         self._update_handle_references()
 
     def close(self):
+        self._close_handle()
+
+
+    def _close_handle(self):
         # may be useful to clean up graphviz data
         # this should completely remove all of the existing graphviz data
-        gv.agclose(self.handle)
+        if self._owns_handle:
+            if self.handle is not None:
+                gv.agclose(self.handle)
+                self.handle = None
+            self._owns_handle = False
+        else:
+            self.handle = None
+
 
     def copy(self):
         """Return a copy of the graph."""
@@ -1220,15 +1236,15 @@ class AGraph(object):
         """
         fh = self._get_fh(path)
         try:
-            if self.handle is not None:
-                gv.agclose(self.handle)
+            self._close_handle()
             try:
                 self.handle = gv.agread(fh, None)
             except ValueError:
                 raise DotError("Invalid Input")
             else:
+                self._owns_handle = True
                 self._update_handle_references()
-        except IOError:
+        except OSError:
             print("IO error reading file")
 
     def write(self, path=None):
@@ -1245,7 +1261,7 @@ class AGraph(object):
         fh = self._get_fh(path, 'w')
         try:
             gv.agwrite(self.handle, fh)
-        except IOError:
+        except OSError:
             print("IO error writing file")
         finally:
             if hasattr(fh, 'close') and not hasattr(path, 'write'):
@@ -1361,7 +1377,7 @@ class AGraph(object):
         p.wait()
 
         if not data:
-            raise IOError(b"".join(errors).decode(self.encoding))
+            raise OSError(b"".join(errors).decode(self.encoding))
 
         if len(errors) > 0:
             warnings.warn(b"".join(errors).decode(self.encoding), RuntimeWarning)
@@ -1529,7 +1545,7 @@ class AGraph(object):
     def _get_fh(self, path, mode='r'):
         """ Return a file handle for given path.
 
-        Path can be a string or a file handle.
+        Path can be a string, pathlib.Path, or a file handle.
         Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
         """
         import os
@@ -1548,8 +1564,10 @@ class AGraph(object):
         elif hasattr(path, 'write'):
             # Note, mode of file handle is unchanged.
             fh = path
+        elif hasattr(path, 'open'):
+            fh = path.open(mode=mode)
         else:
-            raise TypeError('path must be a string or file handle.')
+            raise TypeError('path must be a string, path, or file handle.')
         return fh
 
     def _which(self, name):
@@ -1608,9 +1626,9 @@ class Node(_TEXT_TYPE):
 
     def __new__(self, graph, name=None, nh=None):
         if nh is not None:
-            n = super(Node, self).__new__(self, gv.agnameof(nh), graph.encoding)
+            n = super().__new__(self, gv.agnameof(nh), graph.encoding)
         else:
-            n = super(Node, self).__new__(self, name)
+            n = super().__new__(self, name)
             try:
                 nh = gv.agnode(graph.handle, n.encode(graph.encoding), _Action.find)
             except KeyError:
@@ -1693,7 +1711,7 @@ class Edge(tuple):
                                key,
                                _Action.find)
             except KeyError:
-                raise KeyError("Edge %s-%s not in graph." % (source, target))
+                raise KeyError(f"Edge {source}-{target} not in graph.")
 
         tp = tuple.__new__(self, (s, t))
         tp.ghandle = graph.handle
@@ -1892,8 +1910,8 @@ if __name__ == "__main__":
     import sys
     import unittest
 
-    if sys.version_info[:2] < (2, 4):
-        print("Python version 2.4 or later required for tests (%d.%d detected)." % sys.version_info[:2])
+    if sys.version_info[:2] < (3, 6):
+        print("Python version 3.6 or later required for tests (%d.%d detected)." % sys.version_info[:2])
         sys.exit(-1)
         # directory of package (relative to this)
     nxbase = sys.path[0] + os.sep + os.pardir

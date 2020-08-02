@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Release data for PyGraphviz."""
 
 #    Copyright (C) 2006-2018 by 
@@ -36,7 +35,7 @@ __date__ = '%(date)s'
 
 '''
     if revision is not None:
-        rev = "'%s'" % (revision,)
+        rev = f"'{revision}'"
     else:
         rev = revision
     subs = {'version': version,
@@ -50,11 +49,11 @@ def get_svn_revision():
     base = os.path.split(__file__)[0]
     entries_path = os.path.join(base, '.svn', 'entries')
     if os.path.isfile(entries_path):
-        entries = open(entries_path, 'r').read()
+        entries = open(entries_path).read()
         # Versions >= 7 of the entries file are flat text.  The first line is
         # the version number. The next set of digits after 'dir' is the revision.
-        if re.match('(\d+)', entries):
-            rev_match = re.search('\d+\s+dir\s+(\d+)', entries)
+        if re.match(r'(\d+)', entries):
+            rev_match = re.search(r'\d+\s+dir\s+(\d+)', entries)
             if rev_match:
                 rev = rev_match.groups()[0]
     if rev:
@@ -97,12 +96,10 @@ classifiers = [
         'License :: OSI Approved :: BSD License',
         'Programming Language :: C',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Software Development :: Libraries :: Python Modules',

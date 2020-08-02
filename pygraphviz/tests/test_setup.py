@@ -1,6 +1,6 @@
 import sys
 from nose.tools import *
-from mock import patch
+from unittest.mock import patch
 
 # inside distributed version, there is no setup_extra files already
 sys.path.insert(0,'../..')
@@ -17,10 +17,7 @@ def _get_values():
 def _get_dpkg_output():
     r = """libgvc: /usr/local/include/graphviz/gvc.h
                      gphviz: /usr/local/lib/graphviz/graphviz.so"""
-    if sys.version_info >= (3, 0):
-        s = bytes(r, encoding='utf8')
-    else:
-        s = str(r)
+    s = bytes(r, encoding='utf8')
     return s
 
 
@@ -43,9 +40,6 @@ def test_dpkg_config(subprocess_mock):
 
 def test_b2str():
     if setup_extra:
-        if sys.version_info >= (3, 0):
-            r = bytes('abc', encoding='utf8')
-        else:
-            r = str('abc')
+        r = bytes('abc', encoding='utf8')
         s = setup_extra._b2str(r)
-        assert_equal(s, u'abc')
+        assert_equal(s, 'abc')

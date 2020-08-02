@@ -12,45 +12,41 @@
 %}
 
 %{
-#if PY_VERSION_HEX >= 0x03000000
-extern PyTypeObject PyIOBase_Type;
-#endif
+static PyObject *PyIOBase_TypeObj;
+
+static int init_file_emulator(void)
+{
+    PyObject *io = PyImport_ImportModule("_io");
+    if (io == NULL)
+        return -1;
+    PyIOBase_TypeObj = PyObject_GetAttrString(io, "_IOBase");
+    if (PyIOBase_TypeObj == NULL)
+        return -1;
+    return 0;
+}
+%}
+
+%init %{
+if (init_file_emulator() < 0) {
+    return NULL;
+}
 %}
 
 %typemap(in) FILE* (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
-%#if PY_VERSION_HEX >= 0x03000000 || defined(PYPY_VERSION)
-%#if !defined(PYPY_VERSION)
-    if (!PyObject_IsInstance($input, (PyObject *)&PyIOBase_Type)) {
+    if (!PyObject_IsInstance($input, PyIOBase_TypeObj)) {
         PyErr_SetString(PyExc_TypeError, "not a file handle");
         return NULL;
     }
     // work around to get hold of FILE*
     fd = PyObject_AsFileDescriptor($input);
-%#else
-    fd = PyObject_AsFileDescriptor($input);
-    if (fd < 0)  {
-        PyErr_SetString(PyExc_TypeError, "not a file handle");
-        return NULL;
-    }
-%#endif
+
     mode_obj = PyObject_GetAttrString($input, "mode");
-%#if !defined(PYPY_VERSION)
-     mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
-%#else
-    mode_byte_obj = mode_obj;
-    Py_INCREF(mode_byte_obj);
-%#endif
+    mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+
     mode = PyBytes_AsString(mode_byte_obj);
     $1 = fdopen(fd, mode);
     Py_XDECREF(mode_obj);
     Py_XDECREF(mode_byte_obj);
-%#else
-    if (!PyFile_Check($input)) {
-        PyErr_SetString(PyExc_TypeError, "not a file handle");
-        return NULL;
-    }
-    $1 = PyFile_AsFile($input);
-%#endif
 }
 
 

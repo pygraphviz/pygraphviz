@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from nose.tools import assert_equal, raises
 import pygraphviz as pgv
 from os import linesep

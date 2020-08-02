@@ -24,9 +24,6 @@ See pygraphviz.AGraph for detailed documentation.
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
 
 # Release data
 from . import release
