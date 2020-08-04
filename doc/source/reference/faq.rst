@@ -32,5 +32,4 @@ FAQ
        with Windows or would be willing to help test and distribute a
        Windows installer please drop us a note. 
        
-       See also tickets: https://networkx.lanl.gov/trac/ticket/117
-        https://networkx.lanl.gov/trac/ticket/491
+       See also issues at: https://github.com/pygraphviz/pygraphviz/search?q=Windows&type=Issues
