@@ -6,9 +6,10 @@ import os
 import tempfile
 import pathlib
 
+
 def test_readwrite():
-    A = pgv.AGraph(name='test graph')
-    A.add_path([1,2,3,4,5,6,7,8,9,10])
+    A = pgv.AGraph(name="test graph")
+    A.add_path([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     the_file = tempfile.NamedTemporaryFile(delete=False)
     fname = the_file.name
     # Make sure it can be opened for writing again on Win32
@@ -23,8 +24,8 @@ def test_readwrite():
 
 
 def test_readwrite_pathobj():
-    A = pgv.AGraph(name='test graph')
-    A.add_path([1,2,3,4,5,6,7,8,9,10])
+    A = pgv.AGraph(name="test graph")
+    A.add_path([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     the_file = tempfile.NamedTemporaryFile(delete=False)
     fname = pathlib.Path(the_file.name)
     # Make sure it can be opened for writing again on Win32

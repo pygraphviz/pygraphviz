@@ -17,11 +17,11 @@ strict graph {
 See pygraphviz.AGraph for detailed documentation.
 
 """
-#    Copyright (C) 2004-2010 by 
+#    Copyright (C) 2004-2010 by
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
-#    Distributed with BSD license.     
+#    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
 
 
@@ -29,10 +29,11 @@ See pygraphviz.AGraph for detailed documentation.
 from . import release
 
 if release.revision is None:
-    # we probably not running in an svn directory   
+    # we probably not running in an svn directory
     try:
         # use release data stored at installatation time.
         from . import version
+
         __version__ = version.__version__
         __revision__ = version.__revision__
         __date__ = version.__date__
@@ -47,21 +48,14 @@ else:
     __revision__ = release.revision
     __date__ = release.date
 
-__author__   = '%s <%s>\n%s <%s>\n%s <%s>' % \
-              ( release.authors['Hagberg'] + release.authors['Schult'] + \
-                release.authors['Renieris'] )
-__license__  = release.license
+__author__ = "%s <%s>\n%s <%s>\n%s <%s>" % (
+    release.authors["Hagberg"] + release.authors["Schult"] + release.authors["Renieris"]
+)
+__license__ = release.license
 
 from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute, DotError
 
-__all__=[
-    'AGraph',
-    'Node',
-    'Edge',
-    'Attribute',
-    'ItemAttribute',
-    'DotError'
-    ]
+__all__ = ["AGraph", "Node", "Edge", "Attribute", "ItemAttribute", "DotError"]
 
 
 from pygraphviz.tests.test import run as test
