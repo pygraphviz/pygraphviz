@@ -301,11 +301,11 @@ class AGraph:
 
         >>> G=AGraph()
         >>> G.add_node('a')
-        >>> G.nodes()  # doctest: +IGNORE_UNICODE
-        [u'a']
+        >>> G.nodes()
+        ['a']
         >>> G.add_node(1) # will be converted to a string
-        >>> G.nodes()  # doctest: +IGNORE_UNICODE
-        [u'a', u'1']
+        >>> G.nodes()
+        ['a', '1']
 
         Attributes can be added to nodes on creation or updated after creation
         (attribute values must be strings)
@@ -335,8 +335,8 @@ class AGraph:
         >>> G=AGraph()
         >>> nlist=['a','b',1,'spam']
         >>> G.add_nodes_from(nlist)
-        >>> sorted(G.nodes())  # doctest: +IGNORE_UNICODE
-        [u'1', u'a', u'b', u'spam']
+        >>> sorted(G.nodes())
+        ['1', 'a', 'b', 'spam']
 
 
         Attributes can be added to nodes on creation or updated after creation
@@ -450,8 +450,8 @@ class AGraph:
 
         >>> G=AGraph()
         >>> G.add_edge('a','b')
-        >>> G.edges()  # doctest: +IGNORE_UNICODE
-        [(u'a', u'b')]
+        >>> G.edges()
+        [('a', 'b')]
 
         The optional key argument allows assignment of a key to the
         edge.  This is especially useful to distinguish between
@@ -460,8 +460,8 @@ class AGraph:
         >>> G=AGraph(strict=False)
         >>> G.add_edge('a','b','first')
         >>> G.add_edge('a','b','second')
-        >>> sorted(G.edges(keys=True))  # doctest: +IGNORE_UNICODE
-        [(u'a', u'b', u'first'), (u'a', u'b', u'second')]
+        >>> sorted(G.edges(keys=True))
+        [('a', 'b', 'first'), ('a', 'b', 'second')]
 
         Attributes can be added when edges are created or updated after creation
 
@@ -520,8 +520,8 @@ class AGraph:
         >>> G=AGraph()
         >>> G.add_edge('a','b')
         >>> edge=G.get_edge('a','b')
-        >>> print(edge)  # doctest: +IGNORE_UNICODE
-        (u'a', u'b')
+        >>> print(edge)
+        ('a', 'b')
 
         With optional key argument will only get edge matching (u,v,key).
 
@@ -581,10 +581,10 @@ class AGraph:
         >>> G=AGraph()
         >>> G.add_edge('a','b')
         >>> G.add_edge('c','d')
-        >>> print(sorted(G.edges()))  # doctest: +IGNORE_UNICODE
-        [(u'a', u'b'), (u'c', u'd')]
-        >>> print(G.edges('a'))  # doctest: +IGNORE_UNICODE
-        [(u'a', u'b')]
+        >>> print(sorted(G.edges()))
+        [('a', 'b'), ('c', 'd')]
+        >>> print(G.edges('a'))
+        [('a', 'b')]
         """
         return list(self.edges_iter(nbunch=nbunch, keys=keys))
 
