@@ -104,7 +104,7 @@ For Red Hat Enterprise Linux 7, the requirements are::
    
    sudo yum groups install -y "Development Tools"
    sudo yum install -y python-devel graphviz-devel
-   sudo python -m pip install nose doctest-ignore-unicode mock
+   sudo python -m pip install nose doctest-ignore-unicode
 
 
 GraphViz
