@@ -62,11 +62,11 @@ def get_svn_revision():
 
 
 name = "pygraphviz"
-version = "1.6rc2"
+version = "1.6"
 
 # Declare current release as a development release.
 # Change to False before tagging a release; then change back.
-dev = True
+dev = False
 
 revision = None
 if dev:
