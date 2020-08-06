@@ -3,6 +3,15 @@
 News
 ==== 
 
+pygraphviz-1.6
+--------------
+
+Release date: 05 September 2020
+
+ - Add Python 3.8 support
+ - Drop Python 2.7 support
+ - Update to SWIG 4.0.1
+
 pygraphviz-1.5
 --------------
 
@@ -16,8 +25,6 @@ pygraphviz-1.3.1
 Release date: 6 September 2015
 
  - Update manifest to include missing files
-
-
 
 pygraphviz-1.3
 --------------
