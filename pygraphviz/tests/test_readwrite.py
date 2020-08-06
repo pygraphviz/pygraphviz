@@ -1,6 +1,3 @@
-from nose.tools import assert_equal
-from nose.tools import assert_true
-from nose.tools import assert_false
 import pygraphviz as pgv
 import os
 import tempfile
@@ -17,9 +14,9 @@ def test_readwrite():
     # Pass a string to trigger the code paths that close the newly created file handle
     A.write(fname)
     B = pgv.AGraph(fname)
-    assert_equal(A, B)
-    assert_true(B == A)
-    assert_false(B is A)
+    assert A == B
+    assert B == A
+    assert B is not A
     os.unlink(fname)
 
 
@@ -33,7 +30,7 @@ def test_readwrite_pathobj():
     # Pass a string to trigger the code paths that close the newly created file handle
     A.write(fname)
     B = pgv.AGraph(fname)
-    assert_equal(A, B)
-    assert_true(B == A)
-    assert_false(B is A)
+    assert A == B
+    assert B == A
+    assert B is not A
     os.unlink(fname)

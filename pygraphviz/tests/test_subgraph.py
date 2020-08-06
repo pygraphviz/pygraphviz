@@ -1,4 +1,3 @@
-from nose.tools import *
 import pygraphviz as pgv
 
 
@@ -14,7 +13,7 @@ def test_subgraph():
     G.add_edge(1, 2)
     s = G.add_subgraph((1, 2), label="foo")
     ans = """strict graph { { graph [label=foo]; 1 -- 2; } }"""
-    assert_equal(stringify(G), ans)
+    assert stringify(G) == ans
 
 
 def test_subgraph_cluster():
@@ -25,7 +24,7 @@ def test_subgraph_cluster():
     ans = """strict graph { graph [label=foo];
              { graph [label=<Hello<BR/>World>]; sa; }
              a; }"""
-    assert_equal(stringify(G), " ".join(ans.split()))
+    assert stringify(G) == " ".join(ans.split())
 
 
 def test_subgraph_cluster_attribute():
@@ -39,4 +38,4 @@ def test_subgraph_cluster_attribute():
                graph [foo=bar];
              }
              a; }"""
-    assert_equal(stringify(G), " ".join(ans.split()))
+    assert stringify(G) == " ".join(ans.split())

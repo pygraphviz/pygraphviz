@@ -56,6 +56,3 @@ __license__ = release.license
 from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute, DotError
 
 __all__ = ["AGraph", "Node", "Edge", "Attribute", "ItemAttribute", "DotError"]
-
-
-from pygraphviz.tests.test import run as test

@@ -1,5 +1,5 @@
-from nose.tools import assert_equal, raises
 import pygraphviz as pgv
+import pytest
 
 
 def stringify(agraph):
@@ -11,14 +11,14 @@ def stringify(agraph):
 
 def test_name():
     A = pgv.AGraph(name="")
-    assert_equal(stringify(A), "strict graph { }")
-    assert_equal(A.__repr__()[0:7], "<AGraph")
+    assert stringify(A) == "strict graph { }"
+    assert A.__repr__()[0:7] == "<AGraph"
 
 
 def test_string_representation_small():
     A = pgv.AGraph(name="test")
     A.add_path([1, 2])
-    assert_equal(stringify(A), "strict graph test { 1 -- 2; }")
+    assert stringify(A) == "strict graph test { 1 -- 2; }"
 
 
 def test_string_representation_large():
@@ -36,9 +36,9 @@ def test_string_representation_large():
              8 -- 9;
              9 -- 10;
              11; }"""
-    assert_equal(stringify(A), " ".join(ans.split()))
+    assert stringify(A) == " ".join(ans.split())
 
 
-@raises(pgv.DotError)
 def test_bad_dot_input():
-    A = pgv.AGraph(string="graph {1--1")
+    with pytest.raises(pgv.DotError):
+        A = pgv.AGraph(string="graph {1--1")

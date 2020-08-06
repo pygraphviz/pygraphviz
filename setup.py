@@ -85,7 +85,6 @@ if __name__ == "__main__":
             },
         package_data=package_data,
         include_package_data = True,
-        test_suite='nose.collector',
         python_requires='>=3.6',
-        tests_require=['nose>=1.3.7'],
+        tests_require=['pytest'],
     )
