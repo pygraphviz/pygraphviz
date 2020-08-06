@@ -1,4 +1,3 @@
-from nose.tools import *
 import pygraphviz as pgv
 import sys
 
@@ -8,7 +7,7 @@ _TEXT_TYPE = unicode if _PY2 else str
 
 def test_name_unicode():
     A = pgv.AGraph(name="unicode")
-    assert_equal(A.name, "unicode")
+    assert A.name == "unicode"
 
 
 def test_node_encoding():
@@ -16,10 +15,10 @@ def test_node_encoding():
     hello = "Здравствуйте!"
     A.add_node(hello)
     n = A.get_node(hello)
-    assert_equal(n.name, hello)
+    assert n.name == hello
 
     n.attr["goodbye"] = "До свидания"
-    assert_equal(n.attr["goodbye"], "До свидания")
+    assert n.attr["goodbye"] == "До свидания"
 
 
 def test_edge_encoding():
@@ -27,11 +26,11 @@ def test_edge_encoding():
     hello = "שלום"
     A.add_edge(hello, hello, key=1)  # self loop
     e = A.get_edge(hello, hello)
-    assert_equal(e.name, "1")
-    assert_equal(e, (hello, hello))
+    assert e.name == "1"
+    assert e == (hello, hello)
 
     e.attr["hello"] = hello
-    assert_equal(e.attr["hello"], hello)
+    assert e.attr["hello"] == hello
 
 
 def test_from_string():
@@ -43,4 +42,4 @@ def test_from_string():
     sg = str(G)
     G1 = pgv.AGraph(ug)
     G2 = pgv.AGraph(sg)
-    assert_equal(_TEXT_TYPE(G1), _TEXT_TYPE(G2))
+    assert _TEXT_TYPE(G1) == _TEXT_TYPE(G2)

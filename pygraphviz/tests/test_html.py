@@ -1,4 +1,3 @@
-from nose.tools import *
 import pygraphviz as pgv
 
 
@@ -48,7 +47,6 @@ def test_long_html_string():
     s = G.add_subgraph("b", label="<Hello<BR/>Subgraph>")
     s.add_node("sa", label="<Hello<BR/>Subgraph Node b>")
     G.add_edge("a", "b", label="<Hello<BR/>Edge>")
-    assert_equal.__self__.maxDiff = None
     ans = """strict graph {{
               graph [label=<Hello<BR/>Graph>];
               node [label="\\N"];
@@ -61,7 +59,7 @@ def test_long_html_string():
             }}""".format(
         long_html_string
     )
-    assert_equal(stringify(G), " ".join(ans.split()))
+    assert stringify(G) == " ".join(ans.split())
 
 
 def test_html():
@@ -80,4 +78,4 @@ def test_html():
       a  [label=<Hello<BR/>Node>];
       a -- b [label=<Hello<BR/>Edge>];
     }"""
-    assert_equal(stringify(G), " ".join(ans.split()))
+    assert stringify(G) == " ".join(ans.split())

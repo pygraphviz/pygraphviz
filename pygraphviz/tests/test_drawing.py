@@ -1,12 +1,12 @@
-from nose.tools import *
 import pygraphviz as pgv
+import pytest
 
 
-@raises(AttributeError)
 def test_drawing_error():
-    A = pgv.AGraph(name="test graph")
-    A.add_path([1, 2, 3, 4])
-    d = A.draw()
+    with pytest.raises(AttributeError):
+        A = pgv.AGraph(name="test graph")
+        A.add_path([1, 2, 3, 4])
+        d = A.draw()
 
 
 # this is not a very good way to test...
@@ -14,7 +14,7 @@ def test_drawing_error():
 #    A = pgv.AGraph(name='test graph')
 #    A.add_path([1,2,3,4])
 #    d = A.draw(prog='neato')
-#    assert_equal(len(d.splitlines()),19)
+#    assert len(d.splitlines()) == 19
 # FIXME
 # smoke test
 # >>> (fd,fname)=tempfile.mkstemp()
@@ -22,7 +22,7 @@ def test_drawing_error():
 # >>> A.draw(fname,prog='neato')
 
 
-@raises(ValueError)
 def test_name_error():
-    A = pgv.AGraph(name="test graph")
-    A.draw("foo", prog="foo")
+    with pytest.raises(ValueError):
+        A = pgv.AGraph(name="test graph")
+        A.draw("foo", prog="foo")

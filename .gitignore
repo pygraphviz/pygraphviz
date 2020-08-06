@@ -18,7 +18,6 @@ pygraphviz.egg-info/
 
 dist/
 *.pyd
-.noseids
 *.dll
 pygraphviz/version.py
 _b/

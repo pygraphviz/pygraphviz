@@ -52,7 +52,7 @@ Source Archive File
 
   3. Run "python setup.py install" to build and install 
 
-  4. (optional) Run "python setup_egg.py nosetests" to execute the tests
+  4. (optional) Run "pytest" to execute the tests
 
 
 Github
@@ -68,7 +68,7 @@ Github
 
   3.  Run "python setup.py install" to build and install
 
-  4. (optional) Run "python setup_egg.py nosetests" to execute the tests
+  4. (optional) Run "pytest" to execute the tests
 
 
 If you don't have permission to install software on your
@@ -104,7 +104,7 @@ For Red Hat Enterprise Linux 7, the requirements are::
    
    sudo yum groups install -y "Development Tools"
    sudo yum install -y python-devel graphviz-devel
-   sudo python -m pip install nose
+   sudo python -m pip install pytest
 
 
 GraphViz
