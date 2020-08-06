@@ -54,6 +54,7 @@ How to make a new release of ``pygraphviz``
   - Sync your branch with the remote repo: ``git pull``.
     If you try to ``make github`` when your branch is out of sync, it
     creates headaches.
+  - Update ``documentation.rst``.
   - Update ``_templates/sidebar_versions.html``.
   - Push your changes to the repo.
   - Deploy using ``make github``.
