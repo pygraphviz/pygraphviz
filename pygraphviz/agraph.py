@@ -20,13 +20,10 @@ from collections.abc import MutableMapping
 from . import graphviz as gv
 
 _DEFAULT_ENCODING = "UTF-8"
-_PY2 = sys.version_info[0] == 2
-_TEXT_TYPE = unicode if _PY2 else str
-_STRING_TYPES = (basestring,) if _PY2 else (str,)
 
 
 def is_string_like(obj):
-    return isinstance(obj, _STRING_TYPES)
+    return isinstance(obj, str)
 
 
 class PipeReader(threading.Thread):
@@ -234,18 +231,8 @@ class AGraph:
     def __exit__(self, ext_type, exc_value, traceback):
         pass
 
-    if _PY2:
-
-        def __unicode__(self):
-            return self.string()
-
-        def __str__(self):
-            return unicode(self).encode(self.encoding, "replace")
-
-    else:
-
-        def __str__(self):
-            return self.string()
+    def __str__(self):
+        return self.string()
 
     def __repr__(self):
         name = gv.agnameof(self.handle)
@@ -1603,7 +1590,7 @@ class AGraph:
             pass  # ignore as likely still in __init__()
 
 
-class Node(_TEXT_TYPE):
+class Node(str):
     """Node object based on unicode.
 
     If G is a graph
