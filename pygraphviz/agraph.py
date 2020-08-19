@@ -265,8 +265,11 @@ class AGraph:
         return True
 
     def __hash__(self):
-        # hash the string representation for id
-        return hash(self.string())
+        # include nodes and edges in hash
+        # Could do attributes too, but hash should be fast
+        return hash((tuple(sorted(self.nodes_iter())),
+                     tuple(sorted(self.edges_iter())),
+                     ))
 
     def __iter__(self):
         # provide "for n in G"
