@@ -1,13 +1,7 @@
 import pytest
 import unittest
 import pygraphviz as pgv
-
-
-def stringify(agraph):
-    result = agraph.string().split()
-    if '""' in result:
-        result.remove('""')
-    return " ".join(result)
+stringify = pgv.testing.stringify
 
 
 class TestGraph(unittest.TestCase):

@@ -9,6 +9,7 @@ A Python interface to Graphviz.
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
 
+import os
 import re
 import shlex
 import subprocess
@@ -1282,15 +1283,15 @@ class AGraph:
         return self.draw(format="dot", prog="nop").decode(self.encoding)
 
     def to_string(self):
-        """Return a string (unicode) representation of graph in dot format."""
+        """Return a string representation of graph in dot format.
+        
+        `to_string()` uses "agwrite" to produce "dot" format w/o rendering.
+        The function `string_nop()` layouts with "nop" and renders to "dot".
+        """
         from tempfile import TemporaryFile
 
         fh = TemporaryFile()
-        # Cover TemporaryFile wart: on 'nt' we need the file member
-        if hasattr(fh, "file"):
-            self.write(fh.file)
-        else:
-            self.write(fh)
+        self.write(fh)
         fh.seek(0)
         data = fh.read()
         fh.close()
@@ -1298,8 +1299,8 @@ class AGraph:
 
     def string(self):
         """Return a string (unicode) representation of graph in dot format."""
-        #        return self.to_string()
-        return self.string_nop()
+        return self.to_string()
+        #return self.string_nop()
 
     def from_string(self, string):
         """Load a graph from a string in dot format.
@@ -1324,11 +1325,7 @@ class AGraph:
         fh = TemporaryFile()
         fh.write(string.encode(self.encoding))
         fh.seek(0)
-        # Cover TemporaryFile wart: on 'nt' we need the file member
-        if hasattr(fh, "file"):
-            self.read(fh.file)
-        else:
-            self.read(fh)
+        self.read(fh)
         fh.close()
         return self
 
@@ -1425,15 +1422,31 @@ class AGraph:
         >>> A=AGraph()
         >>> A.layout() # uses neato
         >>> A.layout(prog='dot')
+        >>> A.layout(prog='dot', args="-Nshape=box -Efontsize=8")
 
         Use keyword args to add additional arguments to graphviz programs.
 
         The layout might take a long time on large graphs.
 
+        Note: attaching positions in the AGraph usually doesn't affect the
+        next rendering. The positions are recomputed. But if you use prog="nop"
+        when rendering, it will take node positions from the AGraph attributes.
+        If you use prog="nop2" it will take node and edge positions from the
+        AGraph when rendering.
         """
-        fmt = "dot"
-        data = self._run_prog(prog, " ".join([args, "-T", fmt]))
-        self.from_string(data)
+#        _ , prog = self._manually_parse_args(args, None, prog)
+
+        # convert input strings to type bytes (encode it)
+        if isinstance(prog, str):
+            prog = prog.encode(self.encoding)
+
+        gvc = gv.gvContext()
+        gv.gvLayout(gvc, self.handle, prog)
+        gv.gvRender(gvc, self.handle, format=b"dot", out=None)
+
+        gv.gvFreeLayout(gvc, self.handle)
+        gv.gvFreeContext(gvc)
+
         self.has_layout = True
         return
 
@@ -1482,6 +1495,8 @@ class AGraph:
         cases, one should explicitly set the `format` parameter; otherwise, it
         will default to 'dot'.
 
+        If path is None, the result is returned as a Bytes object.
+
         Formats (not all may be available on every system depending on
         how Graphviz was built)
 
@@ -1514,8 +1529,112 @@ class AGraph:
         The layout might take a long time on large graphs.
 
         """
-        import os
+        # try to guess format from extension
+        if format is None and path is not None:
+            p = path
+            # in case we got a file handle get its name instead
+            if not is_string_like(p):
+                p = path.name
+            format = os.path.splitext(p)[-1].lower()[1:]
 
+        if format is None or format == "":
+            format = "dot"
+
+        if prog is None:
+            if self.has_layout:
+                prog = "neato"
+                args += "-n2"
+            else:
+                raise AttributeError(
+                    """Graph has no layout information, see layout() or specify prog=%s."""
+                    % ("|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"]))
+                )
+
+        else:
+            if self.number_of_nodes() > 1000:
+                sys.stderr.write(
+                    "Warning: graph has %s nodes...layout may take a long time.\n"
+                    % self.number_of_nodes()
+                )
+
+#        if prog[:3] == "nop":
+#            if all((n.attr["pos"] is None) for n in self.nodes()):
+#                raise AttributeError(
+#                    """Graph has no layout information. Can't use prog="nop". """
+#                )
+#        format, prog = self._manually_parse_args(args, format, prog)
+
+        # convert input strings to type bytes (encode it)
+        if isinstance(format, str):
+            format = format.encode(self.encoding)
+        if isinstance(prog, str):
+            prog = prog.encode(self.encoding)
+
+        # Start the drawing
+        gvc = gv.gvContext()
+        G = self.handle
+
+        # Layout
+        err = gv.gvLayout(gvc, G, prog)
+        if err:
+            if err != -1:
+                raise ValueError("Graphviz raised a layout error.")
+            prog = prog.decode(self.encoding)
+            raise ValueError(f"Can't find prog={prog} in this graphviz installation")
+
+        # Render
+        if path is None:
+            out = gv.gvRenderData(gvc, G, format)
+            if out[0]:
+                raise ValueError(f"Graphviz Error creating dot representation: {out[0]}")
+            err, dot_string, length = out
+            assert len(dot_string) == length
+            gv.gvFreeLayout(gvc, G)
+            gv.gvFreeContext(gvc)
+            return dot_string
+
+        # path is string holding the filename, a file handle, or pathlib.Path
+        fh = self._get_fh(path, "wb")
+        err = gv.gvRender(gvc, G, format, fh)
+        if err:
+            raise ValueError("Graphviz raised a render error. Maybe bad format?")
+        if is_string_like(path):
+            fh.close()
+        gv.gvFreeLayout(gvc, G)
+        gv.gvFreeContext(gvc)
+
+    def layout_command_line(self, prog="neato", args=""):
+        """Assign positions to nodes in graph.
+
+        This version of the layout command uses command line calls to neato
+        or other GraphViz tools. This is the code that was in place for
+        versions 1.6 and before.
+
+        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
+        will use specified graphviz layout method.
+
+        >>> A=AGraph()
+        >>> A.layout() # uses neato
+        >>> A.layout(prog='dot')
+
+        Use keyword args to add additional arguments to graphviz programs.
+
+        The layout might take a long time on large graphs.
+
+        """
+        output_fmt = "dot"
+        data = self._run_prog(prog, " ".join([args, "-T", output_fmt]))
+        self.from_string(data)
+        self.has_layout = True
+        return
+
+    def draw_command_line(self, path=None, format=None, prog=None, args=""):
+        """Output graph to path in specified format.
+
+        This version of the draw command uses command line calls to dot
+        or other GraphViz tools. This is the code that was in place for
+        versions 1.6 and before.
+        """
         # try to guess format from extension
         if format is None and path is not None:
             p = path
@@ -1563,14 +1682,35 @@ class AGraph:
 
     # some private helper functions
 
+    def _manually_parse_args(self, args, format=None, prog=None):
+        arg_list = shlex.split(args)
+        for arg in arg_list:
+            value = arg[2:]
+            if arg[:2] == "-T":
+                if format and format != value:
+                    raise ValueError("format specified differently in args and format inputs")
+                format = value
+            if arg[:2] == "-K":
+                if prog and prog != value:
+                    raise ValueError("prog specified differently in args and prog inputs")
+                prog = value
+            if arg[:2] == "-G":
+                key, val = value.split("=")
+                self.graph_attr[key] = val
+            if arg[:2] == "-N":
+                key, val = value.split("=")
+                self.node_attr[key] = val
+            if arg[:2] == "-E":
+                key, val = value.split("=")
+                self.edge_attr[key] = val
+        return format, prog
+
     def _get_fh(self, path, mode="r"):
         """ Return a file handle for given path.
 
         Path can be a string, pathlib.Path, or a file handle.
         Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
         """
-        import os
-
         if is_string_like(path):
             if path.endswith(".gz"):
                 # import gzip
@@ -1593,7 +1733,6 @@ class AGraph:
 
     def _which(self, name):
         """Searches for name in exec path and returns full path"""
-        import os
         import glob
 
         paths = os.environ["PATH"]
@@ -1939,7 +2078,6 @@ def _test_suite():
 
 
 if __name__ == "__main__":
-    import os
     import sys
     import unittest
 

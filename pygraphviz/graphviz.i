@@ -9,6 +9,7 @@
 
 %{
 #include "graphviz/cgraph.h"
+#include "graphviz/gvc.h"
 %}
 
 %{
@@ -33,20 +34,23 @@ if (init_file_emulator() < 0) {
 %}
 
 %typemap(in) FILE* (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
-    if (!PyObject_IsInstance($input, PyIOBase_TypeObj)) {
-        PyErr_SetString(PyExc_TypeError, "not a file handle");
-        return NULL;
+    if ($input == Py_None) { $1 = NULL; }
+    else {
+        if (!PyObject_IsInstance($input, PyIOBase_TypeObj)) {
+            PyErr_SetString(PyExc_TypeError, "not a file handle");
+            return NULL;
+        }
+        // work around to get hold of FILE*
+        fd = PyObject_AsFileDescriptor($input);
+
+        mode_obj = PyObject_GetAttrString($input, "mode");
+        mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+
+        mode = PyBytes_AsString(mode_byte_obj);
+        $1 = fdopen(fd, mode);
+        Py_XDECREF(mode_obj);
+        Py_XDECREF(mode_byte_obj);
     }
-    // work around to get hold of FILE*
-    fd = PyObject_AsFileDescriptor($input);
-
-    mode_obj = PyObject_GetAttrString($input, "mode");
-    mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
-
-    mode = PyBytes_AsString(mode_byte_obj);
-    $1 = fdopen(fd, mode);
-    Py_XDECREF(mode_obj);
-    Py_XDECREF(mode_byte_obj);
 }
 
 
@@ -231,7 +235,7 @@ int      agsafeset(void *obj, char *name, char *value, char *def);
 
 /* styled from gv.cpp in Graphviz to handle <> html data in label */
 %inline %{
-  int agattr_label(Agraph_t *g, int kind, char *name, char *val)
+  Agsym_t *agattr_label(Agraph_t *g, int kind, char *name, char *val)
 {
     int len;
     char *hs;
@@ -308,4 +312,42 @@ const Agdesc_t Agstrictundirected = { 0, 1, 0, 1 };
 #define AGEDGE      AGOUTEDGE       /* synonym in object kind args */
 
 
+
+/**************** GVC ******************/
+/* Could do the whole gvc.h file here. */
+/* But gvParseArgs code is "a mess" (their comment in source code) */
+/* It uses global variables to set default attributes */
+/* It doesn't update current nodes with these defaults yet it sets */
+/* any future nodes to these defaults even if in a different graph */
+/* and a different gvContext. */
+/* The result is that you can set a default for one graph and it doesnt */
+/* do anything to that graph, but then all future graphs have that default */
+//
+/* This code only uses a small portion of the libgvc functions. */
+/* The focus is on layout and render operations. */
+
+/*  set up a graphviz context - and init graph - retaining old API */
+GVC_t *gvContext(void);
+int gvFreeContext(GVC_t *gvc);
+
+/* Compute a layout using a specified engine */
+int gvLayout(GVC_t *gvc, Agraph_t *g, char* prog);
+int gvFreeLayout(GVC_t *gvc, Agraph_t *g);
+
+/* Render layout in a specified format to an open FILE */
+int gvRender(GVC_t *gvc, Agraph_t* g, char *format, FILE *out=NULL);
+int gvRenderFilename(GVC_t *gvc, Agraph_t* g, char *format, char *filename);
+
+/* Render layout in a specified format to an external context */
+/*-------------------------------------------------------------*/
+/* Writing a dot file to a string involves some pointer crazy stuff */
+/* (the input strings are changed by the function... this magic makes */
+/* python return the strings instead of changing the input. The next */
+/* three lines are straight from the SWIG manual.  */
+%include <cstring.i>
+%include <typemaps.i>
+%cstring_output_allocate(char **result, free(*$1)); 
+int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, unsigned int *OUTPUT);
+/* Free memory allocated and pointed to by *result in gvRenderData */
+extern void gvFreeRenderData (char* data);
 

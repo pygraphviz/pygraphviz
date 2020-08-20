@@ -1,12 +1,6 @@
 import pygraphviz as pgv
 import pytest
-
-
-def stringify(agraph):
-    result = agraph.string().split()
-    if '""' in result:
-        result.remove('""')
-    return " ".join(result)
+stringify = pgv.testing.stringify
 
 
 def test_name():
