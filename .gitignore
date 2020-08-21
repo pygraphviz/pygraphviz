@@ -29,3 +29,6 @@ pygraphviz/_graphviz*.so
 .tox/
 MANIFEST
 .eggs/
+
+# Default location for virtual environment
+venv/
