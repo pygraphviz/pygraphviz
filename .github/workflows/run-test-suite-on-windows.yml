@@ -28,8 +28,6 @@ jobs:
 
     - name: Install Testing Dependencies
       run: |
-        python -m venv testenv
-        cmd.exe /c '\testenv\bin\activate.bat'
         python -m pip install -r requirements/test.txt
         python -m pip install -e .
 
