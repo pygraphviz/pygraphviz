@@ -1,6 +1,6 @@
-import pygraphviz as pgv
 import pytest
 import unittest
+import pygraphviz as pgv
 
 
 def stringify(agraph):
@@ -63,6 +63,69 @@ class TestGraph(unittest.TestCase):
         H = pgv.AGraph()
         assert H == A
         assert H is not A
+
+        assert self.P3 == self.P3
+
+        A = pgv.AGraph()
+        A.add_path([1, 2, 3])
+        assert A.nodes() == self.P3.nodes()
+        assert A.edges() == self.P3.edges()
+        assert stringify(A) == stringify(self.P3)
+        assert A == self.P3
+
+    def test_not_equal(self):
+        A = pgv.AGraph()
+        A.add_path([1, 2, 3])
+        B = self.P3
+        assert A == B
+
+        A.add_node(4)
+        assert A != B
+        A.remove_node(4)
+        assert A == B
+        A.add_edge(3, 1)
+        assert A != B
+        A.remove_edge(3, 1)
+        assert A == B
+
+        A.add_node(4, hi=9)
+        assert A != B
+        A.remove_node(4)
+        assert A == B
+        A.add_edge(3, 1, hi=9)
+        assert A != B
+        A.remove_edge(3, 1)
+        assert A == B
+
+        # Note: default attributes dont affect equality
+        A.node_attr['low'] = 3
+        assert A == B
+        B.node_attr['low'] = 3
+        assert A == B
+        A.edge_attr['low'] = 4
+        assert A == B
+        B.edge_attr['low'] = 4
+        assert A == B
+        A.graph_attr.update({'low': 5})
+        assert A == B
+        # print(sorted(A.nodes()), sorted(B.nodes()))
+        # print(sorted(A.edges()), sorted(B.edges()))
+        # print(tuple(dict(n.attr) for n in sorted(A.nodes())))
+        # print(tuple(dict(n.attr) for n in sorted(B.nodes())))
+        # print(tuple(dict(e.attr) for e in sorted(A.edges())))
+        # print(tuple(dict(e.attr) for e in sorted(B.edges())))
+        # print(dict(A.node_attr), dict(B.node_attr))
+        # print(dict(A.edge_attr), dict(B.edge_attr))
+        # print(dict(A.graph_attr), dict(B.graph_attr))
+
+    def test_hash(self):
+        A = pgv.AGraph()
+        A.add_path([1, 2, 3])
+        assert hash(A) == hash(self.P3)
+        B = A.copy()
+        assert hash(A) == hash(B)
+        B.add_node(4)
+        assert hash(A) != hash(B)
 
     def test_iter(self):
         assert sorted(list(self.P3.__iter__())) == ["1", "2", "3"]
@@ -224,9 +287,10 @@ class TestGraph(unittest.TestCase):
         A = self.P3.copy()
         assert A.nodes() == ["1", "2", "3"]
         assert A.edges() == [("1", "2"), ("2", "3")]
-        assert A == self.P3
         assert A is not self.P3
         assert self.P3 is self.P3
+        assert stringify(A) == stringify(self.P3)
+        assert A == self.P3
 
     def test_add_path(self):
         A = pgv.AGraph()

@@ -241,13 +241,35 @@ class AGraph:
         return f"<AGraph {name} {self.handle}>"
 
     def __eq__(self, other):
-        # two graphs are equal if they have exact same string representation
-        # this is not graph isomorphism
-        return self.string() == other.string()
+        # two graphs are equal if they have exact same nodes and edges
+        # and attributes.  This is not graph isomorphism.
+        if sorted(self.nodes()) != sorted(other.nodes()):
+            return False
+        if sorted(self.edges()) != sorted(other.edges()):
+            return False
+        # check attributes
+        if tuple(dict(n.attr) for n in sorted(self.nodes_iter())) != tuple(dict(n.attr) for n in sorted(other.nodes_iter())):
+            return False
+        if tuple(dict(e.attr) for e in sorted(self.edges_iter())) != tuple(dict(e.attr) for e in sorted(other.edges_iter())):
+            return False
+        # We could check the default attributes too.
+        # But they aren't reflected in the attibutes until node is added.
+        # That leads to order dependent additions for equality...
+        # Code would be:
+        # check default attributes
+        ##if {n: nv for n, nv in self.node_attr.items() if nv != ''} != \
+        ##   {n: nv for n, nv in other.node_attr.items() if nv != ''}:
+        ##    return False
+
+        # All checks pass.  They are equal
+        return True
 
     def __hash__(self):
-        # hash the string representation for id
-        return hash(self.string())
+        # include nodes and edges in hash
+        # Could do attributes too, but hash should be fast
+        return hash((tuple(sorted(self.nodes_iter())),
+                     tuple(sorted(self.edges_iter())),
+                     ))
 
     def __iter__(self):
         # provide "for n in G"
@@ -991,20 +1013,24 @@ class AGraph:
             self.handle = None
 
     def copy(self):
-        """Return a copy of the graph."""
-        from tempfile import TemporaryFile
-
-        fh = TemporaryFile()
-        # Cover TemporaryFile wart: on 'nt' we need the file member
-        if hasattr(fh, "file"):
-            fhandle = fh.file
-        else:
-            fhandle = fh
-
-        self.write(fhandle)
-        fh.seek(0)
-
-        return self.__class__(filename=fhandle)
+        """Return a copy of the graph.
+        
+        Notes
+        =====
+        Versions <=1.6 made a copy by writing and the reading a dot string.
+        This version loads a new graph with nodes, edges and attributes.
+        """
+        G = self.__class__()
+        for node in self.nodes():
+            G.add_node(node)
+            G.get_node(node).attr.update(self.get_node(node).attr)
+        for edge in self.edges():
+            G.add_edge(*edge)
+            G.get_edge(*edge).attr.update(self.get_edge(*edge).attr)
+        G.graph_attr.update(self.graph_attr)
+        G.node_attr.update(self.node_attr)
+        G.edge_attr.update(self.edge_attr)
+        return G
 
     def add_path(self, nlist):
         """Add the path of nodes given in nlist."""
