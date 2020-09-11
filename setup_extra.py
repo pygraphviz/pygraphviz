@@ -1,17 +1,18 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Setup helpers for PyGraphviz.
 """
-#    Copyright (C) 2006-2015 by
+#    Copyright (C) 2006-2015, 2020 by
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Manos Renieris, http://www.cs.brown.edu/~er/
-#    Distributed with BSD license.     
+#    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
 
 import subprocess as S
 import sys
 import os
+import re
 
 
 def _b2str(buffer):
@@ -30,22 +31,57 @@ def _b2str(buffer):
     return result
 
 
+def _get_path_from_dpkg_line(line):
+    """Extract the path of the file from a 'dpkg -S PACKAGE' output.
+
+    Depending on the version of dpkg, the output can look like::
+
+        libgraphviz-dev: /usr/include/graphviz/geom.h
+
+    or::
+
+        libgraphviz-dev:amd64: /usr/include/graphviz/geom.h
+
+    To support both, let's use a regular expression.
+
+    :param line:
+
+        The line, e.g.::
+
+            "libgraphviz-dev:amd64: /usr/include/graphviz/geom.h"
+
+    :returns:
+
+        The path, e.g.::
+
+            "/usr/include/graphviz/geom.h"
+
+        Or, if it does not look like a valid line, return None.
+
+    """
+    m = re.match(r".*: +(.*)", line)
+    if m:
+        return m.group(1)
+    else:
+        return None
+
+
 def _dpkg_config():
     # attempt to find graphviz installation with pkg-config
     # should work with modern versions of graphviz
     include_dirs=None
     library_dirs=None
-    
+
     try:
         output = S.check_output(['dpkg', '-S', 'graphviz'])
         output = _b2str(output)
         lines = output.split('\n')
         for line in lines:
             if not include_dirs and line.endswith('.h'):
-                include_dirs = os.path.dirname(line.split(':')[1].strip())
+                include_dirs = os.path.dirname(_get_path_from_dpkg_line(line))
                 include_dirs = include_dirs.strip() or None
             if not library_dirs and line.endswith('.so'):
-                library_dirs = os.path.dirname(line.split(':')[1].strip())
+                library_dirs = os.path.dirname(_get_path_from_dpkg_line(line))
                 library_dirs = library_dirs.strip() or None
             if include_dirs and library_dirs:
                 break
@@ -72,7 +108,7 @@ def _pkg_config():
         if output:
             include_path = output.strip()[2:]
             include_path = include_path.strip()
-            # This line below adds an extra include path for certain cases where pkg-config 
+            # This line below adds an extra include path for certain cases where pkg-config
             # returns the full path to the cgraph.h directory (e.g. with Homebrew and MacPorts.
             include_path = include_path + ":" + "/".join(include_path.split("/")[:-1]) or None
     except OSError:
@@ -192,4 +228,3 @@ def get_graphviz_dirs():
 
 
     return include_dirs, library_dirs
-
