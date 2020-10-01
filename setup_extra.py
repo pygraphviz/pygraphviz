@@ -79,6 +79,7 @@ def _pkg_config():
         print("Failed to find pkg-config")
     return include_path, library_path
 
+
 def _dotneato_config():
     # find graphviz configuration with dotneato-config
     # works with older versions of graphviz
@@ -108,6 +109,26 @@ def _dotneato_config():
             print("Failed to find dotneato-config")
 
     return include_path, library_path
+
+
+def _brew_config():
+    # find graphviz configuration with brew
+    # should work with modern versions of brew and graphviz on OSX
+    # without pkg-config installed
+    include_path=None
+    library_path=None
+    try:
+        output = S.check_output(['brew', '--prefix', 'graphviz'])
+        output = _b2str(output)
+        if output:
+            include_path = output.strip()
+            library_path = include_path
+    except OSError:
+        print("Failed to find brew")
+    except S.CalledProcessError:
+        print("Could not run brew")
+    return include_path, library_path
+
 
 def _try_configure(include_dirs, library_dirs, try_function):
     i, l = try_function()
@@ -160,6 +181,10 @@ def get_graphviz_dirs():
         if library_dirs is None and include_dirs is None:
             print("Trying dotneato-config")
             include_dirs, library_dirs = _try_configure(include_dirs, library_dirs, _dotneato_config)
+
+        if library_dirs is None and include_dirs is None:
+            print("Trying brew")
+            include_dirs, library_dirs = _try_configure(include_dirs, library_dirs, _brew_config)
 
         if library_dirs is None and include_dirs is None:
             print()
