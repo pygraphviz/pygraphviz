@@ -72,9 +72,6 @@ def _pkg_config():
         if output:
             include_path = output.strip()[2:]
             include_path = include_path.strip()
-            # This line below adds an extra include path for certain cases where pkg-config 
-            # returns the full path to the cgraph.h directory (e.g. with Homebrew and MacPorts.
-            include_path = include_path + ":" + "/".join(include_path.split("/")[:-1]) or None
     except OSError:
         print("Failed to find pkg-config")
     return include_path, library_path
