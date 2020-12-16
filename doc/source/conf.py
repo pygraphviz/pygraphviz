@@ -51,6 +51,7 @@ copyright = f'2004-{date.today().year}, PyGraphviz Developers'
 sphinx_gallery_conf = {
     "examples_dirs": "../../examples",
     "gallery_dirs": "auto_examples",
+    "ignore_pattern": "skip_",
     "image_scrapers": (PNGScraper(),),
 }
 
