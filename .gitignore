@@ -5,6 +5,7 @@ __pycache__
 build/*
 doc/source/pygraphviz-documentation.zip
 doc/source/pygraphviz.pdf
+doc/source/auto_examples/*
 doc/gh-pages
 doc/build
 

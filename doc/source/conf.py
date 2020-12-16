@@ -12,6 +12,7 @@
 
 import sys, os, re
 from datetime import date
+from pygraphviz.scraper import PNGScraper
 
 # If your extensions are in another directory, add it here.
 #sys.path.append(os.path.dirname(__file__))
@@ -23,7 +24,12 @@ sys.path.append(os.path.abspath('../sphinxext'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.addons.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.imgmath','sphinx.ext.doctest']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.imgmath',
+    'sphinx.ext.doctest',
+    'sphinx_gallery.gen_gallery',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['templates']
@@ -40,6 +46,13 @@ master_doc = 'index'
 # General substitutions.
 project = 'PyGraphviz'
 copyright = f'2004-{date.today().year}, PyGraphviz Developers'
+
+# Sphinx gallery configuration
+sphinx_gallery_conf = {
+    "examples_dirs": "../../examples",
+    "gallery_dirs": "auto_examples",
+    "image_scrapers": (PNGScraper(),),
+}
 
 
 # The default replacements for |version| and |release|, also used in various
