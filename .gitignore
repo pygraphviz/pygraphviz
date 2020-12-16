@@ -17,6 +17,9 @@ doc/source/examples/*
 # Generated when 'python setup_egg.py'
 pygraphviz.egg-info/
 
+# Dotfiles generated when running gallery examples
+examples/*.dot
+
 dist/
 *.pyd
 *.dll
