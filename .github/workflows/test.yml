@@ -5,10 +5,13 @@ on: [push, pull_request]
 jobs:
 
   ubuntu:
+
     runs-on: Ubuntu-20.04
+
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
+
     steps:
 
     - name: Checkout pygraphviz
@@ -38,12 +41,18 @@ jobs:
       run: pytest --pyargs pygraphviz
 
   macos:
+
     runs-on: macOS-latest
+
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
+
     steps:
-    - uses: actions/checkout@v2
+
+    - name: Checkout pygraphviz
+      uses: actions/checkout@v2
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
