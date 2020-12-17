@@ -6,7 +6,7 @@ jobs:
 
   ubuntu:
 
-    runs-on: Ubuntu-latest
+    runs-on: Ubuntu-20.04
 
     strategy:
       matrix:
@@ -38,10 +38,10 @@ jobs:
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
-        pip install .
+        pip install -e .
         pip list
 
     - name: Coverage report for pygraphviz
       run: |
-        make coverage
+        pytest --cov=pygraphviz --pyargs pygraphviz
         codecov

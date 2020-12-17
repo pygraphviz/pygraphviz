@@ -6,7 +6,7 @@ jobs:
 
   ubuntu:
 
-    runs-on: Ubuntu-latest
+    runs-on: Ubuntu-20.04
 
     strategy:
       matrix:
