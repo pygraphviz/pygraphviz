@@ -4,79 +4,123 @@ on: [push, pull_request]
 
 jobs:
 
-  ubuntu:
+#  ubuntu:
+#
+#    runs-on: Ubuntu-20.04
+#
+#    strategy:
+#      matrix:
+#        python-version: [3.7, 3.8, 3.9, pypy-3.7]
+#
+#    steps:
+#
+#    - name: Checkout pygraphviz
+#      uses: actions/checkout@v2
+#
+#    - name: Set up Python ${{ matrix.python-version }}
+#      uses: actions/setup-python@v2
+#      with:
+#        python-version: ${{ matrix.python-version }}
+#
+#    - name: Update apt-get
+#      run: sudo apt-get update
+#
+#    - name: Install graphviz
+#      run: sudo apt-get install graphviz graphviz-dev
+#
+#    - name: Create venv
+#      run: |
+#        python3 -m venv ~/venv
+#        source ~/venv/bin/activate
+#
+#    - name: Install packages
+#      run: |
+#        pip install --upgrade pip wheel setuptools
+#        pip install -r requirements/doc.txt
+#        pip install -r requirements/test.txt
+#        pip install .
+#        pip list
+#
+#    - name: Test pygraphviz
+#      run: pytest --pyargs pygraphviz
+#
+#  macos:
+#
+#    runs-on: macOS-latest
+#
+#    strategy:
+#      matrix:
+#        python-version: [3.7, 3.8, 3.9, pypy-3.7]
+#
+#    steps:
+#
+#    - name: Checkout pygraphviz
+#      uses: actions/checkout@v2
+#
+#    - name: Set up Python ${{ matrix.python-version }}
+#      uses: actions/setup-python@v2
+#      with:
+#        python-version: ${{ matrix.python-version }}
+#
+#    - name: Install graphviz
+#      run: brew install graphviz pkg-config
+#
+#    - name: Create venv
+#      run: |
+#        python3 -m venv ~/venv
+#        source ~/venv/bin/activate
+#
+#    - name: Install packages
+#      run: |
+#        pip install --upgrade pip wheel setuptools
+#        pip install -r requirements/doc.txt
+#        pip install -r requirements/test.txt
+#        pip install .
+#        pip list
+#
+#    - name: Test pygraphviz
+#      run: pytest --pyargs pygraphviz
 
-    runs-on: Ubuntu-20.04
-
+  windows:
+    runs-on: windows-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, pypy-3.7]
-
+        python-version: [3.7, 3.8, 3.9, pypy3]
     steps:
-
-    - name: Checkout pygraphviz
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Update apt-get
-      run: sudo apt-get update
-
-    - name: Install graphviz
-      run: sudo apt-get install graphviz graphviz-dev
-
-    - name: Create venv
+   - name: Download graphviz source
       run: |
-        python3 -m venv ~/venv
-        source ~/venv/bin/activate
+        $URI = 'https://www2.graphviz.org/Packages/stable/portable_source/graphviz-2.44.1.tar.gz'
+        $SRC = 'C:\graphviz-2.44.1.tar.gz'
+        Invoke-WebRequest -Uri $URI -OutFile C:\graphviz-2.44.1.tar.gz
 
-    - name: Install packages
+    - name: Unpack graphviz source
       run: |
-        pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
-        pip install -r requirements/test.txt
-        pip install .
-        pip list
+        $ROOT = 'C:\graphviz-2.44.1'
+        Expand-Archive -LiteralPath $SRC -DestinationPath $ROOT
 
-    - name: Test pygraphviz
-      run: pytest --pyargs pygraphviz
-
-  macos:
-
-    runs-on: macOS-latest
-
-    strategy:
-      matrix:
-        python-version: [3.7, 3.8, 3.9, pypy-3.7]
-
-    steps:
-
-    - name: Checkout pygraphviz
-      uses: actions/checkout@v2
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install graphviz
-      run: brew install graphviz pkg-config
-
-    - name: Create venv
-      run: |
-        python3 -m venv ~/venv
-        source ~/venv/bin/activate
-
-    - name: Install packages
-      run: |
-        pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
-        pip install -r requirements/test.txt
-        pip install .
-        pip list
-
-    - name: Test pygraphviz
-      run: pytest --pyargs pygraphviz
+#    - name: Install graphviz
+#      run: |
+#        choco install graphviz pkgconfiglite
+#
+#    - name: Create venv
+#      run: |
+#        where pkg-config
+#        python -m venv venv
+#        venv\Scripts\Activate.ps1
+#
+#    - name: Install packages
+#      run: |
+#        pip install --upgrade pip wheel setuptools
+#        pip install -r requirements\doc.txt
+#        pip install -r requirements\test.txt
+#        pip install --global-option=build_ext --global-option="-IC:\Program Files\Graphviz 2.44.1\include" --global-option="-LC:\Program Files\Graphviz 2.44.1\lib\release\lib" .
+#        pip list
+#
+#    - name: Test pygraphviz
+#      run: pytest --pyargs pygraphviz
