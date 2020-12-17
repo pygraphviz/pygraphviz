@@ -12,6 +12,10 @@ jobs:
       matrix:
         python-version: [3.7, 3.8, 3.9, pypy-3.7]
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
 
     - name: Checkout pygraphviz
@@ -23,21 +27,24 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Set environment variables
-      shell: bash
       run: |
         URI='https://www2.graphviz.org/Packages/stable/portable_source/graphviz-2.44.1.tar.gz'
         echo "URI=$URI" >> $GITHUB_ENV
-        echo "SRC='C:\graphviz-2.44.1.tar.gz'" >> $GITHUB_ENV
-        echo "ROOT='C:\graphviz-2.44.1'" >> $GITHUB_ENV
-
+        echo "SRC=/C/graphviz-2.44.1.tar.gz" >> $GITHUB_ENV
+        echo "ROOT=/C/graphviz-2.44.1" >> $GITHUB_ENV
 
     - name: Read exported variable
       run: |
         echo "$URI"
         echo "${{ env.URI }}"
+        mkdir "${{ env.ROOT }}"
+        ls "${{ env.ROOT }}"
 
     - name: Download graphviz source
-      run: Invoke-WebRequest -Uri ${{ env.URI }} -OutFile ${{ env.SRC }}
+      run: curl "${{ env.URI }}" -o "${{ env.SRC }}"
 
     - name: Unpack graphviz source
-      run: Expand-Archive -LiteralPath ${{ env.SRC }} -DestinationPath ${{ env.ROOT }}
+      run: tar xzf "${{ env.SRC }}" -C "${{ env.ROOT }}" --strip-components 1
+
+    - name: List
+      run: ls "${{ env.ROOT }}"
