@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
 
   ubuntu:
-    runs-on: Ubuntu-latest
+    runs-on: Ubuntu-20.04
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
@@ -21,7 +21,8 @@ jobs:
 
     - name: Before install
       run: |
-        sudo apt-get install graphviz
+        sudo apt-get update
+        sudo apt-get install graphviz graphviz-dev
         python3 -m venv ~/venv
         source ~/venv/bin/activate
 
@@ -34,7 +35,7 @@ jobs:
         pip list
 
     - name: Test pygraphviz
-      run: pytest -vv
+      run: pytest --pyargs pygraphviz
 
   macos:
     runs-on: macOS-latest
@@ -50,7 +51,7 @@ jobs:
 
     - name: Before install
       run: |
-        sudo apt-get install graphviz 
+        brew install graphviz pkg-config
         python3 -m venv ~/venv
         source ~/venv/bin/activate
 
@@ -63,4 +64,4 @@ jobs:
         pip list
 
     - name: Test pygraphviz
-      run: pytest -vv
+      run: pytest --pyargs pygraphviz
