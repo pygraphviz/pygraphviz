@@ -96,7 +96,7 @@ Requirements
 Python
 ------
 
-PyGraphviz is tested and works with Python 3.6, 3.7, and 3.8.
+PyGraphviz is tested and works with Python 3.7, 3.8. 3.9.
 
 There are several other distributions that contain the key packages you need for scientific computing.  See the following link for a list: http://scipy.org/install.html
 
