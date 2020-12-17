@@ -1,4 +1,4 @@
-name: document
+name: coverage
 
 on: [push, pull_request]
 
@@ -25,9 +25,6 @@ jobs:
     - name: Update apt-get
       run: sudo apt-get update
 
-    - name: Install tex
-      run: sudo apt-get install texlive texlive-latex-extra latexmk
-
     - name: Install graphviz
       run: sudo apt-get install graphviz graphviz-dev
 
@@ -40,8 +37,11 @@ jobs:
       run: |
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/doc.txt
+        pip install -r requirements/test.txt
         pip install .
         pip list
 
-    - name: Build docs
-      run: make -C doc/ dist
+    - name: Coverage report for pygraphviz
+      run: |
+        make coverage
+        codecov
