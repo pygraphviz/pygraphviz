@@ -1,0 +1,66 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+
+  ubuntu:
+    runs-on: Ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
+    steps:
+
+    - name: Checkout pygraphviz
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Before install
+      run: |
+        sudo apt-get install graphviz
+        python3 -m venv ~/venv
+        source ~/venv/bin/activate
+
+    - name: Install packages
+      run: |
+        pip install --upgrade pip wheel setuptools
+        pip install -r requirements/doc.txt
+        pip install -r requirements/test.txt
+        pip install .
+        pip list
+
+    - name: Test pygraphviz
+      run: pytest -vv
+
+  macos:
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Before install
+      run: |
+        sudo apt-get install graphviz 
+        python3 -m venv ~/venv
+        source ~/venv/bin/activate
+
+    - name: Install packages
+      run: |
+        pip install --upgrade pip wheel setuptools
+        pip install -r requirements/doc.txt
+        pip install -r requirements/test.txt
+        pip install .
+        pip list
+
+    - name: Test pygraphviz
+      run: pytest -vv
