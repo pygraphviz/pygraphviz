@@ -20,7 +20,7 @@ PyGraphviz documentation
    install
    tutorial
    reference/index
-   examples
+   auto_examples/index
 
    
 Indices and tables

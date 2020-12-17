@@ -5,6 +5,7 @@ __pycache__
 build/*
 doc/source/pygraphviz-documentation.zip
 doc/source/pygraphviz.pdf
+doc/source/auto_examples/*
 doc/gh-pages
 doc/build
 
@@ -15,6 +16,9 @@ doc/source/examples/*
 
 # Generated when 'python setup_egg.py'
 pygraphviz.egg-info/
+
+# Dotfiles generated when running gallery examples
+examples/*.dot
 
 dist/
 *.pyd
