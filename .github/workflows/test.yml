@@ -22,10 +22,14 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Before install
+    - name: Update apt-get
+      run: sudo apt-get update
+
+    - name: Install graphviz
+      run: sudo apt-get install graphviz graphviz-dev
+
+    - name: Create venv
       run: |
-        sudo apt-get update
-        sudo apt-get install graphviz graphviz-dev
         python3 -m venv ~/venv
         source ~/venv/bin/activate
 
@@ -58,9 +62,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Before install
+    - name: Install graphviz
+      run: brew install graphviz pkg-config
+
+    - name: Create venv
       run: |
-        brew install graphviz pkg-config
         python3 -m venv ~/venv
         source ~/venv/bin/activate
 
