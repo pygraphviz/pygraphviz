@@ -48,3 +48,18 @@ jobs:
 
     - name: List
       run: ls "${{ env.ROOT }}"
+
+    - name: Configure
+      run: |
+        cd ${{ env.ROOT }}
+        ./configure -C --without-gdk-pixbuf --with-mylibgd --disable-swig --without-x  --disable-tcl --without-ipsepcola --enable-shared --disable-static --enable-ltdl --without-gtk --without-gtkg
+
+    - name: Make
+      run: |
+        cd ${{ env.ROOT }}
+        make
+
+    - name: Install
+      run: |
+        cd ${{ env.ROOT }}
+        make install
