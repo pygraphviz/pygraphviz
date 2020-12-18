@@ -22,10 +22,6 @@ from . import graphviz as gv
 _DEFAULT_ENCODING = "UTF-8"
 
 
-def is_string_like(obj):
-    return isinstance(obj, str)
-
-
 class PipeReader(threading.Thread):
     """Read and write pipes using threads.
     """
@@ -147,7 +143,7 @@ class AGraph:
                 data = thing  # a dictionary of dictionaries (or lists)
             elif hasattr(thing, "own"):  # a Swig pointer - graph handle
                 handle = thing
-            elif is_string_like(thing):
+            elif isinstance(thing, str):
                 pattern = re.compile(r"(strict)?\s*(graph|digraph).*{.*}\s*", re.DOTALL)
                 if pattern.match(thing):
                     string = thing  # this is a dot format graph in a string
@@ -326,7 +322,7 @@ class AGraph:
 
         Anonymous Graphviz nodes are currently not implemented.
         """
-        if not is_string_like(n):
+        if not isinstance(n, str):
             n = str(n)
         n = n.encode(self.encoding)
         try:
@@ -365,7 +361,7 @@ class AGraph:
         >>> G.add_node('a')
         >>> G.remove_node('a')
         """
-        if not is_string_like(n):
+        if not isinstance(n, str):
             n = str(n)
         n = n.encode(self.encoding)
         try:
@@ -495,7 +491,7 @@ class AGraph:
             self.add_node(v)
             vh = Node(self, v).handle
         if key is not None:
-            if not is_string_like(key):
+            if not isinstance(key, str):
                 key = str(key)
             key = key.encode(self.encoding)
         try:
@@ -1520,7 +1516,7 @@ class AGraph:
         if format is None and path is not None:
             p = path
             # in case we got a file handle get its name instead
-            if not is_string_like(p):
+            if not isinstance(p, str):
                 p = path.name
             format = os.path.splitext(p)[-1].lower()[1:]
 
@@ -1554,7 +1550,7 @@ class AGraph:
         if path is not None:
             fh = self._get_fh(path, "w+b")
             fh.write(data)
-            if is_string_like(path):
+            if isinstance(path, str):
                 fh.close()
             d = None
         else:
@@ -1571,7 +1567,7 @@ class AGraph:
         """
         import os
 
-        if is_string_like(path):
+        if isinstance(path, str):
             if path.endswith(".gz"):
                 # import gzip
                 # fh = gzip.open(path,mode=mode)  # doesn't return real fh
@@ -1722,7 +1718,7 @@ class Edge(tuple):
             s = Node(graph, source)
             t = Node(graph, target)
             if key is not None:
-                if not is_string_like(key):
+                if not isinstance(key, str):
                     key = str(key)
                 key = key.encode(graph.encoding)
             try:
@@ -1781,7 +1777,7 @@ class Attribute(MutableMapping):
     def __setitem__(self, name, value):
         if name == "charset" and self.type == 0:
             raise ValueError("Graph charset is immutable!")
-        if not is_string_like(value):
+        if not isinstance(value, str):
             value = str(value)
         ghandle = gv.agroot(self.handle)  # get root graph
         if ghandle == self.handle:
@@ -1878,7 +1874,7 @@ class ItemAttribute(Attribute):
             self.encoding = _DEFAULT_ENCODING
 
     def __setitem__(self, name, value):
-        if not is_string_like(value):
+        if not isinstance(value, str):
             value = str(value)
         if self.type == 1 and name == "label":
             default = "\\N"
