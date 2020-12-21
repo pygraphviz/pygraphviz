@@ -90,10 +90,6 @@ jobs:
       matrix:
         python-version: [3.7]
 
-    defaults:
-      run:
-        shell: bash
-
     steps:
 
     - name: Checkout pygraphviz
@@ -112,9 +108,9 @@ jobs:
         echo "ROOT=/C/graphviz-2.44.1" >> $GITHUB_ENV
 
     - name: Download graphviz source
-      run: curl "${{ env.URI }}" -o "${{ env.SRC }}"
+      run: Invoke-WebRequest -Uri "${{ env.URI  }}" -OutFile "C:\Temp\graphviz-install-2.44.1-win32.exe"
 
     - name: Install exe
-      run: ${{ env.SRC }} -qn
+      run: Start-Process -Wait -FilePath "C:\Temp\graphviz-install-2.44.1-win32.exe" -ArgumentList '/S' -PassThru
 
 
