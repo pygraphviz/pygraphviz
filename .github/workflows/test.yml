@@ -4,13 +4,95 @@ on: [push, pull_request]
 
 jobs:
 
-  ubuntu:
+#  ubuntu:
+#
+#    runs-on: Ubuntu-20.04
+#
+#    strategy:
+#      matrix:
+#        python-version: [3.7, 3.8, 3.9, pypy-3.7]
+#
+#    steps:
+#
+#    - name: Checkout pygraphviz
+#      uses: actions/checkout@v2
+#
+#    - name: Set up Python ${{ matrix.python-version }}
+#      uses: actions/setup-python@v2
+#      with:
+#        python-version: ${{ matrix.python-version }}
+#
+#    - name: Update apt-get
+#      run: sudo apt-get update
+#
+#    - name: Install graphviz
+#      run: sudo apt-get install graphviz graphviz-dev
+#
+#    - name: Create venv
+#      run: |
+#        python3 -m venv ~/venv
+#        source ~/venv/bin/activate
+#
+#    - name: Install packages
+#      run: |
+#        pip install --upgrade pip wheel setuptools
+#        pip install -r requirements/doc.txt
+#        pip install -r requirements/test.txt
+#        pip install .
+#        pip list
+#
+#    - name: Test pygraphviz
+#      run: pytest --pyargs pygraphviz
+#
+#  macos:
+#
+#    runs-on: macOS-latest
+#
+#    strategy:
+#      matrix:
+#        python-version: [3.7, 3.8, 3.9, pypy-3.7]
+#
+#    steps:
+#
+#    - name: Checkout pygraphviz
+#      uses: actions/checkout@v2
+#
+#    - name: Set up Python ${{ matrix.python-version }}
+#      uses: actions/setup-python@v2
+#      with:
+#        python-version: ${{ matrix.python-version }}
+#
+#    - name: Install graphviz
+#      run: brew install graphviz pkg-config
+#
+#    - name: Create venv
+#      run: |
+#        python3 -m venv ~/venv
+#        source ~/venv/bin/activate
+#
+#    - name: Install packages
+#      run: |
+#        pip install --upgrade pip wheel setuptools
+#        pip install -r requirements/doc.txt
+#        pip install -r requirements/test.txt
+#        pip install .
+#        pip list
+#
+#    - name: Test pygraphviz
+#      run: pytest --pyargs pygraphviz
 
-    runs-on: Ubuntu-20.04
+
+  windows:
+
+    runs-on: windows-latest
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, pypy-3.7]
+        python-version: [3.7]
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
 
@@ -22,61 +104,17 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Update apt-get
-      run: sudo apt-get update
-
-    - name: Install graphviz
-      run: sudo apt-get install graphviz graphviz-dev
-
-    - name: Create venv
+    - name: Set environment variables
       run: |
-        python3 -m venv ~/venv
-        source ~/venv/bin/activate
+        URI='https://www2.graphviz.org/Packages/stable/windows/10/cmake/Release/Win32/graphviz-install-2.44.1-win32.exe'
+        echo "URI=$URI" >> $GITHUB_ENV
+        echo "SRC=/C/graphviz-install-2.44.1-win32.exe" >> $GITHUB_ENV
+        echo "ROOT=/C/graphviz-2.44.1" >> $GITHUB_ENV
 
-    - name: Install packages
-      run: |
-        pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
-        pip install -r requirements/test.txt
-        pip install .
-        pip list
+    - name: Download graphviz source
+      run: curl "${{ env.URI }}" -o "${{ env.SRC }}"
 
-    - name: Test pygraphviz
-      run: pytest --pyargs pygraphviz
+    - name: Install exe
+      run: ${{ env.SRC }} -qn
 
-  macos:
 
-    runs-on: macOS-latest
-
-    strategy:
-      matrix:
-        python-version: [3.7, 3.8, 3.9, pypy-3.7]
-
-    steps:
-
-    - name: Checkout pygraphviz
-      uses: actions/checkout@v2
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install graphviz
-      run: brew install graphviz pkg-config
-
-    - name: Create venv
-      run: |
-        python3 -m venv ~/venv
-        source ~/venv/bin/activate
-
-    - name: Install packages
-      run: |
-        pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
-        pip install -r requirements/test.txt
-        pip install .
-        pip list
-
-    - name: Test pygraphviz
-      run: pytest --pyargs pygraphviz
