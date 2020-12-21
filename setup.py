@@ -9,10 +9,6 @@ import os
 from setuptools import setup, Extension
 import sys
 
-from setup_commands import AddExtensionDevelopCommand, AddExtensionInstallCommand
-from setup_extra import get_graphviz_dirs
-
-
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
 if sys.argv[-1] == 'setup.py':
@@ -79,10 +75,6 @@ if __name__ == "__main__":
         packages=packages,
         data_files=data,
         ext_modules=extension,
-        cmdclass={
-            'install': AddExtensionInstallCommand,
-            'develop': AddExtensionDevelopCommand,
-            },
         package_data=package_data,
         include_package_data = True,
         python_requires='>=3.7',
