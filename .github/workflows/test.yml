@@ -115,6 +115,12 @@ jobs:
         Get-ChildItem "C:\Program Files (x86)\Graphviz 2.44.1\lib"
         Get-ChildItem "C:\Program Files (x86)\Graphviz 2.44.1\share"
 
+    - name: Path
+      run: |
+        PATH
+        PATH %PATH%;"C:\Program Files (x86)\Graphviz 2.44.1\bin"
+        PATH
+
     - name: Create venv
       run: |
         python -m venv venv
