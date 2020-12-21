@@ -12,11 +12,18 @@
 
 import sys, os, re
 from datetime import date
+import sphinx_rtd_theme
+from warnings import filterwarnings
+
 from pygraphviz.scraper import PNGScraper
+
+filterwarnings(
+    "ignore", message="Matplotlib is currently using agg", category=UserWarning
+)
 
 # If your extensions are in another directory, add it here.
 #sys.path.append(os.path.dirname(__file__))
-sys.path.append(os.path.abspath('../sphinxext'))
+#sys.path.append(os.path.abspath('../sphinxext'))
 #sys.path.append(os.path.abspath('../sphinxext/numpyext'))
 
 # General configuration
@@ -25,10 +32,16 @@ sys.path.append(os.path.abspath('../sphinxext'))
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.addons.*') or your custom ones.
 extensions = [
+    "sphinx.ext.autosummary",
     'sphinx.ext.autodoc',
     'sphinx.ext.imgmath',
     'sphinx.ext.doctest',
-    'sphinx_gallery.gen_gallery',
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "sphinx_gallery.gen_gallery",
+    "numpydoc",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -90,6 +103,14 @@ pygments_style = 'sphinx'
 
 # Options for HTML output
 # -----------------------
+
+html_theme = "sphinx_rtd_theme"
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
+html_theme_options = {
+    "canonical_url": "https://pygraphviz.github.io/documentation/stable",
+    "navigation_depth": 3,
+}
 
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
