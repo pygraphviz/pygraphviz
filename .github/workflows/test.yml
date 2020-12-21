@@ -106,6 +106,11 @@ jobs:
     - name: Install exe
       run: Start-Process -Wait -FilePath "C:\Temp\graphviz-install-2.44.1-win32.exe" -ArgumentList '/S' -PassThru
 
+    - name: Create venv
+      run: |
+        python -m venv venv
+        venv\Scripts\Activate.ps1
+
     - name: Install packages
       run: |
         pip install --upgrade pip wheel setuptools
