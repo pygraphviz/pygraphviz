@@ -103,14 +103,11 @@ jobs:
     - name: Download graphviz source
       run: Invoke-WebRequest -Uri "https://www2.graphviz.org/Packages/stable/windows/10/cmake/Release/Win32/graphviz-install-2.44.1-win32.exe" -OutFile "C:\Temp\graphviz-install-2.44.1-win32.exe"
 
-    - name: Install exe1
-      run: Start-Process -Wait -FilePath "C:\Temp\graphviz-install-2.44.1-win32.exe" -ArgumentList '/help' -PassThru
-
-    - name: Install exe2
-      run: Start-Process -Wait -FilePath "C:\Temp\graphviz-install-2.44.1-win32.exe" -ArgumentList '/?' -PassThru
-
     - name: Install exe
       run: Start-Process -Wait -FilePath "C:\Temp\graphviz-install-2.44.1-win32.exe" -ArgumentList '/S' -PassThru
+
+    - name: List
+      run: Get-ChildItem "C:\Program Files"
 
     - name: Create venv
       run: |
