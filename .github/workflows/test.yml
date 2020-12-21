@@ -106,4 +106,13 @@ jobs:
     - name: Install exe
       run: Start-Process -Wait -FilePath "C:\Temp\graphviz-install-2.44.1-win32.exe" -ArgumentList '/S' -PassThru
 
+    - name: Install packages
+      run: |
+        pip install --upgrade pip wheel setuptools
+        pip install -r requirements/doc.txt
+        pip install -r requirements/test.txt
+        pip install .
+        pip list
 
+    - name: Test pygraphviz
+      run: pytest --pyargs pygraphviz
