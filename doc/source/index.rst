@@ -9,9 +9,6 @@ PyGraphviz documentation
     :Release: |version|
     :Date: |today|
 
-    Download `PDF <http://pygraphviz.github.io/documentation/latest/pygraphviz.pdf>`_
-
-
 .. toctree::
    :maxdepth: 2
 
