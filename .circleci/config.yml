@@ -1,0 +1,46 @@
+# See: https://circleci.com/docs/2.0/language-python/
+
+version: 2.0
+
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/python:3.8.5-buster
+
+    steps:
+      - checkout
+
+      - run:
+          name: Update apt-get
+          command: |
+            sudo apt-get update
+
+      - run:
+          name: Install Graphviz
+          command: |
+            sudo apt-get install graphviz libgraphviz-dev
+
+      - run:
+          name: Install Python dependencies
+          command: |
+            python3 -m venv venv
+            source venv/bin/activate
+            pip install --upgrade pip wheel setuptools
+            pip install -U -r requirements/doc.txt
+            pip list
+
+      - run:
+          name: Install
+          command: |
+            source venv/bin/activate
+            pip install .
+
+      - run:
+          name: Build docs
+          command: |
+            source venv/bin/activate
+            make -C doc/ html
+
+      - store_artifacts:
+          path: doc/build/html
