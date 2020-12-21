@@ -108,8 +108,11 @@ jobs:
 
     - name: List
       run: |
-        Get-ChildItem "C:\Program Files"
         Get-ChildItem "C:\Program Files (x86)\Graphviz 2.44.1\"
+        Get-ChildItem "C:\Program Files (x86)\Graphviz 2.44.1\bin"
+        Get-ChildItem "C:\Program Files (x86)\Graphviz 2.44.1\include"
+        Get-ChildItem "C:\Program Files (x86)\Graphviz 2.44.1\lib"
+        Get-ChildItem "C:\Program Files (x86)\Graphviz 2.44.1\share"
 
     - name: Create venv
       run: |
