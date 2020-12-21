@@ -117,9 +117,9 @@ jobs:
 
     - name: Path
       run: |
-        PATH
-        PATH %PATH%;"C:\Program Files (x86)\Graphviz 2.44.1\bin"
-        PATH
+        $PATH = [Environment]::GetEnvironmentVariable("PATH")
+        $graphviz_path = "C:\Program Files (x86)\Graphviz 2.44.1\bin"
+        [Environment]::SetEnvironmentVariable("PATH", "$PATH;$graphviz_path")
 
     - name: Create venv
       run: |
