@@ -114,7 +114,6 @@ jobs:
         Get-ChildItem "C:\Program Files\Graphviz 2.44.1\include\graphviz"
         Get-ChildItem "C:\Program Files\Graphviz 2.44.1\lib"
         Get-ChildItem "C:\Program Files\Graphviz 2.44.1\share"
-        Get-ChildItem Env:PYTHONPATH
 
     - name: Path
       run: |
@@ -124,13 +123,16 @@ jobs:
 
     - name: Create venv
       run: |
-        Get-ChildItem Env:PYTHONPATH
+        #Get-ChildItem Env:PYTHONPATH
+        pip -V
         python -m venv venv
         venv\Scripts\Activate.ps1
-        Get-ChildItem Env:PYTHONPATH
+        pip -V
+        #Get-ChildItem Env:PYTHONPATH
 
     - name: Install packages
       run: |
+        pip -V
         Get-ChildItem Env:PATH
         $env:path -split ";"
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
@@ -146,12 +148,11 @@ jobs:
         python setup.py install --user
         #pip install --global-option=build_ext --global-option="-IC:\Program Files\Graphviz 2.44.1\include" --global-option="-LC:\Program Files\Graphviz 2.44.1\lib" .
         #python setup.py install --include-path="C:\Program Files\Graphviz 2.44.1\include" --library-path="C:\Program Files\Graphviz 2.44.1\lib"
-        Get-ChildItem Env:PATH
         pip list
-        Get-ChildItem Env:PATH
+        pip -V
 
     - name: Test pygraphviz
       run: |
-        Get-ChildItem Env:PYTHONPATH
         Get-ChildItem Env:PATH
+        pip -V
         pytest --pyargs pygraphviz
