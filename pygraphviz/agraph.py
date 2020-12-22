@@ -1408,7 +1408,9 @@ class AGraph:
 
         >>> A = AGraph()
         >>> A_unflattened = A.unflatten('-f -l 3')
-        >>> A.unflatten('-f -l 1').layout()
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> A.unflatten('-f -l 1').layout() # doctest: +SKIP
 
         Use keyword args to add additional arguments to graphviz programs.
         """
@@ -1423,7 +1425,9 @@ class AGraph:
         will use specified graphviz layout method.
 
         >>> A=AGraph()
-        >>> A.layout() # uses neato
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> A.layout() # doctest: +SKIP
         >>> A.layout(prog='dot')
 
         Use keyword args to add additional arguments to graphviz programs.
@@ -1500,16 +1504,22 @@ class AGraph:
         will use specified graphviz layout method.
 
         >>> G = AGraph()
-        >>> G.layout()
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> G.layout() # doctest: +SKIP
 
         # use current node positions, output ps in 'file.ps'
-        >>> G.draw('file.ps')
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> G.draw('file.ps') # doctest: +SKIP
 
         # use dot to position, output png in 'file'
         >>> G.draw('file', format='png',prog='dot')
 
         # use keyword 'args' to pass additional arguments to graphviz
-        >>> G.draw('test.ps',prog='twopi',args='-Gepsilon=1')
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> G.draw('test.ps',prog='twopi',args='-Gepsilon=1')  # doctest: +SKIP
 
         The layout might take a long time on large graphs.
 
