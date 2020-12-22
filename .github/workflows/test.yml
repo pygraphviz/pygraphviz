@@ -134,11 +134,11 @@ jobs:
         [Environment]::SetEnvironmentVariable("PATH", "$PATH;$graphviz_path")
         $env:path -split ";"
         pip -V
-        pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
-        pip install -r requirements/test.txt
+        pip install --upgrade pip wheel setuptools --user
+        pip install -r requirements/doc.txt --user
+        pip install -r requirements/test.txt --user
         python setup.py build_ext --include-dirs="C:\Program Files\Graphviz 2.44.1\include" --library-dirs="C:\Program Files\Graphviz 2.44.1\lib"
-        python setup.py install
+        python setup.py install --user
         #pip install --global-option=build_ext --global-option="-IC:\Program Files\Graphviz 2.44.1\include" --global-option="-LC:\Program Files\Graphviz 2.44.1\lib" .
         #python setup.py install --include-path="C:\Program Files\Graphviz 2.44.1\include" --library-path="C:\Program Files\Graphviz 2.44.1\lib"
         pip list
