@@ -163,6 +163,7 @@ jobs:
         $graphviz_path = "C:\Program Files\Graphviz 2.44.1\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         $env:path -split ";"
+        [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
         dot -v
         Get-ChildItem Env:PATH
         pip -V
