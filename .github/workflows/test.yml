@@ -128,9 +128,12 @@ jobs:
 
     - name: Install packages
       run: |
+        $env:path -split ";"
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files (x86)\Graphviz 2.44.1\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$PATH;$graphviz_path")
+        $env:path -split ";"
+        pip -V
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
