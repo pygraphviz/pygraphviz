@@ -1,0 +1,58 @@
+name: deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  documentation:
+    runs-on: Ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Before install
+      run: |
+        sudo apt-get update
+        sudo apt-get install graphviz graphviz-dev
+
+    - name: Install packages
+      run: |
+        pip install --upgrade pip wheel setuptools
+        pip install -r requirements/doc.txt -r requirements/test.txt
+        pip install .
+        pip list
+
+    - name: Install SSH agent
+      if: github.ref == 'refs/heads/master'
+      uses: webfactory/ssh-agent@v0.4.1
+      with:
+        # To set up a cross-repository deploy key:
+        # 1. Create a key pair:
+        #   `ssh-keygen -t ed25519 -C "pgz_doc_deploy_ci_bot@nomail"`
+        # 2. Add the public key to the pygraphviz/documentation repo
+        #   Settings -> Deploy keys -> Add new
+        #   Make sure to check the "writeable" checkbox
+        # 3. Add private key as a secret to pygraphviz/pygraphviz
+        #   Settings -> Secrets -> New Repository Secret
+        #   Make sure the name is the same as below, e.g. CI_DEPLOY_KEY
+        ssh-private-key: ${{ secrets.CI_DEPLOY_KEY }}
+
+    - name: Build docs
+      if: github.ref == 'refs/heads/master'
+      run: |
+        make -C doc/ html
+
+    - name: Deploy docs
+      if: github.ref == 'refs/heads/master'
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        FOLDER: doc/build/html
+        REPOSITORY_NAME: pygraphviz/documentation
+        BRANCH: gh-pages
+        TARGET_FOLDER: latest
+        SSH: true
+
