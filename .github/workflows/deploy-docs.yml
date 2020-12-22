@@ -6,7 +6,12 @@ on:
 
 jobs:
   documentation:
+
+    # Do not attempt to deploy documentation in forks
+    if: github.repository_owner == 'pygraphviz'
+
     runs-on: Ubuntu-20.04
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
