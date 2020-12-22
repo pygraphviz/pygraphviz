@@ -106,7 +106,6 @@ jobs:
     - name: Install exe
       run: |
         Start-Process -Wait -FilePath "C:\Temp\graphviz-install-2.44.1-win64.exe" -ArgumentList '/S' -PassThru
-        dot -c
 
     - name: List
       run: |
@@ -119,7 +118,6 @@ jobs:
 
     - name: Path
       run: |
-        dot -c
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files\Graphviz 2.44.1\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path:$PATH")
