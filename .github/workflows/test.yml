@@ -122,7 +122,7 @@ jobs:
         dot -c
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files\Graphviz 2.44.1\bin"
-        [Environment]::SetEnvironmentVariable("PATH", "$PATH;$graphviz_path")
+        [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path:$PATH")
         dot -c
 
     - name: Create venv
@@ -144,7 +144,7 @@ jobs:
         $env:path -split ";"
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files\Graphviz 2.44.1\bin"
-        [Environment]::SetEnvironmentVariable("PATH", "$PATH;$graphviz_path")
+        [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         $env:path -split ";"
         Get-ChildItem Env:PATH
         pip -V
@@ -162,6 +162,12 @@ jobs:
     - name: Test pygraphviz
       run: |
         dot -c
+        Get-ChildItem Env:PATH
+        $env:path -split ";"
+        $PATH = [Environment]::GetEnvironmentVariable("PATH")
+        $graphviz_path = "C:\Program Files\Graphviz 2.44.1\bin"
+        [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
+        $env:path -split ";"
         Get-ChildItem Env:PATH
         pip -V
         pytest --pyargs pygraphviz
