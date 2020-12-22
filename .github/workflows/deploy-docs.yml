@@ -50,6 +50,8 @@ jobs:
       if: github.ref == 'refs/heads/master'
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
+        GITHUB_CONFIG_NAME: gh-deploy-bot
+        GITHUB_CONFIG_EMAIL: gh-deploy-bot@nomail
         FOLDER: doc/build/html
         REPOSITORY_NAME: pygraphviz/documentation
         BRANCH: gh-pages
