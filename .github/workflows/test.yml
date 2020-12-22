@@ -135,6 +135,7 @@ jobs:
         pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
         pip install --global-option=build_ext --global-option="-IC:\Program Files (x86)\Graphviz 2.44.1\include" --global-option="-LC:\Program Files (x86)\Graphviz 2.44.1\lib" .
+        python setup.py install --include-path="C:\Program Files (x86)\Graphviz 2.44.1\include" --library-path="C:\Program Files (x86)\Graphviz 2.44.1\lib"
         pip list
 
     - name: Test pygraphviz
