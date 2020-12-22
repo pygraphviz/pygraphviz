@@ -101,10 +101,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Download graphviz source
-      run: Invoke-WebRequest -Uri "https://www2.graphviz.org/Packages/stable/windows/10/cmake/Release/Win32/graphviz-install-2.44.1-win32.exe" -OutFile "C:\Temp\graphviz-install-2.44.1-win32.exe"
+      run: Invoke-WebRequest -Uri "https://www2.graphviz.org/Packages/stable/windows/10/cmake/Release/x64/graphviz-install-2.44.1-win64.exe" -OutFile "C:\Temp\graphviz-install-2.44.1-win64.exe"
 
     - name: Install exe
-      run: Start-Process -Wait -FilePath "C:\Temp\graphviz-install-2.44.1-win32.exe" -ArgumentList '/S' -PassThru
+      run: Start-Process -Wait -FilePath "C:\Temp\graphviz-install-2.44.1-win64.exe" -ArgumentList '/S' -PassThru
 
     - name: List
       run: |
