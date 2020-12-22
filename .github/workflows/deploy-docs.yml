@@ -26,19 +26,19 @@ jobs:
         pip install .
         pip list
 
+      # To set up a cross-repository deploy key:
+      # 1. Create a key pair:
+      #   `ssh-keygen -t ed25519 -C "pgz_doc_deploy_ci_bot@nomail"`
+      # 2. Add the public key to the pygraphviz/documentation repo
+      #   Settings -> Deploy keys -> Add new
+      #   Make sure to check the "writeable" checkbox
+      # 3. Add private key as a secret to pygraphviz/pygraphviz
+      #   Settings -> Secrets -> New Repository Secret
+      #   Make sure the name is the same as below, e.g. CI_DEPLOY_KEY
     - name: Install SSH agent
       if: github.ref == 'refs/heads/master'
       uses: webfactory/ssh-agent@v0.4.1
       with:
-        # To set up a cross-repository deploy key:
-        # 1. Create a key pair:
-        #   `ssh-keygen -t ed25519 -C "pgz_doc_deploy_ci_bot@nomail"`
-        # 2. Add the public key to the pygraphviz/documentation repo
-        #   Settings -> Deploy keys -> Add new
-        #   Make sure to check the "writeable" checkbox
-        # 3. Add private key as a secret to pygraphviz/pygraphviz
-        #   Settings -> Secrets -> New Repository Secret
-        #   Make sure the name is the same as below, e.g. CI_DEPLOY_KEY
         ssh-private-key: ${{ secrets.CI_DEPLOY_KEY }}
 
     - name: Build docs
