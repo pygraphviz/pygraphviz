@@ -124,47 +124,24 @@ jobs:
         dot -c
         dot -v
 
-    - name: Create venv
-      run: |
-        #Get-ChildItem Env:PYTHONPATH
-        pip -V
-        python -m venv venv
-        venv\Scripts\Activate.ps1
-        pip -V
-        #Get-ChildItem Env:PYTHONPATH
-
     - name: Install packages
       run: |
-        pip -V
-        Get-ChildItem Env:PATH
-        $env:path -split ";"
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files\Graphviz 2.44.1\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
-        $env:path -split ";"
-        Get-ChildItem Env:PATH
-        pip -V
+        dot -c
         dot -v
         pip install --upgrade pip wheel setuptools --user
         pip install -r requirements/doc.txt --user
         pip install -r requirements/test.txt --user
         python setup.py build_ext --include-dirs="C:\Program Files\Graphviz 2.44.1\include" --library-dirs="C:\Program Files\Graphviz 2.44.1\lib"
         python setup.py install --user
-        #pip install --global-option=build_ext --global-option="-IC:\Program Files\Graphviz 2.44.1\include" --global-option="-LC:\Program Files\Graphviz 2.44.1\lib" .
-        #python setup.py install --include-path="C:\Program Files\Graphviz 2.44.1\include" --library-path="C:\Program Files\Graphviz 2.44.1\lib"
         pip list
-        pip -V
 
     - name: Test pygraphviz
       run: |
-        Get-ChildItem Env:PATH
-        $env:path -split ";"
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files\Graphviz 2.44.1\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
-        $env:path -split ";"
         [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
-        dot -v
-        Get-ChildItem Env:PATH
-        pip -V
         pytest --pyargs pygraphviz
