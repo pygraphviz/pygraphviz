@@ -32,9 +32,6 @@ Ubuntu and Debian
 
     $ sudo apt-get update
     $ sudo apt-get install graphviz graphviz-dev
-    $ python3 -m venv ~/venv
-    $ source ~/venv/bin/activate
-    $ pip install --upgrade pip setuptools
     $ pip install --upgrade pygraphviz 
 
 Fedora and Red Hat
@@ -44,10 +41,7 @@ On Red Hat you may need to replace dnf with yum.
 
 .. code-block:: console
 
-    $ sudo dnf install install graphviz graphviz-dev  
-    $ python3 -m venv ~/venv
-    $ source ~/venv/bin/activate
-    $ pip install --upgrade pip setuptools
+    $ sudo dnf install install graphviz graphviz-devel
     $ pip install --upgrade pygraphviz
 
 macOS
@@ -59,20 +53,6 @@ Homebrew
 .. code-block:: console
 
     $ brew install graphviz
-    $ python3 -m venv ~/venv
-    $ source ~/venv/bin/activate
-    $ pip install --upgrade pip setuptools
-    $ pip install --upgrade pygraphviz
-
-MacPorts
-~~~~~~~~
-
-.. code-block:: console
-
-    $ port install graphviz-devel
-    $ python3 -m venv ~/venv
-    $ source ~/venv/bin/activate
-    $ pip install --upgrade pip setuptools
     $ pip install --upgrade pygraphviz
 
 Windows
@@ -116,3 +96,11 @@ For example
 
 If you didn't install in the standard Python site-packages directory
 you will need to set your PYTHONPATH variable to the alternate location.
+
+MacPorts
+~~~~~~~~
+
+.. code-block:: console
+
+    $ port install graphviz-devel
+    $ pip install --upgrade pygraphviz
