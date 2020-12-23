@@ -1,0 +1,11 @@
+{% extends "!layout.html" %}
+{% block sidebartitle %}
+    <a href="https://pygraphviz.github.io/">Project Homepage</a> |
+    <a href="https://github.com/pygraphviz/pygraphviz">Source Code</a>
+    {{ super() }}
+{% endblock %}
+{% block document %}
+    {% include "dev_banner.html" %}
+    {{ super() }}
+{% endblock %}
+

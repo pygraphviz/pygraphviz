@@ -1,6 +1,6 @@
-**********
-Installing
-**********
+*******
+Install
+*******
 
 Quick Install
 =============
