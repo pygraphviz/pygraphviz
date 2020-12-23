@@ -878,17 +878,7 @@ class AGraph:
 
         Returns paris of (node,degree).
         """
-        # prepare nbunch
-        if nbunch is None:  # include all nodes via iterator
-            bunch = [n for n in self.nodes_iter()]
-        elif nbunch in self:  # if nbunch is a single node
-            bunch = [Node(self, nbunch)]
-        else:  # if nbunch is a sequence of nodes
-            try:
-                bunch = [Node(self, n) for n in nbunch if n in self]
-            except TypeError:
-                raise TypeError("nbunch is not a node or a sequence of nodes.")
-        for n in bunch:
+        for n in self._prepare_nbunch(nbunch):
             yield (Node(self, n), gv.agdegree(self.handle, n.handle, indeg, outdeg))
 
     def in_degree_iter(self, nbunch=None):
