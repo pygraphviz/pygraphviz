@@ -44,6 +44,43 @@ jobs:
     - name: Test pygraphviz
       run: pytest --pyargs pygraphviz
 
+  fedora:
+
+    runs-on: Ubuntu-20.04
+    container: 'fedora:33'
+
+    steps:
+
+    - name: Checkout pygraphviz
+      uses: actions/checkout@v2
+
+    - name: Install graphviz
+      run: sudo dnf install -y graphviz graphviz-devel
+
+    - name: Install Python developer tools
+      run: sudo dnf install -y python3-devel
+
+    - name: Install gcc
+      run: sudo dnf install -y gcc
+
+    - name: Create venv
+      run: |
+        python3 -m venv ~/venv
+
+    - name: Install packages
+      run: |
+        source ~/venv/bin/activate
+        pip install --upgrade pip wheel setuptools
+        pip install -r requirements/doc.txt
+        pip install -r requirements/test.txt
+        pip install .
+        pip list
+
+    - name: Test pygraphviz
+      run: |
+        source ~/venv/bin/activate
+        pytest --pyargs pygraphviz
+
   macos:
 
     runs-on: macOS-latest
