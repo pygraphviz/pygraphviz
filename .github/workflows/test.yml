@@ -151,8 +151,11 @@ jobs:
     - name: Install macports
       run: sudo installer -pkg MacPorts-2.6.4-10.15-Catalina.pkg -target /
 
+    - name: Update PATH
+      run: export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+
     - name: Install graphviz
-      run: sudo port install graphviz-devel
+      run: sudo /opt/local/bin/port install graphviz-devel
 
     - name: Create venv
       run: |
@@ -164,11 +167,13 @@ jobs:
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
-        pip install .
+        pip install --global-option=build_ext --global-option="-I/opt/local/include/" --global-option="-L/opt/local/lib/" .
         pip list
 
     - name: Test pygraphviz
-      run: pytest --pyargs pygraphviz
+      run: |
+        export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+        pytest --pyargs pygraphviz
 
 
 #  windows:
