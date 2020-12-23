@@ -460,3 +460,21 @@ def test_agraph_constructor_string_non_standard_encoding():
     A = pgv.AGraph(string=dotstring)
     assert A.encoding == "latin1"
     assert sorted(A.edges()) == [("0", "1"), ("1", "2")]
+
+
+def test_agraph_equality_node_attrs():
+    """Graphs are not equal if node attributes differ."""
+    nodes = [0, 1]
+    # Create graphs with the same nodes
+    A, B = pgv.AGraph(), pgv.AGraph()
+    A.add_nodes_from(nodes)
+    B.add_nodes_from(nodes)
+    # Set default attributes for all nodes in each graph
+    A.node_attr["color"] = "red"
+    B.node_attr["color"] = "red"
+    assert A.get_node(1).attr["color"] == "red"
+    assert A == B
+    # Change attribute of a single node in B
+    B.get_node(1).attr["color"] = "blue"
+    # Graphs are no longer considered equal
+    assert not A == B
