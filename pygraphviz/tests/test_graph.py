@@ -418,3 +418,17 @@ class TestDiGraphOnly(TestGraph):
         assert A.name == "test"
         B = A.reverse()
         assert B.name == "test"
+
+@pytest.mark.parametrize('d',
+    (
+        {0: {1: {}}, 1: {0: {}, 2: {}}, 2: {1: {}}},  # Dict-of-dicts
+        {0: [1], 1: [0, 2], 2: [1]},  # Dict-of-lists
+    )
+)
+
+def test_agraph_constructor_dict_input(d):
+    """Test AGraph constructor with thing = dod or dol."""
+    # d is a dod or dol representation of a path graph with 3 nodes
+    A = pgv.AGraph(d)
+    assert sorted(A.nodes()) == ["0", "1", "2"]
+    assert sorted(A.edges()) == [("0", "1"), ("1", "2")]
