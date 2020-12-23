@@ -478,3 +478,14 @@ def test_agraph_equality_node_attrs():
     B.get_node(1).attr["color"] = "blue"
     # Graphs are no longer considered equal
     assert not A == B
+
+
+def test_agraph_equality_edge_attrs():
+    """Graphs are not equal if edge attributes differ."""
+    A, B = pgv.AGraph(), pgv.AGraph()
+    A.add_edge(0, 1, weight=1.0)
+    B.add_edge(0, 1, weight=1.0)
+    assert A == B
+    # Change edge attribute
+    B.get_edge(0, 1).attr["weight"] = 2.0
+    assert not A == B
