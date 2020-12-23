@@ -442,3 +442,9 @@ def test_agraph_constructor_handle_input():
     # AGraphs created from handle reference original graph
     base.remove_node(2)
     assert sorted(child.nodes()) == ["0", "1"]
+
+
+def test_agraph_constructor_bad_input():
+    """AGraph constructor does not support edge lists."""
+    with pytest.raises(TypeError, match="Unrecognized input"):
+        pgv.AGraph([(0, 1), (1, 2)])
