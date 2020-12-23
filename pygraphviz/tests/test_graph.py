@@ -56,7 +56,10 @@ class TestGraph(unittest.TestCase):
 
     def test_repr(self):
         A = pgv.AGraph()
-        assert A.__repr__()[0:7] == "<AGraph"
+        assert repr(A).startswith("<AGraph <Swig Object of type 'Agraph_t")
+        # If graph has a name, it should show up in the repr
+        A = pgv.AGraph(name="foo")
+        assert "foo" in repr(A)
 
     def test_equal(self):
         A = pgv.AGraph()
