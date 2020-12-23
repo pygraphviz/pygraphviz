@@ -489,3 +489,10 @@ def test_agraph_equality_edge_attrs():
     # Change edge attribute
     B.get_edge(0, 1).attr["weight"] = 2.0
     assert not A == B
+
+
+def test_agraph_has_edge_single_input_parsing():
+    """If len(args) is 1, args[0] is assumed to be a tuple."""
+    A = pgv.AGraph({0: [1], 1: [0, 2], 2: [1]})
+    assert A.has_edge((0, 1))
+    assert not A.has_edge((0, 3))
