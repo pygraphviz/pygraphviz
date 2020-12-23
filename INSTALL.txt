@@ -2,30 +2,93 @@
 Install
 *******
 
-Quick Install
-=============
+PyGraphviz requires:
 
-Get PyGraphviz from the Python Package Index at
-http://pypi.python.org/pypi/pygraphviz
+- Python (version 3.7, 3.8, or 3.9) and
+- `GraphViz <https://www.graphviz.org/>`_ (version 2.42 or later). 
 
-or install it with::
+Below we assume you have the default Python environment already configured on
+your computer and you intend to install ``pygraphviz`` inside of it.  If you want
+to create and work with Python virtual environments, please follow instructions
+on `venv <https://docs.python.org/3/library/venv.html>`_ and `virtual
+environments <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_.
 
-   pip install pygraphviz
+.. note::
+   If you do not already have a Python environment configured on your computer,
+   please see the instructions for installing the full `scientific Python stack
+   <https://scipy.org/install.html>`_.
 
-and an attempt will be made to find and install an appropriate version
-that matches your operating system and Python version.
 
-You can install the development version (at github.com) with::
+Recommended
+===========
 
-  pip install git://github.com/pygraphviz/pygraphviz.git#egg=pygraphviz
+Linux
+-----
 
+Ubuntu and Debian
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: console
+
+    $ sudo apt-get update
+    $ sudo apt-get install graphviz graphviz-dev
+    $ python3 -m venv ~/venv
+    $ source ~/venv/bin/activate
+    $ pip install --upgrade pip setuptools
+    $ pip install --upgrade pygraphviz 
+
+Fedora and Red Hat
+~~~~~~~~~~~~~~~~~~
+
+On Red Hat you may need to replace dnf with yum.
+
+.. code-block:: console
+
+    $ sudo dnf install install graphviz graphviz-dev  
+    $ python3 -m venv ~/venv
+    $ source ~/venv/bin/activate
+    $ pip install --upgrade pip setuptools
+    $ pip install --upgrade pygraphviz
+
+macOS
+-----
+
+Homebrew
+~~~~~~~~
+
+.. code-block:: console
+
+    $ brew install graphviz
+    $ python3 -m venv ~/venv
+    $ source ~/venv/bin/activate
+    $ pip install --upgrade pip setuptools
+    $ pip install --upgrade pygraphviz
+
+MacPorts
+~~~~~~~~
+
+.. code-block:: console
+
+    $ port install graphviz-devel
+    $ python3 -m venv ~/venv
+    $ source ~/venv/bin/activate
+    $ pip install --upgrade pip setuptools
+    $ pip install --upgrade pygraphviz
+
+Windows
+-------
+
+Graphviz CMake Installer
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Chocolatey
+~~~~~~~~~~
+
+Advanced
+========
 
 Providing path to graphviz
 --------------------------
-
-We tried our best to discover graphviz location automatically, but if you 
-would like specify specific location for graphviz you may provide additrional parameters to specify graphviz location
-
 
 include-path= path to graphviz include files
 library-path= path to graphviz library files
@@ -36,44 +99,10 @@ For example
 
     python setup.py install --include-path=/usr/local/Cellar/graphviz/2.38.0/include/graphviz --library-path=/usr/local/Cellar/graphviz/2.38.0/lib
 
-Installing from Source
-======================
 
-You can install from source by downloading a source archive file
-(tar.gz or zip) or by checking out the source files from the
-Subversion repository.
-
-Source Archive File
--------------------
-
-  1. Download the source (tar.gz or zip file).
-
-  2. Unpack and change directory to pygraphviz-"version" 
-
-  3. Run "python setup.py install" to build and install 
-
-  4. (optional) Run "pytest" to execute the tests
-
-
-Github
-------
-
-  1. Clone the pygraphviz repository
-
-       git clone https://github.com/pygraphviz/pygraphviz.git
-
-  (see https://github.com/pygraphviz/pygraphviz/ for other options)
-
-  2. Change directory to "pygraphviz"
-
-  3.  Run "python setup.py install" to build and install
-
-  4. (optional) Run "pytest" to execute the tests
-
-
-If you don't have permission to install software on your
-system, you can install into another directory using
-the --user, --prefix, or --home flags to setup.py.
+If you don't have permission to install software on your system, you can
+install into another directory using the ``--user``, ``--prefix``, or
+``--home`` flags to setup.py.
 
 For example
 
@@ -87,32 +116,3 @@ For example
 
 If you didn't install in the standard Python site-packages directory
 you will need to set your PYTHONPATH variable to the alternate location.
-Seehttp://docs.python.org/2/install/index.html#search-path for further details.
-
-
-Requirements
-============
-
-Python
-------
-
-PyGraphviz is tested and works with Python 3.7, 3.8. 3.9.
-
-There are several other distributions that contain the key packages you need for scientific computing.  See the following link for a list: http://scipy.org/install.html
-
-For Red Hat Enterprise Linux 7, the requirements are::
-   
-   sudo yum groups install -y "Development Tools"
-   sudo yum install -y python-devel graphviz-devel
-   sudo python -m pip install pytest
-
-
-GraphViz
---------
-
-To use PyGraphviz you need GraphViz version 2.16 or later.
-Some versions have known bugs that have been fixed; get the latest
-release available for best results.
-
- - Official site: http://www.graphviz.org
-
