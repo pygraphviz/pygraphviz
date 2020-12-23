@@ -432,3 +432,13 @@ def test_agraph_constructor_dict_input(d):
     A = pgv.AGraph(d)
     assert sorted(A.nodes()) == ["0", "1", "2"]
     assert sorted(A.edges()) == [("0", "1"), ("1", "2")]
+
+
+def test_agraph_constructor_handle_input():
+    """Test AGraph constructor with thing= a Swig pointer - graph handle."""
+    base = pgv.AGraph({0: [1], 1: [0, 2], 2: [1]})
+    child = pgv.AGraph(base.handle)
+    assert base == child
+    # AGraphs created from handle reference original graph
+    base.remove_node(2)
+    assert sorted(child.nodes()) == ["0", "1"]
