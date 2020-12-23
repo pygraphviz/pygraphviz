@@ -448,3 +448,12 @@ def test_agraph_constructor_bad_input():
     """AGraph constructor does not support edge lists."""
     with pytest.raises(TypeError, match="Unrecognized input"):
         pgv.AGraph([(0, 1), (1, 2)])
+
+
+def test_agraph_constructor_string_non_standard_encoding():
+    """AGraph constructor with a string specifying non-utf8-encoding."""
+    # A path graph string in .dot format with charset specified
+    dotstring = 'strict graph "" {\n\tcharset="latin1";\n\t0 -- 1;\n\t1 -- 2;\n}\n'
+    A = pgv.AGraph(string=dotstring)
+    assert A.encoding == "latin1"
+    assert sorted(A.edges()) == [("0", "1"), ("1", "2")]
