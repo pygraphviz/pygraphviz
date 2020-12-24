@@ -1413,8 +1413,10 @@ class AGraph:
         self.from_string(data)
         return self
 
-    def layout(self, prog="neato", args=""):
+    def _layout(self, prog="neato", args=""):
         """Assign positions to nodes in graph.
+
+        .. caution:: EXPERIMENTAL
 
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
         will use specified graphviz layout method.
@@ -1483,8 +1485,10 @@ class AGraph:
         else:
             return self.from_string(data)
 
-    def draw(self, path=None, format=None, prog=None, args=""):
+    def _draw(self, path=None, format=None, prog=None, args=""):
         """Output graph to path in specified format.
+
+        .. caution:: EXPERIMENTAL
 
         An attempt will be made to guess the output format based on the file
         extension of `path`.  If that fails, then the `format` parameter will
@@ -1603,7 +1607,7 @@ class AGraph:
         gv.gvFreeLayout(gvc, G)
         gv.gvFreeContext(gvc)
 
-    def layout_command_line(self, prog="neato", args=""):
+    def layout(self, prog="neato", args=""):
         """Assign positions to nodes in graph.
 
         This version of the layout command uses command line calls to neato
@@ -1628,7 +1632,7 @@ class AGraph:
         self.has_layout = True
         return
 
-    def draw_command_line(self, path=None, format=None, prog=None, args=""):
+    def draw(self, path=None, format=None, prog=None, args=""):
         """Output graph to path in specified format.
 
         This version of the draw command uses command line calls to dot
