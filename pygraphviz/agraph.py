@@ -1488,7 +1488,11 @@ class AGraph:
         will use specified graphviz layout method.
 
         >>> A=AGraph()
-        >>> A.layout() # uses neato
+        >>> A.add_edge(1, 2)
+        >>> # uses neato by default
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> A.layout()  # doctest: +SKIP
         >>> A.layout(prog='dot')
         >>> A.layout(prog='dot', args="-Nshape=box -Efontsize=8")
 
@@ -1655,17 +1659,23 @@ class AGraph:
 
         >>> G = AGraph()
         >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
-        >>> G.layout()
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> G.layout() # doctest: +SKIP
 
         # use current node positions, output pdf in 'file.pdf'
-        >>> G.draw('file.pdf')
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> G.draw('file.pdf') # doctest: +SKIP
 
         # use dot to position, output png in 'file'
         >>> G.draw('file', format='png', prog='dot')
 
         # use keyword 'args' to pass additional arguments to graphviz
-        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')
-        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')  # doctest: +SKIP
+        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')  # doctest: +SKIP
 
         The layout might take a long time on large graphs.
 
