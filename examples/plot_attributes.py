@@ -1,5 +1,10 @@
-#!/usr/bin/env python
+"""
+Attributes
+----------
 
+Example illustrating how to set node, edge, and graph attributes for
+visualization.
+"""
 
 import pygraphviz as pgv
 
@@ -22,4 +27,4 @@ A.add_edge(4, 6)
 A.graph_attr["epsilon"] = "0.001"
 print(A.string())  # print dot file to standard output
 A.layout("dot")  # layout with dot
-A.draw("foo.ps")  # write to file
+A.draw("foo.png")  # write to file

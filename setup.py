@@ -9,18 +9,14 @@ import os
 from setuptools import setup, Extension
 import sys
 
-from setup_commands import AddExtensionDevelopCommand, AddExtensionInstallCommand
-from setup_extra import get_graphviz_dirs
-
-
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
 if sys.argv[-1] == 'setup.py':
     print("To install, run 'python setup.py install'")
     print()
 
-if sys.version_info[:2] < (3, 6):
-    print("PyGraphviz requires Python version 3.6 or later (%d.%d detected)." %
+if sys.version_info[:2] < (3, 7):
+    print("PyGraphviz requires Python version 3.7 or later (%d.%d detected)." %
           sys.version_info[:2])
     sys.exit(-1)
 
@@ -79,12 +75,8 @@ if __name__ == "__main__":
         packages=packages,
         data_files=data,
         ext_modules=extension,
-        cmdclass={
-            'install': AddExtensionInstallCommand,
-            'develop': AddExtensionDevelopCommand,
-            },
         package_data=package_data,
         include_package_data = True,
-        python_requires='>=3.6',
+        python_requires='>=3.7',
         tests_require=['pytest'],
     )

@@ -31,6 +31,7 @@ help:
 clean:
 	-rm -rf build/* source/reference/generated/* source/examples/* source/static/examples doc/source/*.pdf doc/source/*.zip 
 	-rm -rf ../examples/*/*.png
+	-rm -rf source/auto_examples
 
 generate: build/generate-stamp
 build/generate-stamp: $(wildcard source/reference/*.rst)

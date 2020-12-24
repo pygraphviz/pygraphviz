@@ -23,7 +23,7 @@ Graphs
 
 To make an empty pygraphviz graph use the AGraph class:
 
->>> G=pgv.AGraph()
+>>> G = pgv.AGraph()
 
 You can use the strict and directed keywords to control what type of
 graph you want.  The default is to create a strict graph 

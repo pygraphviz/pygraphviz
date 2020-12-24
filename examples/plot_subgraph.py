@@ -1,5 +1,9 @@
-#!/usr/bin/env python
+"""
+Subgraph
+========
 
+Specify a subgraph in pygraphviz.
+"""
 
 import pygraphviz as pgv
 
@@ -16,3 +20,4 @@ A.add_edge(4, 6)
 B = A.add_subgraph([4, 5, 6], name="s1", rank="same")
 B.graph_attr["rank"] = "same"
 print(A.string())  # print dot file to standard output
+A.draw("subgraph.png", prog="neato")

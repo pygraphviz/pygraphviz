@@ -1,21 +1,16 @@
-#
-# Sphinx documentation build configuration file, created by
-# sphinx-quickstart.py on Sat Mar  8 21:47:50 2008.
-#
-# This file is execfile()d with the current directory set to its containing dir.
-#
-# The contents of this file are pickled, so don't put values in the namespace
-# that aren't pickleable (module imports are okay, they're removed automatically).
-#
-# All configuration values have a default value; values that are commented out
-# serve to show the default value.
-
-import sys, os, re
 from datetime import date
+import sphinx_rtd_theme
+from warnings import filterwarnings
+
+from pygraphviz.scraper import PNGScraper
+
+filterwarnings(
+    "ignore", message="Matplotlib is currently using agg", category=UserWarning
+)
 
 # If your extensions are in another directory, add it here.
 #sys.path.append(os.path.dirname(__file__))
-sys.path.append(os.path.abspath('../sphinxext'))
+#sys.path.append(os.path.abspath('../sphinxext'))
 #sys.path.append(os.path.abspath('../sphinxext/numpyext'))
 
 # General configuration
@@ -23,10 +18,21 @@ sys.path.append(os.path.abspath('../sphinxext'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.addons.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.imgmath','sphinx.ext.doctest']
+extensions = [
+    "sphinx.ext.autosummary",
+    'sphinx.ext.autodoc',
+    'sphinx.ext.imgmath',
+    'sphinx.ext.doctest',
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "sphinx_gallery.gen_gallery",
+    "numpydoc",
+]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['templates']
+templates_path = ['_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -40,6 +46,14 @@ master_doc = 'index'
 # General substitutions.
 project = 'PyGraphviz'
 copyright = f'2004-{date.today().year}, PyGraphviz Developers'
+
+# Sphinx gallery configuration
+sphinx_gallery_conf = {
+    "examples_dirs": "../../examples",
+    "gallery_dirs": "auto_examples",
+    "ignore_pattern": "skip_",
+    "image_scrapers": (PNGScraper(),),
+}
 
 
 # The default replacements for |version| and |release|, also used in various
@@ -76,6 +90,14 @@ pygments_style = 'sphinx'
 
 # Options for HTML output
 # -----------------------
+
+html_theme = "sphinx_rtd_theme"
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
+html_theme_options = {
+    "canonical_url": "https://pygraphviz.github.io/documentation/stable",
+    "navigation_depth": 3,
+}
 
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
@@ -139,57 +161,3 @@ latex_elements = {
 
 # Documents to append as an appendix to all manuals.
 #latex_appendices = []
-
-
-# Extension interface
-# -------------------
-
-from sphinx import addnodes
-
-dir_sig_re = re.compile(r'\.\. ([^:]+)::(.*)$')
-
-def parse_directive(env, sig, signode):
-    if not sig.startswith('.'):
-        dec_sig = '.. %s::' % sig
-        signode += addnodes.desc_name(dec_sig, dec_sig)
-        return sig
-    m = dir_sig_re.match(sig)
-    if not m:
-        signode += addnodes.desc_name(sig, sig)
-        return sig
-    name, args = m.groups()
-    dec_name = '.. %s::' % name
-    signode += addnodes.desc_name(dec_name, dec_name)
-    signode += addnodes.desc_addname(args, args)
-    return name
-
-
-def parse_role(env, sig, signode):
-    signode += addnodes.desc_name(':%s:' % sig, ':%s:' % sig)
-    return sig
-
-
-event_sig_re = re.compile(r'([a-zA-Z-]+)\s*\((.*)\)')
-
-def parse_event(env, sig, signode):
-    m = event_sig_re.match(sig)
-    if not m:
-        signode += addnodes.desc_name(sig, sig)
-        return sig
-    name, args = m.groups()
-    signode += addnodes.desc_name(name, name)
-    plist = addnodes.desc_parameterlist()
-    for arg in args.split(','):
-        arg = arg.strip()
-        plist += addnodes.desc_parameter(arg, arg)
-    signode += plist
-    return name
-
-
-def setup(app):
-    from sphinx.ext.autodoc import cut_lines
-    app.connect('autodoc-process-docstring', cut_lines(4, what=['module']))
-    app.add_object_type('directive', 'dir', 'pair: %s; directive', parse_directive)
-    app.add_object_type('role', 'role', 'pair: %s; role', parse_role)
-    app.add_object_type('confval', 'confval', 'pair: %s; configuration value')
-    app.add_object_type('event', 'event', 'pair: %s; event', parse_event)

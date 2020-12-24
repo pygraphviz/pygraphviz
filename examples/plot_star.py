@@ -1,7 +1,8 @@
-#!/usr/bin/env python
 """
-Create and draw a star with varying node properties.
+Star
+====
 
+Create and draw a star with varying node properties.
 """
 #    Copyright (C) 2006 by
 #    Aric Hagberg <hagberg@lanl.gov>
@@ -33,6 +34,4 @@ for i in range(1, 16):
 
 print(A.string())  # print to screen
 A.write("star.dot")  # write to simple.dot
-print("Wrote star.dot")
-A.draw("star.png", prog="circo")  # draw to png using circo
-print("Wrote star.png")
+A.draw("star.png", prog="circo")  # draw to png using circo layout
