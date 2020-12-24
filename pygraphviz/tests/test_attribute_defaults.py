@@ -1,4 +1,5 @@
 import pygraphviz as pgv
+
 stringify = pgv.testing.stringify
 
 
@@ -9,9 +10,8 @@ def test_default_attributes():
     assert "label" in A.graph_attr
     assert A.graph_attr["label"] == "test"
     assert A.graph_attr.keys() == ["label", "spam"]
-    assert (
-        sorted(list(A.graph_attr.iteritems())) == [("label", "test"), ("spam", "eggs")]
-    )
+    graph_attrs = [("label", "test"), ("spam", "eggs")]
+    assert sorted(list(A.graph_attr.iteritems())) == graph_attrs
     ans = """strict graph { graph [label=test, spam=eggs]; }"""
     assert stringify(A) == " ".join(ans.split())
 

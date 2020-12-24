@@ -249,9 +249,13 @@ class AGraph:
         if sorted(self.edges()) != sorted(other.edges()):
             return False
         # check attributes
-        if tuple(dict(n.attr) for n in sorted(self.nodes_iter())) != tuple(dict(n.attr) for n in sorted(other.nodes_iter())):
+        self_node_attr = tuple(dict(n.attr) for n in sorted(self.nodes_iter()))
+        other_node_attr = tuple(dict(n.attr) for n in sorted(other.nodes_iter()))
+        if self_node_attr != other_node_attr:
             return False
-        if tuple(dict(e.attr) for e in sorted(self.edges_iter())) != tuple(dict(e.attr) for e in sorted(other.edges_iter())):
+        self_edge_attr = tuple(dict(e.attr) for e in sorted(self.edges_iter()))
+        other_edge_attr = tuple(dict(e.attr) for e in sorted(other.edges_iter()))
+        if self_edge_attr != other_edge_attr:
             return False
         # We could check the default attributes too.
         # But they aren't reflected in the attibutes until node is added.
@@ -268,9 +272,9 @@ class AGraph:
     def __hash__(self):
         # include nodes and edges in hash
         # Could do attributes too, but hash should be fast
-        return hash((tuple(sorted(self.nodes_iter())),
-                     tuple(sorted(self.edges_iter())),
-                     ))
+        return hash(
+            (tuple(sorted(self.nodes_iter())), tuple(sorted(self.edges_iter())),)
+        )
 
     def __iter__(self):
         # provide "for n in G"
@@ -1015,7 +1019,7 @@ class AGraph:
 
     def copy(self):
         """Return a copy of the graph.
-        
+
         Notes
         =====
         Versions <=1.6 made a copy by writing and the reading a dot string.
@@ -1284,7 +1288,7 @@ class AGraph:
 
     def to_string(self):
         """Return a string representation of graph in dot format.
-        
+
         `to_string()` uses "agwrite" to produce "dot" format w/o rendering.
         The function `string_nop()` layouts with "nop" and renders to "dot".
         """
@@ -1300,7 +1304,7 @@ class AGraph:
     def string(self):
         """Return a string (unicode) representation of graph in dot format."""
         return self.to_string()
-        #return self.string_nop()
+        # return self.string_nop()
 
     def from_string(self, string):
         """Load a graph from a string in dot format.
@@ -1436,7 +1440,7 @@ class AGraph:
         If you use prog="nop2" it will take node and edge positions from the
         AGraph when rendering.
         """
-#        _ , prog = self._manually_parse_args(args, None, prog)
+        # _ , prog = self._manually_parse_args(args, None, prog)
 
         # convert input strings to type bytes (encode it)
         if isinstance(prog, str):
@@ -1561,12 +1565,12 @@ class AGraph:
                     % self.number_of_nodes()
                 )
 
-#        if prog[:3] == "nop":
-#            if all((n.attr["pos"] is None) for n in self.nodes()):
-#                raise AttributeError(
-#                    """Graph has no layout information. Can't use prog="nop". """
-#                )
-#        format, prog = self._manually_parse_args(args, format, prog)
+        # if prog[:3] == "nop":
+        #     if all((n.attr["pos"] is None) for n in self.nodes()):
+        #         raise AttributeError(
+        #             """Graph has no layout information. Can't use prog="nop". """
+        #         )
+        # format, prog = self._manually_parse_args(args, format, prog)
 
         # convert input strings to type bytes (encode it)
         if isinstance(format, str):
@@ -1590,7 +1594,7 @@ class AGraph:
         if path is None:
             out = gv.gvRenderData(gvc, G, format)
             if out[0]:
-                raise ValueError(f"Graphviz Error creating dot representation: {out[0]}")
+                raise ValueError(f"Graphviz Error creating dot representation:{out[0]}")
             err, dot_string, length = out
             assert len(dot_string) == length
             gv.gvFreeLayout(gvc, G)
@@ -1656,7 +1660,7 @@ class AGraph:
                 args += "-n2"
             else:
                 raise AttributeError(
-                    """Graph has no layout information, see layout() or specify prog=%s."""
+                    "Graph has no layout information, see layout() or specify prog=%s."
                     % ("|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"]))
                 )
 
@@ -1692,11 +1696,11 @@ class AGraph:
             value = arg[2:]
             if arg[:2] == "-T":
                 if format and format != value:
-                    raise ValueError("format specified differently in args and format inputs")
+                    raise ValueError("format doesnt match in args and format inputs")
                 format = value
             if arg[:2] == "-K":
                 if prog and prog != value:
-                    raise ValueError("prog specified differently in args and prog inputs")
+                    raise ValueError("prog doesnt match in args and prog inputs")
                 prog = value
             if arg[:2] == "-G":
                 key, val = value.split("=")

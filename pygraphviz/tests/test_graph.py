@@ -1,6 +1,7 @@
 import pytest
 import unittest
 import pygraphviz as pgv
+
 stringify = pgv.testing.stringify
 
 
@@ -92,15 +93,15 @@ class TestGraph(unittest.TestCase):
         assert A == B
 
         # Note: default attributes dont affect equality
-        A.node_attr['low'] = 3
+        A.node_attr["low"] = 3
         assert A == B
-        B.node_attr['low'] = 3
+        B.node_attr["low"] = 3
         assert A == B
-        A.edge_attr['low'] = 4
+        A.edge_attr["low"] = 4
         assert A == B
-        B.edge_attr['low'] = 4
+        B.edge_attr["low"] = 4
         assert A == B
-        A.graph_attr.update({'low': 5})
+        A.graph_attr.update({"low": 5})
         assert A == B
         # print(sorted(A.nodes()), sorted(B.nodes()))
         # print(sorted(A.edges()), sorted(B.edges()))
@@ -196,16 +197,14 @@ class TestGraph(unittest.TestCase):
         assert sorted(A.edges()) == [("1", "2")]
         e = (2, 3)
         A.add_edge(e)
-        assert (
-            sorted([tuple(sorted(e)) for e in A.edges()]) == [("1", "2"), ("2", "3")]
-        )
+        edges = [("1", "2"), ("2", "3")]
+        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
 
     def test_add_remove_edges_from(self):
         A = pgv.AGraph()
         A.add_edges_from([(1, 2), (2, 3)])
-        assert (
-            sorted([tuple(sorted(e)) for e in A.edges()]) == [("1", "2"), ("2", "3")]
-        )
+        edges = [("1", "2"), ("2", "3")]
+        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
 
         A.remove_edge(1, 2)
         assert sorted(A.edges()) == [("2", "3")]
@@ -218,24 +217,18 @@ class TestGraph(unittest.TestCase):
     def test_remove_edges_from(self):
         A = pgv.AGraph()
         A.add_edges_from([(1, 2), (2, 3)])
-        assert (
-            sorted([tuple(sorted(e)) for e in A.edges()]) == [("1", "2"), ("2", "3")]
-        )
+        edges = [("1", "2"), ("2", "3")]
+        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
         A.remove_edges_from([(1, 2), (2, 3)])
         assert A.edges() == []
 
     def test_edges(self):
         A = pgv.AGraph()
         A.add_edges_from([(1, 2), (2, 3)])
-        assert (
-            sorted([tuple(sorted(e)) for e in A.edges()]) == [("1", "2"), ("2", "3")]
-        )
-        assert (
-            sorted([tuple(sorted(e)) for e in A.edges_iter()]) == [("1", "2"), ("2", "3")]
-        )
-        assert (
-            sorted([tuple(sorted(e)) for e in A.iteredges()]) == [("1", "2"), ("2", "3")]
-        )
+        edges = [("1", "2"), ("2", "3")]
+        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
+        assert sorted([tuple(sorted(e)) for e in A.edges_iter()]) == edges
+        assert sorted([tuple(sorted(e)) for e in A.iteredges()]) == edges
 
     def test_has_edge(self):
         assert self.P3.has_edge(1, 2)
@@ -295,10 +288,8 @@ class TestGraph(unittest.TestCase):
         A = pgv.AGraph()
         A.add_cycle([1, 2, 3])
         assert A.nodes() == ["1", "2", "3"]
-        assert (
-            sorted([tuple(sorted(e)) for e in A.iteredges()]) ==
-            [("1", "2"), ("1", "3"), ("2", "3")]
-        )
+        edges = [("1", "2"), ("1", "3"), ("2", "3")]
+        assert sorted([tuple(sorted(e)) for e in A.iteredges()]) == edges
 
     def test_graph_strict(self):
         A = pgv.AGraph()
@@ -327,10 +318,8 @@ class TestGraph(unittest.TestCase):
 
         A.add_edge("3", "3", "foo")
         assert A.edges() == [("1", "2"), ("1", "2"), ("3", "3"), ("3", "3")]
-        assert (
-            A.edges(keys=True) ==
-            [("1", "2", None), ("1", "2", None), ("3", "3", None), ("3", "3", "foo")]
-        )
+        ans = [("1", "2", None), ("1", "2", None), ("3", "3", None), ("3", "3", "foo")]
+        assert A.edges(keys=True) == ans
         eone = A.get_edge(3, 3, "foo")
         eh = eone.handle
         edge = pgv.Edge(A, 3, 3, "foo")
@@ -352,26 +341,13 @@ class TestDiGraphOnly(TestGraph):
     def test_edges(self):
         A = pgv.AGraph(directed=True)
         A.add_edges_from(self.P3.edges())
-        assert (
-            sorted([tuple(sorted(e)) for e in A.edges()]) == [("1", "2"), ("2", "3")]
-        )
-        assert (
-            sorted([tuple(sorted(e)) for e in A.edges_iter()]) == [("1", "2"), ("2", "3")]
-        )
-        assert (
-            sorted([tuple(sorted(e)) for e in A.out_edges()]) == [("1", "2"), ("2", "3")]
-        )
-        assert (
-            sorted([tuple(sorted(e)) for e in A.out_edges_iter()]) ==
-            [("1", "2"), ("2", "3")]
-        )
-        assert (
-            sorted([tuple(sorted(e)) for e in A.in_edges()]) == [("1", "2"), ("2", "3")]
-        )
-        assert (
-            sorted([tuple(sorted(e)) for e in A.in_edges_iter()]) ==
-            [("1", "2"), ("2", "3")]
-        )
+        edges = [("1", "2"), ("2", "3")]
+        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
+        assert sorted([tuple(sorted(e)) for e in A.edges_iter()]) == edges
+        assert sorted([tuple(sorted(e)) for e in A.out_edges()]) == edges
+        assert sorted([tuple(sorted(e)) for e in A.out_edges_iter()]) == edges
+        assert sorted([tuple(sorted(e)) for e in A.in_edges()]) == edges
+        assert sorted([tuple(sorted(e)) for e in A.in_edges_iter()]) == edges
         assert sorted(A.edges(1)) == [("1", "2")]
         assert sorted(A.edges([1, 2])) == [("1", "2"), ("2", "3")]
         assert sorted(A.edges_iter(1)) == [("1", "2")]

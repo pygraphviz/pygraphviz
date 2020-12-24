@@ -1,5 +1,6 @@
 import pygraphviz as pgv
 import pytest
+
 stringify = pgv.testing.stringify
 
 

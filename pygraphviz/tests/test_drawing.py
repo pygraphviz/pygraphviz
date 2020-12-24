@@ -14,7 +14,7 @@ def test_name_error():
     with pytest.raises(ValueError):
         A = pgv.AGraph(name="test graph")
         A.draw("foo", prog="foo")
- 
+
 
 def test_drawing_no_error_with_no_layout():
     A = pgv.AGraph(name="test graph")
@@ -24,7 +24,7 @@ def test_drawing_no_error_with_no_layout():
 
 
 def test_drawing_makes_file():
-    A = pgv.AGraph(name='test graph')
+    A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4])
     with TemporaryFile() as fh:
         A.draw(fh, format="png", prog="twopi")
@@ -35,7 +35,7 @@ def test_drawing_makes_file():
 
 
 def test_drawing_to_create_dot_string():
-    A = pgv.AGraph(name='test graph')
+    A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4])
     A.layout()
     dot_rep = A.to_string()
@@ -71,8 +71,9 @@ def test_drawing_to_create_dot_string():
 	3 -- 4	[pos="39.322,178.76 38.043,189.53 36.424,203.17 35.14,213.98"];
 }
 """
-    #print("dot representation:", dot_rep)
-    #assert expected == dot_rep
+    # print("dot representation:", dot_rep)
+    # assert expected == dot_rep
+
 
 @pytest.mark.xfail(reason="Tests of experimental Graphviz library interface")
 class TestExperimentalGraphvizLibInterface:
@@ -94,7 +95,7 @@ class TestExperimentalGraphvizLibInterface:
         A.string_nop()
 
     def test_drawing_to_create_dot_string(self):
-        A = pgv.AGraph(name='test graph')
+        A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
         A._layout()
         dot_rep = A.to_string()
@@ -130,11 +131,11 @@ class TestExperimentalGraphvizLibInterface:
         3 -- 4	[pos="39.322,178.76 38.043,189.53 36.424,203.17 35.14,213.98"];
     }
     """
-        #print("dot representation:", dot_rep)
-        #assert expected == dot_rep
+        # print("dot representation:", dot_rep)
+        # assert expected == dot_rep
 
     def test_drawing_makes_file(self):
-        A = pgv.AGraph(name='test graph')
+        A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
         with TemporaryFile() as fh:
             A._draw(fh, format="png", prog="twopi")
@@ -142,4 +143,3 @@ class TestExperimentalGraphvizLibInterface:
         with TemporaryFile() as fh:
             A._draw(path=fh, prog="circo", format="png")
             assert fh.tell() > 0
-

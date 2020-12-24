@@ -5,19 +5,19 @@ import pygraphviz as pgv
 def test_layout():
     A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4])
-    assert [n.attr["pos"] is None for n in A.nodes()] == [True, True, True, True]
+    assert [n.attr["pos"] is None for n in A.nodes()] == [True] * 4
     A.layout()
-    assert [n.attr["pos"] is not None for n in A.nodes()] == [True, True, True, True]
+    assert [n.attr["pos"] is not None for n in A.nodes()] == [True] * 4
 
 
 def test_layout_defaults():
     A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4])
-    #print("Pos before",[n.attr["pos"] for n in A.nodes()])
+    # print("Pos before",[n.attr["pos"] for n in A.nodes()])
     assert [n.attr["pos"] is None for n in A.nodes()] == [True] * 4
     A.layout()
     assert [n.attr["pos"] is not None for n in A.nodes()] == [True] * 4
-    #print("Pos after",[n.attr["pos"] for n in A.nodes()])
+    # print("Pos after",[n.attr["pos"] for n in A.nodes()])
 
 
 def test_layout_prog_arg():
@@ -54,18 +54,18 @@ class TestExperimentalGraphvizLibInterface:
     def test_layout(self):
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
-        assert [n.attr["pos"] is None for n in A.nodes()] == [True, True, True, True]
+        assert [n.attr["pos"] is None for n in A.nodes()] == [True] * 4
         A._layout()
-        assert [n.attr["pos"] is not None for n in A.nodes()] == [True, True, True, True]
+        assert [n.attr["pos"] is not None for n in A.nodes()] == [True] * 4
 
     def test_layout_defaults(self):
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
-        #print("Pos before",[n.attr["pos"] for n in A.nodes()])
+        # print("Pos before",[n.attr["pos"] for n in A.nodes()])
         assert [n.attr["pos"] is None for n in A.nodes()] == [True] * 4
         A._layout()
         assert [n.attr["pos"] is not None for n in A.nodes()] == [True] * 4
-        #print("Pos after",[n.attr["pos"] for n in A.nodes()])
+        # print("Pos after",[n.attr["pos"] for n in A.nodes()])
 
     def test_layout_prog_arg(self):
         A = pgv.AGraph(name="test graph")
