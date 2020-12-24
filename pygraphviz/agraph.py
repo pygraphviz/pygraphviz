@@ -1463,8 +1463,8 @@ class AGraph:
         >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
         >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
         >>> A.layout()  # doctest: +SKIP
-        >>> A.layout(prog='neato')
-        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")
+        >>> A.layout()
+        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")  # doctest: +SKIP
 
         Use keyword args to add additional arguments to graphviz programs.
 
@@ -1494,8 +1494,8 @@ class AGraph:
         >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
         >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
         >>> A.layout()  # doctest: +SKIP
-        >>> A.layout(prog='neato')
-        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")
+        >>> A.layout()
+        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")  # doctest: +SKIP
 
         Use keyword args to add additional arguments to graphviz programs.
 
@@ -1566,7 +1566,7 @@ class AGraph:
         >>> G.draw('file.pdf') # doctest: +SKIP
 
         # use dot to position, output png in 'file'
-        >>> G.draw('file', format='png', prog='neato', args='-Kdot')
+        >>> G.draw('file', format='png', prog='dot')
 
         # use keyword 'args' to pass additional arguments to graphviz
         >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
@@ -1670,7 +1670,7 @@ class AGraph:
         >>> G.draw('file.pdf') # doctest: +SKIP
 
         # use dot to position, output png in 'file'
-        >>> G.draw('file', format='png', prog='neato', args='-Kdot')
+        >>> G.draw('file', format='png', prog='dot')
 
         # use keyword 'args' to pass additional arguments to graphviz
         >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
