@@ -1417,10 +1417,67 @@ class AGraph:
         self.from_string(data)
         return self
 
+    def tred(self, args="", copy=False):
+        """Transitive reduction of graph.  Modifies existing graph.
+
+        To create a new graph use
+
+        >>> A=AGraph()
+        >>> B=A.tred(copy=True) # doctest: +SKIP
+
+        See the graphviz "tred" program for details of the algorithm.
+        """
+        data = self._run_prog("tred", args)
+        if copy:
+            return self.__class__(string=data.decode(self.encoding))
+        else:
+            return self.from_string(data)
+
+    def acyclic(self, args="", copy=False):
+        """Reverse sufficient edges in digraph to make graph acyclic.
+        Modifies existing graph.
+
+        To create a new graph use
+
+        >>> A=AGraph()
+        >>> B=A.acyclic(copy=True) # doctest: +SKIP
+
+        See the graphviz "acyclic" program for details of the algorithm.
+        """
+        data = self._run_prog("acyclic", args)
+        if copy:
+            return self.__class__(string=data.decode(self.encoding))
+        else:
+            return self.from_string(data)
+
+    def layout(self, prog="neato", args=""):
+        """Assign positions to nodes in graph.
+
+        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
+        will use specified graphviz layout method.
+
+        >>> A=AGraph()
+        >>> A.layout() # uses neato
+        >>> A.layout(prog='dot')
+
+        Use keyword args to add additional arguments to graphviz programs.
+
+        The layout might take a long time on large graphs.
+
+        """
+        output_fmt = "dot"
+        data = self._run_prog(prog, " ".join([args, "-T", output_fmt]))
+        self.from_string(data)
+        self.has_layout = True
+        return
+
     def _layout(self, prog="neato", args=""):
         """Assign positions to nodes in graph.
 
         .. caution:: EXPERIMENTAL
+
+        This version of the layout command uses libgvc for layout instead
+        of command line GraphViz tools like in versions <1.6 and the default.
 
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
         will use specified graphviz layout method.
@@ -1456,43 +1513,103 @@ class AGraph:
         self.has_layout = True
         return
 
-    def tred(self, args="", copy=False):
-        """Transitive reduction of graph.  Modifies existing graph.
+    def draw(self, path=None, format=None, prog=None, args=""):
+        """Output graph to path in specified format.
 
-        To create a new graph use
+        An attempt will be made to guess the output format based on the file
+        extension of `path`.  If that fails, then the `format` parameter will
+        be used.
 
-        >>> A=AGraph()
-        >>> B=A.tred(copy=True) # doctest: +SKIP
+        Note, if `path` is a file object returned by a call to os.fdopen(),
+        then the method for discovering the format will not work.  In such
+        cases, one should explicitly set the `format` parameter; otherwise, it
+        will default to 'dot'.
 
-        See the graphviz "tred" program for details of the algorithm.
+        If path is None, the result is returned as a Bytes object.
+
+        Formats (not all may be available on every system depending on
+        how Graphviz was built)
+
+            'canon', 'cmap', 'cmapx', 'cmapx_np', 'dia', 'dot',
+            'fig', 'gd', 'gd2', 'gif', 'hpgl', 'imap', 'imap_np',
+            'ismap', 'jpe', 'jpeg', 'jpg', 'mif', 'mp', 'pcl', 'pdf',
+            'pic', 'plain', 'plain-ext', 'png', 'ps', 'ps2', 'svg',
+            'svgz', 'vml', 'vmlz', 'vrml', 'vtx', 'wbmp', 'xdot', 'xlib'
+
+
+        If prog is not specified and the graph has positions
+        (see layout()) then no additional graph positioning will
+        be performed.
+
+        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
+        will use specified graphviz layout method.
+
+        >>> G = AGraph()
+        >>> G.layout()
+
+        # use current node positions, output ps in 'file.ps'
+        >>> G.draw('file.ps')
+
+        # use dot to position, output png in 'file'
+        >>> G.draw('file', format='png',prog='dot')
+
+        # use keyword 'args' to pass additional arguments to graphviz
+        >>> G.draw('test.ps',prog='twopi',args='-Gepsilon=1')
+
+        The layout might take a long time on large graphs.
         """
-        data = self._run_prog("tred", args)
-        if copy:
-            return self.__class__(string=data.decode(self.encoding))
+        # try to guess format from extension
+        if format is None and path is not None:
+            p = path
+            # in case we got a file handle get its name instead
+            if not is_string_like(p):
+                p = path.name
+            format = os.path.splitext(p)[-1].lower()[1:]
+
+        if format is None or format == "":
+            format = "dot"
+
+        if prog is None:
+            if self.has_layout:
+                prog = "neato"
+                args += "-n2"
+            else:
+                raise AttributeError(
+                    "Graph has no layout information, see layout() or specify prog=%s."
+                    % ("|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"]))
+                )
+
         else:
-            return self.from_string(data)
+            if self.number_of_nodes() > 1000:
+                sys.stderr.write(
+                    "Warning: graph has %s nodes...layout may take a long time.\n"
+                    % self.number_of_nodes()
+                )
 
-    def acyclic(self, args="", copy=False):
-        """Reverse sufficient edges in digraph to make graph acyclic.
-        Modifies existing graph.
-
-        To create a new graph use
-
-        >>> A=AGraph()
-        >>> B=A.acyclic(copy=True) # doctest: +SKIP
-
-        See the graphviz "acyclic" program for details of the algorithm.
-        """
-        data = self._run_prog("acyclic", args)
-        if copy:
-            return self.__class__(string=data.decode(self.encoding))
+        if prog == "nop":  # nop takes no switches
+            args = ""
         else:
-            return self.from_string(data)
+            args = " ".join([args, "-T" + format])
+
+        data = self._run_prog(prog, args)
+
+        if path is not None:
+            fh = self._get_fh(path, "w+b")
+            fh.write(data)
+            if is_string_like(path):
+                fh.close()
+            d = None
+        else:
+            d = data
+        return d
 
     def _draw(self, path=None, format=None, prog=None, args=""):
         """Output graph to path in specified format.
 
         .. caution:: EXPERIMENTAL
+
+        This version of the draw command uses libgvc for drawing instead
+        of command line GraphViz tools like in versions <1.6 and the default.
 
         An attempt will be made to guess the output format based on the file
         extension of `path`.  If that fails, then the `format` parameter will
@@ -1611,86 +1728,10 @@ class AGraph:
         gv.gvFreeLayout(gvc, G)
         gv.gvFreeContext(gvc)
 
-    def layout(self, prog="neato", args=""):
-        """Assign positions to nodes in graph.
-
-        This version of the layout command uses command line calls to neato
-        or other GraphViz tools. This is the code that was in place for
-        versions 1.6 and before.
-
-        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
-        will use specified graphviz layout method.
-
-        >>> A=AGraph()
-        >>> A.layout() # uses neato
-        >>> A.layout(prog='dot')
-
-        Use keyword args to add additional arguments to graphviz programs.
-
-        The layout might take a long time on large graphs.
-
-        """
-        output_fmt = "dot"
-        data = self._run_prog(prog, " ".join([args, "-T", output_fmt]))
-        self.from_string(data)
-        self.has_layout = True
-        return
-
-    def draw(self, path=None, format=None, prog=None, args=""):
-        """Output graph to path in specified format.
-
-        This version of the draw command uses command line calls to dot
-        or other GraphViz tools. This is the code that was in place for
-        versions 1.6 and before.
-        """
-        # try to guess format from extension
-        if format is None and path is not None:
-            p = path
-            # in case we got a file handle get its name instead
-            if not is_string_like(p):
-                p = path.name
-            format = os.path.splitext(p)[-1].lower()[1:]
-
-        if format is None or format == "":
-            format = "dot"
-
-        if prog is None:
-            if self.has_layout:
-                prog = "neato"
-                args += "-n2"
-            else:
-                raise AttributeError(
-                    "Graph has no layout information, see layout() or specify prog=%s."
-                    % ("|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"]))
-                )
-
-        else:
-            if self.number_of_nodes() > 1000:
-                sys.stderr.write(
-                    "Warning: graph has %s nodes...layout may take a long time.\n"
-                    % self.number_of_nodes()
-                )
-
-        if prog == "nop":  # nop takes no switches
-            args = ""
-        else:
-            args = " ".join([args, "-T" + format])
-
-        data = self._run_prog(prog, args)
-
-        if path is not None:
-            fh = self._get_fh(path, "w+b")
-            fh.write(data)
-            if is_string_like(path):
-                fh.close()
-            d = None
-        else:
-            d = data
-        return d
-
     # some private helper functions
 
     def _manually_parse_args(self, args, format=None, prog=None):
+        """Experimental code to parse args relevant for libgvc drawing and layout"""
         arg_list = shlex.split(args)
         for arg in arg_list:
             value = arg[2:]
@@ -1744,12 +1785,8 @@ class AGraph:
         import glob
 
         paths = os.environ["PATH"]
-        if os.name == "nt":
-            exe = ".exe"
-        else:
-            exe = ""
         for path in paths.split(os.pathsep):
-            match = glob.glob(os.path.join(path, name + exe))
+            match = glob.glob(os.path.join(path, name))
             if match:
                 return match[0]
         raise ValueError("No prog %s in path." % name)
