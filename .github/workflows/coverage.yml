@@ -43,5 +43,5 @@ jobs:
 
     - name: Coverage report for pygraphviz
       run: |
-        pytest --cov=pygraphviz --pyargs pygraphviz
+        pytest --cov=pygraphviz --doctest-modules --durations=10 --pyargs pygraphviz
         codecov
