@@ -1497,7 +1497,7 @@ class AGraph:
         If you use prog="nop2" it will take node and edge positions from the
         AGraph when rendering.
         """
-        # _ , prog = self._manually_parse_args(args, None, prog)
+        _ , prog = self._manually_parse_args(args, None, prog)
 
         # convert input strings to type bytes (encode it)
         if isinstance(prog, str):
@@ -1545,18 +1545,21 @@ class AGraph:
         will use specified graphviz layout method.
 
         >>> G = AGraph()
+        >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
         >>> G.layout()
 
-        # use current node positions, output ps in 'file.ps'
-        >>> G.draw('file.ps')
+        # use current node positions, output pdf in 'file.pdf'
+        >>> G.draw('file.pdf')
 
         # use dot to position, output png in 'file'
-        >>> G.draw('file', format='png',prog='dot')
+        >>> G.draw('file', format='png', prog='dot')
 
         # use keyword 'args' to pass additional arguments to graphviz
-        >>> G.draw('test.ps',prog='twopi',args='-Gepsilon=1')
+        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')
+        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')
 
         The layout might take a long time on large graphs.
+
         """
         # try to guess format from extension
         if format is None and path is not None:
@@ -1640,16 +1643,18 @@ class AGraph:
         will use specified graphviz layout method.
 
         >>> G = AGraph()
+        >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
         >>> G.layout()
 
-        # use current node positions, output ps in 'file.ps'
-        >>> G.draw('file.ps')
+        # use current node positions, output pdf in 'file.pdf'
+        >>> G.draw('file.pdf')
 
         # use dot to position, output png in 'file'
-        >>> G.draw('file', format='png',prog='dot')
+        >>> G.draw('file', format='png', prog='dot')
 
         # use keyword 'args' to pass additional arguments to graphviz
-        >>> G.draw('test.ps',prog='twopi',args='-Gepsilon=1')
+        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')
+        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')
 
         The layout might take a long time on large graphs.
 
@@ -1668,7 +1673,7 @@ class AGraph:
         if prog is None:
             if self.has_layout:
                 prog = "neato"
-                args += "-n2"
+                args += " -n2"
             else:
                 raise AttributeError(
                     """Graph has no layout information, see layout() or specify prog=%s."""
@@ -1682,12 +1687,8 @@ class AGraph:
                     % self.number_of_nodes()
                 )
 
-        # if prog[:3] == "nop":
-        #     if all((n.attr["pos"] is None) for n in self.nodes()):
-        #         raise AttributeError(
-        #             """Graph has no layout information. Can't use prog="nop". """
-        #         )
-        # format, prog = self._manually_parse_args(args, format, prog)
+        # process args
+        format, prog = self._manually_parse_args(args, format, prog)
 
         # convert input strings to type bytes (encode it)
         if isinstance(format, str):
