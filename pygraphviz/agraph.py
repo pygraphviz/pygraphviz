@@ -23,10 +23,6 @@ from . import graphviz as gv
 _DEFAULT_ENCODING = "UTF-8"
 
 
-def is_string_like(obj):
-    return isinstance(obj, str)
-
-
 class PipeReader(threading.Thread):
     """Read and write pipes using threads.
     """
@@ -148,7 +144,7 @@ class AGraph:
                 data = thing  # a dictionary of dictionaries (or lists)
             elif hasattr(thing, "own"):  # a Swig pointer - graph handle
                 handle = thing
-            elif is_string_like(thing):
+            elif isinstance(thing, str):
                 pattern = re.compile(r"(strict)?\s*(graph|digraph).*{.*}\s*", re.DOTALL)
                 if pattern.match(thing):
                     string = thing  # this is a dot format graph in a string
@@ -331,7 +327,7 @@ class AGraph:
 
         Anonymous Graphviz nodes are currently not implemented.
         """
-        if not is_string_like(n):
+        if not isinstance(n, str):
             n = str(n)
         n = n.encode(self.encoding)
         try:
@@ -370,7 +366,7 @@ class AGraph:
         >>> G.add_node('a')
         >>> G.remove_node('a')
         """
-        if not is_string_like(n):
+        if not isinstance(n, str):
             n = str(n)
         n = n.encode(self.encoding)
         try:
@@ -500,7 +496,7 @@ class AGraph:
             self.add_node(v)
             vh = Node(self, v).handle
         if key is not None:
-            if not is_string_like(key):
+            if not isinstance(key, str):
                 key = str(key)
             key = key.encode(self.encoding)
         try:
@@ -883,17 +879,7 @@ class AGraph:
 
         Returns paris of (node,degree).
         """
-        # prepare nbunch
-        if nbunch is None:  # include all nodes via iterator
-            bunch = [n for n in self.nodes_iter()]
-        elif nbunch in self:  # if nbunch is a single node
-            bunch = [Node(self, nbunch)]
-        else:  # if nbunch is a sequence of nodes
-            try:
-                bunch = [Node(self, n) for n in nbunch if n in self]
-            except TypeError:
-                raise TypeError("nbunch is not a node or a sequence of nodes.")
-        for n in bunch:
+        for n in self._prepare_nbunch(nbunch):
             yield (Node(self, n), gv.agdegree(self.handle, n.handle, indeg, outdeg))
 
     def in_degree_iter(self, nbunch=None):
@@ -1049,7 +1035,7 @@ class AGraph:
         """Add the cycle of nodes given in nlist."""
         self.add_path(nlist + [nlist[0]])
 
-    def prepare_nbunch(self, nbunch=None):
+    def _prepare_nbunch(self, nbunch=None):
         # private function to build bunch from nbunch
         if nbunch is None:  # include all nodes via iterator
             bunch = self.nodes_iter()
@@ -1081,7 +1067,7 @@ class AGraph:
         if nbunch is None:
             return H
         # add induced subgraph on nodes in nbunch
-        bunch = self.prepare_nbunch(nbunch)
+        bunch = self._prepare_nbunch(nbunch)
         for n in bunch:
             node = Node(self, n)
             nh = gv.agsubnode(handle, node.handle, _Action.create)
@@ -1581,7 +1567,7 @@ class AGraph:
         if format is None and path is not None:
             p = path
             # in case we got a file handle get its name instead
-            if not is_string_like(p):
+            if not isinstance(p, str):
                 p = path.name
             format = os.path.splitext(p)[-1].lower()[1:]
 
@@ -1615,7 +1601,7 @@ class AGraph:
         if path is not None:
             fh = self._get_fh(path, "w+b")
             fh.write(data)
-            if is_string_like(path):
+            if isinstance(path, str):
                 fh.close()
             d = None
         else:
@@ -1784,7 +1770,9 @@ class AGraph:
         Path can be a string, pathlib.Path, or a file handle.
         Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
         """
-        if is_string_like(path):
+        import os
+
+        if isinstance(path, str):
             if path.endswith(".gz"):
                 # import gzip
                 # fh = gzip.open(path,mode=mode)  # doesn't return real fh
@@ -1930,7 +1918,7 @@ class Edge(tuple):
             s = Node(graph, source)
             t = Node(graph, target)
             if key is not None:
-                if not is_string_like(key):
+                if not isinstance(key, str):
                     key = str(key)
                 key = key.encode(graph.encoding)
             try:
@@ -1989,7 +1977,7 @@ class Attribute(MutableMapping):
     def __setitem__(self, name, value):
         if name == "charset" and self.type == 0:
             raise ValueError("Graph charset is immutable!")
-        if not is_string_like(value):
+        if not isinstance(value, str):
             value = str(value)
         ghandle = gv.agroot(self.handle)  # get root graph
         if ghandle == self.handle:
@@ -2086,7 +2074,7 @@ class ItemAttribute(Attribute):
             self.encoding = _DEFAULT_ENCODING
 
     def __setitem__(self, name, value):
-        if not is_string_like(value):
+        if not isinstance(value, str):
             value = str(value)
         if self.type == 1 and name == "label":
             default = "\\N"
