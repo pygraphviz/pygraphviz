@@ -36,7 +36,6 @@ jobs:
     - name: Install packages
       run: |
         pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
         pip install .
         pip list
@@ -118,7 +117,6 @@ jobs:
     - name: Install packages
       run: |
         pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
         pip install .
         pip list
