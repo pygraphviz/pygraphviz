@@ -1,9 +1,9 @@
 import os
 from glob import glob
 import shutil
-from sphinx_gallery.scrapers import figure_rst
 
-class PNGScraper():
+
+class PNGScraper:
     """A callable image scraper for png outputs from pygraphviz examples
     for sphinx-gallery.
 
@@ -23,11 +23,12 @@ class PNGScraper():
     .. [1] sphinx-gallery documentation - custom image scraper.
        https://sphinx-gallery.github.io/stable/advanced.html
     """
+
     def __init__(self):
         self.seen = set()
 
     def __repr__(self):
-        return 'PNGScraper'
+        return "PNGScraper"
 
     def __call__(self, block, block_vars, gallery_conf):
         """
@@ -51,14 +52,18 @@ class PNGScraper():
             rST-formatted string containing the generated images. This will
             be rendered to HTML during the ``sphinx-build`` process.
         """
+        try:
+            from sphinx_gallery.scrapers import figure_rst
+        except ImportError as e:
+            raise ImportError("You must install `sphinx_gallery`") from e
 
         # Find all PNG files in the directory of this example
-        path_current_example = os.path.dirname(block_vars['src_file'])
-        pngs = sorted(glob(os.path.join(path_current_example, '*.png')))
+        path_current_example = os.path.dirname(block_vars["src_file"])
+        pngs = sorted(glob(os.path.join(path_current_example, "*.png")))
 
         # Iterate through PNGs and copy them to sphinx-gallery output dir
         image_names = []
-        image_path_iterator = block_vars['image_path_iterator']
+        image_path_iterator = block_vars["image_path_iterator"]
         for png in pngs:
             if png not in self.seen:
                 self.seen |= set(png)
@@ -67,4 +72,4 @@ class PNGScraper():
                 shutil.move(png, this_image_path)
 
         # Use figure_rst to generate rST for image files
-        return figure_rst(image_names, gallery_conf['src_dir'])
+        return figure_rst(image_names, gallery_conf["src_dir"])
