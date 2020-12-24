@@ -151,9 +151,6 @@ jobs:
     - name: Install macports
       run: sudo installer -pkg MacPorts-2.6.4-10.15-Catalina.pkg -target /
 
-    - name: Update PATH
-      run: export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-
     - name: Install graphviz
       run: sudo /opt/local/bin/port install graphviz-devel
 
