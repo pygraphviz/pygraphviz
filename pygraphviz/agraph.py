@@ -874,17 +874,7 @@ class AGraph:
 
         Returns paris of (node,degree).
         """
-        # prepare nbunch
-        if nbunch is None:  # include all nodes via iterator
-            bunch = [n for n in self.nodes_iter()]
-        elif nbunch in self:  # if nbunch is a single node
-            bunch = [Node(self, nbunch)]
-        else:  # if nbunch is a sequence of nodes
-            try:
-                bunch = [Node(self, n) for n in nbunch if n in self]
-            except TypeError:
-                raise TypeError("nbunch is not a node or a sequence of nodes.")
-        for n in bunch:
+        for n in self._prepare_nbunch(nbunch):
             yield (Node(self, n), gv.agdegree(self.handle, n.handle, indeg, outdeg))
 
     def in_degree_iter(self, nbunch=None):
@@ -1040,7 +1030,7 @@ class AGraph:
         """Add the cycle of nodes given in nlist."""
         self.add_path(nlist + [nlist[0]])
 
-    def prepare_nbunch(self, nbunch=None):
+    def _prepare_nbunch(self, nbunch=None):
         # private function to build bunch from nbunch
         if nbunch is None:  # include all nodes via iterator
             bunch = self.nodes_iter()
@@ -1072,7 +1062,7 @@ class AGraph:
         if nbunch is None:
             return H
         # add induced subgraph on nodes in nbunch
-        bunch = self.prepare_nbunch(nbunch)
+        bunch = self._prepare_nbunch(nbunch)
         for n in bunch:
             node = Node(self, n)
             nh = gv.agsubnode(handle, node.handle, _Action.create)
