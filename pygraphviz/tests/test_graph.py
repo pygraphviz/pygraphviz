@@ -51,7 +51,10 @@ class TestGraph(unittest.TestCase):
 
     def test_repr(self):
         A = pgv.AGraph()
-        assert A.__repr__()[0:7] == "<AGraph"
+        assert repr(A).startswith("<AGraph <Swig Object of type 'Agraph_t")
+        # If graph has a name, it should show up in the repr
+        A = pgv.AGraph(name="foo")
+        assert "foo" in repr(A)
 
     def test_equal(self):
         A = pgv.AGraph()
@@ -388,3 +391,78 @@ class TestDiGraphOnly(TestGraph):
         assert A.name == "test"
         B = A.reverse()
         assert B.name == "test"
+
+@pytest.mark.parametrize('d',
+    (
+        {0: {1: {}}, 1: {0: {}, 2: {}}, 2: {1: {}}},  # Dict-of-dicts
+        {0: [1], 1: [0, 2], 2: [1]},  # Dict-of-lists
+    )
+)
+
+def test_agraph_constructor_dict_input(d):
+    """Test AGraph constructor with thing = dod or dol."""
+    # d is a dod or dol representation of a path graph with 3 nodes
+    A = pgv.AGraph(d)
+    assert sorted(A.nodes()) == ["0", "1", "2"]
+    assert sorted(A.edges()) == [("0", "1"), ("1", "2")]
+
+
+def test_agraph_constructor_handle_input():
+    """Test AGraph constructor with thing= a Swig pointer - graph handle."""
+    base = pgv.AGraph({0: [1], 1: [0, 2], 2: [1]})
+    child = pgv.AGraph(base.handle)
+    assert base == child
+    # AGraphs created from handle reference original graph
+    base.remove_node(2)
+    assert sorted(child.nodes()) == ["0", "1"]
+
+
+def test_agraph_constructor_bad_input():
+    """AGraph constructor does not support edge lists."""
+    with pytest.raises(TypeError, match="Unrecognized input"):
+        pgv.AGraph([(0, 1), (1, 2)])
+
+
+def test_agraph_constructor_string_non_standard_encoding():
+    """AGraph constructor with a string specifying non-utf8-encoding."""
+    # A path graph string in .dot format with charset specified
+    dotstring = 'strict graph "" {\n\tcharset="latin1";\n\t0 -- 1;\n\t1 -- 2;\n}\n'
+    A = pgv.AGraph(string=dotstring)
+    assert A.encoding == "latin1"
+    assert sorted(A.edges()) == [("0", "1"), ("1", "2")]
+
+
+def test_agraph_equality_node_attrs():
+    """Graphs are not equal if node attributes differ."""
+    nodes = [0, 1]
+    # Create graphs with the same nodes
+    A, B = pgv.AGraph(), pgv.AGraph()
+    A.add_nodes_from(nodes)
+    B.add_nodes_from(nodes)
+    # Set default attributes for all nodes in each graph
+    A.node_attr["color"] = "red"
+    B.node_attr["color"] = "red"
+    assert A.get_node(1).attr["color"] == "red"
+    assert A == B
+    # Change attribute of a single node in B
+    B.get_node(1).attr["color"] = "blue"
+    # Graphs are no longer considered equal
+    assert not A == B
+
+
+def test_agraph_equality_edge_attrs():
+    """Graphs are not equal if edge attributes differ."""
+    A, B = pgv.AGraph(), pgv.AGraph()
+    A.add_edge(0, 1, weight=1.0)
+    B.add_edge(0, 1, weight=1.0)
+    assert A == B
+    # Change edge attribute
+    B.get_edge(0, 1).attr["weight"] = 2.0
+    assert not A == B
+
+
+def test_agraph_has_edge_single_input_parsing():
+    """If len(args) is 1, args[0] is assumed to be a tuple."""
+    A = pgv.AGraph({0: [1], 1: [0, 2], 2: [1]})
+    assert A.has_edge((0, 1))
+    assert not A.has_edge((0, 3))
