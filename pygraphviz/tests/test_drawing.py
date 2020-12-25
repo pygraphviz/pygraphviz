@@ -75,7 +75,6 @@ def test_drawing_to_create_dot_string():
     # assert expected == dot_rep
 
 
-@pytest.mark.xfail(reason="Tests of experimental Graphviz library interface")
 class TestExperimentalGraphvizLibInterface:
     def test_drawing_error(self):
         with pytest.raises(AttributeError):
