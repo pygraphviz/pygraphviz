@@ -12,7 +12,7 @@ from collections.abc import MutableMapping
 
 from . import graphviz as gv
 
-_DEFAULT_ENCODING = "UTF-8" 
+_DEFAULT_ENCODING = "UTF-8"
 
 
 class PipeReader(threading.Thread):

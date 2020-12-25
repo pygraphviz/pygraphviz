@@ -17,40 +17,19 @@ strict graph {
 See pygraphviz.AGraph for detailed documentation.
 
 """
-#    Copyright (C) 2004-2010 by
-#    Aric Hagberg <hagberg@lanl.gov>
-#    Dan Schult <dschult@colgate.edu>
-#    Manos Renieris, http://www.cs.brown.edu/~er/
-#    Distributed with BSD license.
-#    All rights reserved, see LICENSE for details.
-
 
 # Release data
 from . import release
 
-if release.revision is None:
-    # we probably not running in an svn directory
-    try:
-        # use release data stored at installatation time.
-        from . import version
+__date__ = release.date
+__version__ = release.version
 
-        __version__ = version.__version__
-        __revision__ = version.__revision__
-        __date__ = version.__date__
-    except ImportError:
-        # version.py was not created or no longer exists
-        __version__ = release.version
-        __revision__ = release.revision
-        __date__ = release.date
-else:
-    # use dynamic values, even if version.py exists
-    __version__ = release.version
-    __revision__ = release.revision
-    __date__ = release.date
-
-__author__ = "%s <%s>\n%s <%s>\n%s <%s>" % (
-    release.authors["Hagberg"] + release.authors["Schult"] + release.authors["Renieris"]
+__author__ = (
+    f"{release.authors['Hagberg'][0]} <{release.authors['Hagberg'][1]}>\n"
+    f"{release.authors['Schult'][0]} <{release.authors['Schult'][1]}>\n"
+    f"{release.authors['Renieris'][0]} <{release.authors['Renieris'][1]}>"
 )
+
 __license__ = release.license
 
 from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute, DotError
