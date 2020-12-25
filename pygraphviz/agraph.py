@@ -1,14 +1,6 @@
 """
 A Python interface to Graphviz.
-
 """
-#    Copyright (C) 2006-2011 by
-#    Aric Hagberg <hagberg@lanl.gov>
-#    Dan Schult <dschult@colgate.edu>
-#    Manos Renieris, http://www.cs.brown.edu/~er/
-#    Distributed with BSD license.
-#    All rights reserved, see LICENSE for details.
-
 import os
 import re
 import shlex
@@ -2099,33 +2091,3 @@ class ItemAttribute(Attribute):
                 continue
             except StopIteration:  # gv.agnxtattr is done, as are we
                 return
-
-
-def _test_suite():
-    import doctest
-
-    suite = doctest.DocFileSuite(
-        "tests/graph.txt",
-        "tests/attributes.txt",
-        "tests/layout_draw.txt",
-        "tests/subgraph.txt",
-        package="pygraphviz",
-    )
-    doctest.testmod()  # test docstrings in module
-    return suite
-
-
-if __name__ == "__main__":
-    import sys
-    import unittest
-
-    if sys.version_info[:2] < (3, 6):
-        print(
-            "Python version 3.6 or later required for tests (%d.%d detected)."
-            % sys.version_info[:2]
-        )
-        sys.exit(-1)
-        # directory of package (relative to this)
-    nxbase = sys.path[0] + os.sep + os.pardir
-    sys.path.insert(0, nxbase)  # prepend to search path
-    unittest.TextTestRunner().run(_test_suite())
