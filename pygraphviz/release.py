@@ -37,7 +37,7 @@ dev = True
 
 description = "Python interface to Graphviz"
 long_description = """\
-PyGraphviz is a Python interface to the Graphviz graph layout and visualization package. With PyGraphviz you can create, edit, read, write, and draw graphs using Python to access the Graphviz graph data structure and layout algorithms. PyGraphviz provides a similar programming interface to NetworkX (http://networkx.github.io). 
+PyGraphviz is a Python interface to the Graphviz graph layout and visualization package. With PyGraphviz you can create, edit, read, write, and draw graphs using Python to access the Graphviz graph data structure and layout algorithms. PyGraphviz provides a similar programming interface to NetworkX (https://networkx.org). 
 """
 license = "BSD"
 
