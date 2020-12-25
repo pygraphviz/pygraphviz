@@ -78,7 +78,7 @@ class PNGScraper:
         for png in pngs:
             if png not in self.seen:
                 self.seen |= set(png)
-                this_image_path = image_path_iterator.next()
+                this_image_path = next(image_path_iterator)
                 image_names.append(this_image_path)
                 shutil.move(png, this_image_path)
 

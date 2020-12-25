@@ -1,40 +1,36 @@
-import io
 import os
-
 import pytest
-from pygraphviz.scraper import PNGScraper
 
-simple = """
 import pygraphviz as pgv
-
-A = pgv.AGraph()
-A.add_edge(1, 2)
-A.layout()
-A.draw("simple.png")
-"""
+from pygraphviz.scraper import _get_sg_image_scraper
 
 
 def test_scraper(tmpdir):
     pytest.importorskip("sphinx_gallery")
-    scraper = PNGScraper()
+    scraper = _get_sg_image_scraper()
+
+    ### Source
     src_dir = str(tmpdir)
-    out_dir = os.path.join(str(tmpdir), "build", "html")
-    img_fname = os.path.join(src_dir, "auto_examples", "images", "sg_img.png")
-    gallery_conf = {"src_dir": src_dir, "builder_name": "html"}
-    target_file = os.path.join(src_dir, "auto_examples", "plot_test.py")
-    print(target_file)
+    src_file = os.path.join(src_dir, "simple.py")  # no need for this to exist
+    # Create source PNG
+    A = pgv.AGraph()
+    A.add_edge(1, 2)
+    A.layout()
+    A.draw(os.path.join(src_dir, "simple.png"))
+
+    ### Target
+    out_dir = os.path.join(src_dir, "build", "html")
+    os.makedirs(out_dir)
+    out_file = os.path.join(out_dir, "simple.png")
+    # Target should **not** exist
+    assert not os.path.isfile(out_file)
+    # Copy source PNG to target location
     block = None
     block_vars = dict(
-        image_path_iterator=(img for img in [img_fname]),
-        example_globals=dict(a=1),
-        src_file=target_file,
+        image_path_iterator=(img for img in [out_file]),
+        src_file=src_file,
     )
-    os.makedirs(os.path.dirname(img_fname))
-    with open(target_file, "w") as fh:
-        fh.write('"""\nSimple\n======\n"""')
-        fh.write(simple)
-    assert not os.path.isfile(img_fname)
-    os.makedirs(out_dir)
+    gallery_conf = {"src_dir": src_dir, "builder_name": "html"}
     scraper(block, block_vars, gallery_conf)
-    print(img_fname)
-    assert os.path.isfile(img_fname)
+    # Target should exist
+    assert os.path.isfile(out_file)
