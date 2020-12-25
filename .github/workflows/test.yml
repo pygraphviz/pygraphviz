@@ -36,13 +36,12 @@ jobs:
     - name: Install packages
       run: |
         pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
         pip install .
         pip list
 
     - name: Test pygraphviz
-      run: pytest --pyargs pygraphviz
+      run: pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
   fedora:
@@ -78,7 +77,6 @@ jobs:
       run: |
         source ~/venv/bin/activate
         pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
         pip install .
         pip list
@@ -86,7 +84,7 @@ jobs:
     - name: Test pygraphviz
       run: |
         source ~/venv/bin/activate
-        pytest --pyargs pygraphviz
+        pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
   macos:
@@ -118,13 +116,12 @@ jobs:
     - name: Install packages
       run: |
         pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
         pip install .
         pip list
 
     - name: Test pygraphviz
-      run: pytest --pyargs pygraphviz
+      run: pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
   macports:
@@ -162,7 +159,6 @@ jobs:
     - name: Install packages
       run: |
         pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt
         pip install -r requirements/test.txt
         pip install --global-option=build_ext --global-option="-I/opt/local/include/" --global-option="-L/opt/local/lib/" .
         pip list
@@ -170,7 +166,7 @@ jobs:
     - name: Test pygraphviz
       run: |
         export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-        pytest --pyargs pygraphviz
+        pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
 #  windows:
@@ -205,7 +201,6 @@ jobs:
 #        dot -c
 #        dot -v
 #        pip install --upgrade pip wheel setuptools --user
-#        pip install -r requirements/doc.txt --user
 #        pip install -r requirements/test.txt --user
 #        python setup.py build_ext --include-dirs="C:\Program Files\Graphviz 2.44.1\include" --library-dirs="C:\Program Files\Graphviz 2.44.1\lib"
 #        python setup.py install --user
@@ -217,4 +212,4 @@ jobs:
 #        $graphviz_path = "C:\Program Files\Graphviz 2.44.1\bin"
 #        [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
 #        [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
-#        pytest --pyargs pygraphviz
+#        pytest --doctest-modules --durations=10 --pyargs pygraphviz

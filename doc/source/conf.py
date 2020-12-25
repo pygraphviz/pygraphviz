@@ -2,16 +2,9 @@ from datetime import date
 import sphinx_rtd_theme
 from warnings import filterwarnings
 
-from pygraphviz.scraper import PNGScraper
-
 filterwarnings(
     "ignore", message="Matplotlib is currently using agg", category=UserWarning
 )
-
-# If your extensions are in another directory, add it here.
-#sys.path.append(os.path.dirname(__file__))
-#sys.path.append(os.path.abspath('../sphinxext'))
-#sys.path.append(os.path.abspath('../sphinxext/numpyext'))
 
 # General configuration
 # ---------------------
@@ -52,7 +45,7 @@ sphinx_gallery_conf = {
     "examples_dirs": "../../examples",
     "gallery_dirs": "auto_examples",
     "ignore_pattern": "skip_",
-    "image_scrapers": (PNGScraper(),),
+    "image_scrapers": ('pygraphviz',),
 }
 
 
