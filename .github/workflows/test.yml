@@ -31,17 +31,19 @@ jobs:
     - name: Create venv
       run: |
         python3 -m venv ~/venv
-        source ~/venv/bin/activate
 
     - name: Install packages
       run: |
+        source ~/venv/bin/activate
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/test.txt
         pip install .
         pip list
 
     - name: Test pygraphviz
-      run: pytest --doctest-modules --durations=10 --pyargs pygraphviz
+      run: |
+        source ~/venv/bin/activate
+        pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
   fedora:
@@ -87,7 +89,7 @@ jobs:
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
-  macos:
+  brew:
 
     runs-on: macOS-latest
 
@@ -111,17 +113,19 @@ jobs:
     - name: Create venv
       run: |
         python3 -m venv ~/venv
-        source ~/venv/bin/activate
 
     - name: Install packages
       run: |
+        source ~/venv/bin/activate
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/test.txt
         pip install .
         pip list
 
     - name: Test pygraphviz
-      run: pytest --doctest-modules --durations=10 --pyargs pygraphviz
+      run: |
+        source ~/venv/bin/activate
+        pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
   macports:
@@ -154,18 +158,22 @@ jobs:
     - name: Create venv
       run: |
         python3 -m venv ~/venv
-        source ~/venv/bin/activate
 
     - name: Install packages
       run: |
+        source ~/venv/bin/activate
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/test.txt
-        pip install --global-option=build_ext --global-option="-I/opt/local/include/" --global-option="-L/opt/local/lib/" .
+        pip install --global-option=build_ext \
+                    --global-option="-I/opt/local/include/" \
+                    --global-option="-L/opt/local/lib/" \
+                    .
         pip list
 
     - name: Test pygraphviz
       run: |
         export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+        source ~/venv/bin/activate
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
