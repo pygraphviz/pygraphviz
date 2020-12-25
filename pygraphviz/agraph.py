@@ -1446,11 +1446,8 @@ class AGraph:
 
         >>> A=AGraph()
         >>> A.add_edge(1, 2)
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> A.layout()  # doctest: +SKIP
         >>> A.layout()
-        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")  # doctest: +SKIP
+        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")
 
         Use keyword args to add additional arguments to graphviz programs.
 
@@ -1476,12 +1473,8 @@ class AGraph:
 
         >>> A=AGraph()
         >>> A.add_edge(1, 2)
-        >>> # uses neato by default
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> A.layout()  # doctest: +SKIP
         >>> A.layout()
-        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")  # doctest: +SKIP
+        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")
 
         Use keyword args to add additional arguments to graphviz programs.
 
@@ -1542,23 +1535,17 @@ class AGraph:
 
         >>> G = AGraph()
         >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> G.layout() # doctest: +SKIP
+        >>> G.layout()
 
         # use current node positions, output pdf in 'file.pdf'
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> G.draw('file.pdf') # doctest: +SKIP
+        >>> G.draw('file.pdf')
 
         # use dot to position, output png in 'file'
         >>> G.draw('file', format='png', prog='dot')
 
         # use keyword 'args' to pass additional arguments to graphviz
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')  # doctest: +SKIP
-        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')  # doctest: +SKIP
+        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')
+        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')
 
         The layout might take a long time on large graphs.
 
@@ -1646,23 +1633,17 @@ class AGraph:
 
         >>> G = AGraph()
         >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> G.layout() # doctest: +SKIP
+        >>> G.layout()
 
         # use current node positions, output pdf in 'file.pdf'
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> G.draw('file.pdf') # doctest: +SKIP
+        >>> G.draw('file.pdf')
 
         # use dot to position, output png in 'file'
         >>> G.draw('file', format='png', prog='dot')
 
         # use keyword 'args' to pass additional arguments to graphviz
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')  # doctest: +SKIP
-        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')  # doctest: +SKIP
+        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')
+        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')
 
         The layout might take a long time on large graphs.
 
@@ -1671,7 +1652,7 @@ class AGraph:
         if format is None and path is not None:
             p = path
             # in case we got a file handle get its name instead
-            if not is_string_like(p):
+            if not isinstance(p, str):
                 p = path.name
             format = os.path.splitext(p)[-1].lower()[1:]
 
@@ -1732,7 +1713,7 @@ class AGraph:
         err = gv.gvRender(gvc, G, format, fh)
         if err:
             raise ValueError("Graphviz raised a render error. Maybe bad format?")
-        if is_string_like(path):
+        if isinstance(path, str):
             fh.close()
         gv.gvFreeLayout(gvc, G)
         gv.gvFreeContext(gvc)
