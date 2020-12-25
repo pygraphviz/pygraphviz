@@ -204,25 +204,25 @@ jobs:
     - name: List
       run: | 
         Get-ChildItem "C:\Program Files\" 
-        Get-ChildItem "C:\Program Files (x86)\"
+        Get-ChildItem "C:\Program Files\Graphviz\" 
 
     - name: Install packages
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
-        $graphviz_path = "C:\Program Files\Graphviz 2.44.2\bin"
+        $graphviz_path = "C:\Program Files\Graphviz\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         dot -c
         dot -v
         pip install --upgrade pip wheel setuptools --user
         pip install -r requirements/test.txt --user
-        python setup.py build_ext --include-dirs="C:\Program Files\Graphviz 2.44.2\include" --library-dirs="C:\Program Files\Graphviz 2.44.2\lib"
+        python setup.py build_ext --include-dirs="C:\Program Files\Graphviz\include" --library-dirs="C:\Program Files\Graphviz\lib"
         python setup.py install --user
         pip list
 
     - name: Test pygraphviz
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
-        $graphviz_path = "C:\Program Files\Graphviz 2.44.2\bin"
+        $graphviz_path = "C:\Program Files\Graphviz\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
