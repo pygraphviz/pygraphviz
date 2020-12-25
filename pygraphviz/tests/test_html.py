@@ -1,11 +1,6 @@
 import pygraphviz as pgv
 
-
-def stringify(agraph):
-    result = agraph.string().split()
-    if '""' in result:
-        result.remove('""')
-    return " ".join(result)
+stringify = pgv.testing.stringify
 
 
 long_html_string = """<<TABLE BORDER=0>
@@ -49,7 +44,6 @@ def test_long_html_string():
     G.add_edge("a", "b", label="<Hello<BR/>Edge>")
     ans = """strict graph {{
               graph [label=<Hello<BR/>Graph>];
-              node [label="\\N"];
               {{
                 graph [label=<Hello<BR/>Subgraph>];
                 sa     [label=<Hello<BR/>Subgraph Node b>];
@@ -70,7 +64,6 @@ def test_html():
     G.add_edge("a", "b", label="<Hello<BR/>Edge>")
     ans = """strict graph {
       graph [label=<Hello<BR/>Graph>];
-      node [label="\\N"];
       {
         graph [label=<Hello<BR/>Subgraph>];
         sa [label=<Hello<BR/>Subgraph Node b>];

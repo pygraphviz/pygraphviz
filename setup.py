@@ -54,7 +54,7 @@ if __name__ == "__main__":
             # is first, the implicit inclusion of cdt can lead to an incomplete
             # link list, having only cdt and preventing the module from being loaded with
             # undefined symbol errors. seen under PyPy on Linux.)
-            libraries=["cdt", "cgraph"],
+            libraries=["cdt", "cgraph", "gvc"],
             define_macros=define_macros
         )
     ]

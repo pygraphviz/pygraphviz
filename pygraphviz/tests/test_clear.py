@@ -16,7 +16,7 @@ def test_clear_node_with_attributes():
     A.clear()
     assert len(A) == 0
     assert A.nodes() == []
-    assert A.node_attr.keys() == []
+    assert A.node_attr.keys() in ([], ["label"])
 
 
 def test_clear_graph_attributes():
@@ -27,5 +27,5 @@ def test_clear_graph_attributes():
     A.clear()
     assert len(A) == 0
     assert A.nodes() == []
-    assert A.node_attr.keys() == []
+    assert A.node_attr.keys() in ([], ["label"])
     assert A.graph_attr.keys() == []

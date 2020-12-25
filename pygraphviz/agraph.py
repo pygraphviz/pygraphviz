@@ -9,6 +9,7 @@ A Python interface to Graphviz.
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
 
+import os
 import re
 import shlex
 import subprocess
@@ -244,9 +245,13 @@ class AGraph:
         if sorted(self.edges()) != sorted(other.edges()):
             return False
         # check attributes
-        if tuple(dict(n.attr) for n in sorted(self.nodes_iter())) != tuple(dict(n.attr) for n in sorted(other.nodes_iter())):
+        self_node_attr = tuple(dict(n.attr) for n in sorted(self.nodes_iter()))
+        other_node_attr = tuple(dict(n.attr) for n in sorted(other.nodes_iter()))
+        if self_node_attr != other_node_attr:
             return False
-        if tuple(dict(e.attr) for e in sorted(self.edges_iter())) != tuple(dict(e.attr) for e in sorted(other.edges_iter())):
+        self_edge_attr = tuple(dict(e.attr) for e in sorted(self.edges_iter()))
+        other_edge_attr = tuple(dict(e.attr) for e in sorted(other.edges_iter()))
+        if self_edge_attr != other_edge_attr:
             return False
         # We could check the default attributes too.
         # But they aren't reflected in the attibutes until node is added.
@@ -263,9 +268,9 @@ class AGraph:
     def __hash__(self):
         # include nodes and edges in hash
         # Could do attributes too, but hash should be fast
-        return hash((tuple(sorted(self.nodes_iter())),
-                     tuple(sorted(self.edges_iter())),
-                     ))
+        return hash(
+            (tuple(sorted(self.nodes_iter())), tuple(sorted(self.edges_iter())),)
+        )
 
     def __iter__(self):
         # provide "for n in G"
@@ -1000,7 +1005,7 @@ class AGraph:
 
     def copy(self):
         """Return a copy of the graph.
-        
+
         Notes
         =====
         Versions <=1.6 made a copy by writing and the reading a dot string.
@@ -1268,15 +1273,15 @@ class AGraph:
         return self.draw(format="dot", prog="nop").decode(self.encoding)
 
     def to_string(self):
-        """Return a string (unicode) representation of graph in dot format."""
+        """Return a string representation of graph in dot format.
+
+        `to_string()` uses "agwrite" to produce "dot" format w/o rendering.
+        The function `string_nop()` layouts with "nop" and renders to "dot".
+        """
         from tempfile import TemporaryFile
 
         fh = TemporaryFile()
-        # Cover TemporaryFile wart: on 'nt' we need the file member
-        if hasattr(fh, "file"):
-            self.write(fh.file)
-        else:
-            self.write(fh)
+        self.write(fh)
         fh.seek(0)
         data = fh.read()
         fh.close()
@@ -1284,8 +1289,8 @@ class AGraph:
 
     def string(self):
         """Return a string (unicode) representation of graph in dot format."""
-        #        return self.to_string()
-        return self.string_nop()
+        return self.to_string()
+        # return self.string_nop()
 
     def from_string(self, string):
         """Load a graph from a string in dot format.
@@ -1310,11 +1315,7 @@ class AGraph:
         fh = TemporaryFile()
         fh.write(string.encode(self.encoding))
         fh.seek(0)
-        # Cover TemporaryFile wart: on 'nt' we need the file member
-        if hasattr(fh, "file"):
-            self.read(fh.file)
-        else:
-            self.read(fh)
+        self.read(fh)
         fh.close()
         return self
 
@@ -1404,29 +1405,6 @@ class AGraph:
         self.from_string(data)
         return self
 
-    def layout(self, prog="neato", args=""):
-        """Assign positions to nodes in graph.
-
-        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
-        will use specified graphviz layout method.
-
-        >>> A=AGraph()
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> A.layout() # doctest: +SKIP
-        >>> A.layout(prog='dot')
-
-        Use keyword args to add additional arguments to graphviz programs.
-
-        The layout might take a long time on large graphs.
-
-        """
-        fmt = "dot"
-        data = self._run_prog(prog, " ".join([args, "-T", fmt]))
-        self.from_string(data)
-        self.has_layout = True
-        return
-
     def tred(self, args="", copy=False):
         """Transitive reduction of graph.  Modifies existing graph.
 
@@ -1460,6 +1438,77 @@ class AGraph:
         else:
             return self.from_string(data)
 
+    def layout(self, prog="neato", args=""):
+        """Assign positions to nodes in graph.
+
+        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
+        will use specified graphviz layout method.
+
+        >>> A=AGraph()
+        >>> A.add_edge(1, 2)
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> A.layout()  # doctest: +SKIP
+        >>> A.layout()
+        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")  # doctest: +SKIP
+
+        Use keyword args to add additional arguments to graphviz programs.
+
+        The layout might take a long time on large graphs.
+
+        """
+        output_fmt = "dot"
+        data = self._run_prog(prog, " ".join([args, "-T", output_fmt]))
+        self.from_string(data)
+        self.has_layout = True
+        return
+
+    def _layout(self, prog="neato", args=""):
+        """Assign positions to nodes in graph.
+
+        .. caution:: EXPERIMENTAL
+
+        This version of the layout command uses libgvc for layout instead
+        of command line GraphViz tools like in versions <1.6 and the default.
+
+        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
+        will use specified graphviz layout method.
+
+        >>> A=AGraph()
+        >>> A.add_edge(1, 2)
+        >>> # uses neato by default
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> A.layout()  # doctest: +SKIP
+        >>> A.layout()
+        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")  # doctest: +SKIP
+
+        Use keyword args to add additional arguments to graphviz programs.
+
+        The layout might take a long time on large graphs.
+
+        Note: attaching positions in the AGraph usually doesn't affect the
+        next rendering. The positions are recomputed. But if you use prog="nop"
+        when rendering, it will take node positions from the AGraph attributes.
+        If you use prog="nop2" it will take node and edge positions from the
+        AGraph when rendering.
+        """
+        _ , prog = self._manually_parse_args(args, None, prog)
+
+        # convert input strings to type bytes (encode it)
+        if isinstance(prog, str):
+            prog = prog.encode(self.encoding)
+
+        gvc = gv.gvContext()
+        gv.gvLayout(gvc, self.handle, prog)
+        gv.gvRender(gvc, self.handle, format=b"dot", out=None)
+
+        gv.gvFreeLayout(gvc, self.handle)
+        gv.gvFreeContext(gvc)
+
+        self.has_layout = True
+        return
+
     def draw(self, path=None, format=None, prog=None, args=""):
         """Output graph to path in specified format.
 
@@ -1471,6 +1520,8 @@ class AGraph:
         then the method for discovering the format will not work.  In such
         cases, one should explicitly set the `format` parameter; otherwise, it
         will default to 'dot'.
+
+        If path is None, the result is returned as a Bytes object.
 
         Formats (not all may be available on every system depending on
         how Graphviz was built)
@@ -1490,28 +1541,28 @@ class AGraph:
         will use specified graphviz layout method.
 
         >>> G = AGraph()
+        >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
         >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
         >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
         >>> G.layout() # doctest: +SKIP
 
-        # use current node positions, output ps in 'file.ps'
+        # use current node positions, output pdf in 'file.pdf'
         >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
         >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> G.draw('file.ps') # doctest: +SKIP
+        >>> G.draw('file.pdf') # doctest: +SKIP
 
         # use dot to position, output png in 'file'
-        >>> G.draw('file', format='png',prog='dot')
+        >>> G.draw('file', format='png', prog='dot')
 
         # use keyword 'args' to pass additional arguments to graphviz
         >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
         >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> G.draw('test.ps',prog='twopi',args='-Gepsilon=1')  # doctest: +SKIP
+        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')  # doctest: +SKIP
+        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')  # doctest: +SKIP
 
         The layout might take a long time on large graphs.
 
         """
-        import os
-
         # try to guess format from extension
         if format is None and path is not None:
             p = path
@@ -1529,7 +1580,7 @@ class AGraph:
                 args += "-n2"
             else:
                 raise AttributeError(
-                    """Graph has no layout information, see layout() or specify prog=%s."""
+                    "Graph has no layout information, see layout() or specify prog=%s."
                     % ("|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"]))
                 )
 
@@ -1557,7 +1608,161 @@ class AGraph:
             d = data
         return d
 
+    def _draw(self, path=None, format=None, prog=None, args=""):
+        """Output graph to path in specified format.
+
+        .. caution:: EXPERIMENTAL
+
+        This version of the draw command uses libgvc for drawing instead
+        of command line GraphViz tools like in versions <1.6 and the default.
+
+        An attempt will be made to guess the output format based on the file
+        extension of `path`.  If that fails, then the `format` parameter will
+        be used.
+
+        Note, if `path` is a file object returned by a call to os.fdopen(),
+        then the method for discovering the format will not work.  In such
+        cases, one should explicitly set the `format` parameter; otherwise, it
+        will default to 'dot'.
+
+        If path is None, the result is returned as a Bytes object.
+
+        Formats (not all may be available on every system depending on
+        how Graphviz was built)
+
+            'canon', 'cmap', 'cmapx', 'cmapx_np', 'dia', 'dot',
+            'fig', 'gd', 'gd2', 'gif', 'hpgl', 'imap', 'imap_np',
+            'ismap', 'jpe', 'jpeg', 'jpg', 'mif', 'mp', 'pcl', 'pdf',
+            'pic', 'plain', 'plain-ext', 'png', 'ps', 'ps2', 'svg',
+            'svgz', 'vml', 'vmlz', 'vrml', 'vtx', 'wbmp', 'xdot', 'xlib'
+
+
+        If prog is not specified and the graph has positions
+        (see layout()) then no additional graph positioning will
+        be performed.
+
+        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
+        will use specified graphviz layout method.
+
+        >>> G = AGraph()
+        >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> G.layout() # doctest: +SKIP
+
+        # use current node positions, output pdf in 'file.pdf'
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> G.draw('file.pdf') # doctest: +SKIP
+
+        # use dot to position, output png in 'file'
+        >>> G.draw('file', format='png', prog='dot')
+
+        # use keyword 'args' to pass additional arguments to graphviz
+        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
+        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
+        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')  # doctest: +SKIP
+        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')  # doctest: +SKIP
+
+        The layout might take a long time on large graphs.
+
+        """
+        # try to guess format from extension
+        if format is None and path is not None:
+            p = path
+            # in case we got a file handle get its name instead
+            if not is_string_like(p):
+                p = path.name
+            format = os.path.splitext(p)[-1].lower()[1:]
+
+        if format is None or format == "":
+            format = "dot"
+
+        if prog is None:
+            if self.has_layout:
+                prog = "neato"
+                args += " -n2"
+            else:
+                raise AttributeError(
+                    """Graph has no layout information, see layout() or specify prog=%s."""
+                    % ("|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"]))
+                )
+
+        else:
+            if self.number_of_nodes() > 1000:
+                sys.stderr.write(
+                    "Warning: graph has %s nodes...layout may take a long time.\n"
+                    % self.number_of_nodes()
+                )
+
+        # process args
+        format, prog = self._manually_parse_args(args, format, prog)
+
+        # convert input strings to type bytes (encode it)
+        if isinstance(format, str):
+            format = format.encode(self.encoding)
+        if isinstance(prog, str):
+            prog = prog.encode(self.encoding)
+
+        # Start the drawing
+        gvc = gv.gvContext()
+        G = self.handle
+
+        # Layout
+        err = gv.gvLayout(gvc, G, prog)
+        if err:
+            if err != -1:
+                raise ValueError("Graphviz raised a layout error.")
+            prog = prog.decode(self.encoding)
+            raise ValueError(f"Can't find prog={prog} in this graphviz installation")
+
+        # Render
+        if path is None:
+            out = gv.gvRenderData(gvc, G, format)
+            if out[0]:
+                raise ValueError(f"Graphviz Error creating dot representation:{out[0]}")
+            err, dot_string, length = out
+            assert len(dot_string) == length
+            gv.gvFreeLayout(gvc, G)
+            gv.gvFreeContext(gvc)
+            return dot_string
+
+        # path is string holding the filename, a file handle, or pathlib.Path
+        fh = self._get_fh(path, "wb")
+        err = gv.gvRender(gvc, G, format, fh)
+        if err:
+            raise ValueError("Graphviz raised a render error. Maybe bad format?")
+        if is_string_like(path):
+            fh.close()
+        gv.gvFreeLayout(gvc, G)
+        gv.gvFreeContext(gvc)
+
     # some private helper functions
+
+    def _manually_parse_args(self, args, format=None, prog=None):
+        """Experimental code to parse args relevant for libgvc drawing and layout"""
+        arg_list = shlex.split(args)
+        for arg in arg_list:
+            value = arg[2:]
+            if arg[:2] == "-T":
+                if format and format != value:
+                    raise ValueError("format doesnt match in args and format inputs")
+                format = value
+            if arg[:2] == "-K":
+                if prog and prog != value:
+                    prog = value
+                    # raise ValueError("prog doesnt match in args and prog inputs")
+                prog = value
+            if arg[:2] == "-G":
+                key, val = value.split("=")
+                self.graph_attr[key] = val
+            if arg[:2] == "-N":
+                key, val = value.split("=")
+                self.node_attr[key] = val
+            if arg[:2] == "-E":
+                key, val = value.split("=")
+                self.edge_attr[key] = val
+        return format, prog
 
     def _get_fh(self, path, mode="r"):
         """ Return a file handle for given path.
@@ -1589,16 +1794,11 @@ class AGraph:
 
     def _which(self, name):
         """Searches for name in exec path and returns full path"""
-        import os
         import glob
 
         paths = os.environ["PATH"]
-        if os.name == "nt":
-            exe = ".exe"
-        else:
-            exe = ""
         for path in paths.split(os.pathsep):
-            match = glob.glob(os.path.join(path, name + exe))
+            match = glob.glob(os.path.join(path, name))
             if match:
                 return match[0]
         raise ValueError("No prog %s in path." % name)
@@ -1935,7 +2135,6 @@ def _test_suite():
 
 
 if __name__ == "__main__":
-    import os
     import sys
     import unittest
 
