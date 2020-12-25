@@ -205,6 +205,9 @@ jobs:
       run: | 
         Get-ChildItem "C:\Program Files\" 
         Get-ChildItem "C:\Program Files\Graphviz\" 
+        Get-ChildItem "C:\Program Files\Graphviz\bin\" 
+        Get-ChildItem "C:\Program Files\Graphviz\include\" 
+        Get-ChildItem "C:\Program Files\Graphviz\lib\" 
 
     - name: Install packages
       run: |
