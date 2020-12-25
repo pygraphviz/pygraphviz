@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Setup script for PyGraphviz
 """
@@ -21,7 +20,6 @@ if sys.version_info[:2] < (3, 7):
     sys.exit(-1)
 
 # Write the version information.
-#TODO rework this import hack with import graphviz.release or import graphviz.version ( doesn't work now because of code in the __init__)
 sys.path.insert(0, 'pygraphviz')
 import release
 release.write_versionfile()

@@ -1,9 +1,6 @@
 import pygraphviz as pgv
 import sys
 
-_PY2 = sys.version_info[0] == 2
-_TEXT_TYPE = unicode if _PY2 else str
-
 
 def test_name_unicode():
     A = pgv.AGraph(name="unicode")
@@ -38,8 +35,8 @@ def test_from_string():
     t = "测试"
     G = pgv.AGraph()
     G.add_node(t)
-    ug = _TEXT_TYPE(G)
+    ug = str(G)
     sg = str(G)
     G1 = pgv.AGraph(ug)
     G2 = pgv.AGraph(sg)
-    assert _TEXT_TYPE(G1) == _TEXT_TYPE(G2)
+    assert str(G1) == str(G2)
