@@ -139,6 +139,10 @@ class TestExperimentalGraphvizLibInterface:
         with TemporaryFile() as fh:
             A._draw(fh, format="png", prog="twopi")
             assert fh.tell() > 0
+
+    def test_drawing_makes_file1(self):
+        A = pgv.AGraph(name="test graph")
+        A.add_path([1, 2, 3, 4])
         with TemporaryFile() as fh:
             A._draw(path=fh, prog="circo", format="png")
             assert fh.tell() > 0
