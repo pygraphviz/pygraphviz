@@ -54,7 +54,7 @@ with open("pygraphviz/__init__.py") as fid:
             break
 
 packages = ["pygraphviz", "pygraphviz.tests"]
-docdirbase = "share/doc/pygraphviz-%s" % version
+docdirbase = f"share/doc/pygraphviz-{version}"
 data = [
     (docdirbase, glob("*.txt")),
     (os.path.join(docdirbase, "examples"), glob("examples/*.py")),

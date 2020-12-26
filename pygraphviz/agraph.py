@@ -145,7 +145,7 @@ class AGraph:
             elif hasattr(thing, "open"):
                 filename = thing  # assume this is a file name (in a path obj)
             else:
-                raise TypeError("Unrecognized input %s" % thing)
+                raise TypeError(f"Unrecognized input {thing}")
 
         if handle is not None:
             # if handle was specified, reference it
@@ -188,7 +188,7 @@ class AGraph:
                     # instantiate a new, empty graph
                 self.handle = gv.agraphnew(name.encode(self.encoding), strict, directed)
             except TypeError:
-                raise TypeError("Graph name must be a string: %s" % name)
+                raise TypeError(f"Graph name must be a string: {name}")
 
             # encoding is already set but if it was specified explicitly
             # as an attr, then set it explicitly for the graph
@@ -226,7 +226,7 @@ class AGraph:
     def __repr__(self):
         name = gv.agnameof(self.handle)
         if name is None:
-            return "<AGraph %s>" % self.handle
+            return f"<AGraph {self.handle}>"
         return f"<AGraph {name} {self.handle}>"
 
     def __eq__(self, other):
@@ -365,7 +365,7 @@ class AGraph:
             nh = gv.agnode(self.handle, n, _Action.find)
             gv.agdelnode(self.handle, nh)
         except KeyError:
-            raise KeyError("Node %s not in graph." % n.decode(self.encoding))
+            raise KeyError(f"Node {n.decode(self.encoding)} not in graph.")
 
     delete_node = remove_node
 
@@ -1050,7 +1050,7 @@ class AGraph:
             handle = gv.agsubg(self.handle, name, _Action.create)
         except TypeError:
             raise TypeError(
-                "Subgraph name must be a string: %s" % name.decode(self.encoding)
+                f"Subgraph name must be a string: {name.decode(self.encoding)}"
             )
 
         H = self.__class__(
@@ -1075,9 +1075,9 @@ class AGraph:
         try:
             handle = gv.agsubg(self.handle, name.encode(self.encoding), _Action.find)
         except TypeError:
-            raise TypeError("Subgraph name must be a string: %s" % name)
+            raise TypeError(f"Subgraph name must be a string: {name}")
         if handle is None:
-            raise KeyError("Subgraph %s not in graph." % name)
+            raise KeyError(f"Subgraph {name} not in graph.")
         gv.agdelsubg(self.handle, handle)
 
     delete_subgraph = remove_subgraph
@@ -1113,7 +1113,7 @@ class AGraph:
         try:
             handle = gv.agsubg(self.handle, name.encode(self.encoding), _Action.find)
         except TypeError:
-            raise TypeError("Subgraph name must be a string: %s" % name)
+            raise TypeError(f"Subgraph name must be a string: {name}")
 
         if handle is None:
             return None
@@ -1331,12 +1331,12 @@ class AGraph:
             "unflatten",
         ]
         if prog not in progs:
-            raise ValueError("Program %s is not one of: %s." % (prog, ", ".join(progs)))
+            raise ValueError(f"Program {prog} is not one of: {', '.join(progs)}.")
 
         try:  # user must pick one of the graphviz programs...
             runprog = self._which(prog)
         except:
-            raise ValueError("Program %s not found in path." % prog)
+            raise ValueError(f"Program {prog} not found in path.")
 
         return runprog
 
@@ -1774,7 +1774,7 @@ class AGraph:
             match = glob.glob(os.path.join(path, name))
             if match:
                 return match[0]
-        raise ValueError("No prog %s in path." % name)
+        raise ValueError(f"No prog {name} in path.")
 
     def _update_handle_references(self):
         try:
@@ -1822,7 +1822,7 @@ class Node(str):
             try:
                 nh = gv.agnode(graph.handle, n.encode(graph.encoding), _Action.find)
             except KeyError:
-                raise KeyError("Node %s not in graph." % n)
+                raise KeyError(f"Node {n} not in graph.")
 
         n.ghandle = graph.handle
         n.attr = ItemAttribute(nh, 1)
