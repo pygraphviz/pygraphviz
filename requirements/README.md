@@ -6,6 +6,8 @@
   Requirements for running test suite
 - [`doc.txt`](doc.txt)
   Requirements for building the documentation (see `../doc/`)
+- [`developer.txt`](developer.txt)
+  Requirements for developers
 
 ## Examples
 
