@@ -3,6 +3,7 @@ import sys
 
 import pygraphviz as pgv
 
+
 def test_layout():
     A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4])

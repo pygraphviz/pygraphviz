@@ -16,8 +16,7 @@ _DEFAULT_ENCODING = "UTF-8"
 
 
 class PipeReader(threading.Thread):
-    """Read and write pipes using threads.
-    """
+    """Read and write pipes using threads."""
 
     def __init__(self, result, pipe):
         threading.Thread.__init__(self)
@@ -48,25 +47,25 @@ class AGraph:
 
     Example use
 
-    >>> from pygraphviz import *
-    >>> G=AGraph()
-    >>> G=AGraph(directed=True)
-    >>> G=AGraph("file.dot")   # doctest: +SKIP
+    >>> import pygraphviz as pgv
+    >>> G = pgv.AGraph()
+    >>> G = pgv.AGraph(directed=True)
+    >>> G = pgv.AGraph("file.dot")  # doctest: +SKIP
 
     Graphviz graph keyword parameters are processed so you may add
     them like
 
-    >>> G=AGraph(landscape='true',ranksep='0.1')
+    >>> G = pgv.AGraph(landscape="true", ranksep="0.1")
 
     or alternatively
 
-    >>> G=AGraph()
-    >>> G.graph_attr.update(landscape='true',ranksep='0.1')
+    >>> G = pgv.AGraph()
+    >>> G.graph_attr.update(landscape="true", ranksep="0.1")
 
     and
 
-    >>> G.node_attr.update(color='red')
-    >>> G.edge_attr.update(len='2.0',color='blue')
+    >>> G.node_attr.update(color="red")
+    >>> G.edge_attr.update(len="2.0", color="blue")
 
     See http://www.graphviz.org/doc/info/attrs.html
     for a list of attributes.
@@ -77,12 +76,12 @@ class AGraph:
     dictionary of dictionaries).  An attempt is made to automaticaly
     detect the type so you may write for example:
 
-    >>> d={'1': {'2': None}, '2': {'1': None, '3': None}, '3': {'2': None}}
-    >>> A=AGraph(d)
-    >>> s=A.to_string()
-    >>> B=AGraph(s)
-    >>> h=B.handle
-    >>> C=AGraph(h)
+    >>> d = {"1": {"2": None}, "2": {"1": None, "3": None}, "3": {"2": None}}
+    >>> A = pgv.AGraph(d)
+    >>> s = A.to_string()
+    >>> B = pgv.AGraph(s)
+    >>> h = B.handle
+    >>> C = pgv.AGraph(h)
 
     Parameters::
 
@@ -261,7 +260,10 @@ class AGraph:
         # include nodes and edges in hash
         # Could do attributes too, but hash should be fast
         return hash(
-            (tuple(sorted(self.nodes_iter())), tuple(sorted(self.edges_iter())),)
+            (
+                tuple(sorted(self.nodes_iter())),
+                tuple(sorted(self.edges_iter())),
+            )
         )
 
     def __iter__(self):
@@ -301,18 +303,19 @@ class AGraph:
         String conversion will work if n has valid string representation
         (try str(n) if you are unsure).
 
-        >>> G=AGraph()
-        >>> G.add_node('a')
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> G.add_node("a")
         >>> G.nodes()
         ['a']
-        >>> G.add_node(1) # will be converted to a string
+        >>> G.add_node(1)  # will be converted to a string
         >>> G.nodes()
         ['a', '1']
 
         Attributes can be added to nodes on creation or updated after creation
         (attribute values must be strings)
 
-        >>> G.add_node(2,color='red')
+        >>> G.add_node(2, color="red")
 
         See http://www.graphviz.org/doc/info/attrs.html
         for a list of attributes.
@@ -334,8 +337,9 @@ class AGraph:
 
         nbunch can be any iterable container such as a list or dictionary
 
-        >>> G=AGraph()
-        >>> nlist=['a','b',1,'spam']
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> nlist = ["a", "b", 1, "spam"]
         >>> G.add_nodes_from(nlist)
         >>> sorted(G.nodes())
         ['1', 'a', 'b', 'spam']
@@ -343,7 +347,7 @@ class AGraph:
 
         Attributes can be added to nodes on creation or updated after creation
 
-        >>> G.add_nodes_from(nlist, color='red') # set all nodes in nlist red
+        >>> G.add_nodes_from(nlist, color="red")  # set all nodes in nlist red
         """
         for n in nbunch:
             self.add_node(n, **attr)
@@ -354,9 +358,10 @@ class AGraph:
         Attempting to remove a node that isn't in the graph will produce
         an error.
 
-        >>> G=AGraph()
-        >>> G.add_node('a')
-        >>> G.remove_node('a')
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> G.add_node("a")
+        >>> G.remove_node("a")
         """
         if not isinstance(n, str):
             n = str(n)
@@ -374,8 +379,9 @@ class AGraph:
 
         nbunch can be any iterable container such as a list or dictionary
 
-        >>> G=AGraph()
-        >>> nlist=['a','b',1,'spam']
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> nlist = ["a", "b", 1, "spam"]
         >>> G.add_nodes_from(nlist)
         >>> G.remove_nodes_from(nlist)
         """
@@ -416,11 +422,12 @@ class AGraph:
     def has_node(self, n):
         """Return True if n is in the graph or False if not.
 
-        >>> G=AGraph()
-        >>> G.add_node('a')
-        >>> G.has_node('a')
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> G.add_node("a")
+        >>> G.has_node("a")
         True
-        >>> 'a' in G  # same as G.has_node('a')
+        >>> "a" in G  # same as G.has_node('a')
         True
 
         """
@@ -433,9 +440,10 @@ class AGraph:
     def get_node(self, n):
         """Return a node object (Node) corresponding to node n.
 
-        >>> G=AGraph()
-        >>> G.add_node('a')
-        >>> node=G.get_node('a')
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> G.add_node("a")
+        >>> node = G.get_node("a")
         >>> print(node)
         a
         """
@@ -450,8 +458,9 @@ class AGraph:
         String conversion will work if u and v have valid string representation
         (try str(u) if you are unsure).
 
-        >>> G=AGraph()
-        >>> G.add_edge('a','b')
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> G.add_edge("a", "b")
         >>> G.edges()
         [('a', 'b')]
 
@@ -459,15 +468,15 @@ class AGraph:
         edge.  This is especially useful to distinguish between
         parallel edges in multi-edge graphs (strict=False).
 
-        >>> G=AGraph(strict=False)
-        >>> G.add_edge('a','b','first')
-        >>> G.add_edge('a','b','second')
+        >>> G = pgv.AGraph(strict=False)
+        >>> G.add_edge("a", "b", "first")
+        >>> G.add_edge("a", "b", "second")
         >>> sorted(G.edges(keys=True))
         [('a', 'b', 'first'), ('a', 'b', 'second')]
 
         Attributes can be added when edges are created or updated after creation
 
-        >>> G.add_edge('a','b',color='green')
+        >>> G.add_edge("a", "b", color="green")
 
         Attributes must be valid strings.
 
@@ -505,13 +514,14 @@ class AGraph:
 
         ebunch is a container of edges such as a list or dictionary.
 
-        >>> G=AGraph()
-        >>> elist=[('a','b'),('b','c')]
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> elist = [("a", "b"), ("b", "c")]
         >>> G.add_edges_from(elist)
 
         Attributes can be added when edges are created or updated after creation
 
-        >>> G.add_edges_from(elist, color='green')
+        >>> G.add_edges_from(elist, color="green")
         """
         for e in ebunch:
             self.add_edge(e, **attr)
@@ -519,9 +529,10 @@ class AGraph:
     def get_edge(self, u, v, key=None):
         """Return an edge object (Edge) corresponding to edge (u,v).
 
-        >>> G=AGraph()
-        >>> G.add_edge('a','b')
-        >>> edge=G.get_edge('a','b')
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> G.add_edge("a", "b")
+        >>> edge = G.get_edge("a", "b")
         >>> print(edge)
         ('a', 'b')
 
@@ -557,9 +568,10 @@ class AGraph:
     def has_edge(self, u, v=None, key=None):
         """Return True an edge u-v is in the graph or False if not.
 
-        >>> G=AGraph()
-        >>> G.add_edge('a','b')
-        >>> G.has_edge('a','b')
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> G.add_edge("a", "b")
+        >>> G.has_edge("a", "b")
         True
 
         Optional key argument will restrict match to edges (u,v,key).
@@ -580,12 +592,13 @@ class AGraph:
         If the optional nbunch (container of nodes) only edges
         adjacent to nodes in nbunch will be returned.
 
-        >>> G=AGraph()
-        >>> G.add_edge('a','b')
-        >>> G.add_edge('c','d')
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> G.add_edge("a", "b")
+        >>> G.add_edge("c", "d")
         >>> print(sorted(G.edges()))
         [('a', 'b'), ('c', 'd')]
-        >>> print(G.edges('a'))
+        >>> print(G.edges("a"))
         [('a', 'b')]
         """
         return list(self.edges_iter(nbunch=nbunch, keys=keys))
@@ -593,9 +606,10 @@ class AGraph:
     def has_neighbor(self, u, v, key=None):
         """Return True if u has an edge to v or False if not.
 
-        >>> G=AGraph()
-        >>> G.add_edge('a','b')
-        >>> G.has_neighbor('a','b')
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
+        >>> G.add_edge("a", "b")
+        >>> G.has_neighbor("a", "b")
         True
 
         Optional key argument will only find edges (u,v,key).
@@ -1042,8 +1056,7 @@ class AGraph:
         return bunch
 
     def add_subgraph(self, nbunch=None, name=None, **attr):
-        """Return subgraph induced by nodes in nbunch.
-        """
+        """Return subgraph induced by nodes in nbunch."""
         if name is not None:
             name = name.encode(self.encoding)
         try:
@@ -1085,8 +1098,7 @@ class AGraph:
     subgraph = add_subgraph
 
     def subgraph_parent(self, nbunch=None, name=None):
-        """Return parent graph of subgraph or None if graph is root graph.
-        """
+        """Return parent graph of subgraph or None if graph is root graph."""
         handle = gv.agparent(self.handle)
         if handle is None:
             return None
@@ -1096,8 +1108,7 @@ class AGraph:
         return H
 
     def subgraph_root(self, nbunch=None, name=None):
-        """Return root graph of subgraph or None if graph is root graph.
-        """
+        """Return root graph of subgraph or None if graph is root graph."""
         handle = gv.agroot(self.handle)
         if handle is None:
             return None
@@ -1291,11 +1302,12 @@ class AGraph:
 
         To make a new graph from a string use
 
-        >>> s='digraph {1 -> 2}'
-        >>> A=AGraph()
-        >>> t=A.from_string(s)
-        >>> A=AGraph(string=s) # specify s is a string
-        >>> A=AGraph(s)  # s assumed to be a string during initialization
+        >>> import pygraphviz as pgv
+        >>> s = "digraph {1 -> 2}"
+        >>> A = pgv.AGraph()
+        >>> t = A.from_string(s)
+        >>> A = pgv.AGraph(string=s)  # specify s is a string
+        >>> A = pgv.AGraph(s)  # s assumed to be a string during initialization
         """
         # allow either unicode or encoded string
         try:
@@ -1343,9 +1355,10 @@ class AGraph:
     def _run_prog(self, prog="nop", args=""):
         """Apply graphviz program to graph and return the result as a string.
 
-        >>> A = AGraph()
-        >>> s = A._run_prog() # doctest: +SKIP
-        >>> s = A._run_prog(prog='acyclic') # doctest: +SKIP
+        >>> import pygraphviz as pgv
+        >>> A = pgv.AGraph()
+        >>> s = A._run_prog()  # doctest: +SKIP
+        >>> s = A._run_prog(prog="acyclic")  # doctest: +SKIP
 
         Use keyword args to add additional arguments to graphviz programs.
         """
@@ -1385,11 +1398,10 @@ class AGraph:
     def unflatten(self, args=""):
         """Adjust directed graphs to improve layout aspect ratio.
 
-        >>> A = AGraph()
-        >>> A_unflattened = A.unflatten('-f -l 3')
-        >>> # FIXME: Windows 'CMake' installer does not install neato, gvpr, fdp and others
-        >>> # https://gitlab.com/graphviz/graphviz/-/issues/1753
-        >>> A.unflatten('-f -l 1').layout() # doctest: +SKIP
+        >>> import pygraphviz as pgv
+        >>> A = pgv.AGraph()
+        >>> A_unflattened = A.unflatten("-f -l 3")
+        >>> A.unflatten("-f -l 1").layout()
 
         Use keyword args to add additional arguments to graphviz programs.
         """
@@ -1402,8 +1414,9 @@ class AGraph:
 
         To create a new graph use
 
-        >>> A=AGraph()
-        >>> B=A.tred(copy=True) # doctest: +SKIP
+        >>> import pygraphviz as pgv
+        >>> A = pgv.AGraph()
+        >>> B = A.tred(copy=True)  # doctest: +SKIP
 
         See the graphviz "tred" program for details of the algorithm.
         """
@@ -1419,8 +1432,9 @@ class AGraph:
 
         To create a new graph use
 
-        >>> A=AGraph()
-        >>> B=A.acyclic(copy=True) # doctest: +SKIP
+        >>> import pygraphviz as pgv
+        >>> A = pgv.AGraph()
+        >>> B = A.acyclic(copy=True)  # doctest: +SKIP
 
         See the graphviz "acyclic" program for details of the algorithm.
         """
@@ -1436,10 +1450,11 @@ class AGraph:
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
         will use specified graphviz layout method.
 
-        >>> A=AGraph()
+        >>> import pygraphviz as pgv
+        >>> A = pgv.AGraph()
         >>> A.add_edge(1, 2)
         >>> A.layout()
-        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")
+        >>> A.layout(prog="neato", args="-Nshape=box -Efontsize=8")
 
         Use keyword args to add additional arguments to graphviz programs.
 
@@ -1463,10 +1478,11 @@ class AGraph:
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
         will use specified graphviz layout method.
 
-        >>> A=AGraph()
+        >>> import pygraphviz as pgv
+        >>> A = pgv.AGraph()
         >>> A.add_edge(1, 2)
         >>> A.layout()
-        >>> A.layout(prog='neato', args="-Nshape=box -Efontsize=8")
+        >>> A.layout(prog="neato", args="-Nshape=box -Efontsize=8")
 
         Use keyword args to add additional arguments to graphviz programs.
 
@@ -1478,7 +1494,7 @@ class AGraph:
         If you use prog="nop2" it will take node and edge positions from the
         AGraph when rendering.
         """
-        _ , prog = self._manually_parse_args(args, None, prog)
+        _, prog = self._manually_parse_args(args, None, prog)
 
         # convert input strings to type bytes (encode it)
         if isinstance(prog, str):
@@ -1525,19 +1541,20 @@ class AGraph:
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
         will use specified graphviz layout method.
 
-        >>> G = AGraph()
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
         >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
         >>> G.layout()
 
         # use current node positions, output pdf in 'file.pdf'
-        >>> G.draw('file.pdf')
+        >>> G.draw("file.pdf")
 
         # use dot to position, output png in 'file'
-        >>> G.draw('file', format='png', prog='dot')
+        >>> G.draw("file", format="png", prog="dot")
 
         # use keyword 'args' to pass additional arguments to graphviz
-        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')
-        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')
+        >>> G.draw("test.pdf", prog="twopi", args="-Gepsilon=1")
+        >>> G.draw("test2.pdf", args="-Nshape=box -Edir=forward -Ecolor=red ")
 
         The layout might take a long time on large graphs.
 
@@ -1623,19 +1640,20 @@ class AGraph:
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
         will use specified graphviz layout method.
 
-        >>> G = AGraph()
+        >>> import pygraphviz as pgv
+        >>> G = pgv.AGraph()
         >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
         >>> G.layout()
 
         # use current node positions, output pdf in 'file.pdf'
-        >>> G.draw('file.pdf')
+        >>> G.draw("file.pdf")
 
         # use dot to position, output png in 'file'
-        >>> G.draw('file', format='png', prog='dot')
+        >>> G.draw("file", format="png", prog="dot")
 
         # use keyword 'args' to pass additional arguments to graphviz
-        >>> G.draw('test.pdf', prog='twopi', args='-Gepsilon=1')
-        >>> G.draw('test2.pdf', args='-Nshape=box -Edir=forward -Ecolor=red ')
+        >>> G.draw("test.pdf", prog="twopi", args="-Gepsilon=1")
+        >>> G.draw("test2.pdf", args="-Nshape=box -Edir=forward -Ecolor=red ")
 
         The layout might take a long time on large graphs.
 
@@ -1738,7 +1756,7 @@ class AGraph:
         return format, prog
 
     def _get_fh(self, path, mode="r"):
-        """ Return a file handle for given path.
+        """Return a file handle for given path.
 
         Path can be a string, pathlib.Path, or a file handle.
         Attempt to uncompress/compress files ending in '.gz' and '.bz2'.
@@ -1790,7 +1808,8 @@ class Node(str):
 
     If G is a graph
 
-    >>> G=AGraph()
+    >>> import pygraphviz as pgv
+    >>> G = pgv.AGraph()
 
     then
 
@@ -1800,17 +1819,17 @@ class Node(str):
 
     To get the object use
 
-    >>> node=Node(G,1)
+    >>> node = pgv.Node(G, 1)
 
     or
-    >>> node=G.get_node(1)
+    >>> node = G.get_node(1)
 
     The node object is derived from a string and can be manipulated as such.
 
     Each node has attributes that can be directly accessed through
     the attr dictionary:
 
-    >>> node.attr['color']='red'
+    >>> node.attr["color"] = "red"
 
     """
 
@@ -1850,25 +1869,26 @@ class Edge(tuple):
 
     If G is a graph
 
-    >>> G=AGraph()
+    >>> import pygraphviz as pgv
+    >>> G = pgv.AGraph()
 
     then
 
-    >>> G.add_edge(1,2)
+    >>> G.add_edge(1, 2)
 
     will add the edge 1-2 to the graph.
 
-    >>> edge=Edge(G,1,2)
+    >>> edge = pgv.Edge(G, 1, 2)
 
     or
-    >>> edge=G.get_edge(1,2)
+    >>> edge = G.get_edge(1, 2)
 
     will get the edge object.
 
     An optional key can be used
 
-    >>> G.add_edge(2,3,'spam')
-    >>> edge=Edge(G,2,3,'spam')
+    >>> G.add_edge(2, 3, "spam")
+    >>> edge = pgv.Edge(G, 2, 3, "spam")
 
     The edge is represented as a tuple (u,v) or (u,v,key)
     and can be manipulated as such.
@@ -1876,7 +1896,7 @@ class Edge(tuple):
     Each edge has attributes that can be directly accessed through
     the attr dictionary:
 
-    >>> edge.attr['color']='red'
+    >>> edge.attr["color"] = "red"
 
     """
 
@@ -1922,10 +1942,11 @@ class Attribute(MutableMapping):
     Assigned on initialization of AGraph class.
     and manipulated through the class data.
 
-    >>> G=AGraph() # initialize, G.graph_attr, G.node_attr, G.edge_attr
-    >>> G.graph_attr['splines']='true'
-    >>> G.node_attr['shape']='circle'
-    >>> G.edge_attr['color']='red'
+    >>> import pygraphviz as pgv
+    >>> G = pgv.AGraph()  # initialize, G.graph_attr, G.node_attr, G.edge_attr
+    >>> G.graph_attr["splines"] = "true"
+    >>> G.node_attr["shape"] = "circle"
+    >>> G.edge_attr["color"] = "red"
 
     See
     http://graphviz.org/doc/info/attrs.html
@@ -2020,12 +2041,13 @@ class ItemAttribute(Attribute):
     Assigned on initialization of Node or Edge classes
     and manipulated through the class data.
 
-    >>> G=AGraph()
-    >>> G.add_edge('a','b')
-    >>> n=Node(G,'a')
-    >>> n.attr['shape']='circle'
-    >>> e=Edge(G,'a','b')
-    >>> e.attr['color']='red'
+    >>> import pygraphviz as pgv
+    >>> G = pgv.AGraph()
+    >>> G.add_edge("a", "b")
+    >>> n = pgv.Node(G, "a")
+    >>> n.attr["shape"] = "circle"
+    >>> e = pgv.Edge(G, "a", "b")
+    >>> e.attr["color"] = "red"
 
     See
     http://graphviz.org/doc/info/attrs.html
