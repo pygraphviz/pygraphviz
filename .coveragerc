@@ -1,3 +1,3 @@
 [run]
 source = pygraphviz
-omit = setup.py, */release.py, pygraphviz/tests/*
+omit = setup.py, pygraphviz/tests/*
