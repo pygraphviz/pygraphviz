@@ -252,7 +252,10 @@ class AGraph:
         # include nodes and edges in hash
         # Could do attributes too, but hash should be fast
         return hash(
-            (tuple(sorted(self.nodes_iter())), tuple(sorted(self.edges_iter())),)
+            (
+                tuple(sorted(self.nodes_iter())),
+                tuple(sorted(self.edges_iter())),
+            )
         )
 
     def __iter__(self):
