@@ -52,7 +52,7 @@ License
 
 Released under the 3-Clause BSD license (see ``LICENSE``)::
 
-  Copyright (C) 2006-2020 PyGraphviz Developers
+  Copyright (C) 2006-2021 PyGraphviz Developers
   Aric Hagberg <aric.hagberg@gmail.gov>
   Dan Schult <dschult@colgate.edu>
   Manos Renieris
