@@ -2,9 +2,6 @@ all:
 
 swig:
 	swig -python pygraphviz/graphviz.i
-	# DOS endings to not corrupt the diff.
-	@unix2dos pygraphviz/graphviz.py
-	@unix2dos pygraphviz/graphviz_wrap.c
 
 # Clean all build and test artifacts.
 clean c:
