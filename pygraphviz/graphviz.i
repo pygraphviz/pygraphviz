@@ -1,10 +1,3 @@
-//    Copyright (C) 2004-2006 by 
-//    Aric Hagberg <hagberg@lanl.gov>
-//    Dan Schult <dschult@colgate.edu>
-//    Manos Renieris, http://www.cs.brown.edu/~er/
-//    Distributed with BSD license.     
-//    All rights reserved, see LICENSE for details.
-
 %module graphviz
 
 %{
