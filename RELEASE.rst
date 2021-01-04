@@ -9,13 +9,13 @@ How to make a new release of ``pygraphviz``
   2. Fix code in documentation by running
      ``cd doc && make doctest``.
 
-- Toggle ``dev = True`` to ``dev = False`` in ``pygraphviz/release.py``.
+- Update ``__version__`` in ``pygraphviz/__init__.py``.
 
 - Commit changes.
 
 - Add the version number as a tag in git::
 
-   git tag -s [-u <key-id>] pygraphviz-<major>.<minor>
+   git tag -s [-u <key-id>] pygraphviz-<version> -m 'signed <version> tag'
 
   (If you do not have a gpg key, use -m instead; it is important for
   Debian packaging that the tags are annotated)
@@ -43,10 +43,7 @@ How to make a new release of ``pygraphviz``
   - Sync your branch with the remote repo: ``git pull``.
   - Copy the built documentation.
 
- - Increase the version number
-
-  - Toggle ``dev = False`` to ``dev = True`` in ``pygraphviz/release.py``.
-  - Update ``version`` in ``pygraphviz/release.py``.
+- Update ``__version__`` in ``pygraphviz/__init__.py``.
 
 - Update the web frontpage:
   The webpage is kept in a separate repo: pygraphviz/website
