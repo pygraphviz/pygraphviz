@@ -89,21 +89,33 @@ class TestGraph(unittest.TestCase):
         A.add_node(4, hi=9)
         assert A != B
         A.remove_node(4)
+        assert A != B  # attribute 'hi' exists for every node.
+        B.node_attr["hi"] = ""
         assert A == B
         A.add_edge(3, 1, hi=9)
         assert A != B
         A.remove_edge(3, 1)
+        assert A != B
+        B.edge_attr["hi"] = ""
         assert A == B
 
-        # Note: default attributes dont affect equality
+        # Note: adding node attr gives every node that attribute but empty.
+        # Default values are only assigned to nodes added after default is set.
         A.node_attr["low"] = 3
-        assert A == B
+        assert A != B
         B.node_attr["low"] = 3
         assert A == B
-        A.edge_attr["low"] = 4
+        B.node_attr["low"] = 4
+        assert A == B
+
+        A.edge_attr["low"] = 3
+        assert A != B
+        B.edge_attr["low"] = 3
         assert A == B
         B.edge_attr["low"] = 4
         assert A == B
+
+        # graph_attr are not default values -- they are attribute values.
         A.graph_attr.update({"low": 5})
         assert A == B
         # print(sorted(A.nodes()), sorted(B.nodes()))
@@ -448,7 +460,11 @@ def test_agraph_equality_node_attrs():
     # Change attribute of a single node in B
     B.get_node(1).attr["color"] = "blue"
     # Graphs are no longer considered equal
-    assert not A == B
+    assert A != B
+    # See #284  A and C should be different
+    C = pgv.AGraph()
+    A.add_nodes_from(nodes)
+    assert A != C
 
 
 def test_agraph_equality_edge_attrs():
@@ -459,7 +475,11 @@ def test_agraph_equality_edge_attrs():
     assert A == B
     # Change edge attribute
     B.get_edge(0, 1).attr["weight"] = 2.0
-    assert not A == B
+    assert A != B
+    # See #284  A and C should be different
+    C = pgv.AGraph()
+    A.add_edge(0, 1)
+    assert A != C
 
 
 def test_agraph_has_edge_single_input_parsing():

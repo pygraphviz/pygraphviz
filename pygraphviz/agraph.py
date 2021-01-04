@@ -208,7 +208,7 @@ class AGraph:
             del attr["charset"]
 
         # assign any attributes specified through keywords
-        self.graph_attr = Attribute(self.handle, 0)  # default graph attributes
+        self.graph_attr = Attribute(self.handle, 0)  # graph attributes
         self.graph_attr.update(attr)  # apply attributes passed to init
         self.node_attr = Attribute(self.handle, 1)  # default node attributes
         self.edge_attr = Attribute(self.handle, 2)  # default edge attribtes
@@ -236,22 +236,14 @@ class AGraph:
         if sorted(self.edges()) != sorted(other.edges()):
             return False
         # check attributes
-        self_node_attr = tuple(dict(n.attr) for n in sorted(self.nodes_iter()))
-        other_node_attr = tuple(dict(n.attr) for n in sorted(other.nodes_iter()))
-        if self_node_attr != other_node_attr:
+        self_all_nodes_attr = {n: n.attr.to_dict() for n in sorted(self.nodes_iter())}
+        other_all_nodes_attr = {n: n.attr.to_dict() for n in sorted(other.nodes_iter())}
+        if self_all_nodes_attr != other_all_nodes_attr:
             return False
-        self_edge_attr = tuple(dict(e.attr) for e in sorted(self.edges_iter()))
-        other_edge_attr = tuple(dict(e.attr) for e in sorted(other.edges_iter()))
-        if self_edge_attr != other_edge_attr:
+        self_all_edges_attr = {e: e.attr.to_dict() for e in sorted(self.edges_iter())}
+        other_all_edges_attr = {e: e.attr.to_dict() for e in sorted(other.edges_iter())}
+        if self_all_edges_attr != other_all_edges_attr:
             return False
-        # We could check the default attributes too.
-        # But they aren't reflected in the attibutes until node is added.
-        # That leads to order dependent additions for equality...
-        # Code would be:
-        # check default attributes
-        ##if {n: nv for n, nv in self.node_attr.items() if nv != ''} != \
-        ##   {n: nv for n, nv in other.node_attr.items() if nv != ''}:
-        ##    return False
 
         # All checks pass.  They are equal
         return True
@@ -2113,3 +2105,16 @@ class ItemAttribute(Attribute):
                 continue
             except StopIteration:  # gv.agnxtattr is done, as are we
                 return
+
+    def to_dict(self):
+        ah = None
+        attrdict = {}
+        while 1:
+            try:
+                ah = gv.agnxtattr(self.ghandle, self.type, ah)
+            except StopIteration:  # gv.agnxtattr is done, as are we
+                break
+            key = gv.agattrname(ah).decode(self.encoding)
+            value = gv.agxget(self.handle, ah).decode(self.encoding)
+            attrdict[key] = value
+        return attrdict
