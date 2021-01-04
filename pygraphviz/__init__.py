@@ -8,7 +8,7 @@ See https://pygraphviz.github.io for complete documentation.
 See pygraphviz.AGraph for detailed documentation.
 """
 
-__version__ = "1.7rc1"
+__version__ = "1.7rc2.dev0"
 
 from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute, DotError
 
