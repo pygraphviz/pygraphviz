@@ -240,8 +240,8 @@ class AGraph:
         other_all_nodes_attr = {n: n.attr.to_dict() for n in sorted(other.nodes_iter())}
         if self_all_nodes_attr != other_all_nodes_attr:
             return False
-        self_all_edges_attr = {n: n.attr.to_dict() for n in sorted(self.edges_iter())}
-        other_all_edges_attr = {n: n.attr.to_dict() for n in sorted(other.edges_iter())}
+        self_all_edges_attr = {e: e.attr.to_dict() for e in sorted(self.edges_iter())}
+        other_all_edges_attr = {e: e.attr.to_dict() for e in sorted(other.edges_iter())}
         if self_all_edges_attr != other_all_edges_attr:
             return False
 
