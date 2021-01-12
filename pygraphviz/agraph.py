@@ -1407,7 +1407,7 @@ class AGraph:
         To create a new graph use
 
         >>> import pygraphviz as pgv
-        >>> A = pgv.AGraph()
+        >>> A = pgv.AGraph(directed=True)
         >>> B = A.tred(copy=True)  # doctest: +SKIP
 
         See the graphviz "tred" program for details of the algorithm.
@@ -1428,7 +1428,7 @@ class AGraph:
         To create a new graph use
 
         >>> import pygraphviz as pgv
-        >>> A = pgv.AGraph()
+        >>> A = pgv.AGraph(directed=True)
         >>> B = A.acyclic(copy=True)  # doctest: +SKIP
 
         See the graphviz "acyclic" program for details of the algorithm.
