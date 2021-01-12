@@ -1412,6 +1412,9 @@ class AGraph:
 
         See the graphviz "tred" program for details of the algorithm.
         """
+        if not self.directed:
+            raise TypeError("tred requires a directed graph")
+
         data = self._run_prog("tred", args)
         if copy:
             return self.__class__(string=data.decode(self.encoding))
@@ -1430,6 +1433,9 @@ class AGraph:
 
         See the graphviz "acyclic" program for details of the algorithm.
         """
+        if not self.directed:
+            raise TypeError("acyclic requires a directed graph")
+
         data = self._run_prog("acyclic", args)
         if copy:
             return self.__class__(string=data.decode(self.encoding))
