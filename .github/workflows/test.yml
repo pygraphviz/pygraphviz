@@ -232,6 +232,9 @@ jobs:
         python setup.py install --user
         pip list
 
+    - name: Debug tempfile
+      run: python -c "import tempfile; print(tempfile.gettempdir())"
+
     - name: Test pygraphviz
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
