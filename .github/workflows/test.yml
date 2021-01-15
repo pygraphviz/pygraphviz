@@ -232,12 +232,6 @@ jobs:
         python setup.py install --user
         pip list
 
-    - name: Debug tempfile
-      run: |
-        python -c "import tempfile; print(tempfile.gettempdir())"
-        python -c "import tempfile, _io, io; fh = tempfile.TemporaryFile(); print(isinstance(fh, _io._IOBase), isinstance(fh, io.IOBase))"
-        python -c "import tempfile, _io, io; fh = tempfile.TemporaryFile(); print(isinstance(fh, (io.IOBase, tempfile._TemporaryFileWrapper)))"
-
     - name: Test pygraphviz
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
