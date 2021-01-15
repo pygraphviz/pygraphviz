@@ -233,7 +233,10 @@ jobs:
         pip list
 
     - name: Debug tempfile
-      run: python -c "import tempfile; print(tempfile.gettempdir())"
+      run: |
+        python -c "import tempfile; print(tempfile.gettempdir())"
+        python -c "import _io; print(_io._IOBase)"
+        python -c "import io; print(io.IOBase)"
 
     - name: Test pygraphviz
       run: |
