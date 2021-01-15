@@ -1786,6 +1786,7 @@ class AGraph:
         import glob
 
         paths = os.environ["PATH"]
+        print(paths)
         for path in paths.split(os.pathsep):
             match = glob.glob(os.path.join(path, name))
             if match:
