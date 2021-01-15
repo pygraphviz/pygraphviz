@@ -9,6 +9,8 @@ import sys
 import threading
 import warnings
 from collections.abc import MutableMapping
+import tempfile
+import io
 
 from . import graphviz as gv
 
@@ -1253,7 +1255,9 @@ class AGraph:
         if path is None:
             path = sys.stdout
         fh = self._get_fh(path, "w")
-        print(type(fh), fh)
+        # NOTE: TemporaryFile objects are not instances of IOBase on windows.
+        if not isinstance(fh, (io.IOBase, tempfile._TemporaryFileWrapper)):
+            raise TypeError(f"{fh} is not a file handle")
         try:
             gv.agwrite(self.handle, fh)
         except OSError:
@@ -1274,9 +1278,7 @@ class AGraph:
         `to_string()` uses "agwrite" to produce "dot" format w/o rendering.
         The function `string_nop()` layouts with "nop" and renders to "dot".
         """
-        from tempfile import TemporaryFile
-
-        fh = TemporaryFile()
+        fh = tempfile.TemporaryFile()
         self.write(fh)
         fh.seek(0)
         data = fh.read()
