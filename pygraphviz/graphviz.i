@@ -5,34 +5,9 @@
 #include "graphviz/gvc.h"
 %}
 
-%{
-static PyObject *PyIOBase_TypeObj;
-
-static int init_file_emulator(void)
-{
-    PyObject *io = PyImport_ImportModule("_io");
-    if (io == NULL)
-        return -1;
-    PyIOBase_TypeObj = PyObject_GetAttrString(io, "_IOBase");
-    if (PyIOBase_TypeObj == NULL)
-        return -1;
-    return 0;
-}
-%}
-
-%init %{
-if (init_file_emulator() < 0) {
-    return NULL;
-}
-%}
-
 %typemap(in) FILE* (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
     if ($input == Py_None) { $1 = NULL; }
     else {
-        if (!PyObject_IsInstance($input, PyIOBase_TypeObj)) {
-            PyErr_SetString(PyExc_TypeError, "not a file handle");
-            return NULL;
-        }
         // work around to get hold of FILE*
         fd = PyObject_AsFileDescriptor($input);
 
