@@ -1784,9 +1784,12 @@ class AGraph:
     def _which(self, name):
         """Searches for name in exec path and returns full path"""
         import glob
+        import platform
+
+        if platform.system() == "Windows":
+            name += ".exe"
 
         paths = os.environ["PATH"]
-        print(paths)
         for path in paths.split(os.pathsep):
             match = glob.glob(os.path.join(path, name))
             if match:
