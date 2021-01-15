@@ -1784,10 +1784,10 @@ class AGraph:
     def _which(self, name):
         """Searches for name in exec path and returns full path"""
         import glob
+        import platform
 
-        # Append wildcard to prog name so that glob will catch on platforms
-        # that have extensions, e.g. ".exe" on Windows
-        name += "*"
+        if platform.system() == "Windows":
+            name += ".exe"
 
         paths = os.environ["PATH"]
         for path in paths.split(os.pathsep):
