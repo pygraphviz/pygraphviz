@@ -1253,6 +1253,7 @@ class AGraph:
         if path is None:
             path = sys.stdout
         fh = self._get_fh(path, "w")
+        print(type(fh), fh)
         try:
             gv.agwrite(self.handle, fh)
         except OSError:
