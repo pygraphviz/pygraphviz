@@ -216,6 +216,7 @@ jobs:
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         dot -c
         dot -v
+        neato -V
         pip install --upgrade pip wheel setuptools --user
         pip install -r requirements/test.txt --user
         python setup.py build_ext --include-dirs="C:\Program Files\Graphviz\include" --library-dirs="C:\Program Files\Graphviz\lib"
@@ -228,4 +229,7 @@ jobs:
         $graphviz_path = "C:\Program Files\Graphviz\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
+        dot -c
+        dot -v
+        neato -V
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
