@@ -196,10 +196,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Download graphviz source
-      run: Invoke-WebRequest -Uri "https://gitlab.com/graphviz/graphviz/-/package_files/5189376/download" -OutFile "C:\Temp\development_windows_10_cmake_Release_x64_graphviz-install-2.44.2_dev.20201207.0046-win64.exe"
+      run: Invoke-WebRequest -Uri "https://gitlab.com/graphviz/graphviz/-/package_files/6105690/download" -OutFile "C:\Temp\development_windows_10_cmake_Release_x64_graphviz-install-2.44.2_dev.20210115.1523-win64.exe"
 
     - name: Install exe
-      run: Start-Process -Wait -FilePath "C:\Temp\development_windows_10_cmake_Release_x64_graphviz-install-2.44.2_dev.20201207.0046-win64.exe" -ArgumentList '/S' -PassThru
+      run: Start-Process -Wait -FilePath "C:\Temp\development_windows_10_cmake_Release_x64_graphviz-install-2.44.2_dev.20210115.1523-win64.exe" -ArgumentList '/S' -PassThru
 
     - name: List
       run: | 
