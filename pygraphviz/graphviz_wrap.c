@@ -2712,20 +2712,6 @@ static swig_module_info swig_module = {swig_types, 11, 0, 0, 0, 0};
 #include "graphviz/gvc.h"
 
 
-static PyObject *PyIOBase_TypeObj;
-
-static int init_file_emulator(void)
-{
-    PyObject *io = PyImport_ImportModule("_io");
-    if (io == NULL)
-        return -1;
-    PyIOBase_TypeObj = PyObject_GetAttrString(io, "_IOBase");
-    if (PyIOBase_TypeObj == NULL)
-        return -1;
-    return 0;
-}
-
-
 SWIGINTERN swig_type_info*
 SWIG_pchar_descriptor(void)
 {
@@ -3185,10 +3171,6 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
       arg1 = NULL; 
     }
     else {
-      if (!PyObject_IsInstance(swig_obj[0], PyIOBase_TypeObj)) {
-        PyErr_SetString(PyExc_TypeError, "not a file handle");
-        return NULL;
-      }
       // work around to get hold of FILE*
       fd1 = PyObject_AsFileDescriptor(swig_obj[0]);
       
@@ -3244,10 +3226,6 @@ SWIGINTERN PyObject *_wrap_agwrite(PyObject *SWIGUNUSEDPARM(self), PyObject *arg
       arg2 = NULL; 
     }
     else {
-      if (!PyObject_IsInstance(swig_obj[1], PyIOBase_TypeObj)) {
-        PyErr_SetString(PyExc_TypeError, "not a file handle");
-        return NULL;
-      }
       // work around to get hold of FILE*
       fd2 = PyObject_AsFileDescriptor(swig_obj[1]);
       
@@ -5026,10 +5004,6 @@ SWIGINTERN PyObject *_wrap_gvRender(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
         arg4 = NULL; 
       }
       else {
-        if (!PyObject_IsInstance(swig_obj[3], PyIOBase_TypeObj)) {
-          PyErr_SetString(PyExc_TypeError, "not a file handle");
-          return NULL;
-        }
         // work around to get hold of FILE*
         fd4 = PyObject_AsFileDescriptor(swig_obj[3]);
         
@@ -6042,11 +6016,6 @@ SWIG_init(void) {
 #endif
   
   SWIG_InstallConstants(d,swig_const_table);
-  
-  
-  if (init_file_emulator() < 0) {
-    return NULL;
-  }
   
   globals = SWIG_globals();
   if (!globals) {
