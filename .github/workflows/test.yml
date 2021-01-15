@@ -235,8 +235,7 @@ jobs:
     - name: Debug tempfile
       run: |
         python -c "import tempfile; print(tempfile.gettempdir())"
-        python -c "import _io; print(_io._IOBase)"
-        python -c "import io; print(io.IOBase)"
+        python -c "import tempfile, _io, io; fh = tempfile.TemporaryFile(); print(isinstance(fh, _io._IOBase), isinstance(fh, io.IOBase))"
 
     - name: Test pygraphviz
       run: |
