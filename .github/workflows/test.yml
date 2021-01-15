@@ -209,10 +209,19 @@ jobs:
         Get-ChildItem "C:\Program Files\Graphviz\include\" 
         Get-ChildItem "C:\Program Files\Graphviz\lib\" 
 
+    - name: Make Link
+      run: |
+        cmd /c mklink /d C:\ProgramFiles "C:\Program Files"
+        Get-ChildItem "C:\ProgramFiles\"
+        Get-ChildItem "C:\ProgramFiles\Graphviz\"
+        Get-ChildItem "C:\ProgramFiles\Graphviz\bin\"
+        Get-ChildItem "C:\ProgramFiles\Graphviz\include\"
+        Get-ChildItem "C:\ProgramFiles\Graphviz\lib\"
+
     - name: Install packages
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
-        $graphviz_path = "C:\Program Files\Graphviz\bin"
+        $graphviz_path = "C:\ProgramFiles\Graphviz\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         dot -c
         dot -v
@@ -226,7 +235,7 @@ jobs:
     - name: Test pygraphviz
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
-        $graphviz_path = "C:\Program Files\Graphviz\bin"
+        $graphviz_path = "C:\ProgramFiles\Graphviz\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
         dot -c
