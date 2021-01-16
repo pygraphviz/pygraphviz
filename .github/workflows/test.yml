@@ -223,6 +223,12 @@ jobs:
         python setup.py install --user
         pip list
 
+    - name: List
+      run: |
+        Get-ChildItem "C:\Users\runneradmin\AppData\Roaming\Python\Python37\site-packages\pygraphviz-1.7rc2.dev0-py3.7-win-amd64.egg\"
+        Get-ChildItem "C:\Users\runneradmin\AppData\Roaming\Python\Python37\site-packages\pygraphviz-1.7rc2.dev0-py3.7-win-amd64.egg\pygraphviz\"
+        Get-Content "C:\Users\runneradmin\AppData\Roaming\Python\Python37\site-packages\pygraphviz-1.7rc2.dev0-py3.7-win-amd64.egg\pygraphviz\_graphviz.py"
+
     - name: Test pygraphviz
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
