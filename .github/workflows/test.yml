@@ -217,10 +217,13 @@ jobs:
         dot -c
         dot -v
         neato -V
-        pip install --upgrade pip wheel setuptools --user
-        pip install -r requirements/test.txt --user
+        Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+        python -m venv pgvenv
+        pgvenv\Scripts\Activate.ps1
+        python -m pip install --upgrade pip wheel setuptools
+        python -m pip install -r requirements/test.txt
         python setup.py build_ext --include-dirs="C:\Program Files\Graphviz\include" --library-dirs="C:\Program Files\Graphviz\lib"
-        python setup.py install --user
+        python setup.py install
         pip list
 
     - name: Test pygraphviz
@@ -232,5 +235,6 @@ jobs:
         dot -c
         dot -v
         neato -V
-        python setup.py develop
-        pytest .
+        pgvenv\Scripts\Activate.ps1
+        pip list
+        pytest --pyargs pygraphviz
