@@ -236,5 +236,6 @@ jobs:
         dot -v
         neato -V
         pgvenv\Scripts\Activate.ps1
+        python -c "import pygraphviz; print(pygraphviz.__version__)"
         pip list
         pytest --pyargs pygraphviz.tests
