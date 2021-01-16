@@ -232,4 +232,5 @@ jobs:
         dot -c
         dot -v
         neato -V
-        pytest --durations=10 --pyargs pygraphviz
+        python setup.py develop
+        pytest .
