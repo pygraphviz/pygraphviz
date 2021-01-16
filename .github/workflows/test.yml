@@ -237,4 +237,4 @@ jobs:
         neato -V
         pgvenv\Scripts\Activate.ps1
         pip list
-        pytest --pyargs pygraphviz
+        pytest --pyargs pygraphviz.tests
