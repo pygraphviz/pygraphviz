@@ -237,4 +237,4 @@ jobs:
         dot -c
         dot -v
         neato -V
-        pytest --doctest-modules --durations=10 --pyargs pygraphviz
+        pytest --durations=10 --pyargs pygraphviz
