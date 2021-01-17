@@ -4,177 +4,177 @@ on: [push, pull_request]
 
 jobs:
 
-#  ubuntu:
-#
-#    runs-on: Ubuntu-20.04
-#
-#    strategy:
-#      matrix:
-#        python-version: [3.7, 3.8, 3.9, pypy-3.7]
-#
-#    steps:
-#
-#    - name: Checkout pygraphviz
-#      uses: actions/checkout@v2
-#
-#    - name: Set up Python ${{ matrix.python-version }}
-#      uses: actions/setup-python@v2
-#      with:
-#        python-version: ${{ matrix.python-version }}
-#
-#    - name: Update apt-get
-#      run: sudo apt-get update
-#
-#    - name: Install graphviz
-#      run: sudo apt-get install graphviz graphviz-dev
-#
-#    - name: Create venv
-#      run: |
-#        python3 -m venv ~/venv
-#
-#    - name: Install packages
-#      run: |
-#        source ~/venv/bin/activate
-#        pip install --upgrade pip wheel setuptools
-#        pip install -r requirements/test.txt
-#        pip install .
-#        pip list
-#
-#    - name: Test pygraphviz
-#      run: |
-#        source ~/venv/bin/activate
-#        pytest --doctest-modules --durations=10 --pyargs pygraphviz
-#
-#
-#  fedora:
-#
-#    strategy:
-#      matrix:
-#        release:
-#          - 32
-#          - 33
-#
-#    runs-on: Ubuntu-20.04
-#    container: 'fedora:${{ matrix.release }}'
-#
-#    steps:
-#
-#    - name: Checkout pygraphviz
-#      uses: actions/checkout@v2
-#
-#    - name: Install graphviz
-#      run: sudo dnf install -y graphviz graphviz-devel
-#
-#    - name: Install Python developer tools
-#      run: sudo dnf install -y python3-devel
-#
-#    - name: Install gcc
-#      run: sudo dnf install -y gcc
-#
-#    - name: Create venv
-#      run: |
-#        python3 -m venv ~/venv
-#
-#    - name: Install packages
-#      run: |
-#        source ~/venv/bin/activate
-#        pip install --upgrade pip wheel setuptools
-#        pip install -r requirements/test.txt
-#        pip install .
-#        pip list
-#
-#    - name: Test pygraphviz
-#      run: |
-#        source ~/venv/bin/activate
-#        pytest --doctest-modules --durations=10 --pyargs pygraphviz
-#
-#
-#  brew:
-#
-#    runs-on: macOS-latest
-#
-#    strategy:
-#      matrix:
-#        python-version: [3.7, 3.8, 3.9]
-#
-#    steps:
-#
-#    - name: Checkout pygraphviz
-#      uses: actions/checkout@v2
-#
-#    - name: Set up Python ${{ matrix.python-version }}
-#      uses: actions/setup-python@v2
-#      with:
-#        python-version: ${{ matrix.python-version }}
-#
-#    - name: Install graphviz
-#      run: brew install graphviz
-#
-#    - name: Create venv
-#      run: |
-#        python3 -m venv ~/venv
-#
-#    - name: Install packages
-#      run: |
-#        source ~/venv/bin/activate
-#        pip install --upgrade pip wheel setuptools
-#        pip install -r requirements/test.txt
-#        pip install .
-#        pip list
-#
-#    - name: Test pygraphviz
-#      run: |
-#        source ~/venv/bin/activate
-#        pytest --doctest-modules --durations=10 --pyargs pygraphviz
-#
-#
-#  macports:
-#
-#    runs-on: macOS-latest
-#
-#    strategy:
-#      matrix:
-#        python-version: [3.7, 3.8, 3.9]
-#
-#    steps:
-#
-#    - name: Checkout pygraphviz
-#      uses: actions/checkout@v2
-#
-#    - name: Set up Python ${{ matrix.python-version }}
-#      uses: actions/setup-python@v2
-#      with:
-#        python-version: ${{ matrix.python-version }}
-#
-#    - name: Download macports pkg
-#      run: wget https://distfiles.macports.org/MacPorts/MacPorts-2.6.4-10.15-Catalina.pkg
-#
-#    - name: Install macports
-#      run: sudo installer -pkg MacPorts-2.6.4-10.15-Catalina.pkg -target /
-#
-#    - name: Install graphviz
-#      run: sudo /opt/local/bin/port install graphviz-devel
-#
-#    - name: Create venv
-#      run: |
-#        python3 -m venv ~/venv
-#
-#    - name: Install packages
-#      run: |
-#        source ~/venv/bin/activate
-#        pip install --upgrade pip wheel setuptools
-#        pip install -r requirements/test.txt
-#        pip install --global-option=build_ext \
-#                    --global-option="-I/opt/local/include/" \
-#                    --global-option="-L/opt/local/lib/" \
-#                    .
-#        pip list
-#
-#    - name: Test pygraphviz
-#      run: |
-#        export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-#        source ~/venv/bin/activate
-#        pytest --doctest-modules --durations=10 --pyargs pygraphviz
+  ubuntu:
+
+    runs-on: Ubuntu-20.04
+
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9, pypy-3.7]
+
+    steps:
+
+    - name: Checkout pygraphviz
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Update apt-get
+      run: sudo apt-get update
+
+    - name: Install graphviz
+      run: sudo apt-get install graphviz graphviz-dev
+
+    - name: Create venv
+      run: |
+        python3 -m venv ~/venv
+
+    - name: Install packages
+      run: |
+        source ~/venv/bin/activate
+        pip install --upgrade pip wheel setuptools
+        pip install -r requirements/test.txt
+        pip install .
+        pip list
+
+    - name: Test pygraphviz
+      run: |
+        source ~/venv/bin/activate
+        pytest --doctest-modules --durations=10 --pyargs pygraphviz
+
+
+  fedora:
+
+    strategy:
+      matrix:
+        release:
+          - 32
+          - 33
+
+    runs-on: Ubuntu-20.04
+    container: 'fedora:${{ matrix.release }}'
+
+    steps:
+
+    - name: Checkout pygraphviz
+      uses: actions/checkout@v2
+
+    - name: Install graphviz
+      run: sudo dnf install -y graphviz graphviz-devel
+
+    - name: Install Python developer tools
+      run: sudo dnf install -y python3-devel
+
+    - name: Install gcc
+      run: sudo dnf install -y gcc
+
+    - name: Create venv
+      run: |
+        python3 -m venv ~/venv
+
+    - name: Install packages
+      run: |
+        source ~/venv/bin/activate
+        pip install --upgrade pip wheel setuptools
+        pip install -r requirements/test.txt
+        pip install .
+        pip list
+
+    - name: Test pygraphviz
+      run: |
+        source ~/venv/bin/activate
+        pytest --doctest-modules --durations=10 --pyargs pygraphviz
+
+
+  brew:
+
+    runs-on: macOS-latest
+
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
+    steps:
+
+    - name: Checkout pygraphviz
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install graphviz
+      run: brew install graphviz
+
+    - name: Create venv
+      run: |
+        python3 -m venv ~/venv
+
+    - name: Install packages
+      run: |
+        source ~/venv/bin/activate
+        pip install --upgrade pip wheel setuptools
+        pip install -r requirements/test.txt
+        pip install .
+        pip list
+
+    - name: Test pygraphviz
+      run: |
+        source ~/venv/bin/activate
+        pytest --doctest-modules --durations=10 --pyargs pygraphviz
+
+
+  macports:
+
+    runs-on: macOS-latest
+
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
+    steps:
+
+    - name: Checkout pygraphviz
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Download macports pkg
+      run: wget https://distfiles.macports.org/MacPorts/MacPorts-2.6.4-10.15-Catalina.pkg
+
+    - name: Install macports
+      run: sudo installer -pkg MacPorts-2.6.4-10.15-Catalina.pkg -target /
+
+    - name: Install graphviz
+      run: sudo /opt/local/bin/port install graphviz-devel
+
+    - name: Create venv
+      run: |
+        python3 -m venv ~/venv
+
+    - name: Install packages
+      run: |
+        source ~/venv/bin/activate
+        pip install --upgrade pip wheel setuptools
+        pip install -r requirements/test.txt
+        pip install --global-option=build_ext \
+                    --global-option="-I/opt/local/include/" \
+                    --global-option="-L/opt/local/lib/" \
+                    .
+        pip list
+
+    - name: Test pygraphviz
+      run: |
+        export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+        source ~/venv/bin/activate
+        pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
   windows:
