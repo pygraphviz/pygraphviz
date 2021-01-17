@@ -225,11 +225,10 @@ jobs:
             .
         python -m pip list
 
-#    - name: List
-#      run: |
-#        Get-ChildItem "C:\Users\runneradmin\AppData\Roaming\Python\Python38\site-packages\pygraphviz-1.7rc2.dev0-py3.8-win-amd64.egg\"
-#        Get-ChildItem "C:\Users\runneradmin\AppData\Roaming\Python\Python38\site-packages\pygraphviz-1.7rc2.dev0-py3.8-win-amd64.egg\pygraphviz\"
-#        Get-Content "C:\Users\runneradmin\AppData\Roaming\Python\Python38\site-packages\pygraphviz-1.7rc2.dev0-py3.8-win-amd64.egg\pygraphviz\_graphviz.py"
+    - name: List
+      run: |
+        Get-ChildItem "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\"
+        Get-Content "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\_graphviz.py"
 
     - name: Test pygraphviz
       run: |
