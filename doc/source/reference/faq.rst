@@ -32,12 +32,23 @@ FAQ
        look for the required Graphviz libraries at build time and run time,
        respectively.
 
-   :Q: How do I compile pygraphviz under Windows?  And why
-       don't you distribute a pygraphviz Windows installer?
+   :Q: How do I compile pygraphviz under Windows?
 
-   :A: We don't have Windows development machines but would like to
-       have pygraphviz work on all platforms.  If you have success
-       with Windows or would be willing to help test and distribute a
-       Windows installer please drop us a note. 
-       
-       See also issues at: https://github.com/pygraphviz/pygraphviz/search?q=Windows&type=Issues
+   :A: See :ref:`windows-install` for the latest on how to
+       install Graphviz and pygraphviz on Windows.
+
+   :Q: Why don't you distribute a ``pygraphviz`` Windows installer?
+
+   :A: We would very much like to make binary wheels available for ``pygraphviz``,
+       but there are several complications.
+       ``pygraphviz`` is a wrapper around Graphviz, which means that Graphviz
+       must be installed, and Graphviz header files, libraries *and* command
+       line executables must all be accessible for the wrapper.
+       The recommended use of the `Graphviz CLI`_ poses challenges for wheel
+       packaging.
+
+       .. seealso:: 
+          This `GitHub issue <https://github.com/pygraphviz/pygraphviz/issues/167>`__
+          for further discussion on wheels and packaging.
+
+.. _Graphviz CLI: https://gitlab.com/graphviz/graphviz/-/issues/1808#note_403608643

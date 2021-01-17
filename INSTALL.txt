@@ -80,8 +80,10 @@ MacPorts
                   --global-option="-L/opt/local/lib/" \
                   pygraphviz
 
-Installing Graphviz
--------------------
+.. _windows-install:
+
+Installing Graphviz on Windows
+------------------------------
 
 Installing Graphviz and PyGraphviz on Windows is not easy.
 Fortunately, the situation is being worked on and there will be more
