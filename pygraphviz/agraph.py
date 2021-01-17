@@ -12,7 +12,7 @@ from collections.abc import MutableMapping
 import tempfile
 import io
 
-from . import graphviz as gv
+from pygraphviz import graphviz as gv
 
 _DEFAULT_ENCODING = "UTF-8"
 
