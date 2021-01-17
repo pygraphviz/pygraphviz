@@ -10,9 +10,10 @@ See pygraphviz.AGraph for detailed documentation.
 
 import sys
 
-if sys.version_info >= (3, 8, 0) and sys.platform == 'win32':
+if sys.version_info >= (3, 8, 0) and sys.platform == "win32":
     import os
-    for path in os.environ['PATH'].split(';'):
+
+    for path in os.environ["PATH"].split(";"):
         if path and os.path.exists(path):
             os.add_dll_directory(path)
 
