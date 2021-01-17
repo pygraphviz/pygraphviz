@@ -225,12 +225,12 @@ jobs:
             .
         python -m pip list
 
-    - name: List
-      run: |
-        Get-ChildItem "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\"
-        Copy-Item "D:\a\pygraphviz\pygraphviz\test_pygraphviz.py"  -Destination "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\_graphviz.py"
-        Get-ChildItem "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\"
-        Get-Content "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\_graphviz.py"
+#    - name: List
+#      run: |
+#        Get-ChildItem "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\"
+#        Copy-Item "D:\a\pygraphviz\pygraphviz\test_pygraphviz.py"  -Destination "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\_graphviz.py"
+#        Get-ChildItem "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\"
+#        Get-Content "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\_graphviz.py"
 
 
     - name: Test pygraphviz
