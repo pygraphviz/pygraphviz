@@ -15,14 +15,22 @@ FAQ
    :A: Some Unix systems don't include the Graphviz library in the
        default search path for the run-time linker.  The path is often
        something like ``/usr/lib/graphviz`` or ``/sw/lib/graphviz`` etc. and
-       it needs to be added to your search path.  You can
+       it needs to be added to your search path.
+       On \*nix systems, the preferred way to do this is by setting the
+       appropriate flags when building/installing ``pygraphviz``.
+       For example, if the Graphviz libraries are installed in
+       ``/opt/lib/mygviz/`` on your system:
 
-       1. set the ``LD_LIBRARY_PATH`` environment variable
-          e.g. ``export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/graphviz``
+       .. code-block:: bash
 
-       2. configure your system with the additional path.
-          e.g. for Linux add a line to ``/etc/ld.so.conf`` and run ``ldconfig``.
+          pip install --global-option=build_ext \
+                      --global-option="-L/opt/lib/mygviz/" \
+                      --global-option="-R/opt/lib/mygviz/" \
+                      pygraphviz
 
+       In this example, the ``-L`` and ``-R`` flags tell the linker where to
+       look for the required Graphviz libraries at build time and run time,
+       respectively.
 
    :Q: How do I compile pygraphviz under Windows?  And why
        don't you distribute a pygraphviz Windows installer?
