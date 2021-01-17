@@ -238,6 +238,7 @@ jobs:
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files\Graphviz\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
+        [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
         dot -v
         neato -V
-        pytest --durations=10 --pyargs pygraphviz
+        pytest --doctest-modules --durations=10 --pyargs pygraphviz
