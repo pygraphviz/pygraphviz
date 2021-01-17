@@ -219,8 +219,10 @@ jobs:
         neato -V
         python -m pip install --upgrade pip wheel setuptools
         python -m pip install -r requirements/test.txt
-        python setup.py build_ext --include-dirs="C:\Program Files\Graphviz\include" --library-dirs="C:\Program Files\Graphviz\lib"
-        python setup.py install
+        python -m pip install --global-option=build_ext `
+            --global-option="-IC:\Program Files\Graphviz\include" `
+            --global-option="-LC:\Program Files\Graphviz\lib" `
+            .
         python -m pip list
 
 #    - name: List
