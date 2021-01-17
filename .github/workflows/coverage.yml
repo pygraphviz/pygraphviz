@@ -28,11 +28,6 @@ jobs:
     - name: Install graphviz
       run: sudo apt-get install graphviz graphviz-dev
 
-    - name: Create venv
-      run: |
-        python3 -m venv ~/venv
-        source ~/venv/bin/activate
-
     - name: Install packages
       run: |
         pip install --upgrade pip wheel setuptools
