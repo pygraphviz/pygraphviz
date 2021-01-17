@@ -45,8 +45,8 @@ jobs:
     strategy:
       matrix:
         release:
-          - 32
           - 33
+          - 34
 
     runs-on: Ubuntu-20.04
     container: 'fedora:${{ matrix.release }}'
