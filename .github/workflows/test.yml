@@ -219,7 +219,7 @@ jobs:
         neato -V
         python -m pip install --upgrade pip wheel setuptools
         python -m pip install -r requirements/test.txt
-        python -m pip install --global-option=build_ext `
+        python -m pip install -e --global-option=build_ext `
             --global-option="-IC:\Program Files\Graphviz\include" `
             --global-option="-LC:\Program Files\Graphviz\lib" `
             .
