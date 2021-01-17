@@ -229,6 +229,11 @@ jobs:
         Get-ChildItem "C:\Users\runneradmin\AppData\Roaming\Python\Python38\site-packages\pygraphviz-1.7rc2.dev0-py3.8-win-amd64.egg\pygraphviz\"
         Get-Content "C:\Users\runneradmin\AppData\Roaming\Python\Python38\site-packages\pygraphviz-1.7rc2.dev0-py3.8-win-amd64.egg\pygraphviz\_graphviz.py"
 
+    - name: make symlink
+      run: |
+        New-Item -ItemType SymbolicLink -Path "C:\Users\runneradmin\AppData\Roaming\Python\Python38\site-packages\pygraphviz-1.7rc2.dev0-py3.8-win-amd64.egg\pygraphviz\_graphviz.pyd" -Target "C:\Users\runneradmin\AppData\Roaming\Python\Python38\site-packages\pygraphviz-1.7rc2.dev0-py3.8-win-amd64.egg\pygraphviz\_graphviz.cp38-win_amd64.pyd"
+        Get-ChildItem "C:\Users\runneradmin\AppData\Roaming\Python\Python38\site-packages\pygraphviz-1.7rc2.dev0-py3.8-win-amd64.egg\pygraphviz\"
+
     - name: Test pygraphviz
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
