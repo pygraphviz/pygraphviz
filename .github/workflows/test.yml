@@ -28,13 +28,8 @@ jobs:
     - name: Install graphviz
       run: sudo apt-get install graphviz graphviz-dev
 
-    - name: Create venv
-      run: |
-        python3 -m venv ~/venv
-
     - name: Install packages
       run: |
-        source ~/venv/bin/activate
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/test.txt
         pip install .
@@ -42,7 +37,6 @@ jobs:
 
     - name: Test pygraphviz
       run: |
-        source ~/venv/bin/activate
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
@@ -71,13 +65,8 @@ jobs:
     - name: Install gcc
       run: sudo dnf install -y gcc
 
-    - name: Create venv
-      run: |
-        python3 -m venv ~/venv
-
     - name: Install packages
       run: |
-        source ~/venv/bin/activate
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/test.txt
         pip install .
@@ -85,7 +74,6 @@ jobs:
 
     - name: Test pygraphviz
       run: |
-        source ~/venv/bin/activate
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
@@ -110,13 +98,8 @@ jobs:
     - name: Install graphviz
       run: brew install graphviz
 
-    - name: Create venv
-      run: |
-        python3 -m venv ~/venv
-
     - name: Install packages
       run: |
-        source ~/venv/bin/activate
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/test.txt
         pip install .
@@ -124,7 +107,6 @@ jobs:
 
     - name: Test pygraphviz
       run: |
-        source ~/venv/bin/activate
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
@@ -155,13 +137,8 @@ jobs:
     - name: Install graphviz
       run: sudo /opt/local/bin/port install graphviz-devel
 
-    - name: Create venv
-      run: |
-        python3 -m venv ~/venv
-
     - name: Install packages
       run: |
-        source ~/venv/bin/activate
         pip install --upgrade pip wheel setuptools
         pip install -r requirements/test.txt
         pip install --global-option=build_ext \
@@ -173,7 +150,6 @@ jobs:
     - name: Test pygraphviz
       run: |
         export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-        source ~/venv/bin/activate
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
