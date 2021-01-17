@@ -238,4 +238,4 @@ jobs:
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         dot -v
         neato -V
-        python -m pytest --durations=10 --pyargs pygraphviz
+        pytest --durations=10 --pyargs pygraphviz
