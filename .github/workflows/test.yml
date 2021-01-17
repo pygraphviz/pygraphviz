@@ -236,10 +236,9 @@ jobs:
 
     - name: Test pygraphviz
       run: |
-        Get-ChildItem Env:PYTHONPATH
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files\Graphviz\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         dot -v
         neato -V
-        pytest --doctest-modules --durations=10 --pyargs pygraphviz
+        pytest --durations=10 --pyargs pygraphviz
