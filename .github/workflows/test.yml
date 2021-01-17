@@ -228,7 +228,9 @@ jobs:
     - name: List
       run: |
         Get-ChildItem "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\"
-        Get-Content "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\_graphviz.py"
+        Rename-Item -Path "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\_graphviz.cp38-win_amd64.pyd" -NewName "_graphviz.pyd"
+        Get-ChildItem "c:\hostedtoolcache\windows\python\3.8.6\x64\lib\site-packages\pygraphviz\"
+
 
     - name: Test pygraphviz
       run: |
