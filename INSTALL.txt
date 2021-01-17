@@ -88,3 +88,5 @@ Installing Graphviz on Windows
 Installing Graphviz and PyGraphviz on Windows is not easy.
 Fortunately, the situation is being worked on and there will be more
 information here soon.
+
+.. include:: reference/faq.rst
