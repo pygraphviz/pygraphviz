@@ -159,7 +159,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7]
+        python-version: [3.7, 3.8, 3.9]
 
     steps:
 
@@ -171,41 +171,47 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
+    # This and the following step need to be changed when Graphviz has new releases.
     - name: Download graphviz source
-      run: Invoke-WebRequest -Uri "https://gitlab.com/graphviz/graphviz/-/package_files/6105690/download" -OutFile "C:\Temp\development_windows_10_cmake_Release_x64_graphviz-install-2.44.2_dev.20210115.1523-win64.exe"
+      run: |
+        Invoke-WebRequest `
+          -Uri "https://gitlab.com/graphviz/graphviz/-/package_files/6105690/download" `
+          -OutFile "C:\Temp\graphviz-install-2.44.2_dev.20210115.1523-win64.exe"
 
     - name: Install exe
-      run: Start-Process -Wait -FilePath "C:\Temp\development_windows_10_cmake_Release_x64_graphviz-install-2.44.2_dev.20210115.1523-win64.exe" -ArgumentList '/S' -PassThru
+      run: |
+        Start-Process -Wait `
+          -FilePath "C:\Temp\graphviz-install-2.44.2_dev.20210115.1523-win64.exe" `
+          -ArgumentList '/S' -PassThru
 
-    - name: List
-      run: | 
-        Get-ChildItem "C:\Program Files\" 
-        Get-ChildItem "C:\Program Files\Graphviz\" 
-        Get-ChildItem "C:\Program Files\Graphviz\bin\" 
-        Get-ChildItem "C:\Program Files\Graphviz\include\" 
-        Get-ChildItem "C:\Program Files\Graphviz\lib\" 
-
+    # The first three lines are necessary to add the bin directory to the PATH.
+    # We need ``python -m pip install --upgrade pip`` because Windows doesn't
+    # allow running programs to be modified.
     - name: Install packages
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files\Graphviz\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
-        dot -c
-        dot -v
-        neato -V
-        pip install --upgrade pip wheel setuptools --user
-        pip install -r requirements/test.txt --user
-        python setup.py build_ext --include-dirs="C:\Program Files\Graphviz\include" --library-dirs="C:\Program Files\Graphviz\lib"
-        python setup.py install --user
-        pip list
+        python -m pip install --upgrade pip wheel setuptools
+        python -m pip install -r requirements/test.txt
+        python -m pip install --global-option=build_ext `
+          --global-option="-IC:\Program Files\Graphviz\include" `
+          --global-option="-LC:\Program Files\Graphviz\lib" `
+          .
+        python -m pip list
 
+    # We are leaving this in to help us remember some useful PowerShell syntax.
+    # The following commands are also helpful for debugging:  Copy-Item, Get-Content
+    - name: List
+      run: |
+        Get-ChildItem "C:\Program Files\Graphviz\bin"
+
+    # Need to update PATH for each step that needs it and ignore PY_IGNORE_IMPORTMISMATCH
+    # b/c otherwise --doctest-modules is confused.
     - name: Test pygraphviz
       run: |
         $PATH = [Environment]::GetEnvironmentVariable("PATH")
         $graphviz_path = "C:\Program Files\Graphviz\bin"
         [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
-        dot -c
-        dot -v
-        neato -V
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
