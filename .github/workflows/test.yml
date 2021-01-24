@@ -175,13 +175,13 @@ jobs:
     - name: Download graphviz source
       run: |
         Invoke-WebRequest `
-          -Uri "https://gitlab.com/graphviz/graphviz/-/package_files/6105690/download" `
-          -OutFile "C:\Temp\graphviz-install-2.44.2_dev.20210115.1523-win64.exe"
+          -Uri "https://gitlab.com/graphviz/graphviz/-/package_files/6164164/download" `
+          -OutFile "C:\Temp\graphviz-install-2.46.0-win64.exe"
 
     - name: Install exe
       run: |
         Start-Process -Wait `
-          -FilePath "C:\Temp\graphviz-install-2.44.2_dev.20210115.1523-win64.exe" `
+          -FilePath "C:\Temp\graphviz-install-2.46.0-win64.exe" `
           -ArgumentList '/S' -PassThru
 
     # The first three lines are necessary to add the bin directory to the PATH.
