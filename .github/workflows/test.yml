@@ -2,6 +2,11 @@ name: test
 
 on: [push, pull_request]
 
+env:
+  WIN_GRAPHVIZ_URL: "https://gitlab.com/graphviz/graphviz/-/package_files/6164164/download"
+  WIN_GRAPHVIZ_EXE: "C:\\Temp\\graphviz-install-2.46.0-win64.exe"
+  WIN_GRAPHVIZ_DIR: "C:\\Program Files\\Graphviz"
+
 jobs:
 
   ubuntu:
@@ -173,45 +178,32 @@ jobs:
 
     # This and the following step need to be changed when Graphviz has new releases.
     - name: Download graphviz source
-      run: |
-        Invoke-WebRequest `
-          -Uri "https://gitlab.com/graphviz/graphviz/-/package_files/6164164/download" `
-          -OutFile "C:\Temp\graphviz-install-2.46.0-win64.exe"
+      run: Invoke-WebRequest -Uri $env:WIN_GRAPHVIZ_URL -OutFile $env:WIN_GRAPHVIZ_EXE
 
     - name: Install exe
-      run: |
-        Start-Process -Wait `
-          -FilePath "C:\Temp\graphviz-install-2.46.0-win64.exe" `
-          -ArgumentList '/S' -PassThru
+      run: Start-Process -Wait -FilePath $env:WIN_GRAPHVIZ_EXE -ArgumentList '/S' -PassThru
 
-    # The first three lines are necessary to add the bin directory to the PATH.
-    # We need ``python -m pip install --upgrade pip`` because Windows doesn't
-    # allow running programs to be modified.
+    - name: Update path
+      run: echo "$($env:WIN_GRAPHVIZ_DIR)\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+    # We need ``python -m pip install -U pip`` b/c Windows won't modify running programs.
     - name: Install packages
       run: |
-        $PATH = [Environment]::GetEnvironmentVariable("PATH")
-        $graphviz_path = "C:\Program Files\Graphviz\bin"
-        [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         python -m pip install --upgrade pip wheel setuptools
         python -m pip install -r requirements/test.txt
         python -m pip install --global-option=build_ext `
-          --global-option="-IC:\Program Files\Graphviz\include" `
-          --global-option="-LC:\Program Files\Graphviz\lib" `
+          --global-option="-I$($env:WIN_GRAPHVIZ_DIR)\include" `
+          --global-option="-L$($env:WIN_GRAPHVIZ_DIR)\lib" `
           .
         python -m pip list
 
     # We are leaving this in to help us remember some useful PowerShell syntax.
     # The following commands are also helpful for debugging:  Copy-Item, Get-Content
     - name: List
-      run: |
-        Get-ChildItem "C:\Program Files\Graphviz\bin"
+      run: Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\bin"
 
-    # Need to update PATH for each step that needs it and ignore PY_IGNORE_IMPORTMISMATCH
-    # b/c otherwise --doctest-modules is confused.
+    # Set PY_IGNORE_IMPORTMISMATCH b/c otherwise --doctest-modules is confused.
     - name: Test pygraphviz
       run: |
-        $PATH = [Environment]::GetEnvironmentVariable("PATH")
-        $graphviz_path = "C:\Program Files\Graphviz\bin"
-        [Environment]::SetEnvironmentVariable("PATH", "$graphviz_path;$PATH")
         [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
