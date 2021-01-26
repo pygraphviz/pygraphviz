@@ -3,6 +3,17 @@
 News
 ==== 
 
+pygraphviz-1.7
+--------------
+
+Release date: TBD
+
+ - Drop Python 3.6 support
+ - Add Python 3.9 support
+ - Improve installation process and documentation
+ - Switch from nose to pytest
+ - Remove old Python 2 code
+
 pygraphviz-1.6
 --------------
 

@@ -29,7 +29,7 @@ Ubuntu and Debian
 .. code-block:: console
 
     $ sudo apt-get install graphviz graphviz-dev
-    $ pip install pygraphviz 
+    $ pip install --pre pygraphviz 
 
 Fedora and Red Hat
 ~~~~~~~~~~~~~~~~~~
@@ -39,7 +39,7 @@ You may need to replace ``dnf`` with ``yum`` in the example below.
 .. code-block:: console
 
     $ sudo dnf install install graphviz graphviz-devel
-    $ pip install pygraphviz
+    $ pip install --pre pygraphviz
 
 macOS
 -----
@@ -52,7 +52,7 @@ Homebrew
 .. code-block:: console
 
     $ brew install graphviz
-    $ pip install pygraphviz
+    $ pip install --pre pygraphviz
 
 Advanced
 ========
@@ -75,7 +75,7 @@ MacPorts
 .. code-block:: console
 
     $ port install graphviz-devel
-    $ pip install --global-option=build_ext \
+    $ pip install -- pre --global-option=build_ext \
                   --global-option="-I/opt/local/include/" \
                   --global-option="-L/opt/local/lib/" \
                   pygraphviz
@@ -86,7 +86,14 @@ Installing Graphviz on Windows
 ------------------------------
 
 Installing Graphviz and PyGraphviz on Windows is not easy.
-Fortunately, the situation is being worked on and there will be more
-information here soon.
+Fortunately, the Graphviz developers are working to fix this and
+there recent releases have much improved the situation.
+
+Here is the only way we currently support installing on Windows:
+
+1. Download and install 2.46.0 for Windows 10 (64-bit):
+   `stable_windows_10_cmake_Release_x64_graphviz-install-2.46.0-win64.exe
+   <https://gitlab.com/graphviz/graphviz/-/package_files/6164164/download>`_.
+2. Install PyGraphviz via ``pip install --pre pygraphviz``.
 
 .. include:: reference/faq.rst
