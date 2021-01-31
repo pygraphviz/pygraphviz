@@ -14,6 +14,7 @@ Release date: 31 January 2021
  - Improve installation process and documentation
  - Switch from nose to pytest
  - Remove old Python 2 code
+ - AGraph.eq includes attribute comparison (PR #246)
 
 pygraphviz-1.6
 --------------
