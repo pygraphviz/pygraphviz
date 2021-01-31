@@ -61,8 +61,8 @@ Advanced
 ========
 
 The two main difficulties are
-(1) installing Graphviz and
-(2) informing pip where Graphviz is installed.
+   1. installing Graphviz and
+   2. informing pip where Graphviz is installed.
 
 Providing path to Graphviz
 --------------------------
