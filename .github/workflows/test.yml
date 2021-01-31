@@ -200,7 +200,11 @@ jobs:
     # We are leaving this in to help us remember some useful PowerShell syntax.
     # The following commands are also helpful for debugging:  Copy-Item, Get-Content
     - name: List
-      run: Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\bin"
+      run: |
+        Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\bin"
+        Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\lib"
+        Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\include"
+        Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\include\graphviz"
 
     # Set PY_IGNORE_IMPORTMISMATCH b/c otherwise --doctest-modules is confused.
     - name: Test pygraphviz
