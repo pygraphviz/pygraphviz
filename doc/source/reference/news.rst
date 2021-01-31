@@ -6,10 +6,11 @@ News
 pygraphviz-1.7
 --------------
 
-Release date: TBD
+Release date: 31 January 2021
 
  - Drop Python 3.6 support
  - Add Python 3.9 support
+ - Require Graphviz 2.42+
  - Improve installation process and documentation
  - Switch from nose to pytest
  - Remove old Python 2 code
