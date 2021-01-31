@@ -10,7 +10,7 @@ Release date: 31 January 2021
 
  - Drop Python 3.6 support
  - Add Python 3.9 support
- - Require Graphviz 2.42+
+ - Require Graphviz 2.42+, (Graphviz 2.46+ recommended)
  - Improve installation process and documentation
  - Switch from nose to pytest
  - Remove old Python 2 code
