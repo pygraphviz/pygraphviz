@@ -79,7 +79,7 @@ down the page.
 MacPorts
 ~~~~~~~~
 
-Note ``port install graphviz-devel`` installs an old developer release of Graphviz.
+.. note:: ``port install graphviz-devel`` installs an old developer release of Graphviz.
 Hopefully, the MacPorts packagers will update Graphviz to a recent release.
 Once that happens, you may want to use ``port install graphviz`` instead of
 ``port install graphviz-devel`` below.
