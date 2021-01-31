@@ -41,7 +41,7 @@ You may need to replace ``dnf`` with ``yum`` in the example below.
 
 .. code-block:: console
 
-    $ sudo dnf install install graphviz graphviz-devel
+    $ sudo dnf install graphviz graphviz-devel
     $ pip install pygraphviz
 
 macOS
