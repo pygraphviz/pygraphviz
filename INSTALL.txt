@@ -68,7 +68,7 @@ Providing path to Graphviz
 --------------------------
 
 If you've installed Graphviz and ``pip`` is unable to find Graphviz, then you need to
-provide ``pip`` with the path where it can find Graphviz.
+provide ``pip`` with the path(s) where it can find Graphviz.
 To do this, you first need to figure out where the binary files, includes files, and
 library files for Graphviz are located on your file system.
 
