@@ -19,7 +19,7 @@ if sys.version_info >= (3, 8, 0) and sys.platform == "win32":
             os.add_dll_directory(path)
 
 
-__version__ = "1.7rc3.dev0"
+__version__ = "1.7"
 
 from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute, DotError
 
