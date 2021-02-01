@@ -6,13 +6,15 @@ News
 pygraphviz-1.7
 --------------
 
-Release date: TBD
+Release date: 1 February 2021
 
  - Drop Python 3.6 support
  - Add Python 3.9 support
+ - Require Graphviz 2.42+, (Graphviz 2.46+ recommended)
  - Improve installation process and documentation
  - Switch from nose to pytest
  - Remove old Python 2 code
+ - AGraph.eq includes attribute comparison (PR #246)
 
 pygraphviz-1.6
 --------------
