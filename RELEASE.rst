@@ -22,8 +22,8 @@ How to make a new release of ``pygraphviz``
 
 - Commit changes::
 
-  git add pygraphviz/__init__.py
-  git commit -m 'Designate <version> release'
+    git add pygraphviz/__init__.py
+    git commit -m 'Designate <version> release'
 
 - Add the version number as a tag in git::
 
