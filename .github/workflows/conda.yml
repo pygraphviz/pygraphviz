@@ -34,4 +34,5 @@ jobs:
         run: |
           conda create -n pgv-testenv
           conda install --channel conda-forge pygraphviz
+          conda install pytest
           pytest --pyargs pygraphviz
