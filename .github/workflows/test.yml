@@ -58,6 +58,9 @@ jobs:
 
     steps:
 
+    - name: update dnf
+      run: sudo dnf upgrade
+
     - name: Checkout pygraphviz
       uses: actions/checkout@v2
 
