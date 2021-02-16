@@ -1,10 +1,8 @@
 name: conda-forge-windows
-# WIP: Replace with scheduled job once done testing workflow
-on: [push, pull_request]
-  #on:
-  #  schedule:
-  #    # Run this workflow once a day
-  #    - cron: "0 0 * * *"
+on:
+  schedule:
+    # Run this workflow once a day
+    - cron: "0 0 * * *"
 
 jobs:
 
