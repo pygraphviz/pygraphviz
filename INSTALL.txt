@@ -12,7 +12,14 @@ PyGraphviz requires:
    These instructions assume you have Python and a C/C++ Compiler on your computer.   
 
 .. warning::
-   We recommend avoiding Anaconda and conda-forge to install Graphviz and PyGraphviz.
+   We recommend avoiding Anaconda to install Graphviz and PyGraphviz, at least
+   with the default channels.
+   It may be possible to install the latest release of pygraphviz via the
+   ``conda-forge`` channel depending on your platform:
+
+   https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-ubuntu/badge.svg
+   https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-macos/badge.svg
+   https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-windows/badge.svg
 
 Recommended
 ===========
