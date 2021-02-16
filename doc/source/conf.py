@@ -20,6 +20,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    "sphinx.ext.imgconverter",
     "sphinx_gallery.gen_gallery",
     "numpydoc",
 ]

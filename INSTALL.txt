@@ -16,10 +16,14 @@ PyGraphviz requires:
    with the default channels.
    It may be possible to install the latest release of pygraphviz via the
    ``conda-forge`` channel depending on your platform:
+    - |conda-forge-ubuntu-badge| 
+    - |conda-forge-macos-badge|
+    - |conda-forge-windows-badge|
 
-   https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-ubuntu/badge.svg
-   https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-macos/badge.svg
-   https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-windows/badge.svg
+
+.. |conda-forge-ubuntu-badge| image:: https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-ubuntu/badge.svg
+.. |conda-forge-macos-badge| image:: https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-macos/badge.svg
+.. |conda-forge-windows-badge| image:: https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-windows/badge.svg
 
 Recommended
 ===========
