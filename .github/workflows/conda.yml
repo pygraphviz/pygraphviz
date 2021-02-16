@@ -29,10 +29,11 @@ jobs:
         shell: bash -l {0}
         run: conda list
 
-      - name: Install pygraphviz from conda-forge
+      - name: Install and Test
         shell: bash -l {0}
         run: |
           conda create -n pgv-testenv
+          conda activate pgv-testenv
           conda install --channel conda-forge pygraphviz
           conda install pytest
           pytest --pyargs pygraphviz
