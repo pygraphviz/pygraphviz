@@ -1,0 +1,37 @@
+name: Test pygraphviz installation via conda
+# WIP: Replace with scheduled job once done testing workflow
+on: [push, pull_request]
+  #on:
+  #  schedule:
+  #    # Run this workflow once a day
+  #    - cron: "0 0 * * *"
+
+jobs:
+
+  conda-forge:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        python-version: [3.7, 3.8, 3.9]
+    steps:
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+
+      - name: Conda info
+        shell: bash -l {0}
+        run: conda info
+
+      - name: Conda list
+        shell: bash -l {0}
+        run: conda list
+
+      - name: Install pygraphviz from conda-forge
+        shell: bash -l {0}
+        run: |
+          conda create -n pgv-testenv
+          conda install --channel conda-forge pygraphviz
+          pytest --pyargs pygraphviz
