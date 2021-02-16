@@ -1,4 +1,4 @@
-name: Test pygraphviz installation via conda
+name: conda-forge
 # WIP: Replace with scheduled job once done testing workflow
 on: [push, pull_request]
   #on:
@@ -8,7 +8,7 @@ on: [push, pull_request]
 
 jobs:
 
-  conda-forge:
+  install:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
