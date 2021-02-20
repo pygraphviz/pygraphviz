@@ -1,11 +1,11 @@
 PyGraphviz
 ==========
 
-.. image:: https://github.com/pygraphviz/pygraphviz/workflows/test/badge.svg?branch=master
-  :target: https://github.com/pygraphviz/pygraphviz/actions?query=workflow%3Atest+branch%3Amaster
+.. image:: https://github.com/pygraphviz/pygraphviz/workflows/test/badge.svg?branch=main
+  :target: https://github.com/pygraphviz/pygraphviz/actions?query=workflow%3Atest+branch%3Amain
 
-.. image:: https://codecov.io/gh/pygraphviz/pygraphviz/branch/master/graph/badge.svg
-   :target: https://app.codecov.io/gh/pygraphviz/pygraphviz/branch/master
+.. image:: https://codecov.io/gh/pygraphviz/pygraphviz/branch/main/graph/badge.svg
+   :target: https://app.codecov.io/gh/pygraphviz/pygraphviz/branch/main
 
 
 PyGraphviz is a Python interface to the Graphviz graph layout and
