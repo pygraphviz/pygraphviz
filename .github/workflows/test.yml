@@ -3,8 +3,8 @@ name: test
 on: [push, pull_request]
 
 env:
-  WIN_GRAPHVIZ_URL: "https://gitlab.com/graphviz/graphviz/-/package_files/6164164/download"
-  WIN_GRAPHVIZ_EXE: "C:\\Temp\\graphviz-install-2.46.0-win64.exe"
+  WIN_GRAPHVIZ_URL: "https://gitlab.com/graphviz/graphviz/-/package_files/7972018/download"
+  WIN_GRAPHVIZ_EXE: "C:\\Temp\\graphviz-install-2.47.0-dev-win64.exe"
   WIN_GRAPHVIZ_DIR: "C:\\Program Files\\Graphviz"
 
 jobs:
@@ -50,8 +50,8 @@ jobs:
     strategy:
       matrix:
         release:
-          - 33
           - 34
+          - 35
 
     runs-on: Ubuntu-20.04
     container: 'fedora:${{ matrix.release }}'
