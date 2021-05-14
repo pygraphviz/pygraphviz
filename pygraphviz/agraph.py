@@ -1309,13 +1309,13 @@ class AGraph:
             string = string.decode(self.encoding)
         except (UnicodeEncodeError, AttributeError):
             pass
-        from tempfile import TemporaryFile
 
-        fh = TemporaryFile()
-        fh.write(string.encode(self.encoding))
-        fh.seek(0)
-        self.read(fh)
-        fh.close()
+        with open('im_a_random_file.dot', 'w+b') as fh:
+            fh.write(string.encode(self.encoding))
+            fh.seek(0)
+            self.read(fh)
+
+        os.remove('im_a_random_file.dot')
         return self
 
     def _get_prog(self, prog):
