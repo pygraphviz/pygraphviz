@@ -34,3 +34,8 @@ def test_readwrite_pathobj():
     assert B == A
     assert B is not A
     os.unlink(fname)
+
+
+def test_sequential_reads_windows():
+    for _ in range(512):
+        pgv.AGraph("digraph {1 -> 2}")
