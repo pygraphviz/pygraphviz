@@ -39,7 +39,7 @@ Install
 -------
 
 PyGraphviz requires Graphviz.
-Please see `INSTALL.rst` for details.
+Please see `INSTALL.txt` for details.
 
 License
 -------
