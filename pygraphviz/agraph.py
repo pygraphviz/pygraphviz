@@ -877,7 +877,7 @@ class AGraph:
         """Return an iterator over the degree of the nodes given in
         nbunch container.
 
-        Returns paris of (node,degree).
+        Returns pairs of (node,degree).
         """
         for n in self._prepare_nbunch(nbunch):
             yield (Node(self, n), gv.agdegree(self.handle, n.handle, indeg, outdeg))
@@ -886,7 +886,7 @@ class AGraph:
         """Return an iterator over the in-degree of the nodes given in
         nbunch container.
 
-        Returns paris of (node,degree).
+        Returns pairs of (node,degree).
         """
         return self.degree_iter(nbunch, indeg=True, outdeg=False)
 
@@ -894,7 +894,7 @@ class AGraph:
         """Return an iterator over the out-degree of the nodes given in
         nbunch container.
 
-        Returns paris of (node,degree).
+        Returns pairs of (node,degree).
 
         """
         return self.degree_iter(nbunch, indeg=False, outdeg=True)
