@@ -299,7 +299,7 @@ class TestGraph(unittest.TestCase):
         DG.add_edge(1, 2)
         DG_copy = DG.copy()
         assert DG_copy.is_directed()
-        G = pgv.AGraph(directed=True)
+        G = pgv.AGraph()
         G.add_edge(1, 2)
         G_copy = G.copy()
         assert not G_copy.is_directed()
