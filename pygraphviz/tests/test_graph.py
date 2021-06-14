@@ -294,6 +294,16 @@ class TestGraph(unittest.TestCase):
         assert stringify(A) == stringify(self.P3)
         assert A == self.P3
 
+        # see Github Issue #354: G.copy() doesn't return a faithful copy
+        DG = pgv.AGraph(directed=True)
+        DG.add_edge(1, 2)
+        DG_copy = DG.copy()
+        assert DG_copy.is_directed()
+        G = pgv.AGraph()
+        G.add_edge(1, 2)
+        G_copy = G.copy()
+        assert not G_copy.is_directed()
+
     def test_add_path(self):
         A = pgv.AGraph()
         A.add_path([1, 2, 3])

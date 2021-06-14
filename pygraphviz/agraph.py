@@ -1011,7 +1011,7 @@ class AGraph:
         Versions <=1.6 made a copy by writing and the reading a dot string.
         This version loads a new graph with nodes, edges and attributes.
         """
-        G = self.__class__()
+        G = self.__class__(directed=self.is_directed())
         for node in self.nodes():
             G.add_node(node)
             G.get_node(node).attr.update(self.get_node(node).attr)
