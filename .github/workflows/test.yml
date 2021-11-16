@@ -45,43 +45,6 @@ jobs:
         pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
 
-  fedora:
-
-    strategy:
-      matrix:
-        release:
-          - 33
-          - 34
-
-    runs-on: Ubuntu-20.04
-    container: 'fedora:${{ matrix.release }}'
-
-    steps:
-
-    - name: Checkout pygraphviz
-      uses: actions/checkout@v2
-
-    - name: Install graphviz
-      run: sudo dnf install --nogpg -y graphviz graphviz-devel
-
-    - name: Install Python developer tools
-      run: sudo dnf install --nogpg -y python3-devel
-
-    - name: Install gcc
-      run: sudo dnf install -y --nogpg gcc
-
-    - name: Install packages
-      run: |
-        pip install --upgrade pip wheel setuptools
-        pip install -r requirements/test.txt
-        pip install .
-        pip list
-
-    - name: Test pygraphviz
-      run: |
-        pytest --doctest-modules --durations=10 --pyargs pygraphviz
-
-
   brew:
 
     runs-on: macOS-latest
