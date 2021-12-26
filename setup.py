@@ -3,9 +3,9 @@ import os
 import sys
 from setuptools import setup, Extension
 
-if sys.version_info[:2] < (3, 7):
+if sys.version_info[:2] < (3, 8):
     error = (
-        "PyGraphviz requires Python version 3.7 or later (%d.%d detected)."
+        "PyGraphviz requires Python version 3.8 or later (%d.%d detected)."
         % sys.version_info[:2]
     )
     sys.stderr.write(error + "\n")
@@ -36,9 +36,9 @@ classifiers = [
     "Programming Language :: C",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Libraries :: Python Modules",

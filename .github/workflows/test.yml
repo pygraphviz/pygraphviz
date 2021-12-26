@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, pypy-3.7]
+        python-version: ["3.8", "3.9", "3.10", "pypy-3.8"]
 
     steps:
 
@@ -50,8 +50,8 @@ jobs:
     strategy:
       matrix:
         release:
-          - 33
           - 34
+          - 35
 
     runs-on: Ubuntu-20.04
     container: 'fedora:${{ matrix.release }}'
@@ -88,7 +88,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
 
@@ -121,7 +121,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
 
@@ -134,10 +134,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Download macports pkg
-      run: wget https://distfiles.macports.org/MacPorts/MacPorts-2.6.4-10.15-Catalina.pkg
+      run: wget https://distfiles.macports.org/MacPorts/MacPorts-2.7.1-11-BigSur.pkg
 
     - name: Install macports
-      run: sudo installer -pkg MacPorts-2.6.4-10.15-Catalina.pkg -target /
+      run: sudo installer -pkg MacPorts-2.7.1-11-BigSur.pkg -target /
 
     - name: Install graphviz
       run: sudo /opt/local/bin/port install graphviz-devel
@@ -164,7 +164,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
 
