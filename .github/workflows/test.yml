@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, pypy-3.7]
+        python-version: ["3.8", "3.9", "3.10", "pypy-3.8"]
 
     steps:
 
@@ -50,8 +50,8 @@ jobs:
     strategy:
       matrix:
         release:
-          - 33
           - 34
+          - 35
 
     runs-on: Ubuntu-20.04
     container: 'fedora:${{ matrix.release }}'
@@ -88,7 +88,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
 
@@ -121,7 +121,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
 
@@ -164,7 +164,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
 
