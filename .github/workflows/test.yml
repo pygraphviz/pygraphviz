@@ -134,10 +134,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Download macports pkg
-      run: wget https://distfiles.macports.org/MacPorts/MacPorts-2.6.4-10.15-Catalina.pkg
+      run: wget https://distfiles.macports.org/MacPorts/MacPorts-2.7.1-11-BigSur.pkg
 
     - name: Install macports
-      run: sudo installer -pkg MacPorts-2.6.4-10.15-Catalina.pkg -target /
+      run: sudo installer -pkg MacPorts-2.7.1-11-BigSur.pkg -target /
 
     - name: Install graphviz
       run: sudo /opt/local/bin/port install graphviz-devel
