@@ -6,7 +6,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: circleci/python:3.8.5-buster
+      - image: cimg/python:3.10
 
     steps:
       - checkout
