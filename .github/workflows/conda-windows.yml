@@ -2,7 +2,7 @@ name: conda-forge-windows
 on:
   schedule:
     # Run this workflow once a day
-    - cron: "0 0 * * *"
+    - cron: "0 0 * * 0"
 
 jobs:
 
