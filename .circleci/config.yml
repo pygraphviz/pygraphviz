@@ -21,7 +21,7 @@ jobs:
 
       - run:
           name: Install TeX
-          command: sudo apt-get install texlive texlive-latex-extra latexmk
+          command: sudo apt-get install texlive texlive-latex-extra latexmk imagemagick
 
       - run:
           name: Install Python dependencies
