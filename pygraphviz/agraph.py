@@ -230,6 +230,16 @@ class AGraph:
             return f"<AGraph {self.handle}>"
         return f"<AGraph {name} {self.handle}>"
 
+    def _svg_repr(self):
+        return self.draw(format="svg").decode(self.encoding)
+
+    def _repr_mimebundle_(self, include=None, exclude=None):
+        if self.has_layout:
+            repr_dict = {"image/svg+xml": self._svg_repr()}
+        else:
+            repr_dict = {"text/plain": self.__repr__()}
+        return repr_dict
+
     def __eq__(self, other):
         # two graphs are equal if they have exact same nodes and edges
         # and attributes.  This is not graph isomorphism.
