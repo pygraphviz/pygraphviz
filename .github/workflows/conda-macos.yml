@@ -1,0 +1,36 @@
+name: conda-forge-macos
+on:
+  schedule:
+    # Run this workflow once a week
+    - cron: "0 0 * * 0"
+
+jobs:
+
+  install:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10]
+    steps:
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+
+      - name: Conda info
+        shell: bash -l {0}
+        run: conda info
+
+      - name: Conda list
+        shell: bash -l {0}
+        run: conda list
+
+      - name: Install and Test
+        shell: bash -l {0}
+        run: |
+          conda create -n pgv-testenv
+          conda activate pgv-testenv
+          conda install --channel conda-forge pygraphviz
+          conda install pytest
+          pytest --pyargs pygraphviz
