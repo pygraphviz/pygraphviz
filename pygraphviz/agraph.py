@@ -1337,7 +1337,7 @@ class AGraph:
             "circo",
             "fdp",
             "nop",
-            "wc",
+            "gc",
             "acyclic",
             "gvpr",
             "gvcolor",
