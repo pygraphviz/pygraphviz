@@ -128,9 +128,8 @@ Development Workflow
       issue number 1480, you could use the phrase "Fixes #1480" in the PR
       description or commit message.
 
-      To reviewers: make sure the merge message has a brief description of the
-      change(s) and if the PR closes an issue add, for example, "Closes #123"
-      where 123 is the issue number.
+      To reviewers: make sure the merge message also has a brief description of
+      the change(s).
 
 Divergence from ``upstream main``
 ---------------------------------
@@ -217,12 +216,15 @@ To measure the test coverage, run::
 This will print a report with one line for each file in `pygraphviz`,
 detailing the test coverage::
 
-  Name                                             Stmts   Miss Branch BrPart  Cover
-  ----------------------------------------------------------------------------------
-  pygraphviz/__init__.py                                33      2      2      1    91%
-  pygraphviz/agraph.py                                  114     0      0      0   100%
-  pygraphviz/graphviz.py                                12      0      0      0   100%
-  ...
+  Name                     Stmts   Miss  Cover
+  --------------------------------------------
+  pygraphviz/__init__.py      12      4    67%
+  pygraphviz/agraph.py      1022    196    81%
+  pygraphviz/graphviz.py     179     42    77%
+  pygraphviz/scraper.py       26     18    31%
+  pygraphviz/testing.py       16      0   100%
+  --------------------------------------------
+  TOTAL                     1255    260    79%
 
 Adding tests
 ------------
