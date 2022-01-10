@@ -140,7 +140,7 @@ jobs:
       run: sudo installer -pkg MacPorts-2.7.1-11-BigSur.pkg -target /
 
     - name: Install graphviz
-      run: sudo /opt/local/bin/port install graphviz-devel
+      run: sudo /opt/local/bin/port install graphviz
 
     - name: Install packages
       run: |

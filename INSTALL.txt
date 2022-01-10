@@ -59,7 +59,7 @@ You may need to replace ``dnf`` with ``yum`` in the example below.
 macOS
 -----
 
-We recommend installing Graphviz using the Homebrew package manager for macOS.
+We recommend installing Graphviz using the Homebrew package manager or MacPorts for macOS.
 
 Homebrew
 ~~~~~~~~
@@ -68,6 +68,18 @@ Homebrew
 
     $ brew install graphviz
     $ pip install pygraphviz
+
+MacPorts
+~~~~~~~~
+
+.. code-block:: console
+
+    $ port install graphviz
+    $ pip install pygraphviz
+    $ pip install --global-option=build_ext \
+                  --global-option="-I/opt/local/include/" \
+                  --global-option="-L/opt/local/lib/" \
+                  pygraphviz
 
 Advanced
 ========
@@ -88,23 +100,6 @@ Once you know where you've installed Graphviz, you will need to do something lik
 the following.  There is an additional example using Chocolatey on Windows further
 down the page.
 
-MacPorts
-~~~~~~~~
-
-.. note:: ``port install graphviz-devel`` installs an old developer release of Graphviz.
-Hopefully, the MacPorts packagers will update Graphviz to a recent release.
-Once that happens, you may want to use ``port install graphviz`` instead of
-``port install graphviz-devel`` below.
-There is an open ticket to upgrade MacPorts to version 2.46.0 here:
-https://trac.macports.org/ticket/62165
-
-.. code-block:: console
-
-    $ port install graphviz-devel
-    $ pip install --global-option=build_ext \
-                  --global-option="-I/opt/local/include/" \
-                  --global-option="-L/opt/local/lib/" \
-                  pygraphviz
 
 .. _windows-install:
 
