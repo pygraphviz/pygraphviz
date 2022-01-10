@@ -26,7 +26,7 @@ jobs:
       run: sudo apt-get install graphviz graphviz-dev
 
     - name: Install TeX
-      run: sudo apt-get install texlive texlive-latex-extra latexmk imagemagick ghostscript
+      run: sudo apt-get install texlive texlive-latex-extra latexmk imagemagick ghostscript libfreetype6-dev gsfonts libmagickwand-dev
 
     - name: Install packages
       run: |
