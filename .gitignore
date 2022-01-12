@@ -36,3 +36,6 @@ pygraphviz/_graphviz*.so
 .tox/
 MANIFEST
 .eggs/
+
+# Virtual environment directory
+pygraphviz-dev
