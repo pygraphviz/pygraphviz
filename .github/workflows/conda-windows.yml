@@ -30,7 +30,6 @@ jobs:
       - name: Install and Test
         shell: bash -l {0}
         run: |
-          conda update conda
           conda create -n pgv-testenv python=${{ matrix.python-version }}
           conda activate pgv-testenv
           conda install --channel conda-forge pygraphviz
