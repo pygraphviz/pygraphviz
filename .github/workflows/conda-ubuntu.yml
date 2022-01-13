@@ -3,6 +3,7 @@ on:
   schedule:
     # Run this workflow once a week
     - cron: "0 0 * * 0"
+  workflow_dispatch:
 
 jobs:
 
