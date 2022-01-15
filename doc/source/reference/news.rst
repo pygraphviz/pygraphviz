@@ -3,6 +3,18 @@
 News
 ==== 
 
+pygraphviz-1.8 (draft)
+----------------------
+
+Release date: 
+
+ - Drop Python 3.7 support
+ - Add Python 3.10 support
+ - Add IPython rich display hook to AGraph class
+ - Add contributor guide
+ - Fixed directed nature of AGraph.copy()
+ - Minor documentation and code fixes
+
 pygraphviz-1.7
 --------------
 
