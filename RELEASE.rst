@@ -34,9 +34,9 @@ How to make a new release of ``pygraphviz``
 
 - Push the new meta-data to github::
 
-   git push --tags upstream main
+   git push --tags origin main
 
-  (where ``upstream`` is the name of the
+  (where ``origin`` is the name of the
    ``github.com:pygraphviz/pygraphviz`` repository.)
 
 - Review the github release page::
