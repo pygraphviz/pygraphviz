@@ -35,7 +35,7 @@ jobs:
         shell: bash -l {0}
         run: |
           mamba create -n pgv-testenv python=${{ matrix.python-version }}
-          mamba activate pgv-testenv
+          conda activate pgv-testenv
           mamba install --channel conda-forge pygraphviz
           mamba install --channel conda-forge pytest
           pytest --pyargs pygraphviz
