@@ -3,10 +3,10 @@
 News
 ==== 
 
-pygraphviz-1.8 (draft)
-----------------------
+pygraphviz-1.8
+--------------
 
-Release date: 
+Release date: 20 January 2022
 
  - Drop Python 3.7 support
  - Add Python 3.10 support
