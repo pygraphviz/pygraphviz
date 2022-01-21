@@ -31,7 +31,7 @@ You may specify a dot format file to be read on initialization:
 
 >>> G = pgv.AGraph("Petersen.dot")  # doctest: +SKIP
 
-Other options for intializing a graph are using a string,
+Other options for initializing a graph are using a string,
 
 >>> G = pgv.AGraph("graph {1 - 2}")
 
