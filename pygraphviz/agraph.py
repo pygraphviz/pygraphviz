@@ -1330,13 +1330,15 @@ class AGraph:
 
     def _get_prog(self, prog):
         # private: get path of graphviz program
-        progs = [
+        progs = {
             "neato",
             "dot",
             "twopi",
             "circo",
             "fdp",
             "nop",
+            "osage",
+            "patchwork",
             "gc",
             "acyclic",
             "gvpr",
@@ -1346,7 +1348,7 @@ class AGraph:
             "tred",
             "sfdp",
             "unflatten",
-        ]
+        }
         if prog not in progs:
             raise ValueError(f"Program {prog} is not one of: {', '.join(progs)}.")
 
