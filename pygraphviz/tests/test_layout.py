@@ -23,7 +23,8 @@ def test_layout_defaults():
 
 
 @pytest.mark.parametrize(
-    "prog", ("neato", "dot", "twopi", "circo", "fdp", "osage", "patchwork", "sfdp"),
+    "prog",
+    ("neato", "dot", "twopi", "circo", "fdp", "osage", "patchwork", "sfdp"),
 )
 def test_layout_prog_arg(prog):
     A = pgv.AGraph(name="test graph")
