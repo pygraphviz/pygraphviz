@@ -105,6 +105,6 @@ if __name__ == "__main__":
         ext_modules=extension,
         package_data=package_data,
         include_package_data=True,
-        python_requires=">=3.7",
+        python_requires=">=3.8",
         tests_require=["pytest"],
     )
