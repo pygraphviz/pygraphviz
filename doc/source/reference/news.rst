@@ -3,17 +3,25 @@
 News
 ==== 
 
+pygraphviz-1.9
+--------------
+
+Release date: 9 February 2022
+
+ - Drop Python 3.7 support
+ - Add Python 3.10 support
+ - Add osage and patchwork to progs list
+ - Add IPython rich display hook to AGraph class
+ - Add contributor guide
+ - Fixed directed nature of AGraph.copy()
+ - Minor documentation and code fixes
+
 pygraphviz-1.8
 --------------
 
 Release date: 20 January 2022
 
- - Drop Python 3.7 support
- - Add Python 3.10 support
- - Add IPython rich display hook to AGraph class
- - Add contributor guide
- - Fixed directed nature of AGraph.copy()
- - Minor documentation and code fixes
+This release was pulled because the install was broken with pip 22 and python 3.7.
 
 pygraphviz-1.7
 --------------
