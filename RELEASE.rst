@@ -22,6 +22,8 @@ How to make a new release of ``pygraphviz``
 
 - Commit changes::
 
+    git add doc/source/reference/api_notes.rst doc/source/reference/news.rst
+    git add doc/source/_templates/layout.html
     git add pygraphviz/__init__.py
     git commit -m 'Designate <version> release'
 
@@ -84,6 +86,7 @@ How to make a new release of ``pygraphviz``
 
   git add pygraphviz/__init__.py doc/source/_templates/layout.html
   git commit -m 'Bump version'
+  git push origin main
 
 - Update the web frontpage:
   The webpage is kept in a separate repo: pygraphviz/website
