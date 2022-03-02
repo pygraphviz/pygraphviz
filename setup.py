@@ -25,6 +25,9 @@ authors = {
     "Renieris": ("Manos Renieris", ""),
 }
 url = "http://pygraphviz.github.io"
+project_urls = {
+    "Source": "https://github.com/pygraphviz/pygraphviz",
+},
 download_url = "https://pypi.python.org/pypi/pygraphviz"
 platforms = ["Linux", "Mac OSX", "Microsoft :: Windows"]
 keywords = ["Networks", "Graph Visualization", "network", "graph", "graph drawing"]
@@ -98,6 +101,7 @@ if __name__ == "__main__":
         license=license,
         platforms=platforms,
         url=url,
+        project_urls=project_urls,
         download_url=download_url,
         classifiers=classifiers,
         packages=packages,
