@@ -28,7 +28,7 @@ url = "http://pygraphviz.github.io"
 project_urls = {
     "Documentation": "https://pygraphviz.github.io/documentation/stable/",
     "Source": "https://github.com/pygraphviz/pygraphviz",
-},
+}
 download_url = "https://pypi.python.org/pypi/pygraphviz"
 platforms = ["Linux", "Mac OSX", "Microsoft :: Windows"]
 keywords = ["Networks", "Graph Visualization", "network", "graph", "graph drawing"]
