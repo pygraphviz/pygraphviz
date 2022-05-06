@@ -1,7 +1,7 @@
 Tutorial
 ========
 
-The API is very similar to that of NetworkX.  Much of the 
+The API is very similar to that of NetworkX.  Much of the
 NetworkX tutorial at https://networkx.org/documentation/latest/tutorial.html
 is applicable to PyGraphviz.
 See http://pygraphviz.github.io/documentation/latest/reference/api_notes.html  for major differences.
@@ -21,7 +21,7 @@ To make an empty pygraphviz graph use the AGraph class:
 >>> G = pgv.AGraph()
 
 You can use the strict and directed keywords to control what type of
-graph you want.  The default is to create a strict graph 
+graph you want.  The default is to create a strict graph
 (no parallel edges or self-loops).  To create a digraph with possible
 parallel edges and self-loops use
 
@@ -49,7 +49,7 @@ or using a SWIG pointer to the AGraph datastructure,
 Nodes, and edges
 ----------------
 
-Nodes and edges can be added one at a time 
+Nodes and edges can be added one at a time
 
 >>> G.add_node("a")  # adds node 'a'
 >>> G.add_edge("b", "c")  # adds edge 'b'-'c' (and also nodes 'b', 'c')
@@ -84,7 +84,7 @@ Attributes can be added when adding nodes or edges,
 >>> G.add_node(1, color="red")
 >>> G.add_edge("b", "c", color="blue")
 
-or through the node or edge attr dictionaries, 
+or through the node or edge attr dictionaries,
 
 >>> n = G.get_node(1)
 >>> n.attr["shape"] = "box"
@@ -110,12 +110,7 @@ To add positions to the nodes with a Graphviz layout algorithm
 >>> G.layout()  # default to neato
 >>> G.layout(prog="dot")  # use dot
 
-To render the graph to an image 
+To render the graph to an image
 
 >>> G.draw("file.png")  # write previously positioned graph to PNG file
 >>> G.draw("file.ps", prog="circo")  # use circo to position, write PS file
-
-
-
-
-

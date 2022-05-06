@@ -15,7 +15,7 @@ if sys.version_info[:2] < (3, 8):
 name = "pygraphviz"
 description = "Python interface to Graphviz"
 
-with open("README.rst", "r") as fh:
+with open("README.rst") as fh:
     long_description = fh.read()
 
 license = "BSD"

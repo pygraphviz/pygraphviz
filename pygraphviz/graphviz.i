@@ -45,7 +45,7 @@
      PyErr_SetString(PyExc_KeyError,"agset: no key");
      return NULL;
   }
-} 
+}
 
 /* agsetsafeset_label returns -1 on error */
 %exception agsafeset_label {
@@ -54,7 +54,7 @@
      PyErr_SetString(PyExc_KeyError,"agsafeset_label: Error");
      return NULL;
   }
-} 
+}
 
 
 /* agdelnode returns -1 on error */
@@ -114,7 +114,7 @@ def agraphnew(name,strict=False,directed=False):
     else:
         if directed:
             return _graphviz.agopen(name,cvar.Agdirected,None)
-        else:		 
+        else:
             return _graphviz.agopen(name,cvar.Agundirected,None)
 %}
 
@@ -130,15 +130,15 @@ int       agisstrict(Agraph_t * g);
 
 /* nodes */
 Agnode_t *agnode(Agraph_t *g, char *name, int createflag);
-Agnode_t *agidnode(Agraph_t * g, unsigned long id, int createflag); 
+Agnode_t *agidnode(Agraph_t * g, unsigned long id, int createflag);
 Agnode_t *agsubnode(Agraph_t *g, Agnode_t *n, int createflag);
 Agnode_t *agfstnode(Agraph_t *g);
 Agnode_t *agnxtnode(Agraph_t *g, Agnode_t *n);
-Agnode_t *aglstnode(Agraph_t * g); 
-Agnode_t *agprvnode(Agraph_t * g, Agnode_t * n); 
+Agnode_t *aglstnode(Agraph_t * g);
+Agnode_t *agprvnode(Agraph_t * g, Agnode_t * n);
 /* Agsubnode_t *agsubrep(Agraph_t * g, Agnode_t * n); */
 
-/* edges */ 
+/* edges */
 
 Agedge_t *agedge(Agraph_t * g, Agnode_t * t, Agnode_t * h,
  		char *name, int createflag);
@@ -167,7 +167,7 @@ int      agxset(void *obj, Agsym_t *sym, char *value);
 int      agsafeset(void *obj, char *name, char *value, char *def);
 
 %inline %{
-  char *agattrname(Agsym_t *atsym) {	
+  char *agattrname(Agsym_t *atsym) {
     return atsym->name;
   }
   %}
@@ -226,9 +226,9 @@ int      agsafeset(void *obj, char *name, char *value, char *def);
 
 /* subgraphs */
 Agraph_t *agsubg(Agraph_t *g, char *name, int createflag);
-Agraph_t *agfstsubg(Agraph_t *g); 
+Agraph_t *agfstsubg(Agraph_t *g);
 Agraph_t *agnxtsubg(Agraph_t *subg);
-Agraph_t *agparent(Agraph_t *g);  
+Agraph_t *agparent(Agraph_t *g);
 Agraph_t *agroot(Agraph_t *g);
 /* Agedge_t *agsubedge(Agraph_t *g, Agedge_t *e, int createflag); */
 long      agdelsubg(Agraph_t *g, Agraph_t *sub);
@@ -258,7 +258,7 @@ def agnameof(handle):
   if name==b'' or name.startswith(b'%'):
     return None
   else:
-    return name 
+    return name
 %}
 
 
@@ -314,8 +314,7 @@ int gvRenderFilename(GVC_t *gvc, Agraph_t* g, char *format, char *filename);
 /* three lines are straight from the SWIG manual.  */
 %include <cstring.i>
 %include <typemaps.i>
-%cstring_output_allocate(char **result, free(*$1)); 
+%cstring_output_allocate(char **result, free(*$1));
 int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, unsigned int *OUTPUT);
 /* Free memory allocated and pointed to by *result in gvRenderData */
 extern void gvFreeRenderData (char* data);
-

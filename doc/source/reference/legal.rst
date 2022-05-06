@@ -5,11 +5,11 @@ PyGraphviz License
 ------------------
 
 
-   Copyright (C) 2004-2010 by 
+   Copyright (C) 2004-2010 by
    Aric Hagberg <hagberg@lanl.gov>
    Dan Schult <dschult@colgate.edu>
    Manos Renieris, http://www.cs.brown.edu/~er/
-   Distributed with BSD license.     
+   Distributed with BSD license.
    All rights reserved, see LICENSE for details.
 
    Redistribution and use in source and binary forms, with or without

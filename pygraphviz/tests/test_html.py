@@ -42,17 +42,15 @@ def test_long_html_string():
     s = G.add_subgraph("b", label="<Hello<BR/>Subgraph>")
     s.add_node("sa", label="<Hello<BR/>Subgraph Node b>")
     G.add_edge("a", "b", label="<Hello<BR/>Edge>")
-    ans = """strict graph {{
+    ans = f"""strict graph {{
               graph [label=<Hello<BR/>Graph>];
               {{
                 graph [label=<Hello<BR/>Subgraph>];
                 sa     [label=<Hello<BR/>Subgraph Node b>];
               }}
-              a  [label={0}];
+              a  [label={long_html_string}];
               a -- b   [label=<Hello<BR/>Edge>];
-            }}""".format(
-        long_html_string
-    )
+            }}"""
     assert stringify(G) == " ".join(ans.split())
 
 

@@ -12,7 +12,7 @@ PyGraphviz documentation
 .. toctree::
    :maxdepth: 2
 
-   
+
    install
    tutorial
    auto_examples/index

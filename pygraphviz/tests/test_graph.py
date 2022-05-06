@@ -213,13 +213,13 @@ class TestGraph(unittest.TestCase):
         e = (2, 3)
         A.add_edge(e)
         edges = [("1", "2"), ("2", "3")]
-        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
+        assert sorted(tuple(sorted(e)) for e in A.edges()) == edges
 
     def test_add_remove_edges_from(self):
         A = pgv.AGraph()
         A.add_edges_from([(1, 2), (2, 3)])
         edges = [("1", "2"), ("2", "3")]
-        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
+        assert sorted(tuple(sorted(e)) for e in A.edges()) == edges
 
         A.remove_edge(1, 2)
         assert sorted(A.edges()) == [("2", "3")]
@@ -233,7 +233,7 @@ class TestGraph(unittest.TestCase):
         A = pgv.AGraph()
         A.add_edges_from([(1, 2), (2, 3)])
         edges = [("1", "2"), ("2", "3")]
-        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
+        assert sorted(tuple(sorted(e)) for e in A.edges()) == edges
         A.remove_edges_from([(1, 2), (2, 3)])
         assert A.edges() == []
 
@@ -241,9 +241,9 @@ class TestGraph(unittest.TestCase):
         A = pgv.AGraph()
         A.add_edges_from([(1, 2), (2, 3)])
         edges = [("1", "2"), ("2", "3")]
-        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
-        assert sorted([tuple(sorted(e)) for e in A.edges_iter()]) == edges
-        assert sorted([tuple(sorted(e)) for e in A.iteredges()]) == edges
+        assert sorted(tuple(sorted(e)) for e in A.edges()) == edges
+        assert sorted(tuple(sorted(e)) for e in A.edges_iter()) == edges
+        assert sorted(tuple(sorted(e)) for e in A.iteredges()) == edges
 
     def test_has_edge(self):
         assert self.P3.has_edge(1, 2)
@@ -314,7 +314,7 @@ class TestGraph(unittest.TestCase):
         A.add_cycle([1, 2, 3])
         assert A.nodes() == ["1", "2", "3"]
         edges = [("1", "2"), ("1", "3"), ("2", "3")]
-        assert sorted([tuple(sorted(e)) for e in A.iteredges()]) == edges
+        assert sorted(tuple(sorted(e)) for e in A.iteredges()) == edges
 
     def test_graph_strict(self):
         A = pgv.AGraph()
@@ -367,12 +367,12 @@ class TestDiGraphOnly(TestGraph):
         A = pgv.AGraph(directed=True)
         A.add_edges_from(self.P3.edges())
         edges = [("1", "2"), ("2", "3")]
-        assert sorted([tuple(sorted(e)) for e in A.edges()]) == edges
-        assert sorted([tuple(sorted(e)) for e in A.edges_iter()]) == edges
-        assert sorted([tuple(sorted(e)) for e in A.out_edges()]) == edges
-        assert sorted([tuple(sorted(e)) for e in A.out_edges_iter()]) == edges
-        assert sorted([tuple(sorted(e)) for e in A.in_edges()]) == edges
-        assert sorted([tuple(sorted(e)) for e in A.in_edges_iter()]) == edges
+        assert sorted(tuple(sorted(e)) for e in A.edges()) == edges
+        assert sorted(tuple(sorted(e)) for e in A.edges_iter()) == edges
+        assert sorted(tuple(sorted(e)) for e in A.out_edges()) == edges
+        assert sorted(tuple(sorted(e)) for e in A.out_edges_iter()) == edges
+        assert sorted(tuple(sorted(e)) for e in A.in_edges()) == edges
+        assert sorted(tuple(sorted(e)) for e in A.in_edges_iter()) == edges
         assert sorted(A.edges(1)) == [("1", "2")]
         assert sorted(A.edges([1, 2])) == [("1", "2"), ("2", "3")]
         assert sorted(A.edges_iter(1)) == [("1", "2")]

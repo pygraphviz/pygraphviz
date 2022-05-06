@@ -13,7 +13,7 @@ visualization package.
 With PyGraphviz you can create, edit, read, write, and draw graphs using
 Python to access the Graphviz graph data structure and layout algorithms.
 PyGraphviz provides a similar programming interface to NetworkX
-(https://networkx.org). 
+(https://networkx.org).
 
 - **Website (including documentation):** https://pygraphviz.github.io
 - **Mailing list:** https://groups.google.com/forum/#!forum/pygraphviz-discuss

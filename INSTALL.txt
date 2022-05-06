@@ -9,7 +9,7 @@ PyGraphviz requires:
 - C/C++ Compiler
 
 .. note::
-   These instructions assume you have Python and a C/C++ Compiler on your computer.   
+   These instructions assume you have Python and a C/C++ Compiler on your computer.
 
 .. warning::
    Do not use the default channels to install pygraphviz with ``conda``. The
@@ -17,7 +17,7 @@ PyGraphviz requires:
 
        conda install --channel conda-forge pygraphviz
 
-   - |conda-forge-ubuntu-badge| 
+   - |conda-forge-ubuntu-badge|
    - |conda-forge-macos-badge|
    - |conda-forge-windows-badge|
 
@@ -44,7 +44,7 @@ Ubuntu and Debian
 .. code-block:: console
 
     $ sudo apt-get install graphviz graphviz-dev
-    $ pip install pygraphviz 
+    $ pip install pygraphviz
 
 Fedora and Red Hat
 ~~~~~~~~~~~~~~~~~~
