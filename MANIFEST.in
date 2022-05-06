@@ -9,8 +9,8 @@ include Makefile
 
 recursive-include doc *.png
 recursive-include pygraphviz *.i
-recursive-include examples *.py *.gz 
-recursive-include doc *.py *.rst Makefile *.html *.txt *.css 
+recursive-include examples *.py *.gz
+recursive-include doc *.py *.rst Makefile *.html *.txt *.css
 
 global-exclude *~
 global-exclude *.pyc

@@ -16,12 +16,12 @@ pygraphviz-1.1
 
   If G is a pygraphviz.AGraph object then
 
-  - str(G) produces a dot-format string representation 
+  - str(G) produces a dot-format string representation
     (some characters might not be represented correctly)
   - unicode(G) produces a dot-format unicode representation
   - repr(G) produces a string of the unicode representation.
   - print G produces a formatted dot language output
-  
+
 
 pygraphivz-0.32
 ---------------
@@ -40,7 +40,7 @@ pygraphivz-0.32
   There are some important differences between the PyGraphviz
   and NetworkX API.  With PyGraphviz
 
-   - All nodes must be of string or unicode type. 
+   - All nodes must be of string or unicode type.
      An attempt will be made to convert other types to a string.
 
    - Nodes and edges are custom Python objects.  Nodes are like
@@ -56,11 +56,10 @@ pygraphivz-0.32
 
    - The string() method produces a string with the graph represented
      in Graphviz dot format.  See also from_string().
-   
+
    - The subgraph() method is the Graphviz representation of
      subgraphs: a tree of graphs under the original
      (root) graph. The are primarily used for clustering of nodes when
      drawing with dot.
 
   Pygraphviz supports most of the Graphviz API.
-

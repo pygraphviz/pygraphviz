@@ -3,7 +3,7 @@ FAQ
 
    :Q: **I followed the installation instructions but when I do:**
 
-       >>> import pygraphviz 
+       >>> import pygraphviz
 
        **I get an error like:**
 
@@ -47,7 +47,7 @@ FAQ
        The recommended use of the `Graphviz CLI`_ poses challenges for wheel
        packaging.
 
-       .. seealso:: 
+       .. seealso::
           This `GitHub issue <https://github.com/pygraphviz/pygraphviz/issues/167>`__
           for further discussion on wheels and packaging.
 

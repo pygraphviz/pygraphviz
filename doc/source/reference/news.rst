@@ -1,7 +1,7 @@
 ..  -*- coding: utf-8 -*-
 
 News
-==== 
+====
 
 pygraphviz-1.9
 --------------
@@ -110,12 +110,12 @@ Release date: 7 December 2008
 See: https://networkx.lanl.gov/trac/timeline
 
  - Use Graphviz libcgraph instead of deprecated libagraph
- - More closely match API to NetworkX 
+ - More closely match API to NetworkX
  - edges() now produces two-tuples or three tuples if edges(keys=True)
  - Edge and Node objects now have .name and .handle properties
  - Warn without throwing exceptions for Graphviz errors
  - Graph now has .strict and .directed properties
- - Cleared up fontsize warnings in examples 
+ - Cleared up fontsize warnings in examples
 
 
 pygraphviz-0.99
@@ -138,8 +138,8 @@ See: https://networkx.lanl.gov/trac/timeline
    https://networkx.lanl.gov/trac/browser/pygraphviz/trunk/doc/examples/subgraph.py
  - Buggy attribute assignment fixed by Graphviz team (use Graphviz>2.17.20080127)
  - Encode all stings as UTF-8 as default
- - Fix AGraph.clear() memory leak and attempt to address slow deletion 
-   of nodes and edges 
+ - Fix AGraph.clear() memory leak and attempt to address slow deletion
+   of nodes and edges
  - Allow pdf output and support all available output types on a given platform
  - Fix number_of_edges() to use gv.agnedges to correctly report edges for
    graphs with self loops
@@ -156,7 +156,7 @@ See: https://networkx.lanl.gov/trac/timeline
  - Add interface to Graphviz programs acyclic and tred
  - Refactor process handling to allow easier access to Graphviz layout
    and graph processing programs
- - to_string() and from_string() methods 
+ - to_string() and from_string() methods
  - Handle multiple anonymous edges correctly
  - Attribute handling on add_node, add_edge and init of AGraph.
    So you can e.g. A=AGraph(ranksep='0.1'); A.add_node('a',color='red')
@@ -171,10 +171,10 @@ See: https://networkx.lanl.gov/trac/timeline
 
  - Rebuilt SWIG wrappers - works correctly now on 64 bit machines/python2.5
  - Implement Graphviz subgraph functionality
- - Better error reporting when attempting to set attributes, avoid 
-   segfault when using None 
- - pkg-config handling now works in more configurations (hopefully all) 
- 
+ - Better error reporting when attempting to set attributes, avoid
+   segfault when using None
+ - pkg-config handling now works in more configurations (hopefully all)
+
 
 pygraphviz-0.34
 ---------------
@@ -203,5 +203,5 @@ pygraphviz-0.32
    Earlier versions will always be available at the download site.
 
    This version now inter-operates with many of the NetworkX
-   algorithms and graph generators.  See 
+   algorithms and graph generators.  See
    https://networkx.lanl.gov/trac/browser/networkx/trunk/doc/examples/pygraphviz_simple.py
