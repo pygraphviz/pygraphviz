@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News &mdash; PyGraphviz 1.10rc1.dev0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="canonical" href="https://pygraphviz.github.io/documentation/stablereference/news.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within PyGraphviz 1.10rc1.dev0 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Related Packages" href="related.html" />
+    <link rel="prev" title="API Notes" href="api_notes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+    <a href="https://pygraphviz.github.io/">Project Homepage</a> |
+    <a href="https://github.com/pygraphviz/pygraphviz">Source Code</a>
+    
+            <a href="../index.html" class="icon icon-home"> PyGraphviz
+          </a>
+              <div class="version">
+                1.10rc1.dev0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="agraph.html">AGraph Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_notes.html">API Notes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">News</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-9">pygraphviz-1.9</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-8">pygraphviz-1.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-7">pygraphviz-1.7</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-6">pygraphviz-1.6</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-5">pygraphviz-1.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-3-1">pygraphviz-1.3.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-3">pygraphviz-1.3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-2">pygraphviz-1.2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-1">pygraphviz-1.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-1-0-0">pygraphviz-1.0.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-0-99-1">pygraphviz-0.99.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-0-99">pygraphviz-0.99</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-0-37">pygraphviz-0.37</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-0-36">pygraphviz-0.36</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-0-35">pygraphviz-0.35</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-0-34">pygraphviz-0.34</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-0-33">pygraphviz-0.33</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pygraphviz-0-32">pygraphviz-0.32</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="related.html">Related Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html">History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="credits.html">Credits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="legal.html">Legal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributor Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGraphviz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Reference</a> &raquo;</li>
+      <li>News</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+    
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+  <p>This documents the development version of PyGraphviz. Documentation for the current release can be found <a href="https://pygraphviz.github.io/documentation/stable/">here</a>.</p>
+</div>
+    
+           <div itemprop="articleBody">
+             
+  <section id="news">
+<h1>News<a class="headerlink" href="#news" title="Permalink to this headline">¶</a></h1>
+<section id="pygraphviz-1-9">
+<h2>pygraphviz-1.9<a class="headerlink" href="#pygraphviz-1-9" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 9 February 2022</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Drop Python 3.7 support</p></li>
+<li><p>Add Python 3.10 support</p></li>
+<li><p>Add osage and patchwork to progs list</p></li>
+<li><p>Add IPython rich display hook to AGraph class</p></li>
+<li><p>Add contributor guide</p></li>
+<li><p>Fixed directed nature of AGraph.copy()</p></li>
+<li><p>Minor documentation and code fixes</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-1-8">
+<h2>pygraphviz-1.8<a class="headerlink" href="#pygraphviz-1-8" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 20 January 2022</p>
+<p>This release was pulled because the install was broken with pip 22 and python 3.7.</p>
+</section>
+<section id="pygraphviz-1-7">
+<h2>pygraphviz-1.7<a class="headerlink" href="#pygraphviz-1-7" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 1 February 2021</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Drop Python 3.6 support</p></li>
+<li><p>Add Python 3.9 support</p></li>
+<li><p>Require Graphviz 2.42+, (Graphviz 2.46+ recommended)</p></li>
+<li><p>Improve installation process and documentation</p></li>
+<li><p>Switch from nose to pytest</p></li>
+<li><p>Remove old Python 2 code</p></li>
+<li><p>AGraph.eq includes attribute comparison (PR #246)</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-1-6">
+<h2>pygraphviz-1.6<a class="headerlink" href="#pygraphviz-1-6" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 05 September 2020</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Add Python 3.8 support</p></li>
+<li><p>Drop Python 2.7 support</p></li>
+<li><p>Update to SWIG 4.0.1</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-1-5">
+<h2>pygraphviz-1.5<a class="headerlink" href="#pygraphviz-1-5" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 10 September 2018</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Python 3.7 support</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-1-3-1">
+<h2>pygraphviz-1.3.1<a class="headerlink" href="#pygraphviz-1-3-1" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 6 September 2015</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Update manifest to include missing files</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-1-3">
+<h2>pygraphviz-1.3<a class="headerlink" href="#pygraphviz-1-3" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 5 September 2015</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Python 3 support</p></li>
+<li><p>Encoding bugfixes</p></li>
+</ul>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/pygraphviz/pygraphviz/issues?q=milestone%3Apygraphivz-1.3+is%3Aclosed">https://github.com/pygraphviz/pygraphviz/issues?q=milestone%3Apygraphivz-1.3+is%3Aclosed</a></p>
+</section>
+<section id="pygraphviz-1-2">
+<h2>pygraphviz-1.2<a class="headerlink" href="#pygraphviz-1-2" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 3 August 2013</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Quote Graphviz program names to work with space (Windows fix)</p></li>
+<li><p>Keep name in reverse()</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-1-1">
+<h2>pygraphviz-1.1<a class="headerlink" href="#pygraphviz-1-1" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 9 February 2011</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Added unicode support for handling non-ASCII characters</p></li>
+<li><p>Better handling of user data on initialization of AGraph() object
+to guess input type (AGraph object, file, dict-of-dicts, file)</p></li>
+<li><p>Add sfdp to layout options</p></li>
+</ul>
+</div></blockquote>
+<p>See <a class="reference external" href="https://networkx.lanl.gov/trac/query?group=status&amp;milestone=pygraphviz-1.1">https://networkx.lanl.gov/trac/query?group=status&amp;milestone=pygraphviz-1.1</a></p>
+</section>
+<section id="pygraphviz-1-0-0">
+<h2>pygraphviz-1.0.0<a class="headerlink" href="#pygraphviz-1-0-0" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 30 July 2010</p>
+<p>See: <a class="reference external" href="https://networkx.lanl.gov/trac/timeline">https://networkx.lanl.gov/trac/timeline</a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Added to_string() and from_string methods</p></li>
+<li><p>Interface to graphviz “acyclic” and “tred”</p></li>
+<li><p>Better handling of user data on initialization of AGraph() object
+to guess input type (AGraph object, file, dict-of-dicts, file)</p></li>
+<li><p>Add handling of default attributes for subgraphs</p></li>
+<li><p>Improved error handling when using non-string data</p></li>
+<li><p>Fix bug in default attribute handling</p></li>
+<li><p>Make sure file handles are closed correctly</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-0-99-1">
+<h2>pygraphviz-0.99.1<a class="headerlink" href="#pygraphviz-0-99-1" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 7 December 2008</p>
+<p>See: <a class="reference external" href="https://networkx.lanl.gov/trac/timeline">https://networkx.lanl.gov/trac/timeline</a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Use Graphviz libcgraph instead of deprecated libagraph</p></li>
+<li><p>More closely match API to NetworkX</p></li>
+<li><p>edges() now produces two-tuples or three tuples if edges(keys=True)</p></li>
+<li><p>Edge and Node objects now have .name and .handle properties</p></li>
+<li><p>Warn without throwing exceptions for Graphviz errors</p></li>
+<li><p>Graph now has .strict and .directed properties</p></li>
+<li><p>Cleared up fontsize warnings in examples</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-0-99">
+<h2>pygraphviz-0.99<a class="headerlink" href="#pygraphviz-0-99" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 18 November 2008</p>
+<p>See: <a class="reference external" href="https://networkx.lanl.gov/trac/timeline">https://networkx.lanl.gov/trac/timeline</a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>New documentation at <a class="reference external" href="http://networkx.lanl.gov/pygraphviz/">http://networkx.lanl.gov/pygraphviz/</a></p></li>
+<li><p>Developer’s site at <a class="reference external" href="https://networkx.lanl.gov/trac/wiki/PyGraphviz">https://networkx.lanl.gov/trac/wiki/PyGraphviz</a></p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-0-37">
+<h2>pygraphviz-0.37<a class="headerlink" href="#pygraphviz-0-37" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 17 August 2008</p>
+<p>See: <a class="reference external" href="https://networkx.lanl.gov/trac/timeline">https://networkx.lanl.gov/trac/timeline</a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Handle default attributes for subgraphs, examples at
+<a class="reference external" href="https://networkx.lanl.gov/trac/browser/pygraphviz/trunk/doc/examples/attributes.py">https://networkx.lanl.gov/trac/browser/pygraphviz/trunk/doc/examples/attributes.py</a>
+<a class="reference external" href="https://networkx.lanl.gov/trac/browser/pygraphviz/trunk/doc/examples/subgraph.py">https://networkx.lanl.gov/trac/browser/pygraphviz/trunk/doc/examples/subgraph.py</a></p></li>
+<li><p>Buggy attribute assignment fixed by Graphviz team (use Graphviz&gt;2.17.20080127)</p></li>
+<li><p>Encode all stings as UTF-8 as default</p></li>
+<li><p>Fix AGraph.clear() memory leak and attempt to address slow deletion
+of nodes and edges</p></li>
+<li><p>Allow pdf output and support all available output types on a given platform</p></li>
+<li><p>Fix number_of_edges() to use gv.agnedges to correctly report edges for
+graphs with self loops</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-0-36">
+<h2>pygraphviz-0.36<a class="headerlink" href="#pygraphviz-0-36" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 13 January 2008</p>
+<p>See: <a class="reference external" href="https://networkx.lanl.gov/trac/timeline">https://networkx.lanl.gov/trac/timeline</a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Automatic handling of types on init of AGraph(data): data can be
+a filename, string in dot format, dictionary-of-dictionaries,
+or a SWIG AGraph pointer.</p></li>
+<li><p>Add interface to Graphviz programs acyclic and tred</p></li>
+<li><p>Refactor process handling to allow easier access to Graphviz layout
+and graph processing programs</p></li>
+<li><p>to_string() and from_string() methods</p></li>
+<li><p>Handle multiple anonymous edges correctly</p></li>
+<li><p>Attribute handling on add_node, add_edge and init of AGraph.
+So you can e.g. A=AGraph(ranksep=’0.1’); A.add_node(‘a’,color=’red’)
+A.add_edge(‘a’,’b’,color=’blue’)</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-0-35">
+<h2>pygraphviz-0.35<a class="headerlink" href="#pygraphviz-0-35" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 22 July 2007</p>
+<p>See: <a class="reference external" href="https://networkx.lanl.gov/trac/timeline">https://networkx.lanl.gov/trac/timeline</a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Rebuilt SWIG wrappers - works correctly now on 64 bit machines/python2.5</p></li>
+<li><p>Implement Graphviz subgraph functionality</p></li>
+<li><p>Better error reporting when attempting to set attributes, avoid
+segfault when using None</p></li>
+<li><p>pkg-config handling now works in more configurations (hopefully all)</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-0-34">
+<h2>pygraphviz-0.34<a class="headerlink" href="#pygraphviz-0-34" title="Permalink to this headline">¶</a></h2>
+<p>Release date: 11 April 2007</p>
+<p>See: <a class="reference external" href="https://networkx.lanl.gov/trac/timeline">https://networkx.lanl.gov/trac/timeline</a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>run “python setup_egg.py test” for tests if you have setuptools</p></li>
+<li><p>added tests for layout code</p></li>
+<li><p>use pkg-config for finding graphviz (dotneato-config still works
+for older graphviz versions)</p></li>
+<li><p>use threads and temporary files for multiplatform nonblocking IO</p></li>
+<li><p>django example</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-0-33">
+<h2>pygraphviz-0.33<a class="headerlink" href="#pygraphviz-0-33" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Workaround for “nop” bug in graphviz-2.8, improved packaging,
+updated swig wrapper, better error handling.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="pygraphviz-0-32">
+<h2>pygraphviz-0.32<a class="headerlink" href="#pygraphviz-0-32" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>The release pygraphviz-0.32 is the second rewrite of the original project.
+It has improved attribute handling and drawing capabilities.
+It is not backward compatible with earlier versions.
+Earlier versions will always be available at the download site.</p>
+<p>This version now inter-operates with many of the NetworkX
+algorithms and graph generators.  See
+<a class="reference external" href="https://networkx.lanl.gov/trac/browser/networkx/trunk/doc/examples/pygraphviz_simple.py">https://networkx.lanl.gov/trac/browser/networkx/trunk/doc/examples/pygraphviz_simple.py</a></p>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api_notes.html" class="btn btn-neutral float-left" title="API Notes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="related.html" class="btn btn-neutral float-right" title="Related Packages" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
+      <span class="lastupdated">Last updated on May 07, 2022.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

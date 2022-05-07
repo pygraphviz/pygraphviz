@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ &mdash; PyGraphviz 1.10rc1.dev0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="canonical" href="https://pygraphviz.github.io/documentation/stablereference/faq.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within PyGraphviz 1.10rc1.dev0 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Notes" href="api_notes.html" />
+    <link rel="prev" title="AGraph Class" href="agraph.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+    <a href="https://pygraphviz.github.io/">Project Homepage</a> |
+    <a href="https://github.com/pygraphviz/pygraphviz">Source Code</a>
+    
+            <a href="../index.html" class="icon icon-home"> PyGraphviz
+          </a>
+              <div class="version">
+                1.10rc1.dev0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="agraph.html">AGraph Class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_notes.html">API Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="news.html">News</a></li>
+<li class="toctree-l2"><a class="reference internal" href="related.html">Related Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html">History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="credits.html">Credits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="legal.html">Legal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributor Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGraphviz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Reference</a> &raquo;</li>
+      <li>FAQ</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+    
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+  <p>This documents the development version of PyGraphviz. Documentation for the current release can be found <a href="https://pygraphviz.github.io/documentation/stable/">here</a>.</p>
+</div>
+    
+           <div itemprop="articleBody">
+             
+  <section id="faq">
+<h1>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">Q</dt>
+<dd class="field-odd"><p><strong>I followed the installation instructions but when I do:</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span>
+</pre></div>
+</div>
+<p><strong>I get an error like:</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">ImportError:</span> <span class="pre">libagraph.so.1:</span> <span class="pre">cannot</span> <span class="pre">open</span> <span class="pre">shared</span> <span class="pre">object</span> <span class="pre">file:</span> <span class="pre">No</span>
+<span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory</span></code></p>
+<p><strong>What is wrong?</strong></p>
+</dd>
+<dt class="field-even">A</dt>
+<dd class="field-even"><p>Some Unix systems don’t include the Graphviz library in the
+default search path for the run-time linker.  The path is often
+something like <code class="docutils literal notranslate"><span class="pre">/usr/lib/graphviz</span></code> or <code class="docutils literal notranslate"><span class="pre">/sw/lib/graphviz</span></code> etc. and
+it needs to be added to your search path.
+On *nix systems, the preferred way to do this is by setting the
+appropriate flags when building/installing <code class="docutils literal notranslate"><span class="pre">pygraphviz</span></code>.
+For example, if the Graphviz libraries are installed in
+<code class="docutils literal notranslate"><span class="pre">/opt/lib/mygviz/</span></code> on your system:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install --global-option<span class="o">=</span>build_ext <span class="se">\</span>
+            --global-option<span class="o">=</span><span class="s2">&quot;-L/opt/lib/mygviz/&quot;</span> <span class="se">\</span>
+            --global-option<span class="o">=</span><span class="s2">&quot;-R/opt/lib/mygviz/&quot;</span> <span class="se">\</span>
+            pygraphviz
+</pre></div>
+</div>
+<p>In this example, the <code class="docutils literal notranslate"><span class="pre">-L</span></code> and <code class="docutils literal notranslate"><span class="pre">-R</span></code> flags tell the linker where to
+look for the required Graphviz libraries at build time and run time,
+respectively.</p>
+</dd>
+<dt class="field-odd">Q</dt>
+<dd class="field-odd"><p><strong>How do I compile pygraphviz under Windows?</strong></p>
+</dd>
+<dt class="field-even">A</dt>
+<dd class="field-even"><p>See <a class="reference internal" href="../install.html#windows-install"><span class="std std-ref">Windows</span></a> for the latest on how to
+install Graphviz and pygraphviz on Windows.</p>
+</dd>
+<dt class="field-odd">Q</dt>
+<dd class="field-odd"><p><strong>Why don’t you distribute a pygraphviz Windows installer?</strong></p>
+</dd>
+<dt class="field-even">A</dt>
+<dd class="field-even"><p>We would very much like to make binary wheels available for <code class="docutils literal notranslate"><span class="pre">pygraphviz</span></code>,
+but there are several complications.
+<code class="docutils literal notranslate"><span class="pre">pygraphviz</span></code> is a wrapper around Graphviz, which means that Graphviz
+must be installed, and Graphviz header files, libraries <em>and</em> command
+line executables must all be accessible for the wrapper.
+The recommended use of the <a class="reference external" href="https://gitlab.com/graphviz/graphviz/-/issues/1808#note_403608643">Graphviz CLI</a> poses challenges for wheel
+packaging.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>This <a class="reference external" href="https://github.com/pygraphviz/pygraphviz/issues/167">GitHub issue</a>
+for further discussion on wheels and packaging.</p>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+
+
+           </div>
+          </div>
+
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="agraph.html" class="btn btn-neutral float-left" title="AGraph Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_notes.html" class="btn btn-neutral float-right" title="API Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
+      <span class="lastupdated">Last updated on May 07, 2022.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

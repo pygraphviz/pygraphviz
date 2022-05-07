@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star &mdash; PyGraphviz 1.10rc1.dev0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="canonical" href="https://pygraphviz.github.io/documentation/stableauto_examples/plot_star.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within PyGraphviz 1.10rc1.dev0 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Knuth Miles" href="plot_miles.html" />
+    <link rel="prev" title="Basic" href="plot_simple.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+    <a href="https://pygraphviz.github.io/">Project Homepage</a> |
+    <a href="https://github.com/pygraphviz/pygraphviz">Source Code</a>
+    
+            <a href="../index.html" class="icon icon-home"> PyGraphviz
+          </a>
+              <div class="version">
+                1.10rc1.dev0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_subgraph.html">Subgraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_simple.html">Basic</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Star</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_miles.html">Knuth Miles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributor Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGraphviz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Gallery</a> &raquo;</li>
+      <li>Star</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+    
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+  <p>This documents the development version of PyGraphviz. Documentation for the current release can be found <a href="https://pygraphviz.github.io/documentation/stable/">here</a>.</p>
+</div>
+    
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-star-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="star">
+<span id="sphx-glr-auto-examples-plot-star-py"></span><h1>Star<a class="headerlink" href="#star" title="Permalink to this headline">¶</a></h1>
+<p>Create and draw a star with varying node properties.</p>
+<img src="../_images/sphx_glr_plot_star_001.png" srcset="../_images/sphx_glr_plot_star_001.png" alt="plot star" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>strict graph &quot;&quot; {
+        node [fixedsize=true,
+                fontcolor=&quot;#FFFFFF&quot;,
+                shape=circle,
+                style=filled
+        ];
+        1       [fillcolor=&quot;#100000&quot;,
+                height=0.5625,
+                width=0.5625];
+        0 -- 1;
+        2       [fillcolor=&quot;#200000&quot;,
+                height=0.625,
+                width=0.625];
+        0 -- 2;
+        3       [fillcolor=&quot;#300000&quot;,
+                height=0.6875,
+                width=0.6875];
+        0 -- 3;
+        4       [fillcolor=&quot;#400000&quot;,
+                height=0.75,
+                width=0.75];
+        0 -- 4;
+        5       [fillcolor=&quot;#500000&quot;,
+                height=0.8125,
+                width=0.8125];
+        0 -- 5;
+        6       [fillcolor=&quot;#600000&quot;,
+                height=0.875,
+                width=0.875];
+        0 -- 6;
+        7       [fillcolor=&quot;#700000&quot;,
+                height=0.9375,
+                width=0.9375];
+        0 -- 7;
+        8       [fillcolor=&quot;#800000&quot;,
+                height=1.0,
+                width=1.0];
+        0 -- 8;
+        9       [fillcolor=&quot;#900000&quot;,
+                height=1.0625,
+                width=1.0625];
+        0 -- 9;
+        10      [fillcolor=&quot;#a00000&quot;,
+                height=1.125,
+                width=1.125];
+        0 -- 10;
+        11      [fillcolor=&quot;#b00000&quot;,
+                height=1.1875,
+                width=1.1875];
+        0 -- 11;
+        12      [fillcolor=&quot;#c00000&quot;,
+                height=1.25,
+                width=1.25];
+        0 -- 12;
+        13      [fillcolor=&quot;#d00000&quot;,
+                height=1.3125,
+                width=1.3125];
+        0 -- 13;
+        14      [fillcolor=&quot;#e00000&quot;,
+                height=1.375,
+                width=1.375];
+        0 -- 14;
+        15      [fillcolor=&quot;#f00000&quot;,
+                height=1.4375,
+                width=1.4375];
+        0 -- 15;
+}
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#    Copyright (C) 2006 by</span>
+<span class="c1">#    Aric Hagberg &lt;hagberg@lanl.gov&gt;</span>
+<span class="c1">#    Dan Schult &lt;dschult@colgate.edu&gt;</span>
+<span class="c1">#    Manos Renieris, http://www.cs.brown.edu/~er/</span>
+<span class="c1">#    Distributed with BSD license.</span>
+<span class="c1">#    All rights reserved, see LICENSE for details.</span>
+
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Aric Hagberg (hagberg@lanl.gov)&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pygraphviz</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">AGraph</span><span class="p">()</span>
+
+<span class="c1"># set some default node attributes</span>
+<span class="n">A</span><span class="o">.</span><span class="n">node_attr</span><span class="p">[</span><span class="s2">&quot;style&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;filled&quot;</span>
+<span class="n">A</span><span class="o">.</span><span class="n">node_attr</span><span class="p">[</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;circle&quot;</span>
+<span class="n">A</span><span class="o">.</span><span class="n">node_attr</span><span class="p">[</span><span class="s2">&quot;fixedsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+<span class="n">A</span><span class="o">.</span><span class="n">node_attr</span><span class="p">[</span><span class="s2">&quot;fontcolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#FFFFFF&quot;</span>
+
+<span class="c1"># make a star in shades of red</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">):</span>
+    <span class="n">A</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">attr</span><span class="p">[</span><span class="s2">&quot;fillcolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">i</span> <span class="o">*</span> <span class="mi">16</span><span class="si">:</span><span class="s2">2x</span><span class="si">}</span><span class="s2">0000&quot;</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">attr</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span> <span class="o">/</span> <span class="mf">16.0</span> <span class="o">+</span> <span class="mf">0.5</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">attr</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span> <span class="o">/</span> <span class="mf">16.0</span> <span class="o">+</span> <span class="mf">0.5</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">string</span><span class="p">())</span>  <span class="c1"># print to screen</span>
+<span class="n">A</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;star.dot&quot;</span><span class="p">)</span>  <span class="c1"># write to simple.dot</span>
+<span class="n">A</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="s2">&quot;star.png&quot;</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;circo&quot;</span><span class="p">)</span>  <span class="c1"># draw to png using circo layout</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.126 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-star-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/3eec82731466697b60c961133f801483/plot_star.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_star.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/4e83e39a7d255093d0acd5faad5cd483/plot_star.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_star.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+           </div>
+          </div>
+
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="plot_simple.html" class="btn btn-neutral float-left" title="Basic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plot_miles.html" class="btn btn-neutral float-right" title="Knuth Miles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
+      <span class="lastupdated">Last updated on May 07, 2022.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

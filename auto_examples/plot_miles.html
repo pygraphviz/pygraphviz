@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knuth Miles &mdash; PyGraphviz 1.10rc1.dev0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="canonical" href="https://pygraphviz.github.io/documentation/stableauto_examples/plot_miles.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within PyGraphviz 1.10rc1.dev0 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reference" href="../reference/index.html" />
+    <link rel="prev" title="Star" href="plot_star.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+    <a href="https://pygraphviz.github.io/">Project Homepage</a> |
+    <a href="https://github.com/pygraphviz/pygraphviz">Source Code</a>
+    
+            <a href="../index.html" class="icon icon-home"> PyGraphviz
+          </a>
+              <div class="version">
+                1.10rc1.dev0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_subgraph.html">Subgraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_simple.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_star.html">Star</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Knuth Miles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#references">References.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributor Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGraphviz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Gallery</a> &raquo;</li>
+      <li>Knuth Miles</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+    
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+  <p>This documents the development version of PyGraphviz. Documentation for the current release can be found <a href="https://pygraphviz.github.io/documentation/stable/">here</a>.</p>
+</div>
+    
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-miles-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="knuth-miles">
+<span id="sphx-glr-auto-examples-plot-miles-py"></span><h1>Knuth Miles<a class="headerlink" href="#knuth-miles" title="Permalink to this headline">¶</a></h1>
+<p>An example that shows how to add your own positions to nodes
+and have graphviz “neato” position the edges.</p>
+<p>miles_graph() returns an undirected graph over the 128 US cities from
+the datafile miles_dat.txt.</p>
+<p>This example is described in Section 1.1 in Knuth’s book <a class="footnote-reference brackets" href="#id4" id="id1">1</a> <a class="footnote-reference brackets" href="#id5" id="id2">2</a>.</p>
+<p>The data used in this example is copied from <a class="footnote-reference brackets" href="#id5" id="id3">2</a>.  The filename and
+header have been modified to adhere to the request of the author to
+not corrupt the original source file content and name.</p>
+<section id="references">
+<h2>References.<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Donald E. Knuth,
+“The Stanford GraphBase: A Platform for Combinatorial Computing”,
+ACM Press, New York, 1993.</p>
+</dd>
+<dt class="label" id="id5"><span class="brackets">2</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id3">2</a>)</span></dt>
+<dd><p><a class="reference external" href="http://www-cs-faculty.stanford.edu/~knuth/sgb.html">http://www-cs-faculty.stanford.edu/~knuth/sgb.html</a></p>
+</dd>
+</dl>
+<img src="../_images/sphx_glr_plot_miles_001.png" srcset="../_images/sphx_glr_plot_miles_001.png" alt="plot miles" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loaded miles_dat.txt containing 128 cities.
+Wrote miles.dot
+Wrote miles.png
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Aric Hagberg (aric.hagberg@gmail.com)&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">miles_graph</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Return a graph from the data in miles_dat.txt.</span>
+
+<span class="sd">    Edges are made between cities that are less then 300 miles apart.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">math</span>
+    <span class="kn">import</span> <span class="nn">re</span>
+    <span class="kn">import</span> <span class="nn">gzip</span>
+
+    <span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;miles_dat&quot;</span><span class="p">)</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">node_attr</span><span class="p">[</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;circle&quot;</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">node_attr</span><span class="p">[</span><span class="s2">&quot;fixedsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">node_attr</span><span class="p">[</span><span class="s2">&quot;fontsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;8&quot;</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">node_attr</span><span class="p">[</span><span class="s2">&quot;style&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;filled&quot;</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">graph_attr</span><span class="p">[</span><span class="s2">&quot;outputorder&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;edgesfirst&quot;</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">graph_attr</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;miles_dat&quot;</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">graph_attr</span><span class="p">[</span><span class="s2">&quot;ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1.0&quot;</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">edge_attr</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#1100FF&quot;</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">edge_attr</span><span class="p">[</span><span class="s2">&quot;style&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;setlinewidth(2)&quot;</span>
+
+    <span class="n">cities</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;miles_dat.txt.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>  <span class="c1"># skip comments</span>
+            <span class="k">continue</span>
+        <span class="n">numfind</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\d+&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">numfind</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>  <span class="c1"># this line is distances</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dist</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>  <span class="c1"># connect if closer then 300 miles</span>
+                    <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">city</span><span class="p">,</span> <span class="n">cities</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># this line is a city, position, population</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="p">(</span><span class="n">city</span><span class="p">,</span> <span class="n">coordpop</span><span class="p">)</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span>
+            <span class="n">cities</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">city</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">pop</span><span class="p">)</span> <span class="o">=</span> <span class="n">coordpop</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">coord</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">city</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">city</span><span class="p">)</span>
+            <span class="c1"># assign positions, scale to be something reasonable in points</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">attr</span><span class="p">[</span>
+                <span class="s2">&quot;pos&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="o">-</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">7000</span><span class="p">)</span> <span class="o">/</span> <span class="mf">10.0</span><span class="si">:</span><span class="s2">f</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2000</span><span class="p">)</span> <span class="o">/</span> <span class="mf">10.0</span><span class="si">:</span><span class="s2">f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="c1"># assign node size, in sqrt of 1,000,000&#39;s of people</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000000.0</span><span class="p">)</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">attr</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">d</span> <span class="o">/</span> <span class="mi">2</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">attr</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">d</span> <span class="o">/</span> <span class="mi">2</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="c1"># assign node color</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">attr</span><span class="p">[</span><span class="s2">&quot;fillcolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#0000</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="mi">256</span><span class="p">)</span><span class="si">:</span><span class="s2">2x</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="c1"># empty labels</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">attr</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+
+    <span class="k">return</span> <span class="n">G</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">warnings</span>
+    <span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+
+    <span class="c1"># ignore Graphviz warning messages</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+    <span class="n">G</span> <span class="o">=</span> <span class="n">miles_graph</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loaded miles_dat.txt containing 128 cities.&quot;</span><span class="p">)</span>
+
+    <span class="n">G</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;miles.dot&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrote miles.dot&quot;</span><span class="p">)</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="s2">&quot;miles.png&quot;</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;neato&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="s2">&quot;-n2&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrote miles.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.137 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-miles-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/3184e92a37f50733f4d8eda3ab5447d1/plot_miles.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_miles.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/ff67e8e79bb0adcdc076fc61d5a9e5a0/plot_miles.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_miles.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="plot_star.html" class="btn btn-neutral float-left" title="Star" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../reference/index.html" class="btn btn-neutral float-right" title="Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
+      <span class="lastupdated">Last updated on May 07, 2022.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

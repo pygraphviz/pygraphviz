@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributor Guide &mdash; PyGraphviz 1.10rc1.dev0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="canonical" href="https://pygraphviz.github.io/documentation/stablecontribute.html"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within PyGraphviz 1.10rc1.dev0 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Legal" href="reference/legal.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+    <a href="https://pygraphviz.github.io/">Project Homepage</a> |
+    <a href="https://github.com/pygraphviz/pygraphviz">Source Code</a>
+    
+            <a href="index.html" class="icon icon-home"> PyGraphviz
+          </a>
+              <div class="version">
+                1.10rc1.dev0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributor Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#divergence-from-upstream-main">Divergence from <code class="docutils literal notranslate"><span class="pre">upstream</span> <span class="pre">main</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#guidelines">Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-tests">Adding tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-examples">Adding examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bugs">Bugs</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyGraphviz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Contributor Guide</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+    
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+  <p>This documents the development version of PyGraphviz. Documentation for the current release can be found <a href="https://pygraphviz.github.io/documentation/stable/">here</a>.</p>
+</div>
+    
+           <div itemprop="articleBody">
+             
+  <section id="contributor-guide">
+<span id="id1"></span><h1>Contributor Guide<a class="headerlink" href="#contributor-guide" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This document assumes some familiarity with contributing to open source
+scientific Python projects using GitHub pull requests.</p>
+</div>
+<section id="development-workflow">
+<span id="dev-workflow"></span><h2>Development Workflow<a class="headerlink" href="#development-workflow" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>If you are a first-time contributor:</p>
+<ul>
+<li><p>You’ll need to install GraphViz on your local computer, if you haven’t
+already.  For OS-specific installation instructions, refer to <a class="reference external" href="https://github.com/pygraphviz/pygraphviz/blob/main/INSTALL.txt">INSTALL.txt</a>.</p></li>
+<li><p>Go to <a class="reference external" href="https://github.com/pygraphviz/pygraphviz">https://github.com/pygraphviz/pygraphviz</a> and click the
+“fork” button to create your own copy of the project.</p></li>
+<li><p>Clone the project to your local computer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">your</span><span class="o">-</span><span class="n">username</span><span class="o">/</span><span class="n">pygraphviz</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+</li>
+<li><p>Navigate to the folder pygraphviz and add the upstream repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">upstream</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">pygraphviz</span><span class="o">/</span><span class="n">pygraphviz</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+</li>
+<li><p>Now, you have remote repositories named:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">upstream</span></code>, which refers to the <code class="docutils literal notranslate"><span class="pre">pygraphviz</span></code> repository</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">origin</span></code>, which refers to your personal fork</p></li>
+</ul>
+</li>
+<li><p>Next, you need to set up your build environment.
+Here are instructions using <code class="docutils literal notranslate"><span class="pre">venv</span></code>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">venv</span></code> (pip based)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a virtualenv named ``pygraphviz-dev`` that lives in the directory of</span>
+<span class="c1"># the same name</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">pygraphviz</span><span class="o">-</span><span class="n">dev</span>
+<span class="c1"># Activate it</span>
+<span class="n">source</span> <span class="n">pygraphviz</span><span class="o">-</span><span class="n">dev</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+<span class="c1"># Install main development and runtime dependencies of pygraphviz</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">developer</span><span class="o">.</span><span class="n">txt</span>
+<span class="c1">#</span>
+<span class="c1"># Build and install pygraphviz from source</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+<span class="c1"># Test your installation</span>
+<span class="n">PYTHONPATH</span><span class="o">=.</span> <span class="n">pytest</span> <span class="n">pygraphviz</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Finally, we recommend you use a pre-commit hook, which runs black when
+you type <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">install</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Develop your contribution:</p>
+<ul>
+<li><p>Pull the latest changes from upstream:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="n">main</span>
+<span class="n">git</span> <span class="n">pull</span> <span class="n">upstream</span> <span class="n">main</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a branch for the feature you want to work on. Since the
+branch name will appear in the merge message, use a sensible name
+such as ‘bugfix-for-issue-1480’:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">bugfix</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">issue</span><span class="o">-</span><span class="mi">1480</span>
+</pre></div>
+</div>
+</li>
+<li><p>Commit locally as you progress (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code>)</p></li>
+</ul>
+</li>
+<li><p>Test your contribution:</p>
+<ul>
+<li><p>Run the test suite locally (see <a class="reference internal" href="#testing">Testing</a> for details):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PYTHONPATH</span><span class="o">=.</span> <span class="n">pytest</span> <span class="n">pygraphviz</span>
+</pre></div>
+</div>
+</li>
+<li><p>Running the tests locally <em>before</em> submitting a pull request helps catch
+problems early and reduces the load on the continuous integration
+system.</p></li>
+</ul>
+</li>
+<li><p>Submit your contribution:</p>
+<ul>
+<li><p>Push your changes back to your fork on GitHub:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">bugfix</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">issue</span><span class="o">-</span><span class="mi">1480</span>
+</pre></div>
+</div>
+</li>
+<li><p>Go to GitHub. The new branch will show up with a green Pull Request
+button—click it.</p></li>
+<li><p>If you want, post on the <a class="reference external" href="https://groups.google.com/forum/#!forum/pygraphviz-discuss">mailing list</a> to explain your changes or
+to ask for review.</p></li>
+</ul>
+</li>
+<li><p>Review process:</p>
+<ul class="simple">
+<li><p>Every Pull Request (PR) update triggers a set of <a class="reference external" href="https://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a> services
+that check that the code is up to standards and passes all our tests.
+These checks must pass before your PR can be merged.  If one of the
+checks fails, you can find out why by clicking on the “failed” icon (red
+cross) and inspecting the build and test log.</p></li>
+<li><p>Reviewers (the other developers and interested community members) will
+write inline and/or general comments on your PR to help
+you improve its implementation, documentation, and style.  Every single
+developer working on the project has their code reviewed, and we’ve come
+to see it as friendly conversation from which we all learn and the
+overall code quality benefits.  Therefore, please don’t let the review
+discourage you from contributing: its only aim is to improve the quality
+of project, not to criticize (we are, after all, very grateful for the
+time you’re donating!).</p></li>
+<li><p>To update your PR, make your changes on your local repository
+and commit. As soon as those changes are pushed up (to the same branch as
+before) the PR will update automatically.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the PR closes an issue, make sure that GitHub knows to automatically
+close the issue when the PR is merged.  For example, if the PR closes
+issue number 1480, you could use the phrase “Fixes #1480” in the PR
+description or commit message.</p>
+<p>To reviewers: make sure the merge message also has a brief description of
+the change(s).</p>
+</div>
+</li>
+</ol>
+</section>
+<section id="divergence-from-upstream-main">
+<h2>Divergence from <code class="docutils literal notranslate"><span class="pre">upstream</span> <span class="pre">main</span></code><a class="headerlink" href="#divergence-from-upstream-main" title="Permalink to this headline">¶</a></h2>
+<p>If GitHub indicates that the branch of your Pull Request can no longer
+be merged automatically, merge the main branch into yours:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span> <span class="n">main</span>
+<span class="n">git</span> <span class="n">merge</span> <span class="n">upstream</span><span class="o">/</span><span class="n">main</span>
+</pre></div>
+</div>
+<p>If any conflicts occur, they need to be fixed before continuing.  See
+which files are in conflict using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">status</span>
+</pre></div>
+</div>
+<p>Which displays a message like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Unmerged</span> <span class="n">paths</span><span class="p">:</span>
+  <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git add &lt;file&gt;...&quot;</span> <span class="n">to</span> <span class="n">mark</span> <span class="n">resolution</span><span class="p">)</span>
+
+  <span class="n">both</span> <span class="n">modified</span><span class="p">:</span>   <span class="n">file_with_conflict</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>Inside the conflicted file, you’ll find sections like these:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> <span class="n">HEAD</span>
+<span class="n">The</span> <span class="n">way</span> <span class="n">the</span> <span class="n">text</span> <span class="n">looks</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">branch</span>
+<span class="o">=======</span>
+<span class="n">The</span> <span class="n">way</span> <span class="n">the</span> <span class="n">text</span> <span class="n">looks</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">main</span> <span class="n">branch</span>
+<span class="o">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> <span class="n">main</span>
+</pre></div>
+</div>
+<p>Choose one version of the text that should be kept, and delete the
+rest:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">way</span> <span class="n">the</span> <span class="n">text</span> <span class="n">looks</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">branch</span>
+</pre></div>
+</div>
+<p>Now, add the fixed file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">add</span> <span class="n">file_with_conflict</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>Once you’ve fixed all merge conflicts, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">commit</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Advanced Git users may want to rebase instead of merge,
+but we squash and merge PRs either way.</p>
+</div>
+</section>
+<section id="guidelines">
+<h2>Guidelines<a class="headerlink" href="#guidelines" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>All code should have tests.</p></li>
+<li><p>All code should be documented, to the same
+<a class="reference external" href="https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard">standard</a>
+as NumPy and SciPy.</p></li>
+<li><p>All changes are reviewed.  Ask on the
+<a class="reference external" href="https://groups.google.com/forum/#!forum/pygraphviz-discuss">mailing list</a> if
+you get no response to your pull request.</p></li>
+</ul>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>To run all tests:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ PYTHONPATH=. pytest pygraphviz
+</pre></div>
+</div>
+<p>Or tests from a specific file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ PYTHONPATH=. pytest pygraphviz/tests/test_readwrite.py
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">--doctest-modules</span></code> to run doctests.
+For example, run all tests and all doctests using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ PYTHONPATH=. pytest --doctest-modules pygraphviz
+</pre></div>
+</div>
+<p>Tests for a module should ideally cover all code in that module,
+i.e., statement coverage should be at 100%.</p>
+<p>To measure the test coverage, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ PYTHONPATH=. pytest --cov=pygraphviz pygraphviz
+</pre></div>
+</div>
+<p>This will print a report with one line for each file in <cite>pygraphviz</cite>,
+detailing the test coverage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Name</span>                     <span class="n">Stmts</span>   <span class="n">Miss</span>  <span class="n">Cover</span>
+<span class="o">--------------------------------------------</span>
+<span class="n">pygraphviz</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>      <span class="mi">12</span>      <span class="mi">4</span>    <span class="mi">67</span><span class="o">%</span>
+<span class="n">pygraphviz</span><span class="o">/</span><span class="n">agraph</span><span class="o">.</span><span class="n">py</span>      <span class="mi">1022</span>    <span class="mi">196</span>    <span class="mi">81</span><span class="o">%</span>
+<span class="n">pygraphviz</span><span class="o">/</span><span class="n">graphviz</span><span class="o">.</span><span class="n">py</span>     <span class="mi">179</span>     <span class="mi">42</span>    <span class="mi">77</span><span class="o">%</span>
+<span class="n">pygraphviz</span><span class="o">/</span><span class="n">scraper</span><span class="o">.</span><span class="n">py</span>       <span class="mi">26</span>     <span class="mi">18</span>    <span class="mi">31</span><span class="o">%</span>
+<span class="n">pygraphviz</span><span class="o">/</span><span class="n">testing</span><span class="o">.</span><span class="n">py</span>       <span class="mi">16</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="o">--------------------------------------------</span>
+<span class="n">TOTAL</span>                     <span class="mi">1255</span>    <span class="mi">260</span>    <span class="mi">79</span><span class="o">%</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-tests">
+<h2>Adding tests<a class="headerlink" href="#adding-tests" title="Permalink to this headline">¶</a></h2>
+<p>If you’re <strong>new to testing</strong>, see existing test files for examples of things to do.
+<strong>Don’t let the tests keep you from submitting your contribution!</strong>
+If you’re not sure how to do this or are having trouble, submit your pull request
+anyway.
+We will help you create the tests and sort out any kind of problem during code review.</p>
+</section>
+<section id="adding-examples">
+<h2>Adding examples<a class="headerlink" href="#adding-examples" title="Permalink to this headline">¶</a></h2>
+<p>The gallery examples are managed by
+<a class="reference external" href="https://sphinx-gallery.readthedocs.io/">sphinx-gallery</a>.
+The source files for the example gallery are <code class="docutils literal notranslate"><span class="pre">.py</span></code> scripts in <code class="docutils literal notranslate"><span class="pre">examples/</span></code> that
+generate one or more figures. They are executed automatically by sphinx-gallery when the
+documentation is built. The output is gathered and assembled into the gallery.</p>
+<p>You can <strong>add a new</strong> plot by placing a new <code class="docutils literal notranslate"><span class="pre">.py</span></code> file in one of the directories inside the
+<code class="docutils literal notranslate"><span class="pre">examples</span></code> directory of the repository. See the other examples to get an idea for the
+format.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Gallery examples should start with <code class="docutils literal notranslate"><span class="pre">plot_</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">plot_new_example.py</span></code></p>
+</div>
+<p>General guidelines for making a good gallery plot:</p>
+<ul class="simple">
+<li><p>Examples should highlight a single feature/command.</p></li>
+<li><p>Try to make the example as simple as possible.</p></li>
+<li><p>Data needed by examples should be included in the same directory and the example script.</p></li>
+<li><p>Add comments to explain things are aren’t obvious from reading the code.</p></li>
+<li><p>Describe the feature that you’re showcasing and link to other relevant parts of the
+documentation.</p></li>
+</ul>
+</section>
+<section id="bugs">
+<h2>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h2>
+<p>Please <a class="reference external" href="https://github.com/pygraphviz/pygraphviz/issues">report bugs on GitHub</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="reference/legal.html" class="btn btn-neutral float-left" title="Legal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
+      <span class="lastupdated">Last updated on May 07, 2022.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

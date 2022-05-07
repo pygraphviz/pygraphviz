@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGraph Class &mdash; PyGraphviz 1.10rc1.dev0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="canonical" href="https://pygraphviz.github.io/documentation/stablereference/agraph.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within PyGraphviz 1.10rc1.dev0 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FAQ" href="faq.html" />
+    <link rel="prev" title="Reference" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+    <a href="https://pygraphviz.github.io/">Project Homepage</a> |
+    <a href="https://github.com/pygraphviz/pygraphviz">Source Code</a>
+    
+            <a href="../index.html" class="icon icon-home"> PyGraphviz
+          </a>
+              <div class="version">
+                1.10rc1.dev0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AGraph Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_notes.html">API Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="news.html">News</a></li>
+<li class="toctree-l2"><a class="reference internal" href="related.html">Related Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html">History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="credits.html">Credits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="legal.html">Legal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributor Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGraphviz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Reference</a> &raquo;</li>
+      <li>AGraph Class</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+    
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+  <p>This documents the development version of PyGraphviz. Documentation for the current release can be found <a href="https://pygraphviz.github.io/documentation/stable/">here</a>.</p>
+</div>
+    
+           <div itemprop="articleBody">
+             
+  <section id="agraph-class">
+<span id="agraph"></span><h1>AGraph Class<a class="headerlink" href="#agraph-class" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pygraphviz.AGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">string</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for Graphviz agraph type.</p>
+<p>Example use</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="s2">&quot;file.dot&quot;</span><span class="p">)</span>  
+</pre></div>
+</div>
+<p>Graphviz graph keyword parameters are processed so you may add
+them like</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">landscape</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="n">ranksep</span><span class="o">=</span><span class="s2">&quot;0.1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or alternatively</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">graph_attr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">landscape</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="n">ranksep</span><span class="o">=</span><span class="s2">&quot;0.1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">node_attr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">edge_attr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="http://www.graphviz.org/doc/info/attrs.html">http://www.graphviz.org/doc/info/attrs.html</a>
+for a list of attributes.</p>
+<p>Keyword parameters:</p>
+<p>thing is a generic input type (filename, string, handle to pointer,
+dictionary of dictionaries).  An attempt is made to automaticaly
+detect the type so you may write for example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">handle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="p">:</span>    <span class="n">Name</span> <span class="k">for</span> <span class="n">the</span> <span class="n">graph</span>
+
+<span class="n">strict</span><span class="p">:</span> <span class="kc">True</span><span class="o">|</span><span class="kc">False</span> <span class="p">(</span><span class="kc">True</span> <span class="k">for</span> <span class="n">simple</span> <span class="n">graphs</span><span class="p">)</span>
+
+<span class="n">directed</span><span class="p">:</span> <span class="kc">True</span><span class="o">|</span><span class="kc">False</span>
+
+<span class="n">data</span><span class="p">:</span> <span class="n">Dictionary</span> <span class="n">of</span> <span class="n">dictionaries</span> <span class="ow">or</span> <span class="n">dictionary</span> <span class="n">of</span> <span class="n">lists</span>
+<span class="n">representing</span> <span class="n">nodes</span> <span class="ow">or</span> <span class="n">edges</span> <span class="n">to</span> <span class="n">load</span> <span class="n">into</span> <span class="n">initial</span> <span class="n">graph</span>
+
+<span class="n">string</span><span class="p">:</span>  <span class="n">String</span> <span class="n">containing</span> <span class="n">a</span> <span class="n">dot</span> <span class="nb">format</span> <span class="n">graph</span>
+
+<span class="n">handle</span><span class="p">:</span>  <span class="n">Swig</span> <span class="n">pointer</span> <span class="n">to</span> <span class="n">an</span> <span class="n">agraph_t</span> <span class="n">data</span> <span class="n">structure</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#pygraphviz.AGraph.directed" title="pygraphviz.AGraph.directed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directed</span></code></a></dt><dd><p>Return True if graph is directed or False if not.</p>
+</dd>
+<dt><strong>name</strong></dt><dd></dd>
+<dt><a class="reference internal" href="#pygraphviz.AGraph.strict" title="pygraphviz.AGraph.strict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strict</span></code></a></dt><dd><p>Return True if graph is strict or False if not.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.acyclic" title="pygraphviz.AGraph.acyclic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acyclic</span></code></a>([args, copy])</p></td>
+<td><p>Reverse sufficient edges in digraph to make graph acyclic.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.add_cycle" title="pygraphviz.AGraph.add_cycle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_cycle</span></code></a>(nlist)</p></td>
+<td><p>Add the cycle of nodes given in nlist.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.add_edge" title="pygraphviz.AGraph.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a>(u[, v, key])</p></td>
+<td><p>Add a single edge between nodes u and v.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.add_edges_from" title="pygraphviz.AGraph.add_edges_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edges_from</span></code></a>(ebunch, **attr)</p></td>
+<td><p>Add nodes to graph from a container ebunch.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.add_node" title="pygraphviz.AGraph.add_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_node</span></code></a>(n, **attr)</p></td>
+<td><p>Add a single node n.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.add_nodes_from" title="pygraphviz.AGraph.add_nodes_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_nodes_from</span></code></a>(nbunch, **attr)</p></td>
+<td><p>Add nodes from a container nbunch.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.add_path" title="pygraphviz.AGraph.add_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_path</span></code></a>(nlist)</p></td>
+<td><p>Add the path of nodes given in nlist.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.add_subgraph" title="pygraphviz.AGraph.add_subgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_subgraph</span></code></a>([nbunch, name])</p></td>
+<td><p>Return subgraph induced by nodes in nbunch.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.clear" title="pygraphviz.AGraph.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
+<td><p>Remove all nodes, edges, and attributes from the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.copy" title="pygraphviz.AGraph.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>()</p></td>
+<td><p>Return a copy of the graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.degree" title="pygraphviz.AGraph.degree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree</span></code></a>([nbunch, with_labels])</p></td>
+<td><p>Return the degree of nodes given in nbunch container.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.degree_iter" title="pygraphviz.AGraph.degree_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_iter</span></code></a>([nbunch, indeg, outdeg])</p></td>
+<td><p>Return an iterator over the degree of the nodes given in nbunch container.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.delete_edge" title="pygraphviz.AGraph.delete_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_edge</span></code></a>(u[, v, key])</p></td>
+<td><p>Remove edge between nodes u and v from the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.delete_edges_from" title="pygraphviz.AGraph.delete_edges_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_edges_from</span></code></a>(ebunch)</p></td>
+<td><p>Remove edges from ebunch (a container of edges).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.delete_node" title="pygraphviz.AGraph.delete_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_node</span></code></a>(n)</p></td>
+<td><p>Remove the single node n.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.delete_nodes_from" title="pygraphviz.AGraph.delete_nodes_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_nodes_from</span></code></a>(nbunch)</p></td>
+<td><p>Remove nodes from a container nbunch.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.delete_subgraph" title="pygraphviz.AGraph.delete_subgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_subgraph</span></code></a>(name)</p></td>
+<td><p>Remove subgraph with given name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.draw" title="pygraphviz.AGraph.draw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw</span></code></a>([path, format, prog, args])</p></td>
+<td><p>Output graph to path in specified format.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.edges" title="pygraphviz.AGraph.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a>([nbunch, keys])</p></td>
+<td><p>Return list of edges in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.edges_iter" title="pygraphviz.AGraph.edges_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges_iter</span></code></a>([nbunch, keys])</p></td>
+<td><p>Return iterator over edges in the graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.from_string" title="pygraphviz.AGraph.from_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_string</span></code></a>(string)</p></td>
+<td><p>Load a graph from a string in dot format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.get_edge" title="pygraphviz.AGraph.get_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_edge</span></code></a>(u, v[, key])</p></td>
+<td><p>Return an edge object (Edge) corresponding to edge (u,v).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.get_node" title="pygraphviz.AGraph.get_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_node</span></code></a>(n)</p></td>
+<td><p>Return a node object (Node) corresponding to node n.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.get_subgraph" title="pygraphviz.AGraph.get_subgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_subgraph</span></code></a>(name)</p></td>
+<td><p>Return existing subgraph with specified name or None if it doesn't exist.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.has_edge" title="pygraphviz.AGraph.has_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_edge</span></code></a>(u[, v, key])</p></td>
+<td><p>Return True an edge u-v is in the graph or False if not.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.has_neighbor" title="pygraphviz.AGraph.has_neighbor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_neighbor</span></code></a>(u, v[, key])</p></td>
+<td><p>Return True if u has an edge to v or False if not.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.has_node" title="pygraphviz.AGraph.has_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_node</span></code></a>(n)</p></td>
+<td><p>Return True if n is in the graph or False if not.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.in_degree" title="pygraphviz.AGraph.in_degree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_degree</span></code></a>([nbunch, with_labels])</p></td>
+<td><p>Return the in-degree of nodes given in nbunch container.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.in_degree_iter" title="pygraphviz.AGraph.in_degree_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_degree_iter</span></code></a>([nbunch])</p></td>
+<td><p>Return an iterator over the in-degree of the nodes given in nbunch container.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.in_edges" title="pygraphviz.AGraph.in_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_edges</span></code></a>([nbunch, keys])</p></td>
+<td><p>Return list of in edges in the graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.in_edges_iter" title="pygraphviz.AGraph.in_edges_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_edges_iter</span></code></a>([nbunch, keys])</p></td>
+<td><p>Return iterator over out edges in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.in_neighbors" title="pygraphviz.AGraph.in_neighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_neighbors</span></code></a>(n)</p></td>
+<td><p>Return list of predecessor nodes of n.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.is_directed" title="pygraphviz.AGraph.is_directed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_directed</span></code></a>()</p></td>
+<td><p>Return True if graph is directed or False if not.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.is_strict" title="pygraphviz.AGraph.is_strict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_strict</span></code></a>()</p></td>
+<td><p>Return True if graph is strict or False if not.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.is_undirected" title="pygraphviz.AGraph.is_undirected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_undirected</span></code></a>()</p></td>
+<td><p>Return True if graph is undirected or False if not.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.iterdegree" title="pygraphviz.AGraph.iterdegree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterdegree</span></code></a>([nbunch, indeg, outdeg])</p></td>
+<td><p>Return an iterator over the degree of the nodes given in nbunch container.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.iteredges" title="pygraphviz.AGraph.iteredges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iteredges</span></code></a>([nbunch, keys])</p></td>
+<td><p>Return iterator over edges in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.iterindegree" title="pygraphviz.AGraph.iterindegree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterindegree</span></code></a>([nbunch])</p></td>
+<td><p>Return an iterator over the in-degree of the nodes given in nbunch container.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.iterinedges" title="pygraphviz.AGraph.iterinedges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterinedges</span></code></a>([nbunch, keys])</p></td>
+<td><p>Return iterator over out edges in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.iterneighbors" title="pygraphviz.AGraph.iterneighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterneighbors</span></code></a>(n)</p></td>
+<td><p>Return iterator over the nodes attached to n.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.iternodes" title="pygraphviz.AGraph.iternodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iternodes</span></code></a>()</p></td>
+<td><p>Return an iterator over all the nodes in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.iteroutdegree" title="pygraphviz.AGraph.iteroutdegree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iteroutdegree</span></code></a>([nbunch])</p></td>
+<td><p>Return an iterator over the out-degree of the nodes given in nbunch container.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.iteroutedges" title="pygraphviz.AGraph.iteroutedges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iteroutedges</span></code></a>([nbunch, keys])</p></td>
+<td><p>Return iterator over out edges in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.iterpred" title="pygraphviz.AGraph.iterpred"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterpred</span></code></a>(n)</p></td>
+<td><p>Return iterator over predecessor nodes of n.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.itersucc" title="pygraphviz.AGraph.itersucc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">itersucc</span></code></a>(n)</p></td>
+<td><p>Return iterator over successor nodes of n.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.layout" title="pygraphviz.AGraph.layout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">layout</span></code></a>([prog, args])</p></td>
+<td><p>Assign positions to nodes in graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.neighbors" title="pygraphviz.AGraph.neighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighbors</span></code></a>(n)</p></td>
+<td><p>Return a list of the nodes attached to n.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.neighbors_iter" title="pygraphviz.AGraph.neighbors_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighbors_iter</span></code></a>(n)</p></td>
+<td><p>Return iterator over the nodes attached to n.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.nodes" title="pygraphviz.AGraph.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a>()</p></td>
+<td><p>Return a list of all nodes in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.nodes_iter" title="pygraphviz.AGraph.nodes_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes_iter</span></code></a>()</p></td>
+<td><p>Return an iterator over all the nodes in the graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.number_of_edges" title="pygraphviz.AGraph.number_of_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_edges</span></code></a>()</p></td>
+<td><p>Return the number of edges in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.number_of_nodes" title="pygraphviz.AGraph.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a>()</p></td>
+<td><p>Return the number of nodes in the graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.order" title="pygraphviz.AGraph.order"><code class="xref py py-obj docutils literal notranslate"><span class="pre">order</span></code></a>()</p></td>
+<td><p>Return the number of nodes in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.out_degree" title="pygraphviz.AGraph.out_degree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">out_degree</span></code></a>([nbunch, with_labels])</p></td>
+<td><p>Return the out-degree of nodes given in nbunch container.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.out_degree_iter" title="pygraphviz.AGraph.out_degree_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">out_degree_iter</span></code></a>([nbunch])</p></td>
+<td><p>Return an iterator over the out-degree of the nodes given in nbunch container.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.out_edges" title="pygraphviz.AGraph.out_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">out_edges</span></code></a>([nbunch, keys])</p></td>
+<td><p>Return list of out edges in the graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.out_edges_iter" title="pygraphviz.AGraph.out_edges_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">out_edges_iter</span></code></a>([nbunch, keys])</p></td>
+<td><p>Return iterator over out edges in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.out_neighbors" title="pygraphviz.AGraph.out_neighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">out_neighbors</span></code></a>(n)</p></td>
+<td><p>Return list of successor nodes of n.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.predecessors" title="pygraphviz.AGraph.predecessors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predecessors</span></code></a>(n)</p></td>
+<td><p>Return list of predecessor nodes of n.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.predecessors_iter" title="pygraphviz.AGraph.predecessors_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predecessors_iter</span></code></a>(n)</p></td>
+<td><p>Return iterator over predecessor nodes of n.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.read" title="pygraphviz.AGraph.read"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read</span></code></a>(path)</p></td>
+<td><p>Read graph from dot format file on path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.remove_edge" title="pygraphviz.AGraph.remove_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_edge</span></code></a>(u[, v, key])</p></td>
+<td><p>Remove edge between nodes u and v from the graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.remove_edges_from" title="pygraphviz.AGraph.remove_edges_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_edges_from</span></code></a>(ebunch)</p></td>
+<td><p>Remove edges from ebunch (a container of edges).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.remove_node" title="pygraphviz.AGraph.remove_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_node</span></code></a>(n)</p></td>
+<td><p>Remove the single node n.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.remove_nodes_from" title="pygraphviz.AGraph.remove_nodes_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_nodes_from</span></code></a>(nbunch)</p></td>
+<td><p>Remove nodes from a container nbunch.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.remove_subgraph" title="pygraphviz.AGraph.remove_subgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_subgraph</span></code></a>(name)</p></td>
+<td><p>Remove subgraph with given name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.reverse" title="pygraphviz.AGraph.reverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reverse</span></code></a>()</p></td>
+<td><p>Return copy of directed graph with edge directions reversed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.string" title="pygraphviz.AGraph.string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">string</span></code></a>()</p></td>
+<td><p>Return a string (unicode) representation of graph in dot format.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.string_nop" title="pygraphviz.AGraph.string_nop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">string_nop</span></code></a>()</p></td>
+<td><p>Return a string (unicode) representation of graph in dot format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.subgraph" title="pygraphviz.AGraph.subgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subgraph</span></code></a>([nbunch, name])</p></td>
+<td><p>Return subgraph induced by nodes in nbunch.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.subgraph_parent" title="pygraphviz.AGraph.subgraph_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subgraph_parent</span></code></a>([nbunch, name])</p></td>
+<td><p>Return parent graph of subgraph or None if graph is root graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.subgraph_root" title="pygraphviz.AGraph.subgraph_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subgraph_root</span></code></a>([nbunch, name])</p></td>
+<td><p>Return root graph of subgraph or None if graph is root graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.subgraphs" title="pygraphviz.AGraph.subgraphs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subgraphs</span></code></a>()</p></td>
+<td><p>Return a list of all subgraphs in the graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.subgraphs_iter" title="pygraphviz.AGraph.subgraphs_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subgraphs_iter</span></code></a>()</p></td>
+<td><p>Iterator over subgraphs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.successors" title="pygraphviz.AGraph.successors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">successors</span></code></a>(n)</p></td>
+<td><p>Return list of successor nodes of n.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.successors_iter" title="pygraphviz.AGraph.successors_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">successors_iter</span></code></a>(n)</p></td>
+<td><p>Return iterator over successor nodes of n.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.to_directed" title="pygraphviz.AGraph.to_directed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_directed</span></code></a>(**kwds)</p></td>
+<td><p>Return directed copy of graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.to_string" title="pygraphviz.AGraph.to_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_string</span></code></a>()</p></td>
+<td><p>Return a string representation of graph in dot format.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.to_undirected" title="pygraphviz.AGraph.to_undirected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_undirected</span></code></a>()</p></td>
+<td><p>Return undirected copy of graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.tred" title="pygraphviz.AGraph.tred"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tred</span></code></a>([args, copy])</p></td>
+<td><p>Transitive reduction of graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pygraphviz.AGraph.unflatten" title="pygraphviz.AGraph.unflatten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unflatten</span></code></a>([args])</p></td>
+<td><p>Adjust directed graphs to improve layout aspect ratio.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pygraphviz.AGraph.write" title="pygraphviz.AGraph.write"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write</span></code></a>([path])</p></td>
+<td><p>Write graph in dot format to file on path.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 55%" />
+<col style="width: 45%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>close</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_name</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.acyclic">
+<span class="sig-name descname"><span class="pre">acyclic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.acyclic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.acyclic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse sufficient edges in digraph to make graph acyclic.
+Modifies existing graph.</p>
+<p>To create a new graph use</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">acyclic</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+</pre></div>
+</div>
+<p>See the graphviz “acyclic” program for details of the algorithm.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.add_cycle">
+<span class="sig-name descname"><span class="pre">add_cycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nlist</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.add_cycle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.add_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the cycle of nodes given in nlist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.add_edge">
+<span class="sig-name descname"><span class="pre">add_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.add_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.add_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single edge between nodes u and v.</p>
+<p>If the nodes u and v are not in the graph they will added.</p>
+<p>If u and v are not strings, conversion to a string will be attempted.
+String conversion will work if u and v have valid string representation
+(try str(u) if you are unsure).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+<span class="go">[(&#39;a&#39;, &#39;b&#39;)]</span>
+</pre></div>
+</div>
+<p>The optional key argument allows assignment of a key to the
+edge.  This is especially useful to distinguish between
+parallel edges in multi-edge graphs (strict=False).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;first&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;second&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">[(&#39;a&#39;, &#39;b&#39;, &#39;first&#39;), (&#39;a&#39;, &#39;b&#39;, &#39;second&#39;)]</span>
+</pre></div>
+</div>
+<p>Attributes can be added when edges are created or updated after creation</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Attributes must be valid strings.</p>
+<p>See <a class="reference external" href="http://www.graphviz.org/doc/info/attrs.html">http://www.graphviz.org/doc/info/attrs.html</a>
+for a list of attributes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.add_edges_from">
+<span class="sig-name descname"><span class="pre">add_edges_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ebunch</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.add_edges_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.add_edges_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add nodes to graph from a container ebunch.</p>
+<p>ebunch is a container of edges such as a list or dictionary.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">elist</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">elist</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Attributes can be added when edges are created or updated after creation</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">elist</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.add_node">
+<span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.add_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.add_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single node n.</p>
+<p>If n is not a string, conversion to a string will be attempted.
+String conversion will work if n has valid string representation
+(try str(n) if you are unsure).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+<span class="go">[&#39;a&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># will be converted to a string</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+<span class="go">[&#39;a&#39;, &#39;1&#39;]</span>
+</pre></div>
+</div>
+<p>Attributes can be added to nodes on creation or updated after creation
+(attribute values must be strings)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="http://www.graphviz.org/doc/info/attrs.html">http://www.graphviz.org/doc/info/attrs.html</a>
+for a list of attributes.</p>
+<p>Anonymous Graphviz nodes are currently not implemented.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.add_nodes_from">
+<span class="sig-name descname"><span class="pre">add_nodes_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.add_nodes_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.add_nodes_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add nodes from a container nbunch.</p>
+<p>nbunch can be any iterable container such as a list or dictionary</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nlist</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;spam&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">nlist</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+<span class="go">[&#39;1&#39;, &#39;a&#39;, &#39;b&#39;, &#39;spam&#39;]</span>
+</pre></div>
+</div>
+<p>Attributes can be added to nodes on creation or updated after creation</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">nlist</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>  <span class="c1"># set all nodes in nlist red</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.add_path">
+<span class="sig-name descname"><span class="pre">add_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nlist</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.add_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.add_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the path of nodes given in nlist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.add_subgraph">
+<span class="sig-name descname"><span class="pre">add_subgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.add_subgraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.add_subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return subgraph induced by nodes in nbunch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all nodes, edges, and attributes from the graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of the graph.</p>
+<p class="rubric">Notes</p>
+<p>Versions &lt;=1.6 made a copy by writing and the reading a dot string.
+This version loads a new graph with nodes, edges and attributes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.degree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the degree of nodes given in nbunch container.</p>
+<p>Using optional with_labels=True returns a dictionary
+keyed by node with value set to the degree.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.degree_iter">
+<span class="sig-name descname"><span class="pre">degree_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.degree_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.degree_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the degree of the nodes given in
+nbunch container.</p>
+<p>Returns pairs of (node,degree).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.delete_edge">
+<span class="sig-name descname"><span class="pre">delete_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.delete_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove edge between nodes u and v from the graph.</p>
+<p>With optional key argument will only remove an edge
+matching (u,v,key).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.delete_edges_from">
+<span class="sig-name descname"><span class="pre">delete_edges_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ebunch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.delete_edges_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove edges from ebunch (a container of edges).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.delete_node">
+<span class="sig-name descname"><span class="pre">delete_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.delete_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the single node n.</p>
+<p>Attempting to remove a node that isn’t in the graph will produce
+an error.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.delete_nodes_from">
+<span class="sig-name descname"><span class="pre">delete_nodes_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.delete_nodes_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove nodes from a container nbunch.</p>
+<p>nbunch can be any iterable container such as a list or dictionary</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nlist</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;spam&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">nlist</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">remove_nodes_from</span><span class="p">(</span><span class="n">nlist</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.delete_subgraph">
+<span class="sig-name descname"><span class="pre">delete_subgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.delete_subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove subgraph with given name.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.directed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">directed</span></span><a class="headerlink" href="#pygraphviz.AGraph.directed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if graph is directed or False if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output graph to path in specified format.</p>
+<p>An attempt will be made to guess the output format based on the file
+extension of <cite>path</cite>.  If that fails, then the <cite>format</cite> parameter will
+be used.</p>
+<p>Note, if <cite>path</cite> is a file object returned by a call to os.fdopen(),
+then the method for discovering the format will not work.  In such
+cases, one should explicitly set the <cite>format</cite> parameter; otherwise, it
+will default to ‘dot’.</p>
+<p>If path is None, the result is returned as a Bytes object.</p>
+<p>Formats (not all may be available on every system depending on
+how Graphviz was built)</p>
+<blockquote>
+<div><p>‘canon’, ‘cmap’, ‘cmapx’, ‘cmapx_np’, ‘dia’, ‘dot’,
+‘fig’, ‘gd’, ‘gd2’, ‘gif’, ‘hpgl’, ‘imap’, ‘imap_np’,
+‘ismap’, ‘jpe’, ‘jpeg’, ‘jpg’, ‘mif’, ‘mp’, ‘pcl’, ‘pdf’,
+‘pic’, ‘plain’, ‘plain-ext’, ‘png’, ‘ps’, ‘ps2’, ‘svg’,
+‘svgz’, ‘vml’, ‘vmlz’, ‘vrml’, ‘vtx’, ‘wbmp’, ‘xdot’, ‘xlib’</p>
+</div></blockquote>
+<p>If prog is not specified and the graph has positions
+(see layout()) then no additional graph positioning will
+be performed.</p>
+<p>Optional prog=[‘neato’|’dot’|’twopi’|’circo’|’fdp’|’nop’]
+will use specified graphviz layout method.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<p># use current node positions, output pdf in ‘file.pdf’
+&gt;&gt;&gt; G.draw(“file.pdf”)</p>
+<p># use dot to position, output png in ‘file’
+&gt;&gt;&gt; G.draw(“file”, format=”png”, prog=”dot”)</p>
+<p># use keyword ‘args’ to pass additional arguments to graphviz
+&gt;&gt;&gt; G.draw(“test.pdf”, prog=”twopi”, args=”-Gepsilon=1”)
+&gt;&gt;&gt; G.draw(“test2.pdf”, args=”-Nshape=box -Edir=forward -Ecolor=red “)</p>
+<p>The layout might take a long time on large graphs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.edges">
+<span class="sig-name descname"><span class="pre">edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of edges in the graph.</p>
+<p>If the optional nbunch (container of nodes) only edges
+adjacent to nodes in nbunch will be returned.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()))</span>
+<span class="go">[(&#39;a&#39;, &#39;b&#39;), (&#39;c&#39;, &#39;d&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">))</span>
+<span class="go">[(&#39;a&#39;, &#39;b&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.edges_iter">
+<span class="sig-name descname"><span class="pre">edges_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.edges_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.edges_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over edges in the graph.</p>
+<p>If the optional nbunch (container of nodes) only edges
+adjacent to nodes in nbunch will be returned.</p>
+<p>Note: modifying the graph structure while iterating over
+edges may produce unpredictable results.  Use edges()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.from_string">
+<span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.from_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a graph from a string in dot format.</p>
+<p>Overwrites any existing graph.</p>
+<p>To make a new graph from a string use</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;digraph {1 -&gt; 2}&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>  <span class="c1"># specify s is a string</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>  <span class="c1"># s assumed to be a string during initialization</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.get_edge">
+<span class="sig-name descname"><span class="pre">get_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.get_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.get_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an edge object (Edge) corresponding to edge (u,v).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edge</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">get_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+<span class="go">(&#39;a&#39;, &#39;b&#39;)</span>
+</pre></div>
+</div>
+<p>With optional key argument will only get edge matching (u,v,key).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.get_node">
+<span class="sig-name descname"><span class="pre">get_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.get_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.get_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a node object (Node) corresponding to node n.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="go">a</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.get_subgraph">
+<span class="sig-name descname"><span class="pre">get_subgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.get_subgraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.get_subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return existing subgraph with specified name or None if it
+doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.has_edge">
+<span class="sig-name descname"><span class="pre">has_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.has_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.has_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True an edge u-v is in the graph or False if not.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Optional key argument will restrict match to edges (u,v,key).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.has_neighbor">
+<span class="sig-name descname"><span class="pre">has_neighbor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.has_neighbor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.has_neighbor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if u has an edge to v or False if not.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">has_neighbor</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Optional key argument will only find edges (u,v,key).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.has_node">
+<span class="sig-name descname"><span class="pre">has_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.has_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.has_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if n is in the graph or False if not.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">has_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;a&quot;</span> <span class="ow">in</span> <span class="n">G</span>  <span class="c1"># same as G.has_node(&#39;a&#39;)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.in_degree">
+<span class="sig-name descname"><span class="pre">in_degree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.in_degree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.in_degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the in-degree of nodes given in nbunch container.</p>
+<p>Using optional with_labels=True returns a dictionary
+keyed by node with value set to the degree.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.in_degree_iter">
+<span class="sig-name descname"><span class="pre">in_degree_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.in_degree_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.in_degree_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the in-degree of the nodes given in
+nbunch container.</p>
+<p>Returns pairs of (node,degree).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.in_edges">
+<span class="sig-name descname"><span class="pre">in_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.in_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.in_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of in edges in the graph.
+If the optional nbunch (container of nodes) only in edges
+adjacent to nodes in nbunch will be returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.in_edges_iter">
+<span class="sig-name descname"><span class="pre">in_edges_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.in_edges_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.in_edges_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over out edges in the graph.</p>
+<p>If the optional nbunch (container of nodes) only out edges
+adjacent to nodes in nbunch will be returned.</p>
+<p>Note: modifying the graph structure while iterating over
+edges may produce unpredictable results.  Use in_edges()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.in_neighbors">
+<span class="sig-name descname"><span class="pre">in_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.in_neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of predecessor nodes of n.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.is_directed">
+<span class="sig-name descname"><span class="pre">is_directed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.is_directed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.is_directed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if graph is directed or False if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.is_strict">
+<span class="sig-name descname"><span class="pre">is_strict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.is_strict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.is_strict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if graph is strict or False if not.</p>
+<p>Strict graphs do not allow parallel edges or self loops.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.is_undirected">
+<span class="sig-name descname"><span class="pre">is_undirected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.is_undirected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.is_undirected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if graph is undirected or False if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.iterdegree">
+<span class="sig-name descname"><span class="pre">iterdegree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.iterdegree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the degree of the nodes given in
+nbunch container.</p>
+<p>Returns pairs of (node,degree).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.iteredges">
+<span class="sig-name descname"><span class="pre">iteredges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.iteredges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over edges in the graph.</p>
+<p>If the optional nbunch (container of nodes) only edges
+adjacent to nodes in nbunch will be returned.</p>
+<p>Note: modifying the graph structure while iterating over
+edges may produce unpredictable results.  Use edges()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.iterindegree">
+<span class="sig-name descname"><span class="pre">iterindegree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.iterindegree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the in-degree of the nodes given in
+nbunch container.</p>
+<p>Returns pairs of (node,degree).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.iterinedges">
+<span class="sig-name descname"><span class="pre">iterinedges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.iterinedges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over out edges in the graph.</p>
+<p>If the optional nbunch (container of nodes) only out edges
+adjacent to nodes in nbunch will be returned.</p>
+<p>Note: modifying the graph structure while iterating over
+edges may produce unpredictable results.  Use in_edges()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.iterneighbors">
+<span class="sig-name descname"><span class="pre">iterneighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.iterneighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over the nodes attached to n.</p>
+<p>Note: modifying the graph structure while iterating over
+node neighbors may produce unpredictable results.  Use neighbors()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.iternodes">
+<span class="sig-name descname"><span class="pre">iternodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.iternodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over all the nodes in the graph.</p>
+<p>Note: modifying the graph structure while iterating over
+the nodes may produce unpredictable results.  Use nodes()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.iteroutdegree">
+<span class="sig-name descname"><span class="pre">iteroutdegree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.iteroutdegree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the out-degree of the nodes given in
+nbunch container.</p>
+<p>Returns pairs of (node,degree).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.iteroutedges">
+<span class="sig-name descname"><span class="pre">iteroutedges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.iteroutedges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over out edges in the graph.</p>
+<p>If the optional nbunch (container of nodes) only out edges
+adjacent to nodes in nbunch will be returned.</p>
+<p>Note: modifying the graph structure while iterating over
+edges may produce unpredictable results.  Use out_edges()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.iterpred">
+<span class="sig-name descname"><span class="pre">iterpred</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.iterpred" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over predecessor nodes of n.</p>
+<p>Note: modifying the graph structure while iterating over
+node predecessors may produce unpredictable results.  Use
+predecessors() as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.itersucc">
+<span class="sig-name descname"><span class="pre">itersucc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.itersucc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over successor nodes of n.</p>
+<p>Note: modifying the graph structure while iterating over
+node successors may produce unpredictable results.  Use
+successors() as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.layout">
+<span class="sig-name descname"><span class="pre">layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neato'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign positions to nodes in graph.</p>
+<p>Optional prog=[‘neato’|’dot’|’twopi’|’circo’|’fdp’|’nop’]
+will use specified graphviz layout method.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s2">&quot;neato&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="s2">&quot;-Nshape=box -Efontsize=8&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use keyword args to add additional arguments to graphviz programs.</p>
+<p>The layout might take a long time on large graphs.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pygraphviz.AGraph.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.neighbors">
+<span class="sig-name descname"><span class="pre">neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.neighbors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of the nodes attached to n.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.neighbors_iter">
+<span class="sig-name descname"><span class="pre">neighbors_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.neighbors_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.neighbors_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over the nodes attached to n.</p>
+<p>Note: modifying the graph structure while iterating over
+node neighbors may produce unpredictable results.  Use neighbors()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.nodes">
+<span class="sig-name descname"><span class="pre">nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all nodes in the graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.nodes_iter">
+<span class="sig-name descname"><span class="pre">nodes_iter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.nodes_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.nodes_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over all the nodes in the graph.</p>
+<p>Note: modifying the graph structure while iterating over
+the nodes may produce unpredictable results.  Use nodes()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.number_of_edges">
+<span class="sig-name descname"><span class="pre">number_of_edges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.number_of_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.number_of_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of edges in the graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.number_of_nodes">
+<span class="sig-name descname"><span class="pre">number_of_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.number_of_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.number_of_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of nodes in the graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.order">
+<span class="sig-name descname"><span class="pre">order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of nodes in the graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.out_degree">
+<span class="sig-name descname"><span class="pre">out_degree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.out_degree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.out_degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the out-degree of nodes given in nbunch container.</p>
+<p>Using optional with_labels=True returns a dictionary
+keyed by node with value set to the degree.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.out_degree_iter">
+<span class="sig-name descname"><span class="pre">out_degree_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.out_degree_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.out_degree_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the out-degree of the nodes given in
+nbunch container.</p>
+<p>Returns pairs of (node,degree).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.out_edges">
+<span class="sig-name descname"><span class="pre">out_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.out_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.out_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of out edges in the graph.</p>
+<p>If the optional nbunch (container of nodes) only out edges
+adjacent to nodes in nbunch will be returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.out_edges_iter">
+<span class="sig-name descname"><span class="pre">out_edges_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.out_edges_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.out_edges_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over out edges in the graph.</p>
+<p>If the optional nbunch (container of nodes) only out edges
+adjacent to nodes in nbunch will be returned.</p>
+<p>Note: modifying the graph structure while iterating over
+edges may produce unpredictable results.  Use out_edges()
+as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.out_neighbors">
+<span class="sig-name descname"><span class="pre">out_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.out_neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of successor nodes of n.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.predecessors">
+<span class="sig-name descname"><span class="pre">predecessors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.predecessors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.predecessors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of predecessor nodes of n.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.predecessors_iter">
+<span class="sig-name descname"><span class="pre">predecessors_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.predecessors_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.predecessors_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over predecessor nodes of n.</p>
+<p>Note: modifying the graph structure while iterating over
+node predecessors may produce unpredictable results.  Use
+predecessors() as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read graph from dot format file on path.</p>
+<p>path can be a file name or file handle</p>
+<p>use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;file.dot&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.remove_edge">
+<span class="sig-name descname"><span class="pre">remove_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.remove_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.remove_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove edge between nodes u and v from the graph.</p>
+<p>With optional key argument will only remove an edge
+matching (u,v,key).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.remove_edges_from">
+<span class="sig-name descname"><span class="pre">remove_edges_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ebunch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.remove_edges_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.remove_edges_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove edges from ebunch (a container of edges).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.remove_node">
+<span class="sig-name descname"><span class="pre">remove_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.remove_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.remove_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the single node n.</p>
+<p>Attempting to remove a node that isn’t in the graph will produce
+an error.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.remove_nodes_from">
+<span class="sig-name descname"><span class="pre">remove_nodes_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.remove_nodes_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.remove_nodes_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove nodes from a container nbunch.</p>
+<p>nbunch can be any iterable container such as a list or dictionary</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nlist</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;spam&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">nlist</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">remove_nodes_from</span><span class="p">(</span><span class="n">nlist</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.remove_subgraph">
+<span class="sig-name descname"><span class="pre">remove_subgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.remove_subgraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.remove_subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove subgraph with given name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.reverse">
+<span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.reverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return copy of directed graph with edge directions reversed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.strict">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">strict</span></span><a class="headerlink" href="#pygraphviz.AGraph.strict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if graph is strict or False if not.</p>
+<p>Strict graphs do not allow parallel edges or self loops.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.string">
+<span class="sig-name descname"><span class="pre">string</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string (unicode) representation of graph in dot format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.string_nop">
+<span class="sig-name descname"><span class="pre">string_nop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.string_nop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.string_nop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string (unicode) representation of graph in dot format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.subgraph">
+<span class="sig-name descname"><span class="pre">subgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygraphviz.AGraph.subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return subgraph induced by nodes in nbunch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.subgraph_parent">
+<span class="sig-name descname"><span class="pre">subgraph_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.subgraph_parent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.subgraph_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return parent graph of subgraph or None if graph is root graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.subgraph_root">
+<span class="sig-name descname"><span class="pre">subgraph_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbunch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.subgraph_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.subgraph_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return root graph of subgraph or None if graph is root graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.subgraphs">
+<span class="sig-name descname"><span class="pre">subgraphs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.subgraphs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.subgraphs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all subgraphs in the graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.subgraphs_iter">
+<span class="sig-name descname"><span class="pre">subgraphs_iter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.subgraphs_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.subgraphs_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator over subgraphs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.successors">
+<span class="sig-name descname"><span class="pre">successors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.successors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.successors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of successor nodes of n.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.successors_iter">
+<span class="sig-name descname"><span class="pre">successors_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.successors_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.successors_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over successor nodes of n.</p>
+<p>Note: modifying the graph structure while iterating over
+node successors may produce unpredictable results.  Use
+successors() as an alternative.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.to_directed">
+<span class="sig-name descname"><span class="pre">to_directed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.to_directed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.to_directed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return directed copy of graph.</p>
+<p>Each undirected edge u-v is represented as two directed
+edges u-&gt;v and v-&gt;u.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string representation of graph in dot format.</p>
+<p><cite>to_string()</cite> uses “agwrite” to produce “dot” format w/o rendering.
+The function <cite>string_nop()</cite> layouts with “nop” and renders to “dot”.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.to_undirected">
+<span class="sig-name descname"><span class="pre">to_undirected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.to_undirected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.to_undirected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return undirected copy of graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.tred">
+<span class="sig-name descname"><span class="pre">tred</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.tred"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.tred" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transitive reduction of graph.  Modifies existing graph.</p>
+<p>To create a new graph use</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">tred</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+</pre></div>
+</div>
+<p>See the graphviz “tred” program for details of the algorithm.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.unflatten">
+<span class="sig-name descname"><span class="pre">unflatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.unflatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.unflatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust directed graphs to improve layout aspect ratio.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A_unflattened</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="s2">&quot;-f -l 3&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="s2">&quot;-f -l 1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Use keyword args to add additional arguments to graphviz programs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygraphviz.AGraph.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygraphviz/agraph.html#AGraph.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygraphviz.AGraph.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write graph in dot format to file on path.</p>
+<p>path can be a file name or file handle</p>
+<p>use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;file.dot&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="faq.html" class="btn btn-neutral float-right" title="FAQ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
+      <span class="lastupdated">Last updated on May 07, 2022.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
