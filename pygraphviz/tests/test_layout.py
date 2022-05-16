@@ -46,7 +46,7 @@ def test_layout_prog_arg(prog):
 def test_bad_prog_arg_raises():
     A = pgv.AGraph()
     A.add_path([1, 2, 3, 4])
-    with pytest.raises(ValueError, match="Program.*is not one of"):
+    with pytest.raises(ValueError, match="Program.*is not a valid layout"):
         A.layout(prog="not-a-valid-layout")
 
 
