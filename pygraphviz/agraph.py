@@ -1491,7 +1491,12 @@ class AGraph:
             prog = prog.encode(self.encoding)
 
         gvc = gv.gvContext()
-        gv.gvLayout(gvc, self.handle, prog)
+        retval = gv.gvLayout(gvc, self.handle, prog)
+        # gvLayout returns -1 if `prog` is not a valid program.
+        # TODO: Check other possible return values from gvLayout
+        # TODO: Catch/suppress msg on stderr from graphviz
+        if retval == -1:
+            raise ValueError(f"Program {prog} is not a valid layout program.")
         gv.gvRender(gvc, self.handle, format=b"dot", out=None)
 
         gv.gvFreeLayout(gvc, self.handle)
