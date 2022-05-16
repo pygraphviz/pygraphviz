@@ -1330,15 +1330,11 @@ class AGraph:
 
     def _get_prog(self, prog):
         # private: get path of graphviz program
+        # NOTE: The `progs` set should only contain graphviz functions for
+        # for which there is no library interface.
+        # For example, the layout functions (e.g. `neato`) are called via
+        # gvLayout and should not be included here.
         progs = {
-            "neato",
-            "dot",
-            "twopi",
-            "circo",
-            "fdp",
-            "nop",
-            "osage",
-            "patchwork",
             "gc",
             "acyclic",
             "gvpr",
@@ -1346,7 +1342,6 @@ class AGraph:
             "ccomps",
             "sccmap",
             "tred",
-            "sfdp",
             "unflatten",
         }
         if prog not in progs:
