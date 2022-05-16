@@ -55,7 +55,7 @@ class TestExperimentalGraphvizLibInterface:
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
         assert [n.attr["pos"] is None for n in A.nodes()] == [True] * 4
-        A._layout()
+        A.layout()
         assert [n.attr["pos"] is not None for n in A.nodes()] == [True] * 4
 
     def test_layout_defaults(self):
@@ -63,7 +63,7 @@ class TestExperimentalGraphvizLibInterface:
         A.add_path([1, 2, 3, 4])
         # print("Pos before",[n.attr["pos"] for n in A.nodes()])
         assert [n.attr["pos"] is None for n in A.nodes()] == [True] * 4
-        A._layout()
+        A.layout()
         assert [n.attr["pos"] is not None for n in A.nodes()] == [True] * 4
         # print("Pos after",[n.attr["pos"] for n in A.nodes()])
 
@@ -71,30 +71,30 @@ class TestExperimentalGraphvizLibInterface:
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
         assert [n.attr["pos"] is None for n in A.nodes()] == [True] * 4
-        A._layout(prog=b"dot")
+        A.layout(prog=b"dot")
         assert [n.attr["pos"] is not None for n in A.nodes()] == [True] * 4
         dot_pos = [n.attr["pos"] for n in A.nodes()]
 
-        A._layout(prog="dot")
+        A.layout(prog="dot")
         result = [n.attr["pos"] for n in A.nodes()]
         assert result == dot_pos
 
-        A._layout(prog="twopi")
+        A.layout(prog="twopi")
         result = [n.attr["pos"] for n in A.nodes()]
         assert result != dot_pos
 
-        A._layout(prog="neato")
+        A.layout(prog="neato")
         result = [n.attr["pos"] for n in A.nodes()]
         assert result != dot_pos
 
-        A._layout(prog="circo")
+        A.layout(prog="circo")
         result = [n.attr["pos"] for n in A.nodes()]
         assert result != dot_pos
 
-        A._layout(prog="fdp")
+        A.layout(prog="fdp")
         result = [n.attr["pos"] for n in A.nodes()]
         assert result != dot_pos
 
-        A._layout(prog="nop")
+        A.layout(prog="nop")
         result = [n.attr["pos"] for n in A.nodes()]
         assert result != dot_pos

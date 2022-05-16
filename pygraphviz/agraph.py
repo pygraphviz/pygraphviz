@@ -1461,29 +1461,6 @@ class AGraph:
     def layout(self, prog="neato", args=""):
         """Assign positions to nodes in graph.
 
-        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
-        will use specified graphviz layout method.
-
-        >>> import pygraphviz as pgv
-        >>> A = pgv.AGraph()
-        >>> A.add_edge(1, 2)
-        >>> A.layout()
-        >>> A.layout(prog="neato", args="-Nshape=box -Efontsize=8")
-
-        Use keyword args to add additional arguments to graphviz programs.
-
-        The layout might take a long time on large graphs.
-
-        """
-        output_fmt = "dot"
-        data = self._run_prog(prog, " ".join([args, "-T", output_fmt]))
-        self.from_string(data)
-        self.has_layout = True
-        return
-
-    def _layout(self, prog="neato", args=""):
-        """Assign positions to nodes in graph.
-
         .. caution:: EXPERIMENTAL
 
         This version of the layout command uses libgvc for layout instead
