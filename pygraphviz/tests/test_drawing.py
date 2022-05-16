@@ -96,7 +96,7 @@ class TestExperimentalGraphvizLibInterface:
     def test_drawing_to_create_dot_string(self):
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
-        A._layout()
+        A.layout()
         dot_rep = A.to_string()
         assert "test graph" in dot_rep
         assert "strict graph" in dot_rep
