@@ -49,6 +49,8 @@ def test_anonymous_edges():
 
     ans = """graph test { a -- b [label=edge1]; a -- b [label=edge2]; }"""
     assert stringify(A) == " ".join(ans.split())
+
+    A.close()
     os.unlink(fname)
 
 

@@ -17,6 +17,9 @@ def test_readwrite():
     assert A == B
     assert B == A
     assert B is not A
+
+    A.close()
+    B.close()
     os.unlink(fname)
 
 
@@ -33,4 +36,7 @@ def test_readwrite_pathobj():
     assert A == B
     assert B == A
     assert B is not A
+
+    A.close()
+    B.close()
     os.unlink(fname)
