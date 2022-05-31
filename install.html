@@ -19,6 +19,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
@@ -103,7 +104,7 @@
            <div itemprop="articleBody">
              
   <section id="install">
-<h1>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h1>
+<h1>Install<a class="headerlink" href="#install" title="Permalink to this heading">¶</a></h1>
 <p>PyGraphviz requires:</p>
 <ul class="simple">
 <li><p>Python (version 3.8, 3.9, or 3.10)</p></li>
@@ -128,21 +129,21 @@ conda-forge channel should be used instead:</p>
 </ul>
 </div>
 <section id="recommended">
-<h2>Recommended<a class="headerlink" href="#recommended" title="Permalink to this headline">¶</a></h2>
+<h2>Recommended<a class="headerlink" href="#recommended" title="Permalink to this heading">¶</a></h2>
 <p>We recommend installing Python packages using <a class="reference external" href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/">pip and virtual environments</a>.</p>
 <section id="linux">
-<h3>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h3>
+<h3>Linux<a class="headerlink" href="#linux" title="Permalink to this heading">¶</a></h3>
 <p>We recommend installing Graphviz using your Linux system’s package manager.
 Below are examples for some popular distributions.</p>
 <section id="ubuntu-and-debian">
-<h4>Ubuntu and Debian<a class="headerlink" href="#ubuntu-and-debian" title="Permalink to this headline">¶</a></h4>
+<h4>Ubuntu and Debian<a class="headerlink" href="#ubuntu-and-debian" title="Permalink to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo apt-get install graphviz graphviz-dev
 <span class="gp">$ </span>pip install pygraphviz
 </pre></div>
 </div>
 </section>
 <section id="fedora-and-red-hat">
-<h4>Fedora and Red Hat<a class="headerlink" href="#fedora-and-red-hat" title="Permalink to this headline">¶</a></h4>
+<h4>Fedora and Red Hat<a class="headerlink" href="#fedora-and-red-hat" title="Permalink to this heading">¶</a></h4>
 <p>You may need to replace <code class="docutils literal notranslate"><span class="pre">dnf</span></code> with <code class="docutils literal notranslate"><span class="pre">yum</span></code> in the example below.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo dnf install graphviz graphviz-devel
 <span class="gp">$ </span>pip install pygraphviz
@@ -151,17 +152,17 @@ Below are examples for some popular distributions.</p>
 </section>
 </section>
 <section id="macos">
-<h3>macOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h3>
+<h3>macOS<a class="headerlink" href="#macos" title="Permalink to this heading">¶</a></h3>
 <p>We recommend installing Graphviz using the Homebrew package manager or MacPorts for macOS.</p>
 <section id="homebrew">
-<h4>Homebrew<a class="headerlink" href="#homebrew" title="Permalink to this headline">¶</a></h4>
+<h4>Homebrew<a class="headerlink" href="#homebrew" title="Permalink to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew install graphviz
 <span class="gp">$ </span>pip install pygraphviz
 </pre></div>
 </div>
 </section>
 <section id="macports">
-<h4>MacPorts<a class="headerlink" href="#macports" title="Permalink to this headline">¶</a></h4>
+<h4>MacPorts<a class="headerlink" href="#macports" title="Permalink to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>port install graphviz
 <span class="gp">$ </span>pip install pygraphviz
 <span class="gp">$ </span>pip install --global-option<span class="o">=</span>build_ext <span class="se">\</span>
@@ -174,7 +175,7 @@ Below are examples for some popular distributions.</p>
 </section>
 </section>
 <section id="advanced">
-<h2>Advanced<a class="headerlink" href="#advanced" title="Permalink to this headline">¶</a></h2>
+<h2>Advanced<a class="headerlink" href="#advanced" title="Permalink to this heading">¶</a></h2>
 <dl class="simple">
 <dt>The two main difficulties are</dt><dd><ol class="arabic simple">
 <li><p>installing Graphviz and</p></li>
@@ -183,7 +184,7 @@ Below are examples for some popular distributions.</p>
 </dd>
 </dl>
 <section id="providing-path-to-graphviz">
-<h3>Providing path to Graphviz<a class="headerlink" href="#providing-path-to-graphviz" title="Permalink to this headline">¶</a></h3>
+<h3>Providing path to Graphviz<a class="headerlink" href="#providing-path-to-graphviz" title="Permalink to this heading">¶</a></h3>
 <p>If you’ve installed Graphviz and <code class="docutils literal notranslate"><span class="pre">pip</span></code> is unable to find Graphviz, then you need to
 provide <code class="docutils literal notranslate"><span class="pre">pip</span></code> with the path(s) where it can find Graphviz.
 To do this, you first need to figure out where the binary files, includes files, and
@@ -193,7 +194,7 @@ the following.  There is an additional example using Chocolatey on Windows furth
 down the page.</p>
 </section>
 <section id="windows">
-<span id="windows-install"></span><h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<span id="windows-install"></span><h3>Windows<a class="headerlink" href="#windows" title="Permalink to this heading">¶</a></h3>
 <p>Historically, installing Graphviz and PyGraphviz on Windows has been challenging.
 Fortunately, the Graphviz developers are working to fix this and
 their recent releases have much improved the situation.</p>
@@ -205,7 +206,7 @@ using <a class="reference external" href="https://chocolatey.org/">Chocolatey</a
 <p>Assuming you have Python and Visual C/C++ installed,
 we believe the following should work on Windows 10 (64 bit) using PowerShell.</p>
 <section id="manual-download">
-<h4>Manual download<a class="headerlink" href="#manual-download" title="Permalink to this headline">¶</a></h4>
+<h4>Manual download<a class="headerlink" href="#manual-download" title="Permalink to this heading">¶</a></h4>
 <ol class="arabic simple">
 <li><p>Download and install 2.46.0 for Windows 10 (64-bit):
 <a class="reference external" href="https://gitlab.com/graphviz/graphviz/-/package_files/6164164/download">stable_windows_10_cmake_Release_x64_graphviz-install-2.46.0-win64.exe</a>.</p></li>
@@ -219,7 +220,7 @@ we believe the following should work on Windows 10 (64 bit) using PowerShell.</p
 </div>
 </section>
 <section id="id1">
-<h4>Chocolatey<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<h4>Chocolatey<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">PS C:\&gt; choco install graphviz</span>
 <span class="go">PS C:\&gt; python -m pip install --global-option=build_ext `</span>
 <span class="go">              --global-option=&quot;-IC:\Program Files\Graphviz\include&quot; `</span>
@@ -231,7 +232,7 @@ we believe the following should work on Windows 10 (64 bit) using PowerShell.</p
 </section>
 </section>
 <section id="faq">
-<h2>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h2>
+<h2>FAQ<a class="headerlink" href="#faq" title="Permalink to this heading">¶</a></h2>
 <blockquote>
 <div><dl class="field-list">
 <dt class="field-odd">Q</dt>
@@ -305,7 +306,7 @@ for further discussion on wheels and packaging.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
-      <span class="lastupdated">Last updated on May 07, 2022.
+      <span class="lastupdated">Last updated on May 31, 2022.
       </span></p>
   </div>
 

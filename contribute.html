@@ -19,6 +19,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
@@ -98,14 +99,14 @@
            <div itemprop="articleBody">
              
   <section id="contributor-guide">
-<span id="id1"></span><h1>Contributor Guide<a class="headerlink" href="#contributor-guide" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Contributor Guide<a class="headerlink" href="#contributor-guide" title="Permalink to this heading">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This document assumes some familiarity with contributing to open source
 scientific Python projects using GitHub pull requests.</p>
 </div>
 <section id="development-workflow">
-<span id="dev-workflow"></span><h2>Development Workflow<a class="headerlink" href="#development-workflow" title="Permalink to this headline">¶</a></h2>
+<span id="dev-workflow"></span><h2>Development Workflow<a class="headerlink" href="#development-workflow" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic">
 <li><p>If you are a first-time contributor:</p>
 <ul>
@@ -234,7 +235,7 @@ the change(s).</p>
 </ol>
 </section>
 <section id="divergence-from-upstream-main">
-<h2>Divergence from <code class="docutils literal notranslate"><span class="pre">upstream</span> <span class="pre">main</span></code><a class="headerlink" href="#divergence-from-upstream-main" title="Permalink to this headline">¶</a></h2>
+<h2>Divergence from <code class="docutils literal notranslate"><span class="pre">upstream</span> <span class="pre">main</span></code><a class="headerlink" href="#divergence-from-upstream-main" title="Permalink to this heading">¶</a></h2>
 <p>If GitHub indicates that the branch of your Pull Request can no longer
 be merged automatically, merge the main branch into yours:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span> <span class="n">main</span>
@@ -281,7 +282,7 @@ but we squash and merge PRs either way.</p>
 </div>
 </section>
 <section id="guidelines">
-<h2>Guidelines<a class="headerlink" href="#guidelines" title="Permalink to this headline">¶</a></h2>
+<h2>Guidelines<a class="headerlink" href="#guidelines" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>All code should have tests.</p></li>
 <li><p>All code should be documented, to the same
@@ -293,7 +294,7 @@ you get no response to your pull request.</p></li>
 </ul>
 </section>
 <section id="testing">
-<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h2>
 <p>To run all tests:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ PYTHONPATH=. pytest pygraphviz
 </pre></div>
@@ -328,7 +329,7 @@ detailing the test coverage:</p>
 </div>
 </section>
 <section id="adding-tests">
-<h2>Adding tests<a class="headerlink" href="#adding-tests" title="Permalink to this headline">¶</a></h2>
+<h2>Adding tests<a class="headerlink" href="#adding-tests" title="Permalink to this heading">¶</a></h2>
 <p>If you’re <strong>new to testing</strong>, see existing test files for examples of things to do.
 <strong>Don’t let the tests keep you from submitting your contribution!</strong>
 If you’re not sure how to do this or are having trouble, submit your pull request
@@ -336,7 +337,7 @@ anyway.
 We will help you create the tests and sort out any kind of problem during code review.</p>
 </section>
 <section id="adding-examples">
-<h2>Adding examples<a class="headerlink" href="#adding-examples" title="Permalink to this headline">¶</a></h2>
+<h2>Adding examples<a class="headerlink" href="#adding-examples" title="Permalink to this heading">¶</a></h2>
 <p>The gallery examples are managed by
 <a class="reference external" href="https://sphinx-gallery.readthedocs.io/">sphinx-gallery</a>.
 The source files for the example gallery are <code class="docutils literal notranslate"><span class="pre">.py</span></code> scripts in <code class="docutils literal notranslate"><span class="pre">examples/</span></code> that
@@ -360,7 +361,7 @@ documentation.</p></li>
 </ul>
 </section>
 <section id="bugs">
-<h2>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h2>
+<h2>Bugs<a class="headerlink" href="#bugs" title="Permalink to this heading">¶</a></h2>
 <p>Please <a class="reference external" href="https://github.com/pygraphviz/pygraphviz/issues">report bugs on GitHub</a>.</p>
 </section>
 </section>
@@ -377,7 +378,7 @@ documentation.</p></li>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
-      <span class="lastupdated">Last updated on May 07, 2022.
+      <span class="lastupdated">Last updated on May 31, 2022.
       </span></p>
   </div>
 

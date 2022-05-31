@@ -19,6 +19,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
@@ -97,20 +98,20 @@
            <div itemprop="articleBody">
              
   <section id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading">¶</a></h1>
 <p>The API is very similar to that of NetworkX.  Much of the
 NetworkX tutorial at <a class="reference external" href="https://networkx.org/documentation/latest/tutorial.html">https://networkx.org/documentation/latest/tutorial.html</a>
 is applicable to PyGraphviz.
 See <a class="reference external" href="http://pygraphviz.github.io/documentation/latest/reference/api_notes.html">http://pygraphviz.github.io/documentation/latest/reference/api_notes.html</a>  for major differences.</p>
 <section id="start-up">
-<h2>Start-up<a class="headerlink" href="#start-up" title="Permalink to this headline">¶</a></h2>
+<h2>Start-up<a class="headerlink" href="#start-up" title="Permalink to this heading">¶</a></h2>
 <p>Import PyGraphviz with</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygraphviz</span> <span class="k">as</span> <span class="nn">pgv</span>
 </pre></div>
 </div>
 </section>
 <section id="graphs">
-<h2>Graphs<a class="headerlink" href="#graphs" title="Permalink to this headline">¶</a></h2>
+<h2>Graphs<a class="headerlink" href="#graphs" title="Permalink to this heading">¶</a></h2>
 <p>To make an empty pygraphviz graph use the AGraph class:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pgv</span><span class="o">.</span><span class="n">AGraph</span><span class="p">()</span>
 </pre></div>
@@ -142,7 +143,7 @@ parallel edges and self-loops use</p>
 </div>
 </section>
 <section id="nodes-and-edges">
-<h2>Nodes, and edges<a class="headerlink" href="#nodes-and-edges" title="Permalink to this headline">¶</a></h2>
+<h2>Nodes, and edges<a class="headerlink" href="#nodes-and-edges" title="Permalink to this heading">¶</a></h2>
 <p>Nodes and edges can be added one at a time</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>  <span class="c1"># adds node &#39;a&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">)</span>  <span class="c1"># adds edge &#39;b&#39;-&#39;c&#39; (and also nodes &#39;b&#39;, &#39;c&#39;)</span>
@@ -160,7 +161,7 @@ to a string</p>
 </div>
 </section>
 <section id="attributes">
-<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading">¶</a></h2>
 <p>To set the default attributes for graphs, nodes, and edges use
 the graph_attr, node_attr, and edge_attr dictionaries</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">graph_attr</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Name of graph&quot;</span>
@@ -188,7 +189,7 @@ the graph_attr, node_attr, and edge_attr dictionaries</p>
 </div>
 </section>
 <section id="layout-and-drawing">
-<h2>Layout and Drawing<a class="headerlink" href="#layout-and-drawing" title="Permalink to this headline">¶</a></h2>
+<h2>Layout and Drawing<a class="headerlink" href="#layout-and-drawing" title="Permalink to this heading">¶</a></h2>
 <p>Pygraphviz provides several methods for layout and drawing of graphs.</p>
 <p>To store and print the graph in dot format as a Python string use</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">string</span><span class="p">()</span>
@@ -224,7 +225,7 @@ the graph_attr, node_attr, and edge_attr dictionaries</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
-      <span class="lastupdated">Last updated on May 07, 2022.
+      <span class="lastupdated">Last updated on May 31, 2022.
       </span></p>
   </div>
 
