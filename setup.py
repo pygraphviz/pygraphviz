@@ -72,7 +72,7 @@ package_data = {
 if __name__ == "__main__":
     define_macros = []
     if sys.platform == "win32":
-        define_macros = define_macros.append(("GVDLL", None))
+        define_macros.append(("GVDLL", None))
 
     extension = [
         Extension(
