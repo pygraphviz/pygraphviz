@@ -1252,6 +1252,9 @@ class AGraph:
                 self._update_handle_references()
         except OSError:
             print("IO error reading file")
+        finally:
+            if hasattr(fh, "close") and not hasattr(path, "write"):
+                fh.close()
 
     def write(self, path=None):
         """Write graph in dot format to file on path.
