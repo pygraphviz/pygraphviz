@@ -50,10 +50,10 @@ jobs:
     strategy:
       matrix:
         release:
-          - 34
           - 35
+          - 36
 
-    runs-on: Ubuntu-20.04
+    runs-on: Ubuntu-22.04
     container: 'fedora:${{ matrix.release }}'
 
     steps:
