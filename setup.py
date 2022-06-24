@@ -79,14 +79,24 @@ if __name__ == "__main__":
             "pygraphviz._graphviz",
             ["pygraphviz/graphviz_wrap.c"],
             include_dirs=[],
-            library_dirs=[],
+            library_dirs=["/usr/local/lib/graphviz"],
             # cdt does not link to cgraph, whereas cgraph links to cdt.
             # thus, cdt needs to come first in the library list to be sure
             # that both libraries are linked in the final built .so (if cgraph
             # is first, the implicit inclusion of cdt can lead to an incomplete
             # link list, having only cdt and preventing the module from being loaded with
             # undefined symbol errors. seen under PyPy on Linux.)
-            libraries=["cdt", "cgraph", "gvc"],
+            libraries=[
+                "cdt",
+                "cgraph",
+                "gvc",
+                "gvpr",
+                "gvplugin_core",
+                "gvplugin_dot_layout",
+                "gvplugin_neato_layout",
+                "gvplugin_visio",
+            ],
+            runtime_library_dirs=["/usr/local/lib/graphviz"],
             define_macros=define_macros,
         )
     ]
