@@ -1725,8 +1725,7 @@ class AGraph:
             out = gv.gvRenderData(gvc, G, format)
             if out[0]:
                 raise ValueError(f"Graphviz Error creating dot representation:{out[0]}")
-            err, dot_string, length = out
-            assert len(dot_string) == length
+            err, dot_string = out
             gv.gvFreeLayout(gvc, G)
             gv.gvFreeContext(gvc)
             return dot_string
