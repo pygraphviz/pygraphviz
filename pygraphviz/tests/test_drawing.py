@@ -93,6 +93,17 @@ class TestExperimentalGraphvizLibInterface:
         d = A._draw(prog="nop")
         A.string_nop()
 
+    def test_drawing_png_output(self):
+        A = pgv.AGraph(name="test graph")
+        A.add_path([1, 2, 3, 4])
+        try:
+            d = A._draw(prog="dot", format="png")
+        except ValueError as e:
+            if e.args[0] == "Graphviz Error creating dot representation:-1":
+                pytest.skip("PNG format appears unavailable")
+            else:
+                raise
+
     def test_drawing_to_create_dot_string(self):
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
