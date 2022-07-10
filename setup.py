@@ -70,7 +70,7 @@ package_data = {
 }
 
 if __name__ == "__main__":
-    define_macros = []
+    define_macros = [("SWIG_PYTHON_STRICT_BYTE_CHAR", None)]
     if sys.platform == "win32":
         define_macros.append(("GVDLL", None))
 
