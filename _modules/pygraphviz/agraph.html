@@ -1816,8 +1816,7 @@
             <span class="n">out</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvRenderData</span><span class="p">(</span><span class="n">gvc</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Graphviz Error creating dot representation:</span><span class="si">{</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">err</span><span class="p">,</span> <span class="n">dot_string</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">out</span>
-            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">dot_string</span><span class="p">)</span> <span class="o">==</span> <span class="n">length</span>
+            <span class="n">err</span><span class="p">,</span> <span class="n">dot_string</span> <span class="o">=</span> <span class="n">out</span>
             <span class="n">gv</span><span class="o">.</span><span class="n">gvFreeLayout</span><span class="p">(</span><span class="n">gvc</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
             <span class="n">gv</span><span class="o">.</span><span class="n">gvFreeContext</span><span class="p">(</span><span class="n">gvc</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">dot_string</span>
@@ -2245,7 +2244,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2004-2022, PyGraphviz Developers.
-      <span class="lastupdated">Last updated on Jun 10, 2022.
+      <span class="lastupdated">Last updated on Jul 10, 2022.
       </span></p>
   </div>
 
