@@ -3222,7 +3222,7 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
       mode_byte_obj1 = PyUnicode_AsUTF8String(mode_obj1);
       
       mode1 = PyBytes_AsString(mode_byte_obj1);
-      arg1 = fdopen(fd1, mode1);
+      arg1 = fdopen(dup(fd1), mode1);
       Py_XDECREF(mode_obj1);
       Py_XDECREF(mode_byte_obj1);
     }
@@ -3234,6 +3234,7 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
   arg2 = (Agdisc_t *)(argp2);
   {
     result = (Agraph_t *)agread(arg1,arg2);
+    fclose(arg1);
     if (!result) {
       PyErr_SetString(PyExc_ValueError,"agread: bad input data");
       return NULL;
