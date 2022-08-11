@@ -1518,7 +1518,7 @@ class AGraph:
 
         gvc = gv.gvContext()
         gv.gvLayout(gvc, self.handle, prog)
-        gv.gvRender(gvc, self.handle, format=b"dot", out=None)
+        gv.gvRender(gvc, self.handle, format=b"dot", output_file=None)
 
         gv.gvFreeLayout(gvc, self.handle)
         gv.gvFreeContext(gvc)

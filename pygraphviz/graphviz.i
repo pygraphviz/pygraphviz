@@ -5,7 +5,23 @@
 #include "graphviz/gvc.h"
 %}
 
-%typemap(in) FILE* (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
+%typemap(in) FILE* input_file (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
+    if ($input == Py_None) { $1 = NULL; }
+    else {
+        // work around to get hold of FILE*
+        fd = PyObject_AsFileDescriptor($input);
+
+        mode_obj = PyObject_GetAttrString($input, "mode");
+        mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
+
+        mode = PyBytes_AsString(mode_byte_obj);
+        $1 = fdopen(dup(fd), mode);
+        Py_XDECREF(mode_obj);
+        Py_XDECREF(mode_byte_obj);
+    }
+}
+
+%typemap(in) FILE* output_file (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
     if ($input == Py_None) { $1 = NULL; }
     else {
         // work around to get hold of FILE*
@@ -19,6 +35,10 @@
         Py_XDECREF(mode_obj);
         Py_XDECREF(mode_byte_obj);
     }
+}
+
+%typemap(freearg) FILE* input_file {
+    fclose($1);
 }
 
 
@@ -119,8 +139,8 @@ def agraphnew(name,strict=False,directed=False):
 %}
 
 int       agclose(Agraph_t *g);
-Agraph_t *agread(FILE *file, Agdisc_t *);
-int       agwrite(Agraph_t *g, FILE *file);
+Agraph_t *agread(FILE *input_file, Agdisc_t *);
+int       agwrite(Agraph_t *g, FILE *output_file);
 int	  agisundirected(Agraph_t * g);
 int       agisdirected(Agraph_t * g);
 int       agisstrict(Agraph_t * g);
@@ -303,7 +323,7 @@ int gvLayout(GVC_t *gvc, Agraph_t *g, char* prog);
 int gvFreeLayout(GVC_t *gvc, Agraph_t *g);
 
 /* Render layout in a specified format to an open FILE */
-int gvRender(GVC_t *gvc, Agraph_t* g, char *format, FILE *out=NULL);
+int gvRender(GVC_t *gvc, Agraph_t* g, char *format, FILE *output_file=NULL);
 int gvRenderFilename(GVC_t *gvc, Agraph_t* g, char *format, char *filename);
 
 /* Render layout in a specified format to an external context */

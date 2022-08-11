@@ -3234,15 +3234,20 @@ SWIGINTERN PyObject *_wrap_agread(PyObject *SWIGUNUSEDPARM(self), PyObject *args
   arg2 = (Agdisc_t *)(argp2);
   {
     result = (Agraph_t *)agread(arg1,arg2);
-    fclose(arg1);
     if (!result) {
       PyErr_SetString(PyExc_ValueError,"agread: bad input data");
       return NULL;
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Agraph_t, 0 |  0 );
+  {
+    fclose(arg1);
+  }
   return resultobj;
 fail:
+  {
+    fclose(arg1);
+  }
   return NULL;
 }
 
