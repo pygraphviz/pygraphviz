@@ -81,11 +81,11 @@ def agraphnew(name,strict=False,directed=False):
 def agclose(g):
     return _graphviz.agclose(g)
 
-def agread(file, arg2):
-    return _graphviz.agread(file, arg2)
+def agread(input_file, arg2):
+    return _graphviz.agread(input_file, arg2)
 
-def agwrite(g, file):
-    return _graphviz.agwrite(g, file)
+def agwrite(g, output_file):
+    return _graphviz.agwrite(g, output_file)
 
 def agisundirected(g):
     return _graphviz.agisundirected(g)
@@ -252,8 +252,8 @@ def gvLayout(gvc, g, prog):
 def gvFreeLayout(gvc, g):
     return _graphviz.gvFreeLayout(gvc, g)
 
-def gvRender(gvc, g, format, out=None):
-    return _graphviz.gvRender(gvc, g, format, out)
+def gvRender(gvc, g, format, output_file=None):
+    return _graphviz.gvRender(gvc, g, format, output_file)
 
 def gvRenderFilename(gvc, g, format, filename):
     return _graphviz.gvRenderFilename(gvc, g, format, filename)
