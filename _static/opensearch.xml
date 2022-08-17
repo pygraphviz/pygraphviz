@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
   <ShortName>PyGraphviz</ShortName>
-  <Description>Search PyGraphviz 1.10rc1.dev0 documentation</Description>
+  <Description>Search PyGraphviz 1.10rc1 documentation</Description>
   <InputEncoding>utf-8</InputEncoding>
   <Url type="text/html" method="get"
        template="http://pygraphviz.github.io/search.html?q={searchTerms}"/>
-  <LongName>PyGraphviz 1.10rc1.dev0 documentation</LongName>
+  <LongName>PyGraphviz 1.10rc1 documentation</LongName>
   
 </OpenSearchDescription>
