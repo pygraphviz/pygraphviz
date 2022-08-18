@@ -154,7 +154,7 @@ int       agisstrict(Agraph_t * g);
 
 /* nodes */
 Agnode_t *agnode(Agraph_t *g, char *name, int createflag);
-Agnode_t *agidnode(Agraph_t * g, unsigned long id, int createflag);
+Agnode_t *agidnode(Agraph_t * g, IDTYPE id, int createflag);
 Agnode_t *agsubnode(Agraph_t *g, Agnode_t *n, int createflag);
 Agnode_t *agfstnode(Agraph_t *g);
 Agnode_t *agnxtnode(Agraph_t *g, Agnode_t *n);
@@ -167,7 +167,7 @@ Agnode_t *agprvnode(Agraph_t * g, Agnode_t * n);
 Agedge_t *agedge(Agraph_t * g, Agnode_t * t, Agnode_t * h,
  		char *name, int createflag);
 Agedge_t *agidedge(Agraph_t * g, Agnode_t * t, Agnode_t * h,
- 		  unsigned long id, int createflag);
+ 		  IDTYPE id, int createflag);
 Agedge_t *agsubedge(Agraph_t * g, Agedge_t * e, int createflag);
 Agedge_t *agfstin(Agraph_t * g, Agnode_t * n);
 Agedge_t *agnxtin(Agraph_t * g, Agedge_t * e);

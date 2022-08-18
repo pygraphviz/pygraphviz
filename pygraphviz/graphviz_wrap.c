@@ -2989,11 +2989,12 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_Agsym_t swig_types[5]
 #define SWIGTYPE_p_FILE swig_types[6]
 #define SWIGTYPE_p_GVC_t swig_types[7]
-#define SWIGTYPE_p_char swig_types[8]
-#define SWIGTYPE_p_p_char swig_types[9]
-#define SWIGTYPE_p_unsigned_int swig_types[10]
-static swig_type_info *swig_types[12];
-static swig_module_info swig_module = {swig_types, 11, 0, 0, 0, 0};
+#define SWIGTYPE_p_IDTYPE swig_types[8]
+#define SWIGTYPE_p_char swig_types[9]
+#define SWIGTYPE_p_p_char swig_types[10]
+#define SWIGTYPE_p_unsigned_int swig_types[11]
+static swig_type_info *swig_types[13];
+static swig_module_info swig_module = {swig_types, 12, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3304,54 +3305,6 @@ SWIG_AsVal_int (PyObject * obj, int *val)
     }
   }  
   return res;
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val) 
-{
-#if PY_VERSION_HEX < 0x03000000
-  if (PyInt_Check(obj)) {
-    long v = PyInt_AsLong(obj);
-    if (v >= 0) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      return SWIG_OverflowError;
-    }
-  } else
-#endif
-  if (PyLong_Check(obj)) {
-    unsigned long v = PyLong_AsUnsignedLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      PyErr_Clear();
-      return SWIG_OverflowError;
-    }
-  }
-#ifdef SWIG_PYTHON_CAST_MODE
-  {
-    int dispatch = 0;
-    unsigned long v = PyLong_AsUnsignedLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_AddCast(SWIG_OK);
-    } else {
-      PyErr_Clear();
-    }
-    if (!dispatch) {
-      double d;
-      int res = SWIG_AddCast(SWIG_AsVal_double (obj,&d));
-      if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, 0, ULONG_MAX)) {
-	if (val) *val = (unsigned long)(d);
-	return res;
-      }
-    }
-  }
-#endif
-  return SWIG_TypeError;
 }
 
 
@@ -3727,12 +3680,12 @@ fail:
 SWIGINTERN PyObject *_wrap_agidnode(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
   Agraph_t *arg1 = (Agraph_t *) 0 ;
-  unsigned long arg2 ;
+  IDTYPE arg2 ;
   int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
   PyObject *swig_obj[3] ;
@@ -3744,11 +3697,17 @@ SWIGINTERN PyObject *_wrap_agidnode(PyObject *self, PyObject *args) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "agidnode" "', argument " "1"" of type '" "Agraph_t *""'"); 
   }
   arg1 = (Agraph_t *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(swig_obj[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "agidnode" "', argument " "2"" of type '" "unsigned long""'");
-  } 
-  arg2 = (unsigned long)(val2);
+  {
+    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_IDTYPE,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "agidnode" "', argument " "2"" of type '" "IDTYPE""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "agidnode" "', argument " "2"" of type '" "IDTYPE""'");
+    } else {
+      arg2 = *((IDTYPE *)(argp2));
+    }
+  }
   ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "agidnode" "', argument " "3"" of type '" "int""'");
@@ -3974,7 +3933,7 @@ SWIGINTERN PyObject *_wrap_agidedge(PyObject *self, PyObject *args) {
   Agraph_t *arg1 = (Agraph_t *) 0 ;
   Agnode_t *arg2 = (Agnode_t *) 0 ;
   Agnode_t *arg3 = (Agnode_t *) 0 ;
-  unsigned long arg4 ;
+  IDTYPE arg4 ;
   int arg5 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3982,8 +3941,8 @@ SWIGINTERN PyObject *_wrap_agidedge(PyObject *self, PyObject *args) {
   int res2 = 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
-  unsigned long val4 ;
-  int ecode4 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
   int val5 ;
   int ecode5 = 0 ;
   PyObject *swig_obj[5] ;
@@ -4005,11 +3964,17 @@ SWIGINTERN PyObject *_wrap_agidedge(PyObject *self, PyObject *args) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "agidedge" "', argument " "3"" of type '" "Agnode_t *""'"); 
   }
   arg3 = (Agnode_t *)(argp3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(swig_obj[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "agidedge" "', argument " "4"" of type '" "unsigned long""'");
-  } 
-  arg4 = (unsigned long)(val4);
+  {
+    res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_IDTYPE,  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "agidedge" "', argument " "4"" of type '" "IDTYPE""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "agidedge" "', argument " "4"" of type '" "IDTYPE""'");
+    } else {
+      arg4 = *((IDTYPE *)(argp4));
+    }
+  }
   ecode5 = SWIG_AsVal_int(swig_obj[4], &val5);
   if (!SWIG_IsOK(ecode5)) {
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "agidedge" "', argument " "5"" of type '" "int""'");
@@ -5589,6 +5554,7 @@ static swig_type_info _swigt__p_Agraph_t = {"_p_Agraph_t", "Agraph_t *", 0, 0, (
 static swig_type_info _swigt__p_Agsym_t = {"_p_Agsym_t", "Agsym_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_FILE = {"_p_FILE", "FILE *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_GVC_t = {"_p_GVC_t", "GVC_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_IDTYPE = {"_p_IDTYPE", "IDTYPE *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_char = {"_p_p_char", "char **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "unsigned int *", 0, 0, (void*)0, 0};
@@ -5602,6 +5568,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Agsym_t,
   &_swigt__p_FILE,
   &_swigt__p_GVC_t,
+  &_swigt__p_IDTYPE,
   &_swigt__p_char,
   &_swigt__p_p_char,
   &_swigt__p_unsigned_int,
@@ -5615,6 +5582,7 @@ static swig_cast_info _swigc__p_Agraph_t[] = {  {&_swigt__p_Agraph_t, 0, 0, 0},{
 static swig_cast_info _swigc__p_Agsym_t[] = {  {&_swigt__p_Agsym_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_FILE[] = {  {&_swigt__p_FILE, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_GVC_t[] = {  {&_swigt__p_GVC_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_IDTYPE[] = {  {&_swigt__p_IDTYPE, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_char[] = {  {&_swigt__p_p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
@@ -5628,6 +5596,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Agsym_t,
   _swigc__p_FILE,
   _swigc__p_GVC_t,
+  _swigc__p_IDTYPE,
   _swigc__p_char,
   _swigc__p_p_char,
   _swigc__p_unsigned_int,
