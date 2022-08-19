@@ -3,6 +3,16 @@
 News
 ====
 
+pygraphviz-1.10
+---------------
+
+Release date: 19 August 2022
+
+ - Add Python 3.11 support
+ - Fix gvRenderData bytes output
+ - Fix FILE* resource leak in agread() wrapper
+ - Close all references to fname before calling unlink(fname)
+
 pygraphviz-1.9
 --------------
 
