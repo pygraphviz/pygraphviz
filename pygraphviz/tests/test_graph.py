@@ -304,10 +304,11 @@ class TestGraph(unittest.TestCase):
         G_copy = G.copy()
         assert not G_copy.is_directed()
 
-        # Similarly with the strict attr when copying: see gh-426
-        A = pgv.AGraph(strict=False, directed=True)
-        assert A.strict is False
-        assert A.copy().strict is False
+        # Similarly with the strict and name attrs when copying: see gh-426
+        A = pgv.AGraph(strict=False, directed=True, name="foobar")
+        AC = A.copy()
+        assert AC.strict == A.strict
+        assert AC.name == A.name
 
     def test_add_path(self):
         A = pgv.AGraph()
