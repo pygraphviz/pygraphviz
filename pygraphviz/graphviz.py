@@ -240,6 +240,9 @@ AGEDGE = _graphviz.AGEDGE
 def gvContext():
     return _graphviz.gvContext()
 
+def gvContextPlugins(builtins, demand_loading):
+    return _graphviz.gvContextPlugins(builtins, demand_loading)
+
 def gvFreeContext(gvc):
     return _graphviz.gvFreeContext(gvc)
 
