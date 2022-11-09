@@ -7,6 +7,7 @@ PyGraphviz
 .. image:: https://codecov.io/gh/pygraphviz/pygraphviz/branch/main/graph/badge.svg
    :target: https://app.codecov.io/gh/pygraphviz/pygraphviz/branch/main
 
+Use graphviz from Python.
 
 PyGraphviz is a Python interface to the Graphviz graph layout and
 visualization package.
