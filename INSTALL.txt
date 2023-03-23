@@ -69,6 +69,19 @@ Homebrew
     $ brew install graphviz
     $ pip install pygraphviz
 
+.. note::
+
+   Graphviz may be installed in a location that is not on the default search
+   path.
+   In this case, it may be necessary to manually specify the path to the
+   graphviz include and/or library directories, e.g. ::
+
+       pip install --global-option="-I$(brew --prefix graphviz)/include" \
+                   --global-option="-L$(brew --prefix graphviz)/lib/" \
+                   pygraphviz
+
+   See the Advanced section for details.
+
 MacPorts
 ~~~~~~~~
 
