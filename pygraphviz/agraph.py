@@ -1082,7 +1082,7 @@ class AGraph:
         for n in bunch:
             node = Node(self, n)
             nh = gv.agsubnode(handle, node.handle, _Action.create)
-        for (u, v, k) in self.edges(keys=True):
+        for u, v, k in self.edges(keys=True):
             if u in H and v in H:
                 edge = Edge(self, u, v, k)
                 eh = gv.agsubedge(handle, edge.handle, _Action.create)
@@ -2038,7 +2038,7 @@ class Attribute(MutableMapping):
         return list(self.__iter__())
 
     def __iter__(self):
-        for (k, v) in self.iteritems():
+        for k, v in self.iteritems():
             yield k
 
     def iteritems(self):
