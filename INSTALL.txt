@@ -76,8 +76,9 @@ Homebrew
    In this case, it may be necessary to manually specify the path to the
    graphviz include and/or library directories, e.g. ::
 
-       pip install --global-option="-I$(brew --prefix graphviz)/include" \
-                   --global-option="-L$(brew --prefix graphviz)/lib/" \
+       pip install --config-setting="--global-option=build_ext" \
+                   --config-setting="--build-option=-I$(brew --prefix graphviz)/include/" \
+                   --config-setting="--build-option=-L$(brew --prefix graphviz)/lib/" \
                    pygraphviz
 
    See the Advanced section for details.
@@ -89,9 +90,9 @@ MacPorts
 
     $ port install graphviz
     $ pip install pygraphviz
-    $ pip install --global-option=build_ext \
-                  --global-option="-I/opt/local/include/" \
-                  --global-option="-L/opt/local/lib/" \
+    $ pip install --config-setting="--global-option=build_ext" \
+                  --config-setting="--global-option="-I/opt/local/include/" \
+                  --config-setting="--global-option="-L/opt/local/lib/" \
                   pygraphviz
 
 Advanced
@@ -143,9 +144,9 @@ Manual download
 
 .. code-block:: console
 
-    PS C:\> python -m pip install --global-option=build_ext `
-                  --global-option="-IC:\Program Files\Graphviz\include" `
-                  --global-option="-LC:\Program Files\Graphviz\lib" `
+    PS C:\> python -m pip install --config-setting="--global-option=build_ext" `
+                  --config-setting="--global-option="-IC:\Program Files\Graphviz\include" `
+                  --config-setting="--global-option="-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
 
 Chocolatey
@@ -154,9 +155,9 @@ Chocolatey
 .. code-block:: console
 
     PS C:\> choco install graphviz
-    PS C:\> python -m pip install --global-option=build_ext `
-                  --global-option="-IC:\Program Files\Graphviz\include" `
-                  --global-option="-LC:\Program Files\Graphviz\lib" `
+    PS C:\> python -m pip install --config-setting="--global-option=build_ext" `
+                  --config-setting="--global-option="-IC:\Program Files\Graphviz\include" `
+                  --config-setting="--global-option="-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
 
 .. include:: reference/faq.rst
