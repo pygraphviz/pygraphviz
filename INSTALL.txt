@@ -146,7 +146,7 @@ Manual download
 
 .. code-block:: console
 
-    PS C:\> python -m pip install --use-pep517
+    PS C:\> python -m pip install --use-pep517 `
                   --config-setting="--global-option=build_ext" `
                   --config-setting="--global-option="-IC:\Program Files\Graphviz\include" `
                   --config-setting="--global-option="-LC:\Program Files\Graphviz\lib" `
@@ -158,7 +158,7 @@ Chocolatey
 .. code-block:: console
 
     PS C:\> choco install graphviz
-    PS C:\> python -m pip install --use-pep517
+    PS C:\> python -m pip install --use-pep517 `
                   --config-setting="--global-option=build_ext" `
                   --config-setting="--global-option="-IC:\Program Files\Graphviz\include" `
                   --config-setting="--global-option="-LC:\Program Files\Graphviz\lib" `
