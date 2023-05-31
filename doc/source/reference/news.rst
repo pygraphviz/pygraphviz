@@ -3,6 +3,16 @@
 News
 ====
 
+pygraphviz-1.11
+---------------
+
+Release date: TBD
+
+ - Update to SWIG 4.1.1
+ - Require Graphviz 2.46+
+ - Fix passthrough of graph attributes when copying
+ - Update install instructions
+
 pygraphviz-1.10
 ---------------
 
