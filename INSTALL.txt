@@ -4,8 +4,8 @@ Install
 
 PyGraphviz requires:
 
-- Python (version 3.8, 3.9, or 3.10)
-- `Graphviz <https://www.graphviz.org/>`_ (version 2.42 or later)
+- Python (version 3.8, 3.9, 3.10, or 3.11)
+- `Graphviz <https://www.graphviz.org/>`_ (version 2.46 or later)
 - C/C++ Compiler
 
 .. note::
