@@ -6,7 +6,7 @@ News
 pygraphviz-1.11
 ---------------
 
-Release date: TBD
+Release date: 1 June 2023
 
  - Update to SWIG 4.1.1
  - Require Graphviz 2.46+
