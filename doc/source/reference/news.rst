@@ -3,6 +3,13 @@
 News
 ====
 
+pygraphviz-1.12
+---------------
+
+Release date: TBD
+
+ - Drop Python 3.8 (SPEC 0)
+
 pygraphviz-1.11
 ---------------
 
