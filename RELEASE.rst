@@ -29,10 +29,7 @@ How to make a new release of ``pygraphviz``
 
 - Add the version number as a tag in git::
 
-   git tag -s [-u <key-id>] pygraphviz-<version> -m 'signed <version> tag'
-
-  (If you do not have a gpg key, use -m instead; it is important for
-  Debian packaging that the tags are annotated)
+   git tag pygraphviz-<version> -m 'signed <version> tag'
 
 - Push the new meta-data to github::
 
@@ -60,16 +57,16 @@ How to make a new release of ``pygraphviz``
     Assuming you are at the top-level of the ``documentation`` repo::
 
       # FIXME - use eol_banner.html
-      cp -a latest pygraphviz-<version>
-      ln -sfn pygraphviz-<version> stable
-      git add pygraphviz-<version> stable
-      git commit -m "Add <version> docs"
+
       # maybe squash the last XX  Deploy GitHub Pages commits
       # git reset --soft HEAD~XX && git commit
       # check you didn't break anything
       # diff -r latest pygraphviz-<version>
       # you will then need to force the push so be careful!
-      git push
+      cp -a latest pygraphviz-<version>
+      cp -a latest stable
+      git add pygraphviz-<version> stable
+
 
 - Update ``__version__`` in ``pygraphviz/__init__.py``.
 
