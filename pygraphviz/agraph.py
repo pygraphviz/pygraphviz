@@ -1021,7 +1021,9 @@ class AGraph:
         Versions <=1.6 made a copy by writing and the reading a dot string.
         This version loads a new graph with nodes, edges and attributes.
         """
-        G = self.__class__(directed=self.is_directed())
+        G = self.__class__(
+            directed=self.is_directed(), strict=self.strict, name=self.name
+        )
         for node in self.nodes():
             G.add_node(node)
             G.get_node(node).attr.update(self.get_node(node).attr)
@@ -1080,7 +1082,7 @@ class AGraph:
         for n in bunch:
             node = Node(self, n)
             nh = gv.agsubnode(handle, node.handle, _Action.create)
-        for (u, v, k) in self.edges(keys=True):
+        for u, v, k in self.edges(keys=True):
             if u in H and v in H:
                 edge = Edge(self, u, v, k)
                 eh = gv.agsubedge(handle, edge.handle, _Action.create)
@@ -1252,6 +1254,9 @@ class AGraph:
                 self._update_handle_references()
         except OSError:
             print("IO error reading file")
+        finally:
+            if hasattr(fh, "close") and not hasattr(path, "write"):
+                fh.close()
 
     def write(self, path=None):
         """Write graph in dot format to file on path.
@@ -1492,7 +1497,7 @@ class AGraph:
         # TODO: Catch/suppress msg on stderr from graphviz
         if retval == -1:
             raise ValueError(f"Program {prog} is not a valid layout program.")
-        gv.gvRender(gvc, self.handle, format=b"dot", out=None)
+        gv.gvRender(gvc, self.handle, format=b"dot", output_file=None)
 
         gv.gvFreeLayout(gvc, self.handle)
         gv.gvFreeContext(gvc)
@@ -1608,8 +1613,7 @@ class AGraph:
             out = gv.gvRenderData(gvc, G, format)
             if out[0]:
                 raise ValueError(f"Graphviz Error creating dot representation:{out[0]}")
-            err, dot_string, length = out
-            assert len(dot_string) == length
+            err, dot_string = out
             gv.gvFreeLayout(gvc, G)
             gv.gvFreeContext(gvc)
             return dot_string
@@ -1917,7 +1921,7 @@ class Attribute(MutableMapping):
         return list(self.__iter__())
 
     def __iter__(self):
-        for (k, v) in self.iteritems():
+        for k, v in self.iteritems():
             yield k
 
     def iteritems(self):

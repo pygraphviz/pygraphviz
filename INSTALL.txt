@@ -4,8 +4,8 @@ Install
 
 PyGraphviz requires:
 
-- Python (version 3.8, 3.9, or 3.10)
-- `Graphviz <https://www.graphviz.org/>`_ (version 2.42 or later)
+- Python (version 3.9, 3.10, or 3.11)
+- `Graphviz <https://www.graphviz.org/>`_ (version 2.46 or later)
 - C/C++ Compiler
 
 .. note::
@@ -69,6 +69,21 @@ Homebrew
     $ brew install graphviz
     $ pip install pygraphviz
 
+.. note::
+
+   Graphviz may be installed in a location that is not on the default search
+   path.
+   In this case, it may be necessary to manually specify the path to the
+   graphviz include and/or library directories, e.g. ::
+
+       pip install --use-pep517 \
+                   --config-setting="--global-option=build_ext" \
+                   --config-setting="--build-option=-I$(brew --prefix graphviz)/include/" \
+                   --config-setting="--build-option=-L$(brew --prefix graphviz)/lib/" \
+                   pygraphviz
+
+   See the Advanced section for details.
+
 MacPorts
 ~~~~~~~~
 
@@ -76,9 +91,10 @@ MacPorts
 
     $ port install graphviz
     $ pip install pygraphviz
-    $ pip install --global-option=build_ext \
-                  --global-option="-I/opt/local/include/" \
-                  --global-option="-L/opt/local/lib/" \
+    $ pip install --use-pep517 \
+                  --config-setting="--global-option=build_ext" \
+                  --config-setting="--global-option="-I/opt/local/include/" \
+                  --config-setting="--global-option="-L/opt/local/lib/" \
                   pygraphviz
 
 Advanced
@@ -130,9 +146,10 @@ Manual download
 
 .. code-block:: console
 
-    PS C:\> python -m pip install --global-option=build_ext `
-                  --global-option="-IC:\Program Files\Graphviz\include" `
-                  --global-option="-LC:\Program Files\Graphviz\lib" `
+    PS C:\> python -m pip install --use-pep517 `
+                  --config-setting="--global-option=build_ext" `
+                  --config-setting="--global-option="-IC:\Program Files\Graphviz\include" `
+                  --config-setting="--global-option="-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
 
 Chocolatey
@@ -141,9 +158,10 @@ Chocolatey
 .. code-block:: console
 
     PS C:\> choco install graphviz
-    PS C:\> python -m pip install --global-option=build_ext `
-                  --global-option="-IC:\Program Files\Graphviz\include" `
-                  --global-option="-LC:\Program Files\Graphviz\lib" `
+    PS C:\> python -m pip install --use-pep517 `
+                  --config-setting="--global-option=build_ext" `
+                  --config-setting="--global-option="-IC:\Program Files\Graphviz\include" `
+                  --config-setting="--global-option="-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
 
 .. include:: reference/faq.rst

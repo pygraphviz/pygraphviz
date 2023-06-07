@@ -3,9 +3,9 @@ import os
 import sys
 from setuptools import setup, Extension
 
-if sys.version_info[:2] < (3, 8):
+if sys.version_info[:2] < (3, 9):
     error = (
-        "PyGraphviz requires Python version 3.8 or later (%d.%d detected)."
+        "PyGraphviz requires Python version 3.9 or later (%d.%d detected)."
         % sys.version_info[:2]
     )
     sys.stderr.write(error + "\n")
@@ -40,9 +40,9 @@ classifiers = [
     "Programming Language :: C",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -70,9 +70,9 @@ package_data = {
 }
 
 if __name__ == "__main__":
-    define_macros = []
+    define_macros = [("SWIG_PYTHON_STRICT_BYTE_CHAR", None)]
     if sys.platform == "win32":
-        define_macros = define_macros.append(("GVDLL", None))
+        define_macros.append(("GVDLL", None))
 
     extension = [
         Extension(
@@ -120,6 +120,6 @@ if __name__ == "__main__":
         ext_modules=extension,
         package_data=package_data,
         include_package_data=True,
-        python_requires=">=3.8",
+        python_requires=">=3.9",
         tests_require=["pytest"],
     )

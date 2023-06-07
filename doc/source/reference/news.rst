@@ -3,6 +3,33 @@
 News
 ====
 
+pygraphviz-1.12
+---------------
+
+Release date: TBD
+
+ - Drop Python 3.8 (SPEC 0)
+
+pygraphviz-1.11
+---------------
+
+Release date: 1 June 2023
+
+ - Update to SWIG 4.1.1
+ - Require Graphviz 2.46+
+ - Fix passthrough of graph attributes when copying
+ - Update install instructions
+
+pygraphviz-1.10
+---------------
+
+Release date: 19 August 2022
+
+ - Add Python 3.11 support
+ - Fix gvRenderData bytes output
+ - Fix FILE* resource leak in agread() wrapper
+ - Close all references to fname before calling unlink(fname)
+
 pygraphviz-1.9
 --------------
 
