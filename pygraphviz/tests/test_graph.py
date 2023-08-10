@@ -310,6 +310,23 @@ class TestGraph(unittest.TestCase):
         assert AC.strict == A.strict
         assert AC.name == A.name
 
+    def test_multigraph_copy_with_keys(self):
+        A = pgv.AGraph(strict=False)
+        # Add parallel edges
+        A.add_edge(1, 2, key="1_2-1")
+        A.add_edge(1, 2, key="1_2-2")
+        # Add single edge
+        A.add_edge(3, 4, key="3_4-1")
+
+        AC = A.copy()
+
+        # Sanity - verify keys exist in original graph
+        assert all(key is not None for key in A.edges(keys=True))
+        # Verify all edges in copied graph have edges
+        assert all(key is not None for key in AC.edges(keys=True))
+        # Verify edges, including keys, are identical to original graph
+        assert set(A.edges(keys=True)) == set(AC.edges(keys=True))
+
     def test_add_path(self):
         A = pgv.AGraph()
         A.add_path([1, 2, 3])

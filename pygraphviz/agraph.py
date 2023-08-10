@@ -1027,7 +1027,7 @@ class AGraph:
         for node in self.nodes():
             G.add_node(node)
             G.get_node(node).attr.update(self.get_node(node).attr)
-        for edge in self.edges():
+        for edge in self.edges(keys=True):
             G.add_edge(*edge)
             G.get_edge(*edge).attr.update(self.get_edge(*edge).attr)
         G.graph_attr.update(self.graph_attr)
