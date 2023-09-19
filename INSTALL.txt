@@ -132,6 +132,7 @@ using `Chocolatey <https://chocolatey.org/>`_, which has been updated to Graphvi
 
 You may also need to install Visual C/C++, e.g. from here:
 https://visualstudio.microsoft.com/visual-cpp-build-tools/
+When installing, confirm the checkbox 'Desktop Development with C++' enabled for utilizing MSVC v14x.
 
 Assuming you have Python and Visual C/C++ installed,
 we believe the following should work on Windows 10 (64 bit) using PowerShell.
@@ -142,14 +143,14 @@ Manual download
 1. Download and install 2.46.0 for Windows 10 (64-bit):
    `stable_windows_10_cmake_Release_x64_graphviz-install-2.46.0-win64.exe
    <https://gitlab.com/graphviz/graphviz/-/package_files/6164164/download>`_.
-2. Install PyGraphviz via
+2. Install PyGraphviz via powershell
 
 .. code-block:: console
 
     PS C:\> python -m pip install --use-pep517 `
-                  --config-setting="--global-option=build_ext" `
-                  --config-setting="--global-option="-IC:\Program Files\Graphviz\include" `
-                  --config-setting="--global-option="-LC:\Program Files\Graphviz\lib" `
+                  --config-setting="--build-option=build_ext" `
+                  --config-setting="--build-option=-IC:\Program Files\Graphviz\include" `
+                  --config-setting="--build-option=-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
 
 Chocolatey
@@ -159,9 +160,9 @@ Chocolatey
 
     PS C:\> choco install graphviz
     PS C:\> python -m pip install --use-pep517 `
-                  --config-setting="--global-option=build_ext" `
-                  --config-setting="--global-option="-IC:\Program Files\Graphviz\include" `
-                  --config-setting="--global-option="-LC:\Program Files\Graphviz\lib" `
+                  --config-setting="--build-option=build_ext" `
+                  --config-setting="--build-option=-IC:\Program Files\Graphviz\include" `
+                  --config-setting="--build-option=-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
 
 .. include:: reference/faq.rst
