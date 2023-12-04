@@ -77,9 +77,9 @@ Homebrew
    graphviz include and/or library directories, e.g. ::
 
        pip install --use-pep517 \
-                   --config-setting="--global-option=build_ext" \
-                   --config-setting="--build-option=-I$(brew --prefix graphviz)/include/" \
-                   --config-setting="--build-option=-L$(brew --prefix graphviz)/lib/" \
+                   --config-settings="--global-option=build_ext" \
+                   --config-settings="--build-option=-I$(brew --prefix graphviz)/include/" \
+                   --config-settings="--build-option=-L$(brew --prefix graphviz)/lib/" \
                    pygraphviz
 
    See the Advanced section for details.
@@ -92,9 +92,9 @@ MacPorts
     $ port install graphviz
     $ pip install pygraphviz
     $ pip install --use-pep517 \
-                  --config-setting="--global-option=build_ext" \
-                  --config-setting="--global-option="-I/opt/local/include/" \
-                  --config-setting="--global-option="-L/opt/local/lib/" \
+                  --config-settings="--global-option=build_ext" \
+                  --config-settings="--global-option="-I/opt/local/include/" \
+                  --config-settings="--global-option="-L/opt/local/lib/" \
                   pygraphviz
 
 Advanced
@@ -147,9 +147,9 @@ Manual download
 .. code-block:: console
 
     PS C:\> python -m pip install --use-pep517 `
-                  --config-setting="--global-option=build_ext" `
-                  --config-setting="--global-option=-IC:\Program Files\Graphviz\include" `
-                  --config-setting="--global-option=-LC:\Program Files\Graphviz\lib" `
+                  --config-settings="--global-option=build_ext" `
+                  --config-settings="--global-option=-IC:\Program Files\Graphviz\include" `
+                  --config-settings="--global-option=-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
 
 Chocolatey
@@ -159,9 +159,9 @@ Chocolatey
 
     PS C:\> choco install graphviz
     PS C:\> python -m pip install --use-pep517 `
-                  --config-setting="--global-option=build_ext" `
-                  --config-setting="--global-option="-IC:\Program Files\Graphviz\include" `
-                  --config-setting="--global-option="-LC:\Program Files\Graphviz\lib" `
+                  --config-settings="--global-option=build_ext" `
+                  --config-settings="--global-option="-IC:\Program Files\Graphviz\include" `
+                  --config-settings="--global-option="-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
 
 .. include:: reference/faq.rst
