@@ -3,9 +3,9 @@ import os
 import sys
 from setuptools import setup, Extension
 
-if sys.version_info[:2] < (3, 9):
+if sys.version_info[:2] < (3, 10):
     error = (
-        "PyGraphviz requires Python version 3.9 or later (%d.%d detected)."
+        "PyGraphviz requires Python version 3.10 or later (%d.%d detected)."
         % sys.version_info[:2]
     )
     sys.stderr.write(error + "\n")
@@ -40,7 +40,6 @@ classifiers = [
     "Programming Language :: C",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -111,6 +110,6 @@ if __name__ == "__main__":
         ext_modules=extension,
         package_data=package_data,
         include_package_data=True,
-        python_requires=">=3.9",
+        python_requires=">=3.10",
         tests_require=["pytest"],
     )
