@@ -144,11 +144,12 @@ jobs:
 
     - name: Install packages
       run: |
-        pip install --upgrade pip
+        pip install --upgrade pip setuptools
         pip install -r requirements/test.txt
-        pip install --global-option=build_ext \
-                    --global-option="-I/opt/local/include/" \
-                    --global-option="-L/opt/local/lib/" \
+        pip install --use-pep517 \
+                    --config-settings="--global-option=build_ext" \
+                    --config-settings="--global-option=-I/opt/local/include/" \
+                    --config-settings="--global-option=-L/opt/local/lib/" \
                     .
         pip list
 
