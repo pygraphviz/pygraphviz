@@ -7,8 +7,7 @@ name = "pygraphviz"
 authors = [
     {name = "Aric Hagberg", email = "aric.hagberg@gmail.com"},
     {name = "Dan Schult", email = "dschult@colgate.edu"},
-    # TODO: proper syntax for authors without emails
-#    {name = "Manos Renieris"},
+    {name = "Manos Renieris"},
 ]
 description = "Python interface to Graphviz"
 readme = "README.rst"
