@@ -1,0 +1,58 @@
+[build-system]
+build-backend = 'setuptools.build_meta'
+requires = ['setuptools>=61.2']
+
+[project]
+name = "pygraphviz"
+authors = [
+    {name = "Aric Hagberg", email = "aric.hagberg@gmail.com"},
+    {name = "Dan Schult", email = "dschult@colgate.edu"},
+    {name = "Manos Renieris"},
+]
+description = "Python interface to Graphviz"
+readme = "README.rst"
+requires-python = ">=3.10"
+license = {text = "BSD-3-Clause"}
+dynamic = ["version"]
+keywords = [
+    "Networks",
+    "Graph Visualization",
+    "network",
+    "graph",
+    "graph drawing",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: C",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+
+[project.urls]
+Homepage = "https://pygraphviz.github.io"
+"Bug Tracker" = "https://github.com/pygraphviz/pygraphviz/issues/"
+Documentation = "https://pygraphviz.github.io/documentation/stable/"
+"Source Code" = "https://github.com/pygraphviz/pygraphviz/"
+Download = "https://pypi.python.org/pypi/pygraphviz"
+
+[tool.setuptools]
+packages = ["pygraphviz", "pygraphviz.tests"]
+platforms = ["Linux", "Mac OSX", "Windows"]
+
+[tool.setuptools.package-data]
+#"" = ["*.txt"]
+
+[tool.setuptools.dynamic.version]
+attr = "pygraphviz.__version__"

@@ -35,7 +35,7 @@ jobs:
 
     - name: Install packages
       run: |
-        pip install --upgrade pip wheel setuptools
+        pip install --upgrade pip
         pip install -r requirements/test.txt
         pip install .
         pip list
@@ -72,7 +72,7 @@ jobs:
 
     - name: Install packages
       run: |
-        pip install --upgrade pip wheel setuptools
+        pip install --upgrade pip
         pip install -r requirements/test.txt
         pip install .
         pip list
@@ -105,7 +105,7 @@ jobs:
 
     - name: Install packages
       run: |
-        pip install --upgrade pip wheel setuptools
+        pip install --upgrade pip
         pip install -r requirements/test.txt
         pip install .
         pip list
@@ -144,11 +144,12 @@ jobs:
 
     - name: Install packages
       run: |
-        pip install --upgrade pip wheel setuptools
+        pip install --upgrade pip setuptools
         pip install -r requirements/test.txt
-        pip install --global-option=build_ext \
-                    --global-option="-I/opt/local/include/" \
-                    --global-option="-L/opt/local/lib/" \
+        pip install --use-pep517 \
+                    --config-settings="--global-option=build_ext" \
+                    --config-settings="--global-option=-I/opt/local/include/" \
+                    --config-settings="--global-option=-L/opt/local/lib/" \
                     .
         pip list
 
@@ -189,7 +190,7 @@ jobs:
     # We need ``python -m pip install -U pip`` b/c Windows won't modify running programs.
     - name: Install packages
       run: |
-        python -m pip install --upgrade pip wheel setuptools
+        python -m pip install --upgrade pip
         python -m pip install -r requirements/test.txt
         python -m pip install --use-pep517 `
           --config-settings="--global-option=build_ext" `

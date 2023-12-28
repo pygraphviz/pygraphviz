@@ -93,8 +93,8 @@ MacPorts
     $ pip install pygraphviz
     $ pip install --use-pep517 \
                   --config-settings="--global-option=build_ext" \
-                  --config-settings="--global-option="-I/opt/local/include/" \
-                  --config-settings="--global-option="-L/opt/local/lib/" \
+                  --config-settings="--global-option=-I/opt/local/include/" \
+                  --config-settings="--global-option=-L/opt/local/lib/" \
                   pygraphviz
 
 Advanced
