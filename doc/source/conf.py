@@ -1,5 +1,4 @@
 from datetime import date
-import sphinx_rtd_theme
 from warnings import filterwarnings
 
 filterwarnings(
@@ -24,18 +23,6 @@ extensions = [
     "sphinx_gallery.gen_gallery",
     "numpydoc",
 ]
-
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates"]
-
-# The suffix of source filenames.
-source_suffix = ".rst"
-
-# The encoding of source files.
-source_encoding = "utf-8"
-
-# The master toctree document.
-master_doc = "index"
 
 # General substitutions.
 project = "PyGraphviz"
@@ -67,17 +54,9 @@ release = version
 # Else, today_fmt is used as the format for a strftime call.
 # today_fmt = '%B %d, %Y'
 
-# List of documents that shouldn't be included in the build.
-unused_docs = []
-
-# If true, '()' will be appended to :func: etc. cross-reference text.
-# add_function_parentheses = True
-
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
 add_module_names = False
-
-show_authors = True
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -86,12 +65,26 @@ pygments_style = "sphinx"
 # Options for HTML output
 # -----------------------
 
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-
+html_baseurl = "https://pygraphviz.github.io/documentation/stable"
+html_theme = "pydata_sphinx_theme"
 html_theme_options = {
-    "canonical_url": "https://pygraphviz.github.io/documentation/stable",
     "navigation_depth": 3,
+    "icon_links": [
+        {
+            "name": "Home Page",
+            "url": "https://pygraphviz.github.io/",
+            "icon": "fas fa-home",
+        },
+        {
+            "name": "GitHub",
+            "url": "https://github.com/pygraphviz/pygraphviz",
+            "icon": "fab fa-github-square",
+        },
+    ],
+    "logo": {
+        "text": "PyGraphviz",
+    },
+    "show_prev_next": False,
 }
 
 # The style sheet to use for HTML and HTML Help pages. A file of that name

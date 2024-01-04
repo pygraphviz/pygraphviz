@@ -1,5 +1,5 @@
 sphinx>=7.2
-sphinx_rtd_theme>=2.0
+pydata-sphinx-theme>=0.15.1
 sphinx-gallery==0.15
 matplotlib>=3.8
 numpydoc>=1.6
