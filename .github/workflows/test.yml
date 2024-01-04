@@ -20,7 +20,7 @@ jobs:
     steps:
 
     - name: Checkout pygraphviz
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -59,7 +59,7 @@ jobs:
     steps:
 
     - name: Checkout pygraphviz
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install graphviz
       run: sudo dnf install --nogpg -y graphviz graphviz-devel
@@ -93,7 +93,7 @@ jobs:
     steps:
 
     - name: Checkout pygraphviz
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -126,7 +126,7 @@ jobs:
     steps:
 
     - name: Checkout pygraphviz
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -170,7 +170,7 @@ jobs:
     steps:
 
     - name: Checkout pygraphviz
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
