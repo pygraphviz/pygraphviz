@@ -84,7 +84,15 @@ html_theme_options = {
     "logo": {
         "text": "PyGraphviz",
     },
+    "navbar_end": ["theme-switcher", "navbar-icon-links", "version-switcher"],
     "show_prev_next": False,
+    "show_version_warning_banner": True,
+    "switcher": {
+        "json_url": (
+            "https://pygraphviz.github.io/documentation/latest/_static/version_switcher.json"
+        ),
+        "version_match": "latest" if "dev" in version else version,
+    },
 }
 
 # The style sheet to use for HTML and HTML Help pages. A file of that name
@@ -95,7 +103,7 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['static']
+html_static_path = ["_static"]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
