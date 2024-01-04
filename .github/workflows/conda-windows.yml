@@ -15,7 +15,7 @@ jobs:
     steps:
 
       - name: Setup conda with mambaforge
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
           miniforge-variant: Mambaforge
