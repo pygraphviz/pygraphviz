@@ -1,0 +1,13 @@
+[
+    {
+        "name": "latest",
+        "version": "latest",
+        "url": "https://pygraphviz.github.io/documentation/latest/"
+    },
+    {
+        "name": "1.11 (stable)",
+        "version":"1.11",
+        "url": "https://pygraphviz.github.io/documentation/stable/",
+        "preferred": true
+    }
+]
