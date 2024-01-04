@@ -42,7 +42,7 @@ jobs:
           name: Build docs
           command: |
             source venv/bin/activate
-            make -C doc/ dist
+            make -C doc/ html
 
       - store_artifacts:
-          path: doc/build/dist
+          path: doc/build/html
