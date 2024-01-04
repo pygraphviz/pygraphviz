@@ -17,4 +17,3 @@ Reference
    related
    history
    credits
-   legal
