@@ -1,52 +1,63 @@
-How to make a new release of ``pygraphviz``
-===========================================
+Release process for ``pygraphviz``
+================================
 
-- Update the release notes:
+Introduction
+------------
 
-  1. Review and cleanup ``doc/source/reference/api_notes.rst``
-     and ``doc/source/reference/news.rst``,
+Example ``version number``
 
-  2. Fix code in documentation by running
-     ``cd doc && make doctest``.
+-  1.8.dev0 # development version of 1.8 (release candidate 1)
+-  1.8rc1 # 1.8 release candidate 1
+-  1.8rc2.dev0 # development version of 1.8 release candidate 2
+-  1.8 # 1.8 release
+-  1.9.dev0 # development version of 1.9 (release candidate 1)
 
-  3. Remove ::
+Process
+-------
 
-       {% block document %}
-           {% include "dev_banner.html" %}
-           {{ super() }}
-       {% endblock %}
+-  Set release variables::
 
-     from ``doc/source/_templates/layout.html``
+      export VERSION=<version number>
+      export PREVIOUS=<previous version number>
+      export ORG="pygraphviz"
+      export REPO="pygraphviz"
 
-- Update ``__version__`` in ``pygraphviz/__init__.py``.
+-  Autogenerate release notes::
 
-- Commit changes::
+      changelist ${ORG}/${REPO} v${PREVIOUS} main --version ${VERSION}
 
-    git add doc/source/reference/api_notes.rst doc/source/reference/news.rst
-    git add doc/source/_templates/layout.html
-    git add pygraphviz/__init__.py
-    git commit -m 'Designate <version> release'
+-  Put the output of the above command at the top of ``CHANGELOG.md``
 
-- Add the version number as a tag in git::
+-  Update ``version`` in ``pygraphviz/__init__.py``.
 
-   git tag pygraphviz-<version> -m 'signed <version> tag'
+-  Commit changes::
 
-- Push the new meta-data to github::
+      git add pygraphviz/__init__.py CHANGELOG.md
+      git commit -m "Designate ${VERSION} release"
 
-   git push --tags origin main
+-  Tag the release in git::
 
-  (where ``origin`` is the name of the
-   ``github.com:pygraphviz/pygraphviz`` repository.)
+      git tag -s v${VERSION} -m "signed ${VERSION} tag"
 
-- Review the github release page::
+   If you do not have a gpg key, use -u instead; it is important for
+   Debian packaging that the tags are annotated
 
-  https://github.com/pygraphviz/pygraphviz/releases
+-  Push the new meta-data to github::
+
+      git push --tags origin main
+
+   where ``origin`` is the name of the
+   ``github.com:pygraphviz/pygraphviz`` repository
+
+-  Review the github release page::
+
+      https://github.com/pygraphviz/pygraphviz/tags
 
 - Publish on PyPi::
 
    git clean -fxd
    python setup.py sdist --formats=zip
-   twine upload -s dist/pygraphviz*.zip
+   twine upload dist/pygraphviz*.zip
 
 - Update documentation on the web:
   The documentation is kept in a separate repo: pygraphviz/documentation
@@ -67,35 +78,10 @@ How to make a new release of ``pygraphviz``
       cp -a latest stable
       git add pygraphviz-<version> stable
 
+-  Update ``version`` in ``pygraphviz/__init__.py``.
 
-- Update ``__version__`` in ``pygraphviz/__init__.py``.
+-  Commit changes::
 
-- Add ::
-
-     {% block document %}
-         {% include "dev_banner.html" %}
-         {{ super() }}
-     {% endblock %}
-
-   to ``doc/source/_templates/layout.html``
-
-- Commit changes::
-
-  git add pygraphviz/__init__.py doc/source/_templates/layout.html
-  git commit -m 'Bump version'
-  git push origin main
-
-- Update the web frontpage:
-  The webpage is kept in a separate repo: pygraphviz/website
-
-  - Sync your branch with the remote repo: ``git pull``.
-    If you try to ``make github`` when your branch is out of sync, it
-    creates headaches.
-  - Update ``build/index.html``.
-  - Update ``build/_static/docversions.js``.
-  - Push your changes to the repo.
-  - Deploy using ``make github``.
-
-- Post release notes on mailing list.
-
-  - pygraphviz-discuss@googlegroups.com
+      git add pygraphviz/__init__.py
+      git commit -m 'Bump version'
+      git push origin main
