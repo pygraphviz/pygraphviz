@@ -9,5 +9,5 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           api-token: ${{ secrets.CIRCLECI_ARTIFACT_REDIRECTOR_TOKEN }}
-          artifact-path: 0/doc/build/dist/index.html
+          artifact-path: 0/doc/build/html/index.html
           circleci-jobs: build
