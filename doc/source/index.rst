@@ -45,3 +45,4 @@ License
    auto_examples/index
    reference/index
    contribute
+   release/index
