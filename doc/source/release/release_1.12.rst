@@ -66,6 +66,4 @@ Contributors
 - Jarrod Millman (`@jarrodmillman <https://github.com/jarrodmillman>`_)
 - Ross Barnowski (`@rossbar <https://github.com/rossbar>`_)
 
-_These lists are automatically generated, and may not be complete or may contain
-duplicates._
-
+_These lists are automatically generated, and may not be complete or may contain duplicates._
