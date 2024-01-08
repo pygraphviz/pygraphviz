@@ -53,12 +53,6 @@ Process
 
       https://github.com/pygraphviz/pygraphviz/tags
 
-- Publish on PyPi::
-
-   git clean -fxd
-   python setup.py sdist --formats=zip
-   twine upload dist/pygraphviz*.zip
-
 - Update documentation on the web:
   The documentation is kept in a separate repo: pygraphviz/documentation
 
