@@ -37,7 +37,7 @@ Process
 
 -  Tag the release in git::
 
-      git tag -s v${VERSION} -m "signed ${VERSION} tag"
+      git tag -s pygraphviz-${VERSION} -m "signed ${VERSION} tag"
 
    If you do not have a gpg key, use -u instead; it is important for
    Debian packaging that the tags are annotated

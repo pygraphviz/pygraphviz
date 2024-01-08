@@ -28,7 +28,7 @@ jobs:
         run: |
           git clean -fxd
           pip install -U build twine wheel
-          python -m build --sdist --formats=zip
+          python -m build --sdist
 
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
