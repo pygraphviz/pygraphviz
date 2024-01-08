@@ -15,24 +15,34 @@ Example ``version number``
 Process
 -------
 
--  Set release variables::
+- Set release variables::
 
       export VERSION=<version number>
       export PREVIOUS=<previous version number>
       export ORG="pygraphviz"
       export REPO="pygraphviz"
 
+  If this is a prerelease:
+
+      export NOTES="doc/source/release/release_dev.rst"
+
+  If this is release:
+
+      export NOTES="doc/source/release/release_${VERSION}.rst"
+      git rm doc/source/release/release_dev.rst
+
 -  Autogenerate release notes::
 
-      changelist ${ORG}/${REPO} v${PREVIOUS} main --version ${VERSION}
+      changelist ${ORG}/${REPO}  pygraphviz-${PREVIOUS} main --version ${VERSION}  --out ${NOTES} --format rst
 
--  Put the output of the above command at the top of ``CHANGELOG.md``
+- Edit ``doc/source/_static/version_switcher.json`` in order to add the release, move the
+  key value pair `"preferred": true` to the most recent stable version, and commit.
 
 -  Update ``version`` in ``pygraphviz/__init__.py``.
 
 -  Commit changes::
 
-      git add pygraphviz/__init__.py CHANGELOG.md
+      git add pygraphviz/__init__.py ${NOTES} doc/source/_static/version_switcher.json
       git commit -m "Designate ${VERSION} release"
 
 -  Tag the release in git::
@@ -62,15 +72,14 @@ Process
     Assuming you are at the top-level of the ``documentation`` repo::
 
       # FIXME - use eol_banner.html
-
-      # maybe squash the last XX  Deploy GitHub Pages commits
-      # git reset --soft HEAD~XX && git commit
-      # check you didn't break anything
-      # diff -r latest pygraphviz-<version>
-      # you will then need to force the push so be careful!
-      cp -a latest pygraphviz-<version>
-      cp -a latest stable
-      git add pygraphviz-<version> stable
+      cp -a latest ../pygraphviz-${VERSION}
+      git reset --hard <commit from last release>
+      mv ../pygraphviz-${VERSION} .
+      rm -rf stable
+      cp -rf pygraphviz-${VERSION} stable
+      git add pygraphviz-${VERSION} stable
+      git commit -m "Add ${VERSION} docs"
+      git push  # force push---be careful!
 
 -  Update ``version`` in ``pygraphviz/__init__.py``.
 
