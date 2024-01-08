@@ -44,5 +44,5 @@ License
    tutorial
    auto_examples/index
    reference/index
-   contribute
+   developer/index
    release/index
