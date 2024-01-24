@@ -1,5 +1,9 @@
 %module graphviz
 
+%begin %{
+#define SWIG_PYTHON_STRICT_BYTE_CHAR
+%}
+
 %{
 #include "graphviz/cgraph.h"
 #include "graphviz/gvc.h"
