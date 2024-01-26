@@ -11,7 +11,7 @@ jobs:
 
   ubuntu:
 
-    runs-on: Ubuntu-22.04
+    runs-on: Ubuntu-latest
 
     strategy:
       matrix:
@@ -50,10 +50,10 @@ jobs:
     strategy:
       matrix:
         release:
-          - 37
           - 38
+          - 39
 
-    runs-on: Ubuntu-22.04
+    runs-on: Ubuntu-latest
     container: 'fedora:${{ matrix.release }}'
 
     steps:
@@ -134,10 +134,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Download macports pkg
-      run: wget https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-12-Monterey.pkg
+      run: wget https://github.com/macports/macports-base/releases/download/v2.9.0/MacPorts-2.9.0-12-Monterey.pkg
 
     - name: Install macports
-      run: sudo installer -pkg MacPorts-2.8.1-12-Monterey.pkg -target /
+      run: sudo installer -pkg MacPorts-2.9.0-12-Monterey.pkg -target /
 
     - name: Install graphviz
       run: sudo /opt/local/bin/port install graphviz
