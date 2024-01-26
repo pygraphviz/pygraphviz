@@ -4,6 +4,7 @@ Star
 
 Create and draw a star with varying node properties.
 """
+
 #    Copyright (C) 2006 by
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
