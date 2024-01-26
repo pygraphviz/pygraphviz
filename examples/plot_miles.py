@@ -66,9 +66,9 @@ def miles_graph():
             G.add_node(city)
             n = G.get_node(city)
             # assign positions, scale to be something reasonable in points
-            n.attr[
-                "pos"
-            ] = f"{-(float(x) - 7000) / 10.0:f},{(float(y) - 2000) / 10.0:f}"
+            n.attr["pos"] = (
+                f"{-(float(x) - 7000) / 10.0:f},{(float(y) - 2000) / 10.0:f}"
+            )
             # assign node size, in sqrt of 1,000,000's of people
             d = math.sqrt(float(pop) / 1000000.0)
             n.attr["height"] = f"{d / 2}"

@@ -4,6 +4,7 @@ Basic
 
 A simple example to create a graphviz dot file and draw a graph.
 """
+
 #    Copyright (C) 2006 by
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>

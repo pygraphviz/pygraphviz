@@ -2,7 +2,6 @@
 Example showing use of unicode and UTF-8 encoding.
 """
 
-
 import pygraphviz as pgv
 
 # specify UTF-8 encoding (it is the default)
