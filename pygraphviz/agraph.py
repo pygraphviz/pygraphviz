@@ -1378,6 +1378,9 @@ class AGraph:
         runprog = r'"%s"' % self._get_prog(prog)
         cmd = " ".join([runprog, args])
         dotargs = shlex.split(cmd)
+        popen_kwargs = dict()
+        if hasattr(subprocess, 'CREATE_NO_WINDOW'):  # Only on Windows OS
+            popen_kwargs.update(creationflags=subprocess.CREATE_NO_WINDOW)
         p = subprocess.Popen(
             dotargs,
             shell=False,
@@ -1385,6 +1388,7 @@ class AGraph:
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             close_fds=False,
+            **popen_kwargs,
         )
         (child_stdin, child_stdout, child_stderr) = (p.stdin, p.stdout, p.stderr)
         # Use threading to avoid blocking
