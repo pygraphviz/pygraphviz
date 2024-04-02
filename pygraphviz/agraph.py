@@ -226,6 +226,8 @@ class AGraph:
         return self.string()
 
     def __repr__(self):
+        if self.handle is None:
+            return super().__repr__()
         name = gv.agnameof(self.handle)
         if name is None:
             return f"<AGraph {self.handle}>"
