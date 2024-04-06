@@ -520,3 +520,10 @@ def test_agraph_has_edge_single_input_parsing():
     A = pgv.AGraph({0: [1], 1: [0, 2], 2: [1]})
     assert A.has_edge((0, 1))
     assert not A.has_edge((0, 3))
+
+
+def test_repr_on_incomplete_initialization():
+    """Smoke test to ensure no segfaults from accessing uninitialized attributes
+    in __repr__ when object initialization fails. See gh-519."""
+    with pytest.raises(TypeError, match="Unrecognized input"):
+        A = pgv.AGraph(object())
