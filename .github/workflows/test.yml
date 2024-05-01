@@ -107,7 +107,11 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r requirements/test.txt
-        pip install .
+        pip install --no-cache-dir \
+                    --config-settings="--global-option=build_ext" \
+                    --config-settings="--global-option=-I$(brew --prefix graphviz)/include/" \
+                    --config-settings="--global-option=-L$(brew --prefix graphviz)/lib/" \
+                    .
         pip list
 
     - name: Test pygraphviz
@@ -134,10 +138,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Download macports pkg
-      run: wget https://github.com/macports/macports-base/releases/download/v2.9.0/MacPorts-2.9.0-12-Monterey.pkg
+      run: wget https://github.com/macports/macports-base/releases/download/v2.9.3/MacPorts-2.9.3-14-Sonoma.pkg
 
     - name: Install macports
-      run: sudo installer -pkg MacPorts-2.9.0-12-Monterey.pkg -target /
+      run: sudo installer -pkg MacPorts-2.9.3-14-Sonoma.pkg -target /
 
     - name: Install graphviz
       run: sudo /opt/local/bin/port install graphviz

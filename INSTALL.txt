@@ -76,10 +76,10 @@ Homebrew
    In this case, it may be necessary to manually specify the path to the
    graphviz include and/or library directories, e.g. ::
 
-       pip install --use-pep517 \
+       pip install --no-cache-dir \
                    --config-settings="--global-option=build_ext" \
-                   --config-settings="--build-option=-I$(brew --prefix graphviz)/include/" \
-                   --config-settings="--build-option=-L$(brew --prefix graphviz)/lib/" \
+                   --config-settings="--global-option=-I$(brew --prefix graphviz)/include/" \
+                   --config-settings="--global-option=-L$(brew --prefix graphviz)/lib/" \
                    pygraphviz
 
    See the Advanced section for details.
