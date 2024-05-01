@@ -109,8 +109,8 @@ jobs:
         pip install -r requirements/test.txt
         pip install --no-cache-dir \
                     --config-settings="--global-option=build_ext" \
-                    --config-settings="--build-option=-I$(brew --prefix graphviz)/include/" \
-                    --config-settings="--build-option=-L$(brew --prefix graphviz)/lib/" \
+                    --config-settings="--global-option=-I$(brew --prefix graphviz)/include/" \
+                    --config-settings="--global-option=-L$(brew --prefix graphviz)/lib/" \
                     .
         pip list
 
