@@ -6,7 +6,7 @@ exclude: (graphviz.py|graphviz_wrap.c)
 repos:
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: c4a0b883114b00d8d76b479c820ce7950211c99b  # frozen: v4.5.0
+    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c  # frozen: v4.6.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -20,7 +20,7 @@ repos:
       - id: check-added-large-files
 
   - repo: https://github.com/psf/black
-    rev: 0e6e46b9eb45f5a22062fe84c2c2ff46bd0d738e  # frozen: 24.1.0
+    rev: 3702ba224ecffbcec30af640c149f231d90aebdb  # frozen: 24.4.2
     hooks:
       - id: black
 
@@ -30,7 +30,7 @@ repos:
       - id: blacken-docs
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: 1bbebc88c6925a4e56fd5446b830b12c38c1c24a  # frozen: v3.15.0
+    rev: 12af25eb252deaaecb6b259df40d01f42e716dc3  # frozen: v3.15.2
     hooks:
       - id: pyupgrade
         args: [--py310-plus]
