@@ -107,7 +107,7 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r requirements/test.txt
-        pip install --no-cache-dir \
+        pip install --use-pep517 \
                     --config-settings="--global-option=build_ext" \
                     --config-settings="--global-option=-I$(brew --prefix graphviz)/include/" \
                     --config-settings="--global-option=-L$(brew --prefix graphviz)/lib/" \
