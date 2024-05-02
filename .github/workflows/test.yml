@@ -50,8 +50,8 @@ jobs:
     strategy:
       matrix:
         release:
-          - 38
           - 39
+          - 40
 
     runs-on: Ubuntu-latest
     container: 'fedora:${{ matrix.release }}'
