@@ -76,8 +76,7 @@ Homebrew
    In this case, it may be necessary to manually specify the path to the
    graphviz include and/or library directories, e.g. ::
 
-       pip install --no-cache-dir \
-                   --config-settings="--global-option=build_ext" \
+       pip install --config-settings="--global-option=build_ext" \
                    --config-settings="--global-option=-I$(brew --prefix graphviz)/include/" \
                    --config-settings="--global-option=-L$(brew --prefix graphviz)/lib/" \
                    pygraphviz
@@ -91,8 +90,7 @@ MacPorts
 
     $ port install graphviz
     $ pip install pygraphviz
-    $ pip install --use-pep517 \
-                  --config-settings="--global-option=build_ext" \
+    $ pip install --config-settings="--global-option=build_ext" \
                   --config-settings="--global-option=-I/opt/local/include/" \
                   --config-settings="--global-option=-L/opt/local/lib/" \
                   pygraphviz
@@ -146,8 +144,7 @@ Manual download
 
 .. code-block:: console
 
-    PS C:\> python -m pip install --use-pep517 `
-                  --config-settings="--global-option=build_ext" `
+    PS C:\> python -m pip install --config-settings="--global-option=build_ext" `
                   --config-settings="--global-option=-IC:\Program Files\Graphviz\include" `
                   --config-settings="--global-option=-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
@@ -158,8 +155,7 @@ Chocolatey
 .. code-block:: console
 
     PS C:\> choco install graphviz
-    PS C:\> python -m pip install --use-pep517 `
-                  --config-settings="--global-option=build_ext" `
+    PS C:\> python -m pip install --config-settings="--global-option=build_ext" `
                   --config-settings="--global-option="-IC:\Program Files\Graphviz\include" `
                   --config-settings="--global-option="-LC:\Program Files\Graphviz\lib" `
                   pygraphviz
