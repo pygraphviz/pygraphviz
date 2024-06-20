@@ -31,9 +31,11 @@ Process
       export NOTES="doc/source/release/release_${VERSION}.rst"
       git rm doc/source/release/release_dev.rst
 
--  Autogenerate release notes::
+- Autogenerate release notes::
 
       changelist ${ORG}/${REPO}  pygraphviz-${PREVIOUS} main --version ${VERSION}  --out ${NOTES} --format rst
+
+- Update ``doc/source/release/index.rst``
 
 - Edit ``doc/source/_static/version_switcher.json`` in order to add the release, move the
   key value pair `"preferred": true` to the most recent stable version, and commit.
@@ -42,7 +44,9 @@ Process
 
 -  Commit changes::
 
-      git add pygraphviz/__init__.py ${NOTES} doc/source/_static/version_switcher.json
+      git add doc/source/release/index.rst ${NOTES}
+      git add pygraphviz/__init__.py doc/source/_static/version_switcher.json
+      pre-commit run -a
       git commit -m "Designate ${VERSION} release"
 
 -  Tag the release in git::
