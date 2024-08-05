@@ -12,6 +12,7 @@ import warnings
 from collections.abc import MutableMapping
 import tempfile
 import io
+import pathlib
 
 from . import graphviz as gv
 
@@ -1617,7 +1618,7 @@ class AGraph:
         if path is not None:
             fh = self._get_fh(path, "w+b")
             fh.write(data)
-            if isinstance(path, str):
+            if isinstance(path, (str, pathlib.Path)):
                 fh.close()
             d = None
         else:
