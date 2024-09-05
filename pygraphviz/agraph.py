@@ -12,6 +12,7 @@ import warnings
 from collections.abc import MutableMapping
 import tempfile
 import io
+import pathlib
 
 from . import graphviz as gv
 
@@ -1328,11 +1329,10 @@ class AGraph:
             pass
         from tempfile import TemporaryFile
 
-        fh = TemporaryFile()
-        fh.write(string.encode(self.encoding))
-        fh.seek(0)
-        self.read(fh)
-        fh.close()
+        with TemporaryFile() as fh:
+            fh.write(string.encode(self.encoding))
+            fh.seek(0)
+            self.read(fh)
         return self
 
     def _get_prog(self, prog):
@@ -1617,7 +1617,7 @@ class AGraph:
         if path is not None:
             fh = self._get_fh(path, "w+b")
             fh.write(data)
-            if isinstance(path, str):
+            if isinstance(path, (str, pathlib.Path)):
                 fh.close()
             d = None
         else:

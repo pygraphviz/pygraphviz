@@ -23,7 +23,7 @@ def test_drawing_no_error_with_no_layout():
     A.string_nop()
 
 
-def test_drawing_makes_file():
+def test_drawing_makes_file_handle():
     A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4])
     with TemporaryFile() as fh:
@@ -32,6 +32,17 @@ def test_drawing_makes_file():
     with TemporaryFile() as fh:
         A.draw(path=fh, prog="circo", format="png")
         assert fh.tell() > 0
+
+
+def test_drawing_makes_file_path(tmp_path):
+    A = pgv.AGraph(name="test graph")
+    A.add_path([1, 2, 3, 4])
+    out = tmp_path / "draw.png"
+    A.draw(out, format="png", prog="twopi")
+    assert out.is_file()
+    out2 = tmp_path / "draw.png"
+    A.draw(str(out2), format="png", prog="twopi")
+    assert out2.is_file()
 
 
 def test_drawing_to_create_dot_string():
