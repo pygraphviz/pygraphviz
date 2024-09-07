@@ -1,0 +1,149 @@
+name: Wheels
+
+on:
+  pull_request:
+  push:
+    tags:
+      - "v*"
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+
+jobs:
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        name: Install Python
+        with:
+          python-version: 3.x
+
+      - name: Build sdist
+        run: >
+          pip install build
+          &&  python -m build --sdist . --outdir dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pypi-artifacts
+          path: ${{ github.workspace }}/dist/*.tar.gz
+
+
+  build_wheels:
+    name: Build wheels for ${{matrix.arch}} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            arch: x86_64
+            INCLUDE_DIR: "/usr/include/graphviz/"
+            LIB_DIR: "/usr/lib/graphviz/"
+          - os: macos-14
+            arch: arm64
+            INCLUDE_DIR: "/Users/runner/micromamba/envs/build/include"
+            LIB_DIR: "/Users/runner/micromamba/envs/build/lib"
+          - os: macos-13
+            arch: x86_64
+            INCLUDE_DIR: "/Users/runner/micromamba/envs/build/include"
+            LIB_DIR: "/Users/runner/micromamba/envs/build/lib"
+          - os: windows-latest
+            arch: win_amd64
+            INCLUDE_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\include"
+            LIB_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\lib"
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        name: Install Python
+        with:
+          python-version: 3.x
+
+      - name: Setup Micromamba Python ${{ matrix.python-version }}
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-name: build
+          init-shell: bash
+          create-args: >-
+            python=${{ matrix.python-version }} graphviz=12.0.0 --channel conda-forge
+
+      - name: Install cibuildwheel
+        run: |
+          python -m pip install --upgrade cibuildwheel delvewheel
+
+      - name: Build Wheels
+        run: cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_SKIP: "pp* cp36-* cp37-* cp38-* cp39-* *-musllinux*"
+          CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_28"
+          CIBW_BEFORE_ALL_LINUX: dnf install -y graphviz graphviz-devel
+          CIBW_BUILD: "cp310*${{ matrix.arch }} cp311*${{ matrix.arch }} cp312*${{ matrix.arch }}"
+          CIBW_TEST_REQUIRES: pytest
+          MACOSX_DEPLOYMENT_TARGET: "10.13"
+          CIBW_ENVIRONMENT_WINDOWS: >
+            PATH="C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\bin;${PATH}"
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
+            delvewheel show {wheel}
+            && delvewheel repair -w {dest_dir} {wheel}
+          # FIXME: Remove this one the CLI is no longer needed!
+          CIBW_BEFORE_ALL_MACOS: brew install graphviz
+          CIBW_TEST_COMMAND: >
+            python -c "import pygraphviz; print(f'pygraphviz v{pygraphviz.__version__}')"
+            && pytest --doctest-modules --durations=10 --pyargs pygraphviz -k "not (test_drawing_no_error_with_no_layout or test_drawing_png_output_with_NULL_smoketest or test_drawing_to_create_dot_string or test_drawing_makes_file or test_drawing_makes_file1 or test_layout)"
+          CIBW_BUILD_FRONTEND: 'pip; args: --config-settings="--global-option=build_ext" --config-settings="--global-option=-I${{ matrix.INCLUDE_DIR }}" --config-settings="--global-option=-L${{ matrix.LIB_DIR }}"'
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
+            DYLD_LIBRARY_PATH=/Users/runner/micromamba/envs/build/lib delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
+              
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pypi-artifacts-${{ matrix.os }}-${{ matrix.arch }}
+          path: ${{ github.workspace }}/wheelhouse/*.whl
+
+
+  show-artifacts:
+    needs: [ build_sdist, build_wheels ]
+    name: "Show artifacts"
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: pypi-artifacts*
+        path: ${{ github.workspace }}/dist
+        merge-multiple: true
+
+    - shell: bash
+      run: |
+        ls -lh ${{ github.workspace }}/dist
+
+
+  publish-artifacts-pypi:
+    needs: [ build_sdist, build_wheels ]
+    name: "Publish to PyPI"
+    runs-on: ubuntu-22.04
+    # upload to PyPI for every tag starting with 'v'
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: pypi-artifacts*
+        path: ${{ github.workspace }}/dist
+        merge-multiple: true
+
+    - uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_PASSWORD }}
+        print_hash: true
