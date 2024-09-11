@@ -1380,7 +1380,7 @@ class AGraph:
         cmd = " ".join([runprog, args])
         dotargs = shlex.split(cmd)
         popen_kwargs = dict()
-        if hasattr(subprocess, 'CREATE_NO_WINDOW'):  # Only on Windows OS
+        if hasattr(subprocess, "CREATE_NO_WINDOW"):  # Only on Windows OS
             popen_kwargs.update(creationflags=subprocess.CREATE_NO_WINDOW)
         p = subprocess.Popen(
             dotargs,
