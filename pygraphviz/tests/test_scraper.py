@@ -26,10 +26,10 @@ def test_scraper(tmpdir):
     assert not os.path.isfile(out_file)
     # Copy source PNG to target location
     block = None
-    block_vars = dict(
-        image_path_iterator=(img for img in [out_file]),
-        src_file=src_file,
-    )
+    block_vars = {
+        "image_path_iterator": (img for img in [out_file]),
+        "src_file": src_file,
+    }
     gallery_conf = {"src_dir": src_dir, "builder_name": "html"}
     scraper(block, block_vars, gallery_conf)
     # Target should exist

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Simple example for rendering a graph with the Django web framework.
 See
@@ -13,7 +12,6 @@ http://www.djangobook.com/en/beta/chapter11/
 #    Manos Renieris, http://www.cs.brown.edu/~er/
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
-
 
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 

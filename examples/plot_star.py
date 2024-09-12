@@ -12,7 +12,6 @@ Create and draw a star with varying node properties.
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
 
-
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 
 from pygraphviz import *

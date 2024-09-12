@@ -13,10 +13,10 @@ def test_repr_output():
 def test_mimetype_select():
     A = pgv.AGraph()
     A.add_path([1, 2, 3, 4])
-    assert "text/plain" in A._repr_mimebundle_().keys()
-    assert not "image/svg+xml" in A._repr_mimebundle_().keys()
+    assert "text/plain" in A._repr_mimebundle_()
+    assert "image/svg+xml" not in A._repr_mimebundle_()
     A.layout()
-    assert "image/svg+xml" in A._repr_mimebundle_().keys()
+    assert "image/svg+xml" in A._repr_mimebundle_()
 
 
 def test_svg_repr_error():

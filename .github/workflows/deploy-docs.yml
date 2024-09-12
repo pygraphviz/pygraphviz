@@ -2,66 +2,65 @@ name: deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   documentation:
-
     # Do not attempt to deploy documentation in forks
     if: github.repository_owner == 'pygraphviz'
 
     runs-on: Ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-    - name: Update apt-get
-      run: sudo apt-get update
+      - name: Update apt-get
+        run: sudo apt-get update
 
-    - name: Install Graphviz
-      run: sudo apt-get install graphviz graphviz-dev
+      - name: Install Graphviz
+        run: sudo apt-get install graphviz graphviz-dev
 
-    - name: Install TeX
-      run: sudo apt-get install texlive texlive-latex-extra latexmk imagemagick ghostscript libfreetype6-dev gsfonts libmagickwand-dev
+      - name: Install TeX
+        run: sudo apt-get install texlive texlive-latex-extra latexmk imagemagick ghostscript libfreetype6-dev gsfonts libmagickwand-dev
 
-    - name: Install packages
-      run: |
-        pip install --upgrade pip wheel setuptools
-        pip install -r requirements/doc.txt -r requirements/test.txt
-        pip install .
-        pip list
+      - name: Install packages
+        run: |
+          pip install --upgrade pip wheel setuptools
+          pip install -r requirements/doc.txt -r requirements/test.txt
+          pip install .
+          pip list
 
-      # To set up a cross-repository deploy key:
-      # 1. Create a key pair:
-      #   `ssh-keygen -t ed25519 -C "pgz_doc_deploy_ci_bot@nomail"`
-      # 2. Add the public key to the pygraphviz/documentation repo
-      #   Settings -> Deploy keys -> Add new
-      #   Make sure to check the "writeable" checkbox
-      # 3. Add private key as a secret to pygraphviz/pygraphviz
-      #   Settings -> Secrets -> New Repository Secret
-      #   Make sure the name is the same as below, e.g. CI_DEPLOY_KEY
-    - name: Install SSH agent
-      if: github.ref == 'refs/heads/main'
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.CI_DEPLOY_KEY }}
+        # To set up a cross-repository deploy key:
+        # 1. Create a key pair:
+        #   `ssh-keygen -t ed25519 -C "pgz_doc_deploy_ci_bot@nomail"`
+        # 2. Add the public key to the pygraphviz/documentation repo
+        #   Settings -> Deploy keys -> Add new
+        #   Make sure to check the "writeable" checkbox
+        # 3. Add private key as a secret to pygraphviz/pygraphviz
+        #   Settings -> Secrets -> New Repository Secret
+        #   Make sure the name is the same as below, e.g. CI_DEPLOY_KEY
+      - name: Install SSH agent
+        if: github.ref == 'refs/heads/main'
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.CI_DEPLOY_KEY }}
 
-    - name: Build docs
-      if: github.ref == 'refs/heads/main'
-      run: make -C doc/ html
+      - name: Build docs
+        if: github.ref == 'refs/heads/main'
+        run: make -C doc/ html
 
-    - name: Deploy docs
-      if: github.ref == 'refs/heads/main'
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        GIT_CONFIG_NAME: gh-deploy-bot
-        GIT_CONFIG_EMAIL: gh-deploy-bot@nomail
-        FOLDER: doc/build/html
-        REPOSITORY_NAME: pygraphviz/documentation
-        BRANCH: gh-pages
-        TARGET_FOLDER: latest
-        SSH: true
+      - name: Deploy docs
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GIT_CONFIG_NAME: gh-deploy-bot
+          GIT_CONFIG_EMAIL: gh-deploy-bot@nomail
+          FOLDER: doc/build/html
+          REPOSITORY_NAME: pygraphviz/documentation
+          BRANCH: gh-pages
+          TARGET_FOLDER: latest
+          SSH: true
