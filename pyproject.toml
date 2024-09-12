@@ -77,7 +77,7 @@ select = [
   "SIM",     # flake8-simplify
   "SIM2",    # simplify boolean comparisons
   "UP",      # pyupgrade
-  "YTT"     # flake8-2020
+  "YTT"      # flake8-2020
 ]
 ignore = [
   "B006",     # Do not use mutable data structures for argument defaults

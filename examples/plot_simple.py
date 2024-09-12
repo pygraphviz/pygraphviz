@@ -12,7 +12,6 @@ A simple example to create a graphviz dot file and draw a graph.
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
 
-
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 
 import pygraphviz as pgv

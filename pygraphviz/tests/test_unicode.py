@@ -1,5 +1,4 @@
 import pygraphviz as pgv
-import sys
 
 
 def test_name_unicode():

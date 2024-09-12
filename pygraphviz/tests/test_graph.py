@@ -138,7 +138,7 @@ class TestGraph(unittest.TestCase):
         assert hash(A) != hash(B)
 
     def test_iter(self):
-        assert sorted(list(self.P3.__iter__())) == ["1", "2", "3"]
+        assert sorted(self.P3.__iter__()) == ["1", "2", "3"]
         assert sorted(self.P3) == ["1", "2", "3"]
 
     def test_contains(self):

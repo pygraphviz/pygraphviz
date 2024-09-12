@@ -14,7 +14,6 @@ http://www.djangobook.com/en/beta/chapter11/
 #    Distributed with BSD license.
 #    All rights reserved, see LICENSE for details.
 
-
 __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 
 try:

@@ -15,6 +15,7 @@ import io
 import pathlib
 
 from . import graphviz as gv
+import contextlib
 
 _DEFAULT_ENCODING = "UTF-8"
 
@@ -924,7 +925,7 @@ class AGraph:
         if with_labels:
             return dict(self.out_degree_iter(nbunch))
         else:
-            dlist = list(d for n, d in self.out_degree_iter(nbunch))
+            dlist = [d for n, d in self.out_degree_iter(nbunch)]
             if nbunch in self:
                 return dlist[0]
             else:
@@ -940,7 +941,7 @@ class AGraph:
         if with_labels:
             return dict(self.in_degree_iter(nbunch))
         else:
-            dlist = list(d for n, d in self.in_degree_iter(nbunch))
+            dlist = [d for n, d in self.in_degree_iter(nbunch)]
             if nbunch in self:
                 return dlist[0]
             else:
@@ -977,7 +978,7 @@ class AGraph:
         if with_labels:
             return dict(self.degree_iter(nbunch))
         else:
-            dlist = list(d for n, d in self.degree_iter(nbunch))
+            dlist = [d for n, d in self.degree_iter(nbunch)]
             if nbunch in self:
                 return dlist[0]
             else:
@@ -1163,28 +1164,19 @@ class AGraph:
 
         Strict graphs do not allow parallel edges or self loops.
         """
-        if gv.agisstrict(self.handle) == 1:
-            return True
-        else:
-            return False
+        return gv.agisstrict(self.handle) == 1
 
     strict = property(is_strict)
 
     def is_directed(self):
         """Return True if graph is directed or False if not."""
-        if gv.agisdirected(self.handle) == 1:
-            return True
-        else:
-            return False
+        return gv.agisdirected(self.handle) == 1
 
     directed = property(is_directed)
 
     def is_undirected(self):
         """Return True if graph is undirected or False if not."""
-        if gv.agisundirected(self.handle) == 1:
-            return True
-        else:
-            return False
+        return gv.agisundirected(self.handle) == 1
 
     def to_undirected(self):
         """Return undirected copy of graph."""
@@ -1242,7 +1234,7 @@ class AGraph:
 
         use::
 
-           G.read('file.dot')
+           G.read("file.dot")
 
         """
         fh = self._get_fh(path)
@@ -1268,13 +1260,13 @@ class AGraph:
 
         use::
 
-           G.write('file.dot')
+           G.write("file.dot")
         """
         if path is None:
             path = sys.stdout
         fh = self._get_fh(path, "w")
         # NOTE: TemporaryFile objects are not instances of IOBase on windows.
-        if not isinstance(fh, (io.IOBase, tempfile._TemporaryFileWrapper)):
+        if not isinstance(fh, io.IOBase | tempfile._TemporaryFileWrapper):
             raise TypeError(f"{fh} is not a file handle")
         try:
             gv.agwrite(self.handle, fh)
@@ -1323,10 +1315,8 @@ class AGraph:
         >>> A = pgv.AGraph(s)  # s assumed to be a string during initialization
         """
         # allow either unicode or encoded string
-        try:
+        with contextlib.suppress(UnicodeEncodeError, AttributeError):
             string = string.decode(self.encoding)
-        except (UnicodeEncodeError, AttributeError):
-            pass
         from tempfile import TemporaryFile
 
         with TemporaryFile() as fh:
@@ -1376,10 +1366,10 @@ class AGraph:
 
         Use keyword args to add additional arguments to graphviz programs.
         """
-        runprog = r'"%s"' % self._get_prog(prog)
+        runprog = rf'"{self._get_prog(prog)}"'
         cmd = " ".join([runprog, args])
         dotargs = shlex.split(cmd)
-        popen_kwargs = dict()
+        popen_kwargs = {}
         if hasattr(subprocess, "CREATE_NO_WINDOW"):  # Only on Windows OS
             popen_kwargs.update(creationflags=subprocess.CREATE_NO_WINDOW)
         p = subprocess.Popen(
@@ -1599,16 +1589,15 @@ class AGraph:
                 prog = "neato"
                 args += "-n2"
             else:
-                raise AttributeError(
-                    "Graph has no layout information, see layout() or specify prog=%s."
-                    % ("|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"]))
+                msg = "Graph has no layout information, see layout() or specify prog={}.".format(
+                    "|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"])
                 )
+                raise AttributeError(msg)
 
         else:
             if self.number_of_nodes() > 1000:
                 sys.stderr.write(
-                    "Warning: graph has %s nodes...layout may take a long time.\n"
-                    % self.number_of_nodes()
+                    f"Warning: graph has {self.number_of_nodes()} nodes...layout may take a long time.\n"
                 )
 
         if prog == "nop":  # nop takes no switches
@@ -1621,7 +1610,7 @@ class AGraph:
         if path is not None:
             fh = self._get_fh(path, "w+b")
             fh.write(data)
-            if isinstance(path, (str, pathlib.Path)):
+            if isinstance(path, str | pathlib.Path):
                 fh.close()
             d = None
         else:
@@ -1698,16 +1687,15 @@ class AGraph:
                 prog = "neato"
                 args += " -n2"
             else:
-                raise AttributeError(
-                    """Graph has no layout information, see layout() or specify prog=%s."""
-                    % ("|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"]))
+                msg = """Graph has no layout information, see layout() or specify prog={}.""".format(
+                    "|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"])
                 )
+                raise AttributeError(msg)
 
         else:
             if self.number_of_nodes() > 1000:
                 sys.stderr.write(
-                    "Warning: graph has %s nodes...layout may take a long time.\n"
-                    % self.number_of_nodes()
+                    f"Warning: graph has {self.number_of_nodes()} nodes...layout may take a long time.\n"
                 )
 
         # process args
@@ -2098,10 +2086,7 @@ class ItemAttribute(Attribute):
     def __setitem__(self, name, value):
         if not isinstance(value, str):
             value = str(value)
-        if self.type == 1 and name == "label":
-            default = "\\N"
-        else:
-            default = ""
+        default = "\\N" if self.type == 1 and name == "label" else ""
         gv.agsafeset_label(
             self.ghandle,
             self.handle,

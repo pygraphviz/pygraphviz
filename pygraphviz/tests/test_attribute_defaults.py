@@ -11,7 +11,7 @@ def test_default_attributes():
     assert A.graph_attr["label"] == "test"
     assert A.graph_attr.keys() == ["label", "spam"]
     graph_attrs = [("label", "test"), ("spam", "eggs")]
-    assert sorted(list(A.graph_attr.iteritems())) == graph_attrs
+    assert sorted(A.graph_attr.iteritems()) == graph_attrs
     ans = """strict graph { graph [label=test, spam=eggs]; }"""
     assert stringify(A) == " ".join(ans.split())
 
