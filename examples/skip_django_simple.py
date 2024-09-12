@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Simple example for rendering a graph with the Django web framework.
 See
