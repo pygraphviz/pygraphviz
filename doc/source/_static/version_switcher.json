@@ -6,18 +6,18 @@
     },
     {
         "name": "1.14rc0 (stable)",
-        "version":"1.14rc0",
+        "version": "1.14rc0",
         "url": "https://pygraphviz.github.io/documentation/stable/",
         "preferred": true
     },
     {
         "name": "1.13",
-        "version":"1.13",
+        "version": "1.13",
         "url": "https://pygraphviz.github.io/documentation/pygraphviz-1.13/"
     },
     {
         "name": "1.12",
-        "version":"1.12",
+        "version": "1.12",
         "url": "https://pygraphviz.github.io/documentation/pygraphviz-1.12/"
     }
 ]
