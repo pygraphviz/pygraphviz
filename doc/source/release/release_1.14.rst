@@ -1,7 +1,7 @@
-pygraphviz 1.14rc0
-==================
+pygraphviz 1.14
+===============
 
-We're happy to announce the release of pygraphviz 1.14rc0!
+We're happy to announce the release of pygraphviz 1.14!
 
 Enhancements
 ------------
