@@ -34,6 +34,7 @@ Process
 - Autogenerate release notes::
 
       changelist ${ORG}/${REPO}  pygraphviz-${PREVIOUS} main --version ${VERSION}  --out ${NOTES} --format rst
+      changelist ${ORG}/${REPO}  pygraphviz-${PREVIOUS} main --version ${VERSION} --out ${VERSION}.md
 
 - Update ``doc/source/release/index.rst``
 
