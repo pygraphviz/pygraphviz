@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13-dev", "pypy-3.10"]
+        python-version: ["3.11", "3.12", "3.13-dev"]
 
     steps:
       - name: Checkout pygraphviz
