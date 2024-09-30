@@ -6,7 +6,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.12
 
     steps:
       - checkout
