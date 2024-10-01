@@ -98,11 +98,9 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
             delvewheel show {wheel}
             && delvewheel repair -w {dest_dir} {wheel}
-          # FIXME: Remove this one the CLI is no longer needed!
-          CIBW_BEFORE_ALL_MACOS: brew install graphviz
           CIBW_TEST_COMMAND: >
             python -c "import pygraphviz; print(f'pygraphviz v{pygraphviz.__version__}')"
-            && pytest --doctest-modules --durations=10 --pyargs pygraphviz -k "not (test_drawing_no_error_with_no_layout or test_drawing_png_output_with_NULL_smoketest or test_drawing_to_create_dot_string or test_drawing_makes_file or test_drawing_makes_file1 or test_layout)"
+            && pytest --doctest-modules --durations=10 --pyargs pygraphviz
           CIBW_BUILD_FRONTEND: 'pip; args: --config-settings="--global-option=build_ext" --config-settings="--global-option=-I${{ matrix.INCLUDE_DIR }}" --config-settings="--global-option=-L${{ matrix.LIB_DIR }}"'
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             DYLD_LIBRARY_PATH=/Users/runner/micromamba/envs/build/lib delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
