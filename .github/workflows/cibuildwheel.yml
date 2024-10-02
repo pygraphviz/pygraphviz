@@ -13,7 +13,6 @@ permissions:
   contents: read
 
 jobs:
-
   build_sdist:
     name: Build source distribution
     runs-on: ubuntu-22.04
@@ -36,7 +35,6 @@ jobs:
         with:
           name: pypi-artifacts
           path: ${{ github.workspace }}/dist/*.tar.gz
-
 
   build_wheels:
     name: Build wheels for ${{matrix.arch}} on ${{ matrix.os }}
@@ -104,44 +102,42 @@ jobs:
           CIBW_BUILD_FRONTEND: 'pip; args: --config-settings="--global-option=build_ext" --config-settings="--global-option=-I${{ matrix.INCLUDE_DIR }}" --config-settings="--global-option=-L${{ matrix.LIB_DIR }}"'
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             DYLD_LIBRARY_PATH=/Users/runner/micromamba/envs/build/lib delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
-              
+
       - uses: actions/upload-artifact@v4
         with:
           name: pypi-artifacts-${{ matrix.os }}-${{ matrix.arch }}
           path: ${{ github.workspace }}/wheelhouse/*.whl
 
-
   show-artifacts:
-    needs: [ build_sdist, build_wheels ]
+    needs: [build_sdist, build_wheels]
     name: "Show artifacts"
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/download-artifact@v4
-      with:
-        pattern: pypi-artifacts*
-        path: ${{ github.workspace }}/dist
-        merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: pypi-artifacts*
+          path: ${{ github.workspace }}/dist
+          merge-multiple: true
 
-    - shell: bash
-      run: |
-        ls -lh ${{ github.workspace }}/dist
-
+      - shell: bash
+        run: |
+          ls -lh ${{ github.workspace }}/dist
 
   publish-artifacts-pypi:
-    needs: [ build_sdist, build_wheels ]
+    needs: [build_sdist, build_wheels]
     name: "Publish to PyPI"
     runs-on: ubuntu-22.04
     # upload to PyPI for every tag starting with 'v'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
-    - uses: actions/download-artifact@v4
-      with:
-        pattern: pypi-artifacts*
-        path: ${{ github.workspace }}/dist
-        merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: pypi-artifacts*
+          path: ${{ github.workspace }}/dist
+          merge-multiple: true
 
-    - uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_PASSWORD }}
-        print_hash: true
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_PASSWORD }}
+          print_hash: true
