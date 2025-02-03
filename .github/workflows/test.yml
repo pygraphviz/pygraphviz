@@ -3,8 +3,8 @@ name: test
 on: [push, pull_request]
 
 env:
-  WIN_GRAPHVIZ_URL: "https://gitlab.com/graphviz/graphviz/-/package_files/6164164/download"
-  WIN_GRAPHVIZ_EXE: "C:\\Temp\\graphviz-install-2.46.0-win64.exe"
+  WIN_GRAPHVIZ_URL: "https://gitlab.com/graphviz/graphviz/-/package_files/164443457/download"
+  WIN_GRAPHVIZ_EXE: "C:\\Temp\\graphviz-install-12.2.1-win64.exe"
   WIN_GRAPHVIZ_DIR: "C:\\Program Files\\Graphviz"
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13-dev"]
+        python-version: ["3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout pygraphviz
@@ -80,7 +80,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13-dev"]
+        python-version: ["3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout pygraphviz
@@ -113,7 +113,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13-dev"]
+        python-version: ["3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout pygraphviz
@@ -153,7 +153,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13-dev"]
+        python-version: ["3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout pygraphviz
