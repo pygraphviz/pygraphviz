@@ -26,11 +26,6 @@ PyGraphviz requires:
 .. |conda-forge-macos-badge| image:: https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-macos/badge.svg
 .. |conda-forge-windows-badge| image:: https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-windows/badge.svg
 
-Recommended
-===========
-
-We recommend installing Python packages using `pip and virtual environments
-<https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/>`_.
 
 Linux
 -----
