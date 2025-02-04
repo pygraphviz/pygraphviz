@@ -119,10 +119,6 @@ Historically, installing Graphviz and PyGraphviz on Windows has been challenging
 Fortunately, the Graphviz developers are working to fix this and
 their recent releases have much improved the situation.
 
-For this reason, PyGraphviz 1.7 only supports Graphviz 2.46.0 or higher on Windows.
-We recommend either manually installing the official binary release of Graphviz or
-using `Chocolatey <https://chocolatey.org/>`_, which has been updated to Graphviz 2.46.0.
-
 You may also need to install Visual C/C++, e.g. from here:
 https://visualstudio.microsoft.com/visual-cpp-build-tools/
 
@@ -132,9 +128,9 @@ we believe the following should work on Windows 10 (64 bit) using PowerShell.
 Manual download
 ~~~~~~~~~~~~~~~
 
-1. Download and install 2.46.0 for Windows 10 (64-bit):
-   `stable_windows_10_cmake_Release_x64_graphviz-install-2.46.0-win64.exe
-   <https://gitlab.com/graphviz/graphviz/-/package_files/6164164/download>`_.
+1. Download and install 12.2.1 for Windows 10 (64-bit):
+   `windows_10_cmake_Release_graphviz-install-12.2.1-win64.exe
+   <https://gitlab.com/graphviz/graphviz/-/package_files/164443457/download>`_.
 2. Install PyGraphviz via
 
 .. code-block:: console
