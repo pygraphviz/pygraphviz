@@ -9,7 +9,7 @@ jobs:
     # Do not attempt to deploy documentation in forks
     if: github.repository_owner == 'pygraphviz'
 
-    runs-on: Ubuntu-22.04
+    runs-on: Ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
