@@ -76,7 +76,7 @@ jobs:
           environment-name: build
           init-shell: bash
           create-args: >-
-            python=${{ matrix.python-version }} graphviz=12.0.0 --channel conda-forge
+            python=${{ matrix.python-version }} graphviz=12.2.1 --channel conda-forge
 
       - name: Install cibuildwheel
         run: |
