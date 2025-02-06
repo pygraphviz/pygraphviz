@@ -28,7 +28,7 @@ if __name__ == "__main__":
                 "gvplugin_neato_layout",
                 # "gvplugin_visio",
             ],
-            runtime_library_dirs=["/usr/lib/graphviz"],
+            # runtime_library_dirs=["/usr/lib/graphviz"],
             define_macros=define_macros,
         )
     ]
