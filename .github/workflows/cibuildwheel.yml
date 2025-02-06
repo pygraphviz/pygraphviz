@@ -87,7 +87,6 @@ jobs:
         env:
           CIBW_SKIP: "pp* cp36-* cp37-* cp38-* cp39-* *-musllinux*"
           CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_28"
-          CIBW_BEFORE_ALL: "dot -c"
           CIBW_BEFORE_ALL_LINUX: dnf install -y graphviz graphviz-devel
           CIBW_BUILD: "cp310*${{ matrix.arch }} cp311*${{ matrix.arch }} cp312*${{ matrix.arch }}"
           CIBW_TEST_REQUIRES: pytest
