@@ -11,7 +11,7 @@ if __name__ == "__main__":
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz_wrap.c"],
             include_dirs=[],
-            library_dirs=["/usr/local/lib/graphviz"],
+            library_dirs=["/usr/lib/graphviz"],
             # cdt does not link to cgraph, whereas cgraph links to cdt.
             # thus, cdt needs to come first in the library list to be sure
             # that both libraries are linked in the final built .so (if cgraph
@@ -28,7 +28,7 @@ if __name__ == "__main__":
                 "gvplugin_neato_layout",
                 "gvplugin_visio",
             ],
-            runtime_library_dirs=["/usr/local/lib/graphviz"],
+            runtime_library_dirs=["/usr/lib/graphviz"],
             define_macros=define_macros,
         )
     ]
