@@ -1327,15 +1327,11 @@ class AGraph:
 
     def _get_prog(self, prog):
         # private: get path of graphviz program
+        # NOTE: The `progs` set should only contain graphviz functions for
+        # for which there is no library interface.
+        # For example, the layout functions (e.g. `neato`) are called via
+        # gvLayout and should not be included here.
         progs = {
-            "neato",
-            "dot",
-            "twopi",
-            "circo",
-            "fdp",
-            "nop",
-            "osage",
-            "patchwork",
             "gc",
             "acyclic",
             "gvpr",
@@ -1343,7 +1339,6 @@ class AGraph:
             "ccomps",
             "sccmap",
             "tred",
-            "sfdp",
             "unflatten",
         }
         if prog not in progs:
@@ -1461,29 +1456,6 @@ class AGraph:
     def layout(self, prog="neato", args=""):
         """Assign positions to nodes in graph.
 
-        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
-        will use specified graphviz layout method.
-
-        >>> import pygraphviz as pgv
-        >>> A = pgv.AGraph()
-        >>> A.add_edge(1, 2)
-        >>> A.layout()
-        >>> A.layout(prog="neato", args="-Nshape=box -Efontsize=8")
-
-        Use keyword args to add additional arguments to graphviz programs.
-
-        The layout might take a long time on large graphs.
-
-        """
-        output_fmt = "dot"
-        data = self._run_prog(prog, " ".join([args, "-T", output_fmt]))
-        self.from_string(data)
-        self.has_layout = True
-        return
-
-    def _layout(self, prog="neato", args=""):
-        """Assign positions to nodes in graph.
-
         .. caution:: EXPERIMENTAL
 
         This version of the layout command uses libgvc for layout instead
@@ -1515,7 +1487,12 @@ class AGraph:
             prog = prog.encode(self.encoding)
 
         gvc = gv.gvContext()
-        gv.gvLayout(gvc, self.handle, prog)
+        retval = gv.gvLayout(gvc, self.handle, prog)
+        # gvLayout returns -1 if `prog` is not a valid program.
+        # TODO: Check other possible return values from gvLayout
+        # TODO: Catch/suppress msg on stderr from graphviz
+        if retval == -1:
+            raise ValueError(f"Program {prog} is not a valid layout program.")
         gv.gvRender(gvc, self.handle, format=b"dot", output_file=None)
 
         gv.gvFreeLayout(gvc, self.handle)

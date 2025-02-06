@@ -91,17 +91,17 @@ class TestExperimentalGraphvizLibInterface:
         with pytest.raises(AttributeError):
             A = pgv.AGraph(name="test graph")
             A.add_path([1, 2, 3, 4])
-            d = A._draw()
+            d = A.draw()
 
     def test_name_error(self):
         with pytest.raises(ValueError):
             A = pgv.AGraph(name="test graph")
-            A._draw("foo", prog="foo")
+            A.draw("foo", prog="foo")
 
     def test_drawing_no_error_with_no_layout(self):
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
-        d = A._draw(prog="nop")
+        d = A.draw(prog="nop")
         A.string_nop()
 
     def test_drawing_png_output_with_NULL_smoketest(self):
@@ -115,7 +115,7 @@ class TestExperimentalGraphvizLibInterface:
     def test_drawing_to_create_dot_string(self):
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
-        A._layout()
+        A.layout()
         dot_rep = A.to_string()
         assert "test graph" in dot_rep
         assert "strict graph" in dot_rep
@@ -156,12 +156,12 @@ class TestExperimentalGraphvizLibInterface:
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
         with TemporaryFile() as fh:
-            A._draw(fh, format="png", prog="twopi")
+            A.draw(fh, format="png", prog="twopi")
             assert fh.tell() > 0
 
     def test_drawing_makes_file1(self):
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
         with TemporaryFile() as fh:
-            A._draw(path=fh, prog="circo", format="png")
+            A.draw(path=fh, prog="circo", format="png")
             assert fh.tell() > 0
