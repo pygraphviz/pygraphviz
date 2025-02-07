@@ -32,7 +32,7 @@ if __name__ == "__main__":
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz_wrap.c"],
             include_dirs=[
-                "/opt/homebrew/include/graphviz",
+                "/opt/homebrew/opt/graphviz/include/",
                 "C:\\Program Files\\Graphviz\\include",
             ],
             library_dirs=library_search_paths,
