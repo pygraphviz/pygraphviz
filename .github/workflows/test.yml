@@ -45,8 +45,8 @@ jobs:
     strategy:
       matrix:
         release:
-          - 39
           - 40
+          - 41
 
     runs-on: Ubuntu-latest
     container: "fedora:${{ matrix.release }}"
@@ -56,13 +56,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install graphviz
-        run: sudo dnf install --nogpg -y graphviz graphviz-devel
+        run: sudo dnf install -y graphviz graphviz-devel
 
       - name: Install Python developer tools
-        run: sudo dnf install --nogpg -y python3-devel
+        run: sudo dnf install -y python3-devel
 
       - name: Install gcc
-        run: sudo dnf install -y --nogpg gcc
+        run: sudo dnf install -y gcc
 
       - name: Install packages
         run: |
