@@ -56,8 +56,10 @@ jobs:
             LIB_DIR: "/opt/homebrew/opt/graphviz/lib/"
           - os: windows-latest
             arch: win_amd64
-            INCLUDE_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\include"
-            LIB_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\lib"
+            INCLUDE_DIR: "C:\\Program Files\\Graphviz\\include"
+            LIB_DIR: "C:\\Program Files\\Graphviz\\lib"
+            #INCLUDE_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\include"
+            #LIB_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\lib"
       fail-fast: false
 
     steps:
@@ -94,7 +96,7 @@ jobs:
           CIBW_TEST_REQUIRES: pytest
           MACOSX_DEPLOYMENT_TARGET: "14.0"
           CIBW_ENVIRONMENT_WINDOWS: >
-            PATH="C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\bin;${PATH}"
+            PATH="C:\\Program Files\\Graphviz\\bin;${PATH}"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
             delvewheel show {wheel}
             && delvewheel repair -w {dest_dir} {wheel}
