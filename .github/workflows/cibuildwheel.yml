@@ -91,7 +91,7 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: dnf install -y graphviz graphviz-devel
           CIBW_BUILD: "cp310*${{ matrix.arch }} cp311*${{ matrix.arch }} cp312*${{ matrix.arch }}"
           CIBW_TEST_REQUIRES: pytest
-          MACOSX_DEPLOYMENT_TARGET: "10.13"
+          MACOSX_DEPLOYMENT_TARGET: "14.0"
           CIBW_ENVIRONMENT_WINDOWS: >
             PATH="C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\bin;${PATH}"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
