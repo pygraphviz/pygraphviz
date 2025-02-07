@@ -93,7 +93,15 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: "quay.io/pypa/manylinux_2_34_x86_64"
           CIBW_BEFORE_ALL_MACOS: brew install graphviz
           CIBW_BEFORE_ALL_WINDOWS: choco install graphviz
-          CIBW_BEFORE_ALL_LINUX: dnf install -y graphviz graphviz-devel
+          CIBW_BEFORE_ALL_LINUX: >
+            curl -o graphviz-12.2.1.tar.xz https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/12.2.1/graphviz-12.2.1.tar.xz
+            && xz --uncompress graphviz-12.2.1.tar.xz
+            && tar -xf graphviz-12.2.1.tar
+            && cd graphviz-12.2.1
+            && dnf install -y gd-devel pango-devel
+            && ./configure
+            && make
+            && make install
           CIBW_BUILD: "cp310*${{ matrix.arch }} cp311*${{ matrix.arch }} cp312*${{ matrix.arch }}"
           CIBW_TEST_REQUIRES: pytest
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.MACOSX_DEPLOYMENT_TARGET }}
