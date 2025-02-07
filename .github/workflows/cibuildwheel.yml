@@ -48,12 +48,12 @@ jobs:
             LIB_DIR: "/usr/lib/graphviz/"
           - os: macos-14
             arch: arm64
-            INCLUDE_DIR: "$(brew --prefix graphviz)/include/"
-            LIB_DIR: "$(brew --prefix graphviz)/lib/"
+            INCLUDE_DIR: "/opt/homebrew/opt/graphviz/include/"
+            LIB_DIR: "/opt/homebrew/opt/graphviz/lib/"
           - os: macos-13
             arch: x86_64
-            INCLUDE_DIR: "$(brew --prefix graphviz)/include/"
-            LIB_DIR: "$(brew --prefix graphviz)/lib/"
+            INCLUDE_DIR: "/opt/homebrew/opt/graphviz/include/"
+            LIB_DIR: "/opt/homebrew/opt/graphviz/lib/"
           - os: windows-latest
             arch: win_amd64
             INCLUDE_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\include"
