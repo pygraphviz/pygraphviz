@@ -49,7 +49,7 @@ if __name__ == "__main__":
                 "cdt",
                 "cgraph",
                 "gvc",
-                "gvpr",
+                #"gvpr",
                 "gvplugin_core",
                 "gvplugin_dot_layout",
                 "gvplugin_neato_layout",
