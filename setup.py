@@ -1,16 +1,37 @@
 import sys
 from setuptools import setup, Extension
+import platform
+import os
+
+def get_homebrew_graphviz():
+    paths = {
+        'include_dirs': [],
+        'library_dirs': []
+    }
+    # This could be different
+    if platform.machine() == 'arm64':
+        brew_prefix = '/opt/homebrew'
+    else:
+        brew_prefix = '/usr/local'
+
+    # Add graphviz-specific paths
+    graphviz_include = os.path.join(brew_prefix, 'include', 'graphviz')
+    graphviz_lib = os.path.join(brew_prefix, 'lib')
+
+    if os.path.exists(graphviz_include):
+        paths['include_dirs'].append(graphviz_include)
+    if os.path.exists(graphviz_lib):
+        paths['library_dirs'].append(graphviz_lib)
+
+    return paths
+
 
 if __name__ == "__main__":
     define_macros = [("SWIG_PYTHON_STRICT_BYTE_CHAR", None)]
     if sys.platform == "win32":
         define_macros.append(("GVDLL", None))
-
-    macos_ext = {
-            'include_dirs': ["/opt/homebrew/opt/graphviz/include/graphviz"],
-            'library_dirs': ["/opt/homebrew/opt/graphviz/lib/graphviz/", "/opt/homebrew/opt/graphviz/lib/"],
-            'runtime_library_dirs': ["/opt/homebrew/opt/graphviz/lib"],
-            }
+    if platform.system() == 'Darwin':
+        macos_ext = get_homebrew_graphviz()
     extension = [
         Extension(
             name="pygraphviz._graphviz",
