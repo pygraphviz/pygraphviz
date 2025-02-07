@@ -1493,7 +1493,7 @@ class AGraph:
         # TODO: Catch/suppress msg on stderr from graphviz
         if retval == -1:
             raise ValueError(f"Program {prog} is not a valid layout program.")
-        gv.gvRender(gvc, self.handle, format=b"dot", out=None)
+        gv.gvRender(gvc, self.handle, format=b"dot")
 
         gv.gvFreeLayout(gvc, self.handle)
         gv.gvFreeContext(gvc)
