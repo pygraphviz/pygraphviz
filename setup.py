@@ -10,8 +10,8 @@ if __name__ == "__main__":
         Extension(
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz_wrap.c"],
-            # include_dirs=["/usr/include/graphviz/"],
-            # library_dirs=["/usr/lib/graphviz"],
+            include_dirs=["/usr/include/graphviz/"],
+            library_dirs=["/usr/lib/graphviz"],
             # cdt does not link to cgraph, whereas cgraph links to cdt.
             # thus, cdt needs to come first in the library list to be sure
             # that both libraries are linked in the final built .so (if cgraph
