@@ -10,8 +10,8 @@ if __name__ == "__main__":
         Extension(
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz_wrap.c"],
-            # include_dirs=["/usr/include/graphviz/"],
-            # library_dirs=["/usr/lib/graphviz"],
+            include_dirs=["/opt/homebrew/opt/graphviz/include/graphviz"],
+            library_dirs=["/opt/homebrew/opt/graphviz/lib/graphviz/", "/opt/homebrew/opt/graphviz/lib/"],
             # cdt does not link to cgraph, whereas cgraph links to cdt.
             # thus, cdt needs to come first in the library list to be sure
             # that both libraries are linked in the final built .so (if cgraph
@@ -23,9 +23,9 @@ if __name__ == "__main__":
                 "cgraph",
                 "gvc",
                 "gvpr",
-                # "gvplugin_core",
-                # "gvplugin_dot_layout",
-                # "gvplugin_neato_layout",
+                "gvplugin_core",
+                "gvplugin_dot_layout",
+                "gvplugin_neato_layout",
                 # "gvplugin_visio",
             ],
             # runtime_library_dirs=["/usr/lib/graphviz"],
