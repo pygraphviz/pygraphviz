@@ -6,12 +6,15 @@ if __name__ == "__main__":
     if sys.platform == "win32":
         define_macros.append(("GVDLL", None))
 
+    macos_ext = {
+            'include_dirs': ["/opt/homebrew/opt/graphviz/include/graphviz"],
+            'library_dirs': ["/opt/homebrew/opt/graphviz/lib/graphviz/", "/opt/homebrew/opt/graphviz/lib/"],
+            'runtime_library_dirs': ["/opt/homebrew/opt/graphviz/lib"],
+            }
     extension = [
         Extension(
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz_wrap.c"],
-            include_dirs=["/opt/homebrew/opt/graphviz/include/graphviz"],
-            library_dirs=["/opt/homebrew/opt/graphviz/lib/graphviz/", "/opt/homebrew/opt/graphviz/lib/"],
             # cdt does not link to cgraph, whereas cgraph links to cdt.
             # thus, cdt needs to come first in the library list to be sure
             # that both libraries are linked in the final built .so (if cgraph
@@ -28,9 +31,10 @@ if __name__ == "__main__":
                 "gvplugin_neato_layout",
                 # "gvplugin_visio",
             ],
-            # runtime_library_dirs=["/usr/lib/graphviz"],
             define_macros=define_macros,
+            **macos_ext,
         )
     ]
 
     setup(ext_modules=extension)
+
