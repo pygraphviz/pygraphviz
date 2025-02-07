@@ -28,7 +28,9 @@ if __name__ == "__main__":
     define_macros = [("SWIG_PYTHON_STRICT_BYTE_CHAR", None)]
     if sys.platform == "win32":
         define_macros.append(("GVDLL", None))
-        kwargs_ext = {}
+        kwargs_ext = {
+                'include_dirs': ['C:\Program Files\Graphviz\include'],
+                'library_dirs': ['C:\Program Files\Graphviz\lib']}
     elif platform.system() == 'Darwin':
         kwargs_ext = get_homebrew_graphviz()
     else:
