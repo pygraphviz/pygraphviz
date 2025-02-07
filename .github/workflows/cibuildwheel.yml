@@ -104,6 +104,7 @@ jobs:
             && delvewheel repair -w {dest_dir} {wheel}
           CIBW_TEST_COMMAND: >
             python -c "import pygraphviz; print(f'pygraphviz v{pygraphviz.__version__}')"
+            && dot -c
             && pytest --doctest-modules --durations=10 --pyargs pygraphviz
           CIBW_BUILD_FRONTEND: 'pip; args: --config-settings="--global-option=build_ext" --config-settings="--global-option=-I${{ matrix.INCLUDE_DIR }}" --config-settings="--global-option=-L${{ matrix.LIB_DIR }}"'
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
