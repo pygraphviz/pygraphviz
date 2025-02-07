@@ -110,7 +110,7 @@ class TestExperimentalGraphvizLibInterface:
         """
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
-        d = A._draw(prog="dot", format="png")
+        d = A.draw(prog="dot", format="png")
 
     def test_drawing_to_create_dot_string(self):
         A = pgv.AGraph(name="test graph")
