@@ -34,6 +34,7 @@ sphinx_gallery_conf = {
     "gallery_dirs": "auto_examples",
     "ignore_pattern": "skip_",
     "image_scrapers": ("pygraphviz",),
+    "min_reported_time": 60.0,
 }
 
 
