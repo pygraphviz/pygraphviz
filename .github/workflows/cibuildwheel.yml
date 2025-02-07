@@ -44,22 +44,22 @@ jobs:
         include:
           - os: ubuntu-22.04
             arch: x86_64
-            INCLUDE_DIR: "/usr/include/graphviz/"
-            LIB_DIR: "/usr/lib/graphviz/"
+            #INCLUDE_DIR: "/usr/include/graphviz/"
+            #LIB_DIR: "/usr/lib/graphviz/"
           - os: macos-14
             arch: arm64
-            INCLUDE_DIR: "/opt/homebrew/opt/graphviz/include/"
-            LIB_DIR: "/opt/homebrew/opt/graphviz/lib/"
+            #INCLUDE_DIR: "/opt/homebrew/opt/graphviz/include/"
+            #LIB_DIR: "/opt/homebrew/opt/graphviz/lib/"
             MACOSX_DEPLOYMENT_TARGET: "14.0"
           - os: macos-13
             arch: x86_64
-            INCLUDE_DIR: "/opt/homebrew/opt/graphviz/include/"
-            LIB_DIR: "/opt/homebrew/opt/graphviz/lib/"
+            #INCLUDE_DIR: "/opt/homebrew/opt/graphviz/include/"
+            #LIB_DIR: "/opt/homebrew/opt/graphviz/lib/"
             MACOSX_DEPLOYMENT_TARGET: "13.0"
           - os: windows-latest
             arch: win_amd64
-            INCLUDE_DIR: "C:\\Program Files\\Graphviz\\include"
-            LIB_DIR: "C:\\Program Files\\Graphviz\\lib"
+            #INCLUDE_DIR: "C:\\Program Files\\Graphviz\\include"
+            #LIB_DIR: "C:\\Program Files\\Graphviz\\lib"
             #INCLUDE_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\include"
             #LIB_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\lib"
       fail-fast: false
@@ -112,9 +112,8 @@ jobs:
             && delvewheel repair -w {dest_dir} {wheel}
           CIBW_TEST_COMMAND: >
             python -c "import pygraphviz; print(f'pygraphviz v{pygraphviz.__version__}')"
-            && dot -c
             && pytest --doctest-modules --durations=10 --pyargs pygraphviz
-          CIBW_BUILD_FRONTEND: 'pip; args: --config-settings="--global-option=build_ext" --config-settings="--global-option=-I${{ matrix.INCLUDE_DIR }}" --config-settings="--global-option=-L${{ matrix.LIB_DIR }}"'
+          #CIBW_BUILD_FRONTEND: 'pip; args: --config-settings="--global-option=build_ext" --config-settings="--global-option=-I${{ matrix.INCLUDE_DIR }}" --config-settings="--global-option=-L${{ matrix.LIB_DIR }}"'
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
 
