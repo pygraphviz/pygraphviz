@@ -50,10 +50,12 @@ jobs:
             arch: arm64
             INCLUDE_DIR: "/opt/homebrew/opt/graphviz/include/"
             LIB_DIR: "/opt/homebrew/opt/graphviz/lib/"
+            MACOSX_DEPLOYMENT_TARGET: "14.0"
           - os: macos-13
             arch: x86_64
             INCLUDE_DIR: "/opt/homebrew/opt/graphviz/include/"
             LIB_DIR: "/opt/homebrew/opt/graphviz/lib/"
+            MACOSX_DEPLOYMENT_TARGET: "13.0"
           - os: windows-latest
             arch: win_amd64
             INCLUDE_DIR: "C:\\Program Files\\Graphviz\\include"
@@ -88,13 +90,13 @@ jobs:
         run: cibuildwheel --output-dir wheelhouse
         env:
           CIBW_SKIP: "pp* cp36-* cp37-* cp38-* cp39-* *-musllinux*"
-          CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_31"
+          CIBW_MANYLINUX_X86_64_IMAGE: "quay.io/pypa/manylinux_2_34_x86_64"
           CIBW_BEFORE_ALL_MACOS: brew install graphviz
           CIBW_BEFORE_ALL_WINDOWS: choco install graphviz
           CIBW_BEFORE_ALL_LINUX: dnf install -y graphviz graphviz-devel
           CIBW_BUILD: "cp310*${{ matrix.arch }} cp311*${{ matrix.arch }} cp312*${{ matrix.arch }}"
           CIBW_TEST_REQUIRES: pytest
-          MACOSX_DEPLOYMENT_TARGET: "14.0"
+          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.MACOSX_DEPLOYMENT_TARGET }}
           CIBW_ENVIRONMENT_WINDOWS: >
             PATH="C:\\Program Files\\Graphviz\\bin;${PATH}"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
