@@ -2,15 +2,6 @@ name: Wheels
 
 on:
   pull_request:
-  push:
-    tags:
-      - "v*"
-  release:
-    types:
-      - published
-
-permissions:
-  contents: read
 
 jobs:
   build_sdist:
