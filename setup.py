@@ -12,7 +12,7 @@ if __name__ == "__main__":
     # The graphviz library subdir contains the plugin libraries (e.g.
     # gvplugin_*). The main graphviz libs (cgraph etc.) are in the
     # parent dir
-    library_search_paths=[
+    library_search_paths = [
         "/usr/lib/x86_64-linux-gnu",  # Ubuntu x86_64
         "/usr/lib/x86_64-linux-gnu/graphviz",
         "/opt/homebrew/lib",  # Macos, homebrew aarch64
@@ -31,7 +31,7 @@ if __name__ == "__main__":
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz_wrap.c"],
             include_dirs=[],
-            library_dirs = library_search_paths,
+            library_dirs=library_search_paths,
             # cdt does not link to cgraph, whereas cgraph links to cdt.
             # thus, cdt needs to come first in the library list to be sure
             # that both libraries are linked in the final built .so (if cgraph
@@ -42,7 +42,6 @@ if __name__ == "__main__":
                 "cdt",
                 "cgraph",
                 "gvc",
-                "gvpr",
                 "gvplugin_core",
                 "gvplugin_dot_layout",
                 "gvplugin_neato_layout",
