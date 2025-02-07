@@ -30,7 +30,7 @@ if __name__ == "__main__":
         Extension(
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz_wrap.c"],
-            include_dirs=[],
+            include_dirs=["/opt/homebrew/include/graphviz"],
             library_dirs=library_search_paths,
             # cdt does not link to cgraph, whereas cgraph links to cdt.
             # thus, cdt needs to come first in the library list to be sure
