@@ -17,12 +17,10 @@ def get_homebrew_graphviz():
     # Add graphviz-specific paths
     graphviz_include = os.path.join(brew_prefix, 'include', 'graphviz')
     graphviz_lib = os.path.join(brew_prefix, 'lib')
-
-    if os.path.exists(graphviz_include):
-        paths['include_dirs'].append(graphviz_include)
-    if os.path.exists(graphviz_lib):
-        paths['library_dirs'].append(graphviz_lib)
-
+    plugin_lib = os.path.join(graphviz_lib, 'graphviz')
+    paths['include_dirs'].append(graphviz_include)
+    paths['library_dirs'].append(graphviz_lib)
+    paths['library_dirs'].append(plugin_lib)
     return paths
 
 
