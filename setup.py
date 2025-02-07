@@ -21,6 +21,7 @@ if __name__ == "__main__":
         "/usr/lib64/graphviz",
         "/usr/local/lib",  # source install / macos homebrew x86_64
         "/usr/local/lib/graphviz",
+        "C:\\Program Files\\Graphviz\\lib",
     ]
 
     # runtime_library_dirs must not be defined with windows else setup will fail
