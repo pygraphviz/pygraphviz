@@ -48,12 +48,12 @@ jobs:
             LIB_DIR: "/usr/lib/graphviz/"
           - os: macos-14
             arch: arm64
-            INCLUDE_DIR: "/Users/runner/micromamba/envs/build/include"
-            LIB_DIR: "/Users/runner/micromamba/envs/build/lib"
+            INCLUDE_DIR: "$(brew --prefix graphviz)/include/"
+            LIB_DIR: "$(brew --prefix graphviz)/lib/"
           - os: macos-13
             arch: x86_64
-            INCLUDE_DIR: "/Users/runner/micromamba/envs/build/include"
-            LIB_DIR: "/Users/runner/micromamba/envs/build/lib"
+            INCLUDE_DIR: "$(brew --prefix graphviz)/include/"
+            LIB_DIR: "$(brew --prefix graphviz)/lib/"
           - os: windows-latest
             arch: win_amd64
             INCLUDE_DIR: "C:\\Users\\runneradmin\\micromamba\\envs\\build\\Library\\include"
@@ -86,7 +86,8 @@ jobs:
         run: cibuildwheel --output-dir wheelhouse
         env:
           CIBW_SKIP: "pp* cp36-* cp37-* cp38-* cp39-* *-musllinux*"
-          CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_34"
+          CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_31"
+          CIBW_BEFORE_ALL_MACOS: brew install graphviz
           CIBW_BEFORE_ALL_LINUX: dnf install -y graphviz graphviz-devel
           CIBW_BUILD: "cp310*${{ matrix.arch }} cp311*${{ matrix.arch }} cp312*${{ matrix.arch }}"
           CIBW_TEST_REQUIRES: pytest
