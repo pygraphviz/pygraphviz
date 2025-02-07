@@ -15,8 +15,8 @@ if __name__ == "__main__":
     library_search_paths = [
         "/usr/lib/x86_64-linux-gnu",  # Ubuntu x86_64
         "/usr/lib/x86_64-linux-gnu/graphviz",
-        "/opt/homebrew/lib",  # Macos, homebrew aarch64
-        "/opt/homebrew/lib/graphviz",
+        "/opt/homebrew/opt/graphviz/lib",  # Macos, homebrew aarch64
+        "/opt/homebrew/opt/graphviz/lib/graphviz",
         "/usr/lib64",  # Fedora
         "/usr/lib64/graphviz",
         "/usr/local/lib",  # source install / macos homebrew x86_64
@@ -31,7 +31,10 @@ if __name__ == "__main__":
         Extension(
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz_wrap.c"],
-            include_dirs=["/opt/homebrew/include/graphviz"],
+            include_dirs=[
+                "/opt/homebrew/include/graphviz",
+                "C:\\Program Files\\Graphviz\\include",
+            ],
             library_dirs=library_search_paths,
             # cdt does not link to cgraph, whereas cgraph links to cdt.
             # thus, cdt needs to come first in the library list to be sure
