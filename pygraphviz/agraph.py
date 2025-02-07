@@ -1327,15 +1327,11 @@ class AGraph:
 
     def _get_prog(self, prog):
         # private: get path of graphviz program
+        # NOTE: The `progs` set should only contain graphviz functions for
+        # for which there is no library interface.
+        # For example, the layout functions (e.g. `neato`) are called via
+        # gvLayout and should not be included here.
         progs = {
-            "neato",
-            "dot",
-            "twopi",
-            "circo",
-            "fdp",
-            "nop",
-            "osage",
-            "patchwork",
             "gc",
             "acyclic",
             "gvpr",
@@ -1343,7 +1339,6 @@ class AGraph:
             "ccomps",
             "sccmap",
             "tred",
-            "sfdp",
             "unflatten",
         }
         if prog not in progs:
@@ -1461,29 +1456,6 @@ class AGraph:
     def layout(self, prog="neato", args=""):
         """Assign positions to nodes in graph.
 
-        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
-        will use specified graphviz layout method.
-
-        >>> import pygraphviz as pgv
-        >>> A = pgv.AGraph()
-        >>> A.add_edge(1, 2)
-        >>> A.layout()
-        >>> A.layout(prog="neato", args="-Nshape=box -Efontsize=8")
-
-        Use keyword args to add additional arguments to graphviz programs.
-
-        The layout might take a long time on large graphs.
-
-        """
-        output_fmt = "dot"
-        data = self._run_prog(prog, " ".join([args, "-T", output_fmt]))
-        self.from_string(data)
-        self.has_layout = True
-        return
-
-    def _layout(self, prog="neato", args=""):
-        """Assign positions to nodes in graph.
-
         .. caution:: EXPERIMENTAL
 
         This version of the layout command uses libgvc for layout instead
@@ -1515,8 +1487,13 @@ class AGraph:
             prog = prog.encode(self.encoding)
 
         gvc = gv.gvContext()
-        gv.gvLayout(gvc, self.handle, prog)
-        gv.gvRender(gvc, self.handle, format=b"dot", output_file=None)
+        retval = gv.gvLayout(gvc, self.handle, prog)
+        # gvLayout returns -1 if `prog` is not a valid program.
+        # TODO: Check other possible return values from gvLayout
+        # TODO: Catch/suppress msg on stderr from graphviz
+        if retval == -1:
+            raise ValueError(f"Program {prog} is not a valid layout program.")
+        gv.gvRender(gvc, self.handle, format=b"dot")
 
         gv.gvFreeLayout(gvc, self.handle)
         gv.gvFreeContext(gvc)
@@ -1525,99 +1502,6 @@ class AGraph:
         return
 
     def draw(self, path=None, format=None, prog=None, args=""):
-        """Output graph to path in specified format.
-
-        An attempt will be made to guess the output format based on the file
-        extension of `path`.  If that fails, then the `format` parameter will
-        be used.
-
-        Note, if `path` is a file object returned by a call to os.fdopen(),
-        then the method for discovering the format will not work.  In such
-        cases, one should explicitly set the `format` parameter; otherwise, it
-        will default to 'dot'.
-
-        If path is None, the result is returned as a Bytes object.
-
-        Formats (not all may be available on every system depending on
-        how Graphviz was built)
-
-            'canon', 'cmap', 'cmapx', 'cmapx_np', 'dia', 'dot',
-            'fig', 'gd', 'gd2', 'gif', 'hpgl', 'imap', 'imap_np',
-            'ismap', 'jpe', 'jpeg', 'jpg', 'mif', 'mp', 'pcl', 'pdf',
-            'pic', 'plain', 'plain-ext', 'png', 'ps', 'ps2', 'svg',
-            'svgz', 'vml', 'vmlz', 'vrml', 'vtx', 'wbmp', 'xdot', 'xlib'
-
-
-        If prog is not specified and the graph has positions
-        (see layout()) then no additional graph positioning will
-        be performed.
-
-        Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
-        will use specified graphviz layout method.
-
-        >>> import pygraphviz as pgv
-        >>> G = pgv.AGraph()
-        >>> G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
-        >>> G.layout()
-
-        # use current node positions, output pdf in 'file.pdf'
-        >>> G.draw("file.pdf")
-
-        # use dot to position, output png in 'file'
-        >>> G.draw("file", format="png", prog="dot")
-
-        # use keyword 'args' to pass additional arguments to graphviz
-        >>> G.draw("test.pdf", prog="twopi", args="-Gepsilon=1")
-        >>> G.draw("test2.pdf", args="-Nshape=box -Edir=forward -Ecolor=red ")
-
-        The layout might take a long time on large graphs.
-
-        """
-        # try to guess format from extension
-        if format is None and path is not None:
-            p = path
-            # in case we got a file handle get its name instead
-            if not isinstance(p, str):
-                p = path.name
-            format = os.path.splitext(p)[-1].lower()[1:]
-
-        if format is None or format == "":
-            format = "dot"
-
-        if prog is None:
-            if self.has_layout:
-                prog = "neato"
-                args += "-n2"
-            else:
-                msg = "Graph has no layout information, see layout() or specify prog={}.".format(
-                    "|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"])
-                )
-                raise AttributeError(msg)
-
-        else:
-            if self.number_of_nodes() > 1000:
-                sys.stderr.write(
-                    f"Warning: graph has {self.number_of_nodes()} nodes...layout may take a long time.\n"
-                )
-
-        if prog == "nop":  # nop takes no switches
-            args = ""
-        else:
-            args = " ".join([args, "-T" + format])
-
-        data = self._run_prog(prog, args)
-
-        if path is not None:
-            fh = self._get_fh(path, "w+b")
-            fh.write(data)
-            if isinstance(path, str | pathlib.Path):
-                fh.close()
-            d = None
-        else:
-            d = data
-        return d
-
-    def _draw(self, path=None, format=None, prog=None, args=""):
         """Output graph to path in specified format.
 
         .. caution:: EXPERIMENTAL
