@@ -24,7 +24,18 @@ if __name__ == "__main__":
     ]
 
     # runtime_library_dirs must not be defined with windows else setup will fail
-    extra_kwargs = {} if WINDOWS else {"runtime_library_dirs": library_search_paths}
+    if WINDOWS:
+        extra_kwargs = {
+            "export_symbols": [
+                "gvplugin_core_LTX_library",
+                "gvplugin_neato_layout_LTX_library",
+                "gvplugin_pango_LTX_library",
+                "gvplugin_dot_layout_LTX_library",
+                "gvplugin_gd_LTX_library",
+            ],
+        }
+    else:
+        extra_kwargs = {"runtime_library_dirs": library_search_paths}
 
     extension = [
         Extension(
