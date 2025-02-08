@@ -181,7 +181,7 @@ jobs:
           python -m pip install -r requirements/test.txt
           python -m pip install --config-settings="--global-option=build_ext" `
             --config-settings="--global-option=-I$($env:WIN_GRAPHVIZ_DIR)\include" `
-            --config-settings="--global-option=-L$($env:WIN_GRAPHVIZ_DIR)\bin" `
+            --config-settings="--global-option=-L$($env:WIN_GRAPHVIZ_DIR)\lib" `
             .
           python -m pip list
 
@@ -193,6 +193,8 @@ jobs:
         run: Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\bin"
       - name: List lib
         run: Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\lib"
+      - name: List lib/graphviz
+        run: Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\lib\graphviz"
 
       # Set PY_IGNORE_IMPORTMISMATCH b/c otherwise --doctest-modules is confused.
       - name: Test pygraphviz
