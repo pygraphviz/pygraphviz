@@ -181,8 +181,7 @@ jobs:
           python -m pip install -r requirements/test.txt
           python -m pip install --config-settings="--global-option=build_ext" `
             --config-settings="--global-option=-I$($env:WIN_GRAPHVIZ_DIR)\include" `
-            --config-settings="--global-option=-L$($env:WIN_GRAPHVIZ_DIR)\lib" `
-            --config-settings="--global-option=-L$($env:WIN_GRAPHVIZ_DIR)\lib\graphviz" `
+            --config-settings="--global-option=-L$($env:WIN_GRAPHVIZ_DIR)\bin" `
             .
           python -m pip list
 
