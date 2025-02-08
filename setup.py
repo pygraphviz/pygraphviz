@@ -46,6 +46,7 @@ if __name__ == "__main__":
                 "gvplugin_dot_layout",
                 "gvplugin_neato_layout",
                 "gvplugin_pango",
+            ],
             define_macros=define_macros,
             **extra_kwargs,
         )
