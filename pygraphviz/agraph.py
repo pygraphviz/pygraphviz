@@ -1615,7 +1615,8 @@ class AGraph:
             out = gv.gvRenderData(gvc, G, format)
             if out[0]:
                 raise ValueError(f"Graphviz Error creating dot representation:{out[0]}")
-            err, dot_string = out
+            # TODO: What is the third item in the return tuple?
+            err, dot_string, _ = out
             gv.gvFreeLayout(gvc, G)
             gv.gvFreeContext(gvc)
             return dot_string
