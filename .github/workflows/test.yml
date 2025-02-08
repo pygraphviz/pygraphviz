@@ -1,6 +1,6 @@
 name: test
 
-on: [push, pull_request]
+on: [push]
 
 env:
   WIN_GRAPHVIZ_URL: "https://gitlab.com/graphviz/graphviz/-/package_files/164443457/download"
