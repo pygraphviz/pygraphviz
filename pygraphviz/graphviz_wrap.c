@@ -3077,7 +3077,7 @@ SWIG_FromCharPtr(const char *cptr)
 
 
 #if defined(GVDLL)
-  #define EXPORT __declspec(dllimport)
+  #define EXPORT __declspec(dllexport)
 #else
   #define EXPORT
 #endif
