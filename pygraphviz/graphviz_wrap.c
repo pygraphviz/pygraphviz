@@ -3076,11 +3076,17 @@ SWIG_FromCharPtr(const char *cptr)
   #define SWIG_From_long   PyInt_FromLong 
 
 
-SWIGEXPORT extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
-SWIGEXPORT extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
-SWIGEXPORT extern gvplugin_library_t gvplugin_core_LTX_library;
-SWIGEXPORT extern gvplugin_library_t gvplugin_gd_LTX_library;
-SWIGEXPORT extern gvplugin_library_t gvplugin_pango_LTX_library;
+#if defined(GVDLL)
+  #define EXPORT __declspec(dllimport)
+#else
+  #define EXPORT
+#endif
+
+EXPORT extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
+EXPORT extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
+EXPORT extern gvplugin_library_t gvplugin_core_LTX_library;
+EXPORT extern gvplugin_library_t gvplugin_gd_LTX_library;
+EXPORT extern gvplugin_library_t gvplugin_pango_LTX_library;
 lt_symlist_t lt_preloaded_symbols[6] = {
     { "gvplugin_dot_layout_LTX_library", &gvplugin_dot_layout_LTX_library },
     { "gvplugin_neato_layout_LTX_library", &gvplugin_neato_layout_LTX_library },
