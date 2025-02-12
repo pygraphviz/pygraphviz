@@ -3022,7 +3022,8 @@ static swig_module_info swig_module = {swig_types, 11, 0, 0, 0, 0};
 
 #include "graphviz/cgraph.h"
 #include "graphviz/gvc.h"
-#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 SWIGINTERN swig_type_info*
@@ -3412,7 +3413,8 @@ SWIG_FromCharPtr(const char *cptr)
     if (val[0] == '<' && (strcmp(name, "label") == 0 || strcmp(name, "xlabel") == 0)) {
       len = strlen(val);
       if (val[len - 1] == '>') {
-        hs = strdup(val + 1);
+        hs = malloc(len - 1);
+        memcpy(hs, val + 1, len - 2);
         *(hs+len-2) = '\0';
         val = agstrdup_html(g,hs);
         free(hs);
