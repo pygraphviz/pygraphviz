@@ -7,6 +7,7 @@
 %{
 #include "graphviz/cgraph.h"
 #include "graphviz/gvc.h"
+#include <stddef.h>
 %}
 
 %typemap(in) FILE* input_file (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
@@ -211,7 +212,7 @@ int      agsafeset(void *obj, char *name, char *value, char *def);
    * @return The equivalent of `val`, as a plain string or HTML-like string, as relevant
    */
   static char *htmlize(Agraph_t *g, const char *name, char *val) {
-    int len;
+    size_t len;
     char *hs;
 
     if (val[0] == '<' && (strcmp(name, "label") == 0 || strcmp(name, "xlabel") == 0)) {
