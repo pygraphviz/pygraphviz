@@ -7,6 +7,8 @@
 %{
 #include "graphviz/cgraph.h"
 #include "graphviz/gvc.h"
+#include <stdlib.h>
+#include <string.h>
 %}
 
 %typemap(in) FILE* input_file (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
@@ -202,22 +204,38 @@ int      agsafeset(void *obj, char *name, char *value, char *def);
   }
   %}
 
+%{
+  /** create a string as an internally cached HTML-like string, if necessary
+   *
+   * @param g Graph with which to associated new strings
+   * @param name Name of an attribute being created
+   * @param val Value of the attribute being created
+   * @return The equivalent of `val`, as a plain string or HTML-like string, as relevant
+   */
+  static char *htmlize(Agraph_t *g, const char *name, char *val) {
+    size_t len;
+    char *hs;
+
+    if (val[0] == '<' && (strcmp(name, "label") == 0 || strcmp(name, "xlabel") == 0)) {
+      len = strlen(val);
+      if (val[len - 1] == '>') {
+        hs = malloc(len - 1);
+        memcpy(hs, val + 1, len - 2);
+        *(hs+len-2) = '\0';
+        val = agstrdup_html(g,hs);
+        free(hs);
+      }
+    }
+
+    return val;
+  }
+%}
+
 /* styled from gv.cpp in Graphviz to handle <> html data in label */
 %inline %{
   int agsafeset_label(Agraph_t *g, void *obj, char *name, char *val, char *def)
 {
-    int len;
-    char *hs;
-
-    if (val[0] == '<' && (strcmp(name, "label") == 0 || strcmp(name, "xlabel") == 0)) {
-        len = strlen(val);
-        if (val[len-1] == '>') {
-            hs = strdup(val+1);
-                *(hs+len-2) = '\0';
-            val = agstrdup_html(g,hs);
-            free(hs);
-        }
-    }
+    val = htmlize(g, name, val);
     return agsafeset(obj, name, val,def);
 }
   %}
@@ -229,18 +247,7 @@ int      agsafeset(void *obj, char *name, char *value, char *def);
 %inline %{
   Agsym_t *agattr_label(Agraph_t *g, int kind, char *name, char *val)
 {
-    int len;
-    char *hs;
-
-    if (val[0] == '<' && (strcmp(name, "label") == 0 || strcmp(name, "xlabel") == 0)) {
-        len = strlen(val);
-        if (val[len-1] == '>') {
-            hs = strdup(val+1);
-                *(hs+len-2) = '\0';
-            val = agstrdup_html(g,hs);
-            free(hs);
-        }
-    }
+    val = htmlize(g, name, val);
     return agattr(g, kind, name, val);
 }
   %}
