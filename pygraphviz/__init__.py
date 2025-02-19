@@ -21,9 +21,9 @@ if sys.version_info >= (3, 8, 0) and sys.platform == "win32":
 
 __version__ = "2.0beta0.dev0"
 
-from .agraph import AGraph, Node, Edge, Attribute, ItemAttribute, DotError
+from .agraph import AGraph, Attribute, DotError, Edge, ItemAttribute, Node
 
-__all__ = ["AGraph", "Node", "Edge", "Attribute", "ItemAttribute", "DotError"]
+__all__ = ["AGraph", "Attribute", "DotError", "Edge", "ItemAttribute", "Node"]
 
 from . import testing
 
