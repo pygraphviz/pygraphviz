@@ -15,12 +15,13 @@ if __name__ == "__main__":
     library_search_paths = [
         "/usr/lib/x86_64-linux-gnu",  # Ubuntu x86_64
         "/usr/lib/x86_64-linux-gnu/graphviz",
-        "/opt/homebrew/lib",  # Macos, homebrew aarch64
-        "/opt/homebrew/lib/graphviz",
+        "/opt/homebrew/opt/graphviz/lib",  # Macos, homebrew aarch64
+        "/opt/homebrew/opt/graphviz/lib/graphviz",
         "/usr/lib64",  # Fedora
         "/usr/lib64/graphviz",
         "/usr/local/lib",  # source install / macos homebrew x86_64
         "/usr/local/lib/graphviz",
+        "C:\\Program Files\\Graphviz\\lib",
     ]
 
     # runtime_library_dirs must not be defined with windows else setup will fail
@@ -30,7 +31,10 @@ if __name__ == "__main__":
         Extension(
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz_wrap.c"],
-            include_dirs=[],
+            include_dirs=[
+                "/opt/homebrew/opt/graphviz/include/",
+                "C:\\Program Files\\Graphviz\\include",
+            ],
             library_dirs=library_search_paths,
             # cdt does not link to cgraph, whereas cgraph links to cdt.
             # thus, cdt needs to come first in the library list to be sure
@@ -42,9 +46,19 @@ if __name__ == "__main__":
                 "cdt",
                 "cgraph",
                 "gvc",
+                # "gvpr",
+                # "pathplan",
+                # "xdot",
                 "gvplugin_core",
                 "gvplugin_dot_layout",
+                "gvplugin_gd",
+                "gvplugin_kitty",
                 "gvplugin_neato_layout",
+                "gvplugin_pango",
+                "gvplugin_quartz",
+                "gvplugin_rsvg",
+                "gvplugin_vt",
+                "gvplugin_webp",
             ],
             define_macros=define_macros,
             **extra_kwargs,
