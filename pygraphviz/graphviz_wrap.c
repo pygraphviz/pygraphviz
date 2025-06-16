@@ -5447,7 +5447,7 @@ SWIGINTERN PyObject *_wrap_gvRenderData(PyObject *self, PyObject *args) {
   Agraph_t *arg2 = (Agraph_t *) 0 ;
   char *arg3 = (char *) 0 ;
   char **arg4 = (char **) 0 ;
-  unsigned int *arg5 = (unsigned int *) 0 ;
+  size_t *arg5 = (size_t *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -5456,7 +5456,7 @@ SWIGINTERN PyObject *_wrap_gvRenderData(PyObject *self, PyObject *args) {
   char *buf3 = 0 ;
   int alloc3 = 0 ;
   char *temp4 = 0 ;
-  unsigned int tempn4 ;
+  size_t tempn4 ;
   PyObject *swig_obj[3] ;
   int result;
   
