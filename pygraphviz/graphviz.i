@@ -345,7 +345,12 @@ int gvRenderFilename(GVC_t *gvc, Agraph_t* g, char *format, char *filename);
 /* three lines are straight from the SWIG manual.  */
 %include <cstring.i>
 %include <typemaps.i>
+#if GRAPHVIZ_VERSION_MAJOR >= 14
+%cstring_output_allocate_size(char **result, size_t* size, free(*$1));
+int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, size_t *size);
+#else
 %cstring_output_allocate_size(char **result, unsigned int* size, free(*$1));
 int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, unsigned int *size);
+#endif
 /* Free memory allocated and pointed to by *result in gvRenderData */
 extern void gvFreeRenderData (char* data);
