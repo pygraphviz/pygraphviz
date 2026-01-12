@@ -12,7 +12,7 @@ authors = [
 description = "Python interface to Graphviz"
 readme = "README.rst"
 requires-python = ">=3.11"
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
 dynamic = ["version"]
 keywords = [
     "Networks",
