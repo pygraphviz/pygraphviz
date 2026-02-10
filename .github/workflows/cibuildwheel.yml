@@ -1,0 +1,121 @@
+name: Wheels
+on:
+  pull_request:
+jobs:
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        name: Install Python
+        with:
+          python-version: 3.11
+      - name: Build sdist
+        run: >
+          pip install build
+          &&  python -m build --sdist . --outdir dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pypi-artifacts
+          path: ${{ github.workspace }}/dist/*.tar.gz
+
+  build_wheels:
+    name: Build wheels for ${{matrix.arch}} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+          - os: macos-latest
+            arch: arm64
+            MACOSX_DEPLOYMENT_TARGET: "14.0"
+          - os: macos-15-intel
+            arch: x86_64
+            MACOSX_DEPLOYMENT_TARGET: "14.0"
+          - os: windows-latest
+            arch: win_amd64
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        name: Install Python
+        with:
+          python-version: 3.11
+      - name: Install cibuildwheel
+        run: |
+          python -m pip install --upgrade cibuildwheel delvewheel
+      - name: Build Wheels
+        run: cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_SKIP: "pp* cp36-* cp37-* cp38-* cp39-* cp310-* *-musllinux*"
+          CIBW_MANYLINUX_X86_64_IMAGE: "quay.io/pypa/manylinux_2_34_x86_64"
+          CIBW_BEFORE_ALL_MACOS: brew install graphviz
+          CIBW_BEFORE_ALL_WINDOWS: choco install graphviz
+          CIBW_BEFORE_ALL_LINUX: >
+            curl -o graphviz-12.2.1.tar.xz https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/12.2.1/graphviz-12.2.1.tar.xz
+            && xz --uncompress graphviz-12.2.1.tar.xz
+            && tar -xf graphviz-12.2.1.tar
+            && cd graphviz-12.2.1
+            && dnf install -y gd-devel pango-devel
+            && ./configure
+            && make
+            && make install
+          CIBW_BUILD: "cp311*${{ matrix.arch }} cp312*${{ matrix.arch }}"
+          CIBW_TEST_REQUIRES: pytest
+          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.MACOSX_DEPLOYMENT_TARGET }}
+          CIBW_ENVIRONMENT_WINDOWS: >
+            PATH="C:\\Program Files\\Graphviz\\bin;${PATH}"
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
+            delvewheel show {wheel}
+            && delvewheel repair -w {dest_dir} {wheel}
+          CIBW_TEST_COMMAND: >
+            python -c "import pygraphviz; print(f'pygraphviz v{pygraphviz.__version__}')"
+            && pytest --doctest-modules --durations=10 --pyargs pygraphviz
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
+            DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: pypi-artifacts-${{ matrix.os }}-${{ matrix.arch }}
+          path: ${{ github.workspace }}/wheelhouse/*.whl
+
+  show-artifacts:
+    needs: [build_sdist, build_wheels]
+    name: "Show artifacts"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: pypi-artifacts*
+          path: ${{ github.workspace }}/dist
+          merge-multiple: true
+
+      - shell: bash
+        run: |
+          ls -lh ${{ github.workspace }}/dist
+
+  publish-artifacts-pypi:
+    needs: [build_sdist, build_wheels]
+    name: "Publish to PyPI"
+    runs-on: ubuntu-latest
+    # upload to PyPI for every tag starting with 'v'
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: pypi-artifacts*
+          path: ${{ github.workspace }}/dist
+          merge-multiple: true
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_PASSWORD }}
+          print_hash: true
