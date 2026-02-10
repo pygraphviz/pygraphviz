@@ -3896,10 +3896,12 @@ SWIG_FromCharPtr(const char *cptr)
 extern __declspec(dllimport) gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern __declspec(dllimport) gvplugin_library_t gvplugin_neato_layout_LTX_library;
 extern __declspec(dllimport) gvplugin_library_t gvplugin_core_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_gd_LTX_library;
 #else
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
 extern gvplugin_library_t gvplugin_core_LTX_library;
+extern gvplugin_library_t gvplugin_gd_LTX_library;
 #endif
 
 
@@ -3908,6 +3910,7 @@ GVC_t *gvContextWithBuiltins(void) {
     gvAddLibrary(gvc, &gvplugin_core_LTX_library);
     gvAddLibrary(gvc, &gvplugin_dot_layout_LTX_library);
     gvAddLibrary(gvc, &gvplugin_neato_layout_LTX_library);
+    gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
     return gvc;
 }
 

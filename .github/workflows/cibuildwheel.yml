@@ -44,7 +44,7 @@ jobs:
           # --disable-swig --disable-tcl etc: skip language bindings we don't need
           # CFLAGS=-fPIC: needed for linking into a shared Python extension
           CIBW_BEFORE_ALL_LINUX: >
-            dnf install -y gcc gcc-c++ bison flex expat-devel zlib-devel autoconf automake libtool &&
+            dnf install -y gcc gcc-c++ bison flex expat-devel zlib-devel autoconf automake libtool gd-devel &&
             curl -L
             "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/graphviz-${{ env.GRAPHVIZ_VERSION }}.tar.gz"
             -o /tmp/graphviz.tar.gz &&
@@ -53,7 +53,7 @@ jobs:
             ./configure
             --prefix=/opt/graphviz
             --disable-ltdl
-            --enable-static
+            --disable-static
             --disable-swig
             --disable-tcl
             --disable-sharp
@@ -76,6 +76,7 @@ jobs:
             ldconfig
 
           CIBW_BEFORE_ALL_MACOS: >
+            brew install gd &&
             curl -L
             "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/graphviz-${{ env.GRAPHVIZ_VERSION }}.tar.gz"
             -o /tmp/graphviz.tar.gz &&
@@ -84,7 +85,7 @@ jobs:
             ./configure
             --prefix=/opt/graphviz
             --disable-ltdl
-            --enable-static
+            --disable-static
             --disable-swig
             --disable-tcl
             --disable-sharp
@@ -104,7 +105,8 @@ jobs:
             make -j$(sysctl -n hw.logicalcpu) &&
             sudo make install
 
-          # Windows: use the official graphviz installer to a simple path (no spaces)
+          # Windows: use the official graphviz installer to a simple path (no spaces).
+          # Update the package_files URL when changing GRAPHVIZ_VERSION.
           CIBW_BEFORE_ALL_WINDOWS: >
             curl -L -o C:\Temp\graphviz.exe
             "https://gitlab.com/graphviz/graphviz/-/package_files/164443457/download" &&
@@ -121,6 +123,40 @@ jobs:
           CIBW_ENVIRONMENT_WINDOWS: >
             GRAPHVIZ_PREFIX=C:\graphviz
 
+          # --- Bundle CLI tools into the wheel ---
+          CIBW_BEFORE_BUILD_LINUX: >
+            mkdir -p {package}/pygraphviz/bin &&
+            cp /opt/graphviz/bin/gc
+            /opt/graphviz/bin/acyclic
+            /opt/graphviz/bin/gvpr
+            /opt/graphviz/bin/gvcolor
+            /opt/graphviz/bin/ccomps
+            /opt/graphviz/bin/sccmap
+            /opt/graphviz/bin/tred
+            /opt/graphviz/bin/unflatten
+            {package}/pygraphviz/bin/
+          CIBW_BEFORE_BUILD_MACOS: >
+            mkdir -p {package}/pygraphviz/bin &&
+            cp /opt/graphviz/bin/gc
+            /opt/graphviz/bin/acyclic
+            /opt/graphviz/bin/gvpr
+            /opt/graphviz/bin/gvcolor
+            /opt/graphviz/bin/ccomps
+            /opt/graphviz/bin/sccmap
+            /opt/graphviz/bin/tred
+            /opt/graphviz/bin/unflatten
+            {package}/pygraphviz/bin/
+          CIBW_BEFORE_BUILD_WINDOWS: >
+            mkdir {package}\pygraphviz\bin &
+            copy C:\graphviz\bin\gc.exe {package}\pygraphviz\bin\ &
+            copy C:\graphviz\bin\acyclic.exe {package}\pygraphviz\bin\ &
+            copy C:\graphviz\bin\gvpr.exe {package}\pygraphviz\bin\ &
+            copy C:\graphviz\bin\gvcolor.exe {package}\pygraphviz\bin\ &
+            copy C:\graphviz\bin\ccomps.exe {package}\pygraphviz\bin\ &
+            copy C:\graphviz\bin\sccmap.exe {package}\pygraphviz\bin\ &
+            copy C:\graphviz\bin\tred.exe {package}\pygraphviz\bin\ &
+            copy C:\graphviz\bin\unflatten.exe {package}\pygraphviz\bin\
+
           # --- Wheel repair (bundle shared libs into wheel) ---
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel
@@ -135,7 +171,6 @@ jobs:
           CIBW_TEST_COMMAND: >
             python -c "import pygraphviz; print(f'pygraphviz v{pygraphviz.__version__}')" &&
             pytest --pyargs pygraphviz
-            -k "not (test_drawing_png or test_drawing_makes_file or unflatten or tred or acyclic)"
 
       - uses: actions/upload-artifact@v4
         with:
