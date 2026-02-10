@@ -102,7 +102,7 @@ jobs:
             --disable-man-pdfs
             --with-expat
             --with-zlib &&
-            sed -i '' '/^libgvplugin_gd_la_LIBADD/s|$| ../../lib/pathplan/libpathplan_C.la|' plugin/gd/Makefile &&
+            echo 'libgvplugin_gd_la_LIBADD += ../../lib/pathplan/libpathplan_C.la' >> plugin/gd/Makefile &&
             make -j$(sysctl -n hw.logicalcpu) &&
             sudo make install
 
