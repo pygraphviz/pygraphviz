@@ -102,11 +102,13 @@ jobs:
             --with-expat
             --with-zlib &&
             make -j$(sysctl -n hw.logicalcpu) &&
-            make install
+            sudo make install
 
-          # Windows: use the official graphviz installer (autotools doesn't work on Windows)
+          # Windows: use the official graphviz installer to a simple path (no spaces)
           CIBW_BEFORE_ALL_WINDOWS: >
-            choco install -y graphviz
+            curl -L -o C:\Temp\graphviz.exe
+            "https://gitlab.com/graphviz/graphviz/-/package_files/164443457/download" &&
+            C:\Temp\graphviz.exe /S /D=C:\graphviz
 
           # --- Environment for pip build step ---
           CIBW_ENVIRONMENT_LINUX: >
@@ -116,7 +118,9 @@ jobs:
             GRAPHVIZ_PREFIX=/opt/graphviz
             DYLD_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
             REPAIR_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
-          CIBW_ENVIRONMENT_WINDOWS: "GRAPHVIZ_PREFIX=\"C:\\Program Files\\Graphviz\""
+          CIBW_ENVIRONMENT_WINDOWS: >
+            GRAPHVIZ_PREFIX=C:\graphviz
+
           # --- Wheel repair (bundle shared libs into wheel) ---
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel
@@ -124,7 +128,7 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
             pip install delvewheel &&
             delvewheel repair -w {dest_dir} {wheel}
-            --add-path "C:\Program Files\Graphviz\bin"
+            --add-path C:\graphviz\bin
 
           # --- Testing ---
           CIBW_TEST_REQUIRES: pytest
