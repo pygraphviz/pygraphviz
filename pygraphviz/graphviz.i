@@ -349,3 +349,37 @@ int gvRenderFilename(GVC_t *gvc, Agraph_t* g, char *format, char *filename);
 int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, unsigned int *size);
 /* Free memory allocated and pointed to by *result in gvRenderData */
 extern void gvFreeRenderData (char* data);
+
+/* --- Wheel-compatible context with builtin plugins --- */
+/* When graphviz is built with ENABLE_LTDL=OFF (as in wheel builds),    */
+/* gvContext() cannot discover plugins dynamically. This function        */
+/* explicitly registers the core plugins via gvAddLibrary(), ensuring    */
+/* they work regardless of ltdl/config6 availability.                   */
+/* On system installs with ltdl enabled, the gvAddLibrary() calls are   */
+/* harmless re-registrations.                                           */
+%{
+#include "graphviz/gvplugin.h"
+
+#ifdef _WIN32
+extern __declspec(dllimport) gvplugin_library_t gvplugin_dot_layout_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_neato_layout_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_core_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_gd_LTX_library;
+#else
+extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
+extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
+extern gvplugin_library_t gvplugin_core_LTX_library;
+extern gvplugin_library_t gvplugin_gd_LTX_library;
+#endif
+%}
+
+%inline %{
+GVC_t *gvContextWithBuiltins(void) {
+    GVC_t *gvc = gvContext();
+    gvAddLibrary(gvc, &gvplugin_core_LTX_library);
+    gvAddLibrary(gvc, &gvplugin_dot_layout_LTX_library);
+    gvAddLibrary(gvc, &gvplugin_neato_layout_LTX_library);
+    gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
+    return gvc;
+}
+%}
