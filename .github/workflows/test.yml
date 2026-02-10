@@ -163,14 +163,8 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-
-      # This and the following step need to be changed when Graphviz has new releases.
-      - name: Download graphviz source
-        run: Invoke-WebRequest -Uri $env:WIN_GRAPHVIZ_URL -OutFile $env:WIN_GRAPHVIZ_EXE
-
-      - name: Install exe
-        run: Start-Process -Wait -FilePath $env:WIN_GRAPHVIZ_EXE -ArgumentList '/S' -PassThru
-
+      - name: Install graphviz
+        run: choco install graphviz
       - name: Update path
         run: echo "$($env:WIN_GRAPHVIZ_DIR)\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
