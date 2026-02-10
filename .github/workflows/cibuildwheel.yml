@@ -46,10 +46,10 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: >
             dnf install -y gcc gcc-c++ bison flex expat-devel zlib-devel autoconf automake libtool &&
             curl -L
-            "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${GRAPHVIZ_VERSION}/graphviz-${GRAPHVIZ_VERSION}.tar.gz"
+            "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/graphviz-${{ env.GRAPHVIZ_VERSION }}.tar.gz"
             -o /tmp/graphviz.tar.gz &&
             tar xzf /tmp/graphviz.tar.gz -C /tmp &&
-            cd /tmp/graphviz-${GRAPHVIZ_VERSION} &&
+            cd /tmp/graphviz-${{ env.GRAPHVIZ_VERSION }} &&
             ./configure
             --prefix=/opt/graphviz
             --disable-ltdl
@@ -77,10 +77,10 @@ jobs:
 
           CIBW_BEFORE_ALL_MACOS: >
             curl -L
-            "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${GRAPHVIZ_VERSION}/graphviz-${GRAPHVIZ_VERSION}.tar.gz"
+            "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/graphviz-${{ env.GRAPHVIZ_VERSION }}.tar.gz"
             -o /tmp/graphviz.tar.gz &&
             tar xzf /tmp/graphviz.tar.gz -C /tmp &&
-            cd /tmp/graphviz-${GRAPHVIZ_VERSION} &&
+            cd /tmp/graphviz-${{ env.GRAPHVIZ_VERSION }} &&
             ./configure
             --prefix=/opt/graphviz
             --disable-ltdl
@@ -116,9 +116,7 @@ jobs:
             GRAPHVIZ_PREFIX=/opt/graphviz
             DYLD_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
             REPAIR_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
-          CIBW_ENVIRONMENT_WINDOWS: >
-            GRAPHVIZ_PREFIX=C:\Program Files\Graphviz
-
+          CIBW_ENVIRONMENT_WINDOWS: "GRAPHVIZ_PREFIX=\"C:\\Program Files\\Graphviz\""
           # --- Wheel repair (bundle shared libs into wheel) ---
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel
