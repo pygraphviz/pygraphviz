@@ -360,9 +360,15 @@ extern void gvFreeRenderData (char* data);
 %{
 #include "graphviz/gvplugin.h"
 
+#ifdef _WIN32
+extern __declspec(dllimport) gvplugin_library_t gvplugin_dot_layout_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_neato_layout_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_core_LTX_library;
+#else
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
 extern gvplugin_library_t gvplugin_core_LTX_library;
+#endif
 %}
 
 %inline %{

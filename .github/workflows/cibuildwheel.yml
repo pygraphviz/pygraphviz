@@ -2,7 +2,7 @@ name: Build Wheels
 
 on:
   push:
-    branches: [main]
+    branches: [main, clean_claude_build]
     tags: ["pygraphviz-*"]
   pull_request:
     branches: [main]
