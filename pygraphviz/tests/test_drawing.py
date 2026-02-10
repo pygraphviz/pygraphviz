@@ -1,4 +1,3 @@
-from tempfile import TemporaryFile
 import pygraphviz as pgv
 import pytest
 
@@ -23,13 +22,13 @@ def test_drawing_no_error_with_no_layout():
     A.string_nop()
 
 
-def test_drawing_makes_file_handle():
+def test_drawing_makes_file_handle(tmp_path):
     A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4])
-    with TemporaryFile() as fh:
+    with (tmp_path / "file1").open("wb") as fh:
         A.draw(fh, format="png", prog="twopi")
         assert fh.tell() > 0
-    with TemporaryFile() as fh:
+    with (tmp_path / "file2").open("wb") as fh:
         A.draw(path=fh, prog="circo", format="png")
         assert fh.tell() > 0
 
@@ -152,16 +151,16 @@ class TestExperimentalGraphvizLibInterface:
         # print("dot representation:", dot_rep)
         # assert expected == dot_rep
 
-    def test_drawing_makes_file(self):
+    def test_drawing_makes_file(self, tmp_path):
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
-        with TemporaryFile() as fh:
+        with (tmp_path / "file").open("wb") as fh:
             A.draw(fh, format="png", prog="twopi")
             assert fh.tell() > 0
 
-    def test_drawing_makes_file1(self):
+    def test_drawing_makes_file1(self, tmp_path):
         A = pgv.AGraph(name="test graph")
         A.add_path([1, 2, 3, 4])
-        with TemporaryFile() as fh:
+        with (tmp_path / "file").open("wb") as fh:
             A.draw(path=fh, prog="circo", format="png")
             assert fh.tell() > 0

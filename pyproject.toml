@@ -12,7 +12,8 @@ authors = [
 description = "Python interface to Graphviz"
 readme = "README.rst"
 requires-python = ">=3.11"
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
+license-files = ['LICENSE']
 dynamic = ["version"]
 keywords = [
     "Networks",
@@ -25,13 +26,13 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: BSD License",
     "Programming Language :: C",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Libraries :: Python Modules",
