@@ -1,27 +1,22 @@
 name: Wheels
-
 on:
   pull_request:
-
 jobs:
   build_sdist:
     name: Build source distribution
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         name: Install Python
         with:
-          python-version: 3.x
-
+          python-version: 3.11
       - name: Build sdist
         run: >
           pip install build
           &&  python -m build --sdist . --outdir dist
-
       - uses: actions/upload-artifact@v4
         with:
           name: pypi-artifacts
@@ -33,32 +28,29 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-latest
             arch: x86_64
-          - os: macos-14
+          - os: macos-latest
             arch: arm64
             MACOSX_DEPLOYMENT_TARGET: "14.0"
-          - os: macos-13
+          - os: macos-15-intel
             arch: x86_64
-            MACOSX_DEPLOYMENT_TARGET: "13.0"
+            MACOSX_DEPLOYMENT_TARGET: "14.0"
           - os: windows-latest
             arch: win_amd64
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         name: Install Python
         with:
-          python-version: 3.x
-
+          python-version: 3.11
       - name: Install cibuildwheel
         run: |
           python -m pip install --upgrade cibuildwheel delvewheel
-
       - name: Build Wheels
         run: cibuildwheel --output-dir wheelhouse
         env:
@@ -89,7 +81,7 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: pypi-artifacts-${{ matrix.os }}-${{ matrix.arch }}
           path: ${{ github.workspace }}/wheelhouse/*.whl
@@ -97,9 +89,9 @@ jobs:
   show-artifacts:
     needs: [build_sdist, build_wheels]
     name: "Show artifacts"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           pattern: pypi-artifacts*
           path: ${{ github.workspace }}/dist
@@ -112,11 +104,11 @@ jobs:
   publish-artifacts-pypi:
     needs: [build_sdist, build_wheels]
     name: "Publish to PyPI"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     # upload to PyPI for every tag starting with 'v'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           pattern: pypi-artifacts*
           path: ${{ github.workspace }}/dist
