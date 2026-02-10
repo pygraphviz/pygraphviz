@@ -2,7 +2,7 @@ name: Build Wheels
 
 on:
   push:
-    branches: [main, clean_claude_build]
+    branches: [main]
     tags: ["pygraphviz-*"]
   pull_request:
     branches: [main]
@@ -33,7 +33,7 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_BUILD: "cp311-* cp312-* cp313-*"
+          CIBW_BUILD: "cp312-* cp313-* cp314-*"
           CIBW_SKIP: "*-win32 *-manylinux_i686 *-musllinux_*"
 
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
