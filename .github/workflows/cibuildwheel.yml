@@ -53,7 +53,7 @@ jobs:
             ./configure
             --prefix=/opt/graphviz
             --disable-ltdl
-            --disable-static
+            --enable-static
             --disable-swig
             --disable-tcl
             --disable-sharp
@@ -85,7 +85,7 @@ jobs:
             ./configure
             --prefix=/opt/graphviz
             --disable-ltdl
-            --disable-static
+            --enable-static
             --disable-swig
             --disable-tcl
             --disable-sharp
