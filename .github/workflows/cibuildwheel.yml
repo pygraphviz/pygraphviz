@@ -120,6 +120,7 @@ jobs:
             GRAPHVIZ_PREFIX=/opt/graphviz
             DYLD_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
             REPAIR_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
+            MACOSX_DEPLOYMENT_TARGET=15.0
           CIBW_ENVIRONMENT_WINDOWS: >
             GRAPHVIZ_PREFIX=C:\graphviz
 
