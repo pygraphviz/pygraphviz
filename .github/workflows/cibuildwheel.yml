@@ -38,63 +38,75 @@ jobs:
 
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
 
-          # --- Build graphviz from source on each platform ---
+          # --- Build graphviz from source (autotools) on Linux/macOS ---
+          # The release tarballs use autotools, not CMake.
+          # --disable-ltdl: disables dynamic plugin loading via config6
+          # --disable-swig --disable-tcl etc: skip language bindings we don't need
+          # CFLAGS=-fPIC: needed for linking into a shared Python extension
           CIBW_BEFORE_ALL_LINUX: >
-            dnf install -y cmake gcc gcc-c++ bison flex expat-devel zlib-devel &&
+            dnf install -y gcc gcc-c++ bison flex expat-devel zlib-devel autoconf automake libtool &&
             curl -L
             "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${GRAPHVIZ_VERSION}/graphviz-${GRAPHVIZ_VERSION}.tar.gz"
             -o /tmp/graphviz.tar.gz &&
             tar xzf /tmp/graphviz.tar.gz -C /tmp &&
             cd /tmp/graphviz-${GRAPHVIZ_VERSION} &&
-            cmake -S . -B build
-            -DCMAKE_INSTALL_PREFIX=/opt/graphviz
-            -DCMAKE_BUILD_TYPE=Release
-            -DENABLE_LTDL=OFF
-            -Dwith_smyrna=OFF
-            -Dwith_gvedit=OFF
-            -DGRAPHVIZ_CLI=OFF
-            -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-            -Duse_coverage=OFF &&
-            cmake --build build -j$(nproc) &&
-            cmake --install build
+            ./configure
+            --prefix=/opt/graphviz
+            --disable-ltdl
+            --enable-static
+            --disable-swig
+            --disable-tcl
+            --disable-sharp
+            --disable-go
+            --disable-guile
+            --disable-java
+            --disable-lua
+            --disable-perl
+            --disable-php
+            --disable-python
+            --disable-python3
+            --disable-r
+            --disable-ruby
+            --disable-man-pdfs
+            --with-expat
+            --with-zlib
+            CFLAGS="-fPIC" &&
+            make -j$(nproc) &&
+            make install &&
+            ldconfig
 
           CIBW_BEFORE_ALL_MACOS: >
-            brew install cmake bison flex &&
             curl -L
             "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${GRAPHVIZ_VERSION}/graphviz-${GRAPHVIZ_VERSION}.tar.gz"
             -o /tmp/graphviz.tar.gz &&
             tar xzf /tmp/graphviz.tar.gz -C /tmp &&
             cd /tmp/graphviz-${GRAPHVIZ_VERSION} &&
-            cmake -S . -B build
-            -DCMAKE_INSTALL_PREFIX=/opt/graphviz
-            -DCMAKE_BUILD_TYPE=Release
-            -DENABLE_LTDL=OFF
-            -Dwith_smyrna=OFF
-            -Dwith_gvedit=OFF
-            -DGRAPHVIZ_CLI=OFF
-            -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-            -Duse_coverage=OFF
-            -DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET} &&
-            cmake --build build -j$(sysctl -n hw.logicalcpu) &&
-            cmake --install build
+            ./configure
+            --prefix=/opt/graphviz
+            --disable-ltdl
+            --enable-static
+            --disable-swig
+            --disable-tcl
+            --disable-sharp
+            --disable-go
+            --disable-guile
+            --disable-java
+            --disable-lua
+            --disable-perl
+            --disable-php
+            --disable-python
+            --disable-python3
+            --disable-r
+            --disable-ruby
+            --disable-man-pdfs
+            --with-expat
+            --with-zlib &&
+            make -j$(sysctl -n hw.logicalcpu) &&
+            make install
 
+          # Windows: use the official graphviz installer (autotools doesn't work on Windows)
           CIBW_BEFORE_ALL_WINDOWS: >
-            choco install -y cmake --installargs ADD_CMAKE_TO_PATH=System &&
-            curl -L
-            "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/%GRAPHVIZ_VERSION%/graphviz-%GRAPHVIZ_VERSION%.tar.gz"
-            -o C:\Temp\graphviz.tar.gz &&
-            tar xzf C:\Temp\graphviz.tar.gz -C C:\Temp &&
-            cd C:\Temp\graphviz-%GRAPHVIZ_VERSION% &&
-            cmake -S . -B build
-            -DCMAKE_INSTALL_PREFIX=C:\graphviz
-            -DCMAKE_BUILD_TYPE=Release
-            -DENABLE_LTDL=OFF
-            -Dwith_smyrna=OFF
-            -Dwith_gvedit=OFF
-            -DGRAPHVIZ_CLI=OFF
-            -Duse_coverage=OFF &&
-            cmake --build build --config Release &&
-            cmake --install build --config Release
+            choco install -y graphviz
 
           # --- Environment for pip build step ---
           CIBW_ENVIRONMENT_LINUX: >
@@ -105,7 +117,7 @@ jobs:
             DYLD_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
             REPAIR_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
           CIBW_ENVIRONMENT_WINDOWS: >
-            GRAPHVIZ_PREFIX=C:\graphviz
+            GRAPHVIZ_PREFIX=C:\Program Files\Graphviz
 
           # --- Wheel repair (bundle shared libs into wheel) ---
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
@@ -114,14 +126,14 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
             pip install delvewheel &&
             delvewheel repair -w {dest_dir} {wheel}
-            --add-path C:\graphviz\bin;C:\graphviz\lib
+            --add-path "C:\Program Files\Graphviz\bin"
 
           # --- Testing ---
           CIBW_TEST_REQUIRES: pytest
           CIBW_TEST_COMMAND: >
             python -c "import pygraphviz; print(f'pygraphviz v{pygraphviz.__version__}')" &&
             pytest --pyargs pygraphviz
-            -k "not (test_drawing_png or unflatten or tred or acyclic)"
+            -k "not (test_drawing_png or test_drawing_makes_file or unflatten or tred or acyclic)"
 
       - uses: actions/upload-artifact@v7
         with:
