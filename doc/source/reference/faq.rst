@@ -23,9 +23,9 @@ FAQ
 
        .. code-block:: bash
 
-          pip install --global-option=build_ext \
-                      --global-option="-L/opt/lib/mygviz/" \
-                      --global-option="-R/opt/lib/mygviz/" \
+          pip install --config-settings="--global-option=build_ext" \
+                      --config-settings="--global-option=-L/opt/lib/mygviz/" \
+                      --config-settings="--global-option=-R/opt/lib/mygviz/" \
                       pygraphviz
 
        In this example, the ``-L`` and ``-R`` flags tell the linker where to
