@@ -17,7 +17,7 @@ jobs:
 
       - run:
           name: Install Graphviz
-          command: sudo apt-get install graphviz libgraphviz-dev
+          command: sudo apt-get install graphviz libgraphviz-dev swig
 
       - run:
           name: Install TeX
