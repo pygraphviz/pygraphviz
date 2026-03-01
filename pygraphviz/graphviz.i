@@ -37,7 +37,7 @@
         mode_byte_obj = PyUnicode_AsUTF8String(mode_obj);
 
         mode = PyBytes_AsString(mode_byte_obj);
-        $1 = fdopen(fd, mode);
+        $1 = fdopen(dup(fd), mode);
         Py_XDECREF(mode_obj);
         Py_XDECREF(mode_byte_obj);
     }
@@ -45,6 +45,10 @@
 
 %typemap(freearg) FILE* input_file {
     fclose($1);
+}
+
+%typemap(freearg) FILE* output_file {
+    if ($1) fclose($1);
 }
 
 
