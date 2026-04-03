@@ -44,10 +44,16 @@ if __name__ == "__main__":
                 "cdt",
                 "cgraph",
                 "gvc",
-                "gvplugin_core",
-                "gvplugin_dot_layout",
-                "gvplugin_neato_layout",
-            ],
+            ]
+            + (
+                []
+                if WINDOWS
+                else [
+                    "gvplugin_core",
+                    "gvplugin_dot_layout",
+                    "gvplugin_neato_layout",
+                ]
+            ),
             define_macros=define_macros,
             **extra_kwargs,
         )

@@ -7,8 +7,12 @@
 %{
 #include "graphviz/cgraph.h"
 #include "graphviz/gvc.h"
+#include "graphviz/gvplugin.h"
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 %}
 
 %typemap(in) FILE* input_file (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
@@ -327,7 +331,80 @@ const Agdesc_t Agstrictundirected = { 0, 1, 0, 1 };
 
 /*  set up a graphviz context - and init graph - retaining old API */
 GVC_t *gvContext(void);
+/*  set up a graphviz context with builtins */
+GVC_t *gvContextPlugins(const lt_symlist_t *builtins, int demand_loading);
 int gvFreeContext(GVC_t *gvc);
+
+/*
+ * Create a GVC context with builtin plugin support.
+ *
+ * On Unix, plugin symbols are resolved at link time and passed to
+ * gvContextPlugins so that layout/render works without relying on
+ * runtime plugin discovery (required for self-contained wheels).
+ *
+ * On Windows, plugin symbols cannot be resolved at link time because
+ * the graphviz plugin DLLs do not export them via import libraries.
+ * Instead, we attempt to load them at runtime with LoadLibrary/
+ * GetProcAddress.  If that fails, we fall back to gvContext() which
+ * discovers plugins via the graphviz installation's config file.
+ */
+%inline %{
+#ifndef _WIN32
+extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
+extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
+extern gvplugin_library_t gvplugin_core_LTX_library;
+#endif
+
+GVC_t *pygraphviz_context(void) {
+#ifdef _WIN32
+    /* On Windows, try to resolve plugin symbols from DLLs at runtime */
+    static lt_symlist_t symbols[4];
+    static int initialized = 0;
+    static int use_plugins = 0;
+
+    if (!initialized) {
+        initialized = 1;
+        const char *dlls[] = {
+            "gvplugin_dot_layout.dll",
+            "gvplugin_neato_layout.dll",
+            "gvplugin_core.dll",
+        };
+        const char *syms[] = {
+            "gvplugin_dot_layout_LTX_library",
+            "gvplugin_neato_layout_LTX_library",
+            "gvplugin_core_LTX_library",
+        };
+        int ok = 1;
+        for (int i = 0; i < 3; i++) {
+            HMODULE h = LoadLibraryA(dlls[i]);
+            if (!h) { ok = 0; break; }
+            void *addr = (void *)GetProcAddress(h, syms[i]);
+            if (!addr) { ok = 0; break; }
+            symbols[i].name = syms[i];
+            symbols[i].address = addr;
+        }
+        if (ok) {
+            symbols[3].name = NULL;
+            symbols[3].address = NULL;
+            use_plugins = 1;
+        }
+    }
+
+    if (use_plugins) {
+        return gvContextPlugins(symbols, 1);
+    }
+    return gvContext();
+#else
+    static lt_symlist_t lt_preloaded_symbols[] = {
+        { "gvplugin_dot_layout_LTX_library", &gvplugin_dot_layout_LTX_library },
+        { "gvplugin_neato_layout_LTX_library", &gvplugin_neato_layout_LTX_library },
+        { "gvplugin_core_LTX_library", &gvplugin_core_LTX_library },
+        { 0, 0 }
+    };
+    return gvContextPlugins(lt_preloaded_symbols, 1);
+#endif
+}
+%}
 
 /* Compute a layout using a specified engine */
 int gvLayout(GVC_t *gvc, Agraph_t *g, char* prog);
