@@ -1,6 +1,13 @@
 name: test
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 env:
   WIN_GRAPHVIZ_URL: "https://gitlab.com/graphviz/graphviz/-/package_files/164443457/download"
