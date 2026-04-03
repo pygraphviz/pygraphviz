@@ -348,13 +348,18 @@ int gvFreeContext(GVC_t *gvc);
  * GetProcAddress.  If that fails, we fall back to gvContext() which
  * discovers plugins via the graphviz installation's config file.
  */
-%inline %{
+%{
+/* Extern declarations in a raw code block so SWIG does not generate
+   Python-level accessors (which would reference the symbols
+   unconditionally and break the Windows build). */
 #ifndef _WIN32
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
 extern gvplugin_library_t gvplugin_core_LTX_library;
 #endif
+%}
 
+%inline %{
 GVC_t *pygraphviz_context(void) {
 #ifdef _WIN32
     /* On Windows, try to resolve plugin symbols from DLLs at runtime */

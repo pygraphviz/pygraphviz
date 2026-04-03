@@ -171,6 +171,7 @@ jobs:
       # We need ``python -m pip install -U pip`` b/c Windows won't modify running programs.
       - name: Install packages
         run: |
+          $ErrorActionPreference = 'Stop'
           python -m pip install --upgrade pip
           python -m pip install -r requirements/test.txt
           python -m pip install --config-settings="--global-option=build_ext" `
