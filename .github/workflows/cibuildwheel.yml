@@ -23,6 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -35,6 +38,8 @@ jobs:
         env:
           CIBW_BUILD: "cp312-* cp313-* cp314-*"
           CIBW_SKIP: "*-win32 *-manylinux_i686 *-musllinux_*"
+
+          CIBW_ARCHS_LINUX: "auto aarch64"
 
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
 
