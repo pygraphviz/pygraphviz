@@ -14,7 +14,14 @@ import sys
 if sys.version_info >= (3, 8, 0) and sys.platform == "win32":
     import os
 
-    for path in os.environ["PATH"].split(os.pathsep):
+    # Wheel install: delvewheel places DLLs in pygraphviz.libs/
+    _libs_dir = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)), "pygraphviz.libs"
+    )
+    if os.path.isdir(_libs_dir):
+        os.add_dll_directory(_libs_dir)
+    # Dev install: find graphviz on PATH
+    for path in os.environ.get("PATH", "").split(os.pathsep):
         if "graphviz" in path.lower() and os.path.exists(path):
             os.add_dll_directory(path)
 

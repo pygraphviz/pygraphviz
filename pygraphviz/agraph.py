@@ -1367,6 +1367,12 @@ class AGraph:
         popen_kwargs = {}
         if hasattr(subprocess, "CREATE_NO_WINDOW"):  # Only on Windows OS
             popen_kwargs.update(creationflags=subprocess.CREATE_NO_WINDOW)
+
+        # Set up library paths so bundled executables can find shared libs
+        env = self._get_prog_env()
+        if env is not None:
+            popen_kwargs["env"] = env
+
         p = subprocess.Popen(
             dotargs,
             shell=False,
@@ -1486,7 +1492,7 @@ class AGraph:
         if isinstance(prog, str):
             prog = prog.encode(self.encoding)
 
-        gvc = gv.gvContext()
+        gvc = gv.gvContextWithBuiltins()
         retval = gv.gvLayout(gvc, self.handle, prog)
         # gvLayout returns -1 if `prog` is not a valid program.
         # TODO: Check other possible return values from gvLayout
@@ -1592,7 +1598,7 @@ class AGraph:
             prog = prog.encode(self.encoding)
 
         # Start the drawing
-        gvc = gv.gvContext()
+        gvc = gv.gvContextWithBuiltins()
         G = self.handle
 
         # Layout
@@ -1686,12 +1692,49 @@ class AGraph:
         if platform.system() == "Windows":
             name += ".exe"
 
+        # Check bundled bin/ directory first (for wheel installs)
+        pkg_bin = os.path.join(os.path.dirname(__file__), "bin")
+        match = glob.glob(os.path.join(pkg_bin, name))
+        if match:
+            return match[0]
+
         paths = os.environ["PATH"]
         for path in paths.split(os.pathsep):
             match = glob.glob(os.path.join(path, name))
             if match:
                 return match[0]
         raise ValueError(f"No prog {name} in path.")
+
+    def _get_prog_env(self):
+        """Return modified environment for running bundled executables, or None."""
+        pkg_dir = os.path.dirname(__file__)
+        pkg_bin = os.path.join(pkg_dir, "bin")
+        if not os.path.isdir(pkg_bin):
+            return None
+
+        env = os.environ.copy()
+        if sys.platform == "linux":
+            # auditwheel puts libs in pygraphviz.libs/ (with hash-renamed files)
+            libs_dir = os.path.join(os.path.dirname(pkg_dir), "pygraphviz.libs")
+            if os.path.isdir(libs_dir):
+                existing = env.get("LD_LIBRARY_PATH", "")
+                env["LD_LIBRARY_PATH"] = libs_dir + (
+                    os.pathsep + existing if existing else ""
+                )
+        elif sys.platform == "darwin":
+            # delocate puts libs in pygraphviz/.dylibs/
+            dylibs_dir = os.path.join(pkg_dir, ".dylibs")
+            if os.path.isdir(dylibs_dir):
+                existing = env.get("DYLD_LIBRARY_PATH", "")
+                env["DYLD_LIBRARY_PATH"] = dylibs_dir + (
+                    os.pathsep + existing if existing else ""
+                )
+        elif sys.platform == "win32":
+            # delvewheel puts libs in pygraphviz.libs/
+            libs_dir = os.path.join(os.path.dirname(pkg_dir), "pygraphviz.libs")
+            if os.path.isdir(libs_dir):
+                env["PATH"] = libs_dir + os.pathsep + env.get("PATH", "")
+        return env
 
     def _update_handle_references(self):
         try:
