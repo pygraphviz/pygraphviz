@@ -48,7 +48,7 @@ if __name__ == "__main__":
     extension = [
         Extension(
             name="pygraphviz._graphviz",
-            sources=["pygraphviz/graphviz_wrap.c"],
+            sources=["pygraphviz/graphviz.i"],
             include_dirs=include_dirs,
             library_dirs=library_dirs,
             # cdt does not link to cgraph, whereas cgraph links to cdt.
