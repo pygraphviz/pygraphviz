@@ -18,13 +18,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-15, macos-15-intel, windows-latest]
+        os: [ubuntu-latest, macos-15, macos-15-intel, windows-latest, ubuntu-24.04-arm]
 
     steps:
       - uses: actions/checkout@v6
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
 
       - uses: actions/setup-python@v6
         with:
@@ -38,8 +35,6 @@ jobs:
         env:
           CIBW_BUILD: "cp312-* cp313-* cp314-*"
           CIBW_SKIP: "*-win32 *-manylinux_i686 *-musllinux_*"
-
-          CIBW_ARCHS_LINUX: "auto aarch64"
 
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
 
