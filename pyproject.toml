@@ -1,6 +1,6 @@
 [build-system]
 build-backend = 'setuptools.build_meta'
-requires = ['setuptools>=61.2']
+requires = ['setuptools>=61.2', "swig>4.1.0"]
 
 [project]
 name = "pygraphviz"
