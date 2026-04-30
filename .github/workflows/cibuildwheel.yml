@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  GRAPHVIZ_VERSION: "12.2.1"
+  GRAPHVIZ_VERSION: "14.1.5"
 
 jobs:
   build_wheels:
@@ -112,11 +112,9 @@ jobs:
             make -j$(sysctl -n hw.logicalcpu) &&
             sudo make install
 
-          # Windows: use the official graphviz installer to a simple path (no spaces).
-          # Update the package_files URL when changing GRAPHVIZ_VERSION.
           CIBW_BEFORE_ALL_WINDOWS: >
             curl -L -o C:\Temp\graphviz.exe
-            "https://gitlab.com/graphviz/graphviz/-/package_files/164443457/download" &&
+            "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/windows_10_cmake_Release_graphviz-install-${{ env.GRAPHVIZ_VERSION }}-win64.exe" &&
             C:\Temp\graphviz.exe /S /D=C:\graphviz
 
           # --- Environment for pip build step ---
