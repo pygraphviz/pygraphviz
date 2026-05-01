@@ -1,2 +1,2 @@
 twine>=4.0
-wheel>=0.40
+wheel>=0.47.0
