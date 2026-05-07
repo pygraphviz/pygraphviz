@@ -13,7 +13,7 @@ jobs:
         python-version: ["3.12", "3.13", "3.14"]
     steps:
       - name: Setup conda with mambaforge
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
           auto-update-conda: true
           miniforge-variant: Mambaforge
