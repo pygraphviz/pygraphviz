@@ -58,8 +58,6 @@ jobs:
             cd /tmp/graphviz-${{ env.GRAPHVIZ_VERSION }} &&
             ./configure
             --prefix=/opt/graphviz
-            --disable-ltdl
-            --enable-static
             --disable-swig
             --disable-tcl
             --disable-sharp
@@ -90,8 +88,6 @@ jobs:
             cd /tmp/graphviz-${{ env.GRAPHVIZ_VERSION }} &&
             ./configure
             --prefix=/opt/graphviz
-            --disable-ltdl
-            --enable-static
             --disable-swig
             --disable-tcl
             --disable-sharp
@@ -116,20 +112,23 @@ jobs:
           # Update the package_files URL when changing GRAPHVIZ_VERSION.
           CIBW_BEFORE_ALL_WINDOWS: >
             curl -L -o C:\Temp\graphviz.exe
-            "https://gitlab.com/graphviz/graphviz/-/package_files/164443457/download" &&
+            "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/windows_10_cmake_Release_graphviz-install-${{ env.GRAPHVIZ_VERSION }}-win64.exe" &&
             C:\Temp\graphviz.exe /S /D=C:\graphviz
 
           # --- Environment for pip build step ---
           CIBW_ENVIRONMENT_LINUX: >
             GRAPHVIZ_PREFIX=/opt/graphviz
             LD_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
+            PATH="$PATH:/opt/graphviz/bin"
           CIBW_ENVIRONMENT_MACOS: >
             GRAPHVIZ_PREFIX=/opt/graphviz
             DYLD_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
             REPAIR_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
             MACOSX_DEPLOYMENT_TARGET=15.0
+            PATH="$PATH:/opt/graphviz/bin"
           CIBW_ENVIRONMENT_WINDOWS: >
             GRAPHVIZ_PREFIX=C:\graphviz
+            PATH="C:\graphviz\bin;$PATH"
 
           # --- Bundle CLI tools into the wheel ---
           CIBW_BEFORE_BUILD_LINUX: >
@@ -194,6 +193,12 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+
+      # NOTE: Due to the version-checking mechanism for building pygraphviz,
+      # graphviz (specifically, the `dot` CLI tool) *must* be available at
+      # build time in order to build pygraphviz from source.
+      - name: Install graphviz
+        run: sudo apt install graphviz
 
       - name: Build sdist
         run: |
