@@ -109,6 +109,7 @@ jobs:
             LIBPNG_VERSION=1.6.58
             FREETYPE_VERSION=2.13.3
             LIBGD_VERSION=2.3.3
+            LIBTOOL_VERSION=2.5.4
 
             # Own the prefix so every `make install` works without sudo.
             sudo mkdir -p "$PREFIX"
@@ -167,10 +168,25 @@ jobs:
                    --without-avif --without-heif \
               && make -j"$JOBS" && make install )
 
-            # graphviz (links the libgd we just built)
+            # libtool / libltdl (graphviz links libltdl for runtime plugin
+            # loading). Same Homebrew-bottle problem as libgd: the runner's
+            # libtool bottle (/usr/local/.../libltdl.7.dylib) targets the
+            # current macOS (15), so delocate rejects it in an 11.0 wheel.
+            # Build libltdl from source so the bundled copy carries the 11.0
+            # floor, and point graphviz's configure at it below.
+            dl "https://ftpmirror.gnu.org/libtool/libtool-${LIBTOOL_VERSION}.tar.gz" libtool.tar.gz
+            tar xzf libtool.tar.gz
+            ( cd "libtool-${LIBTOOL_VERSION}" \
+              && ./configure --prefix="$PREFIX" --disable-static \
+              && make -j"$JOBS" && make install )
+
+            # graphviz (links the libgd and libltdl we just built). CPPFLAGS/
+            # LDFLAGS steer ltdl detection to $PREFIX so graphviz links our
+            # 11.0 libltdl instead of the Homebrew bottle on the runner.
             dl "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/graphviz-${{ env.GRAPHVIZ_VERSION }}.tar.gz" graphviz.tar.gz
             tar xzf graphviz.tar.gz
             cd "graphviz-${{ env.GRAPHVIZ_VERSION }}"
+            CPPFLAGS="-I$PREFIX/include" LDFLAGS="-L$PREFIX/lib" \
             ./configure \
               --prefix="$PREFIX" \
               --disable-swig --disable-tcl --disable-sharp --disable-go --disable-guile \
