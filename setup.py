@@ -14,6 +14,8 @@ if __name__ == "__main__":
     # If, in the future, it is possible/reasonable to set Graphviz 14 as a
     # minimum supported version, then this should be replaced with the macro
     # See gh-573 for further discussion
+    if WINDOWS:
+        os.environ["PATH"] += ";C:\\graphviz\\bin"
     try:  # Better exception message if graphviz not installed
         version_str = subprocess.check_output(["dot", "-V"], stderr=subprocess.STDOUT)
     except FileNotFoundError:
