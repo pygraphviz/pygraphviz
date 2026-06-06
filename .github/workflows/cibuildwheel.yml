@@ -88,8 +88,6 @@ jobs:
             cd /tmp/graphviz-${{ env.GRAPHVIZ_VERSION }} &&
             ./configure
             --prefix=/opt/graphviz
-            --disable-ltdl
-            --enable-static
             --disable-swig
             --disable-tcl
             --disable-sharp
@@ -127,8 +125,10 @@ jobs:
             DYLD_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
             REPAIR_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
             MACOSX_DEPLOYMENT_TARGET=15.0
+            PATH="$PATH:/opt/graphviz/bin"
           CIBW_ENVIRONMENT_WINDOWS: >
             GRAPHVIZ_PREFIX=C:\graphviz
+            PATH=C:\graphviz\bin
 
           # --- Bundle CLI tools into the wheel ---
           CIBW_BEFORE_BUILD_LINUX: >
