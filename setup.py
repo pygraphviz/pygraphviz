@@ -7,6 +7,12 @@ from setuptools import setup, Extension
 if __name__ == "__main__":
     WINDOWS = sys.platform == "win32"
 
+    # FIXME: This should be handled with the cibuildwheel windows path specification
+    # but for whatever reason it's not being picked up correctly. This is a hack
+    # to make this work with the specific installation locations used within the
+    # cibuildwheel environment.
+    if WINDOWS:
+        os.environ["PATH"] += ";C:\\graphviz\\bin"
     # Extract graphviz major version from command line
     # NOTE: A GRAPHVIZ_MAJOR_VERSION macro was added in Graphviz v14.0, but is
     # not availble prior - so parsing the CLI version output is the only
@@ -14,8 +20,6 @@ if __name__ == "__main__":
     # If, in the future, it is possible/reasonable to set Graphviz 14 as a
     # minimum supported version, then this should be replaced with the macro
     # See gh-573 for further discussion
-    if WINDOWS:
-        os.environ["PATH"] += ";C:\\graphviz\\bin"
     try:  # Better exception message if graphviz not installed
         version_str = subprocess.check_output(["dot", "-V"], stderr=subprocess.STDOUT)
     except FileNotFoundError:
