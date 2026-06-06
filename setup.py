@@ -14,10 +14,15 @@ if __name__ == "__main__":
     # If, in the future, it is possible/reasonable to set Graphviz 14 as a
     # minimum supported version, then this should be replaced with the macro
     # See gh-573 for further discussion
-    vm = re.match(
-        r"dot - graphviz version (\d+)",
-        subprocess.check_output(["dot", "-V"], stderr=subprocess.STDOUT).decode()
-    )
+    try:  # Better exception message if graphviz not installed
+        version_str = subprocess.check_output(["dot", "-V"], stderr=subprocess.STDOUT)
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            "\n\nCould not find `dot` executable!\n"
+            "Graphviz must be installed to build pygraphviz from source.\n\n"
+        )
+
+    vm = re.match(r"dot - graphviz version (\d+)", version_str.decode())
     graphviz_major_version = int(vm.string[:vm.end()].split(" ")[-1])
     print(f"Detected Graphviz version {graphviz_major_version}")
     # Pass version info into swig build
