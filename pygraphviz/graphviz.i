@@ -349,16 +349,13 @@ int gvRenderFilename(GVC_t *gvc, Agraph_t* g, char *format, char *filename);
 /* three lines are straight from the SWIG manual.  */
 %include <cstring.i>
 %include <typemaps.i>
-/* The ifndef agnew check serves as a Graphviz v13 check: agnew was add in */
-/* Graphviz v13, so it's existence is a proxy for whether the installed */
-/* Graphviz has the old (pre-13) or new (v13 and later) gvRenderData api. */
 /* See gh-573 for further discussion */
-#ifndef agnew
-%cstring_output_allocate_size(char **result, size_t* size, free(*$1));
-int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, size_t *size);
-#else
+#ifdef agnew
 %cstring_output_allocate_size(char **result, unsigned int* size, free(*$1));
 int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, unsigned int *size);
+#else
+%cstring_output_allocate_size(char **result, size_t* size, free(*$1));
+int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, size_t *size);
 #endif
 /* Free memory allocated and pointed to by *result in gvRenderData */
 extern void gvFreeRenderData (char* data);
