@@ -123,6 +123,7 @@ jobs:
           CIBW_ENVIRONMENT_LINUX: >
             GRAPHVIZ_PREFIX=/opt/graphviz
             LD_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
+            PATH="$PATH:/opt/graphviz/bin"
           CIBW_ENVIRONMENT_MACOS: >
             GRAPHVIZ_PREFIX=/opt/graphviz
             DYLD_LIBRARY_PATH=/opt/graphviz/lib:/opt/graphviz/lib/graphviz
