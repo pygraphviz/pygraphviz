@@ -195,6 +195,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      # NOTE: Due to the version-checking mechanism for building pygraphviz,
+      # graphviz (specifically, the `dot` CLI tool) *must* be available at
+      # build time in order to build pygraphviz from source.
+      - name: Install graphviz
+        run: sudo apt install graphviz
+
       - name: Build sdist
         run: |
           pip install build
