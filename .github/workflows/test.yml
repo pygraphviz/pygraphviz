@@ -48,40 +48,6 @@ jobs:
         run: |
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
-  fedora:
-    strategy:
-      matrix:
-        release:
-          - 40
-          - 41
-
-    runs-on: Ubuntu-latest
-    container: "fedora:${{ matrix.release }}"
-
-    steps:
-      - name: Checkout pygraphviz
-        uses: actions/checkout@v6
-
-      - name: Install graphviz
-        run: sudo dnf install -y graphviz graphviz-devel
-
-      - name: Install Python developer tools
-        run: sudo dnf install -y python3-devel
-
-      - name: Install gcc
-        run: sudo dnf install -y gcc
-
-      - name: Install packages
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements/test.txt
-          pip install .
-          pip list
-
-      - name: Test pygraphviz
-        run: |
-          pytest --doctest-modules --durations=10 --pyargs pygraphviz
-
   brew:
     runs-on: macOS-latest
 
