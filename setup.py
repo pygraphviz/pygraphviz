@@ -23,7 +23,7 @@ if __name__ == "__main__":
         )
 
     vm = re.match(r"dot - graphviz version (\d+)", version_str.decode())
-    graphviz_major_version = int(vm.string[:vm.end()].split(" ")[-1])
+    graphviz_major_version = int(vm.string[: vm.end()].split(" ")[-1])
     print(f"Detected Graphviz version {graphviz_major_version}")
     # Pass version info into swig build
     swig_options = [f"-DGRAPHVIZ_VERSION_MAJOR={graphviz_major_version}"]
