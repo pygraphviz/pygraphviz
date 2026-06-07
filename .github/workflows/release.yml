@@ -220,12 +220,8 @@ jobs:
 
           # --- Testing ---
           CIBW_TEST_REQUIRES: pytest
-          # The render also writes a sample PNG into {project}/rendered so it can
-          # be uploaded as an artifact for visual inspection of each platform's
-          # native renderer output (Quartz on macOS, GDI+ on Windows, gd on
-          # Linux) -- the only way to eyeball a wheel built for another OS.
           CIBW_TEST_COMMAND: >
-            python -c "import os, sys, pygraphviz as p; print('pygraphviz', p.__version__); d = os.path.join(r'{project}', 'rendered'); os.makedirs(d, exist_ok=True); G = p.AGraph(directed=True); G.add_edge('a', 'b'); G.add_edge('b', 'c'); G.add_edge('a', 'c'); G.node_attr.update(shape='circle', style='filled', fillcolor='lightblue'); f = os.path.join(d, 'sample-%s-py%d%d.png' % (sys.platform, sys.version_info[0], sys.version_info[1])); G.draw(f, prog='dot'); sz = os.path.getsize(f); assert sz > 0; print('PNG render OK:', f, sz, 'bytes')" &&
+            python -c "import os, tempfile, pygraphviz as p; print('pygraphviz', p.__version__); G = p.AGraph(); G.add_edge('a', 'b'); f = os.path.join(tempfile.mkdtemp(), 't.png'); G.draw(f, prog='dot'); assert os.path.getsize(f) > 0; print('PNG render OK:', f)" &&
             pytest --pyargs pygraphviz
 
       - uses: actions/upload-artifact@v7
@@ -233,8 +229,39 @@ jobs:
           name: wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
-      # Sample PNGs rendered by the test step, one per Python version, so the
-      # actual per-platform renderer output can be downloaded and inspected.
+      # Render a sample image FROM THE BUILT WHEEL (installed on the host runner,
+      # so it exercises the wheel's bundled libs + builtins -- the same code path
+      # users get) and upload it for visual inspection. Done as a host step
+      # rather than in CIBW_TEST_COMMAND because the Linux test runs in a
+      # container whose filesystem (incl. any rendered file) is not copied back.
+      - name: Render sample image from the built wheel
+        shell: bash
+        run: |
+          python -m pip install --force-reinstall --no-index --find-links wheelhouse pygraphviz
+          mkdir -p rendered
+          OUT="rendered/foo-${{ matrix.os }}.png" python - <<'PY'
+          import os
+          import pygraphviz as pgv
+          A = pgv.AGraph(directed=True, strict=True, rankdir="LR")
+          A.add_node(1, color="red")
+          A.add_node(5, color="blue")
+          A.add_edge(1, 2, color="green")
+          A.add_edge(2, 3)
+          A.add_edge(1, 3)
+          A.add_edge(3, 4)
+          A.add_edge(3, 5)
+          A.add_edge(3, 6)
+          A.add_edge(4, 6)
+          A.graph_attr["epsilon"] = "0.001"
+          print(A.string())
+          A.layout("dot")
+          out = os.environ["OUT"]
+          A.draw(out)
+          print("wrote", out, os.path.getsize(out), "bytes")
+          PY
+
+      # Sample image(s) rendered by the built wheel, one per OS, for download +
+      # visual inspection of each platform's native renderer output.
       - uses: actions/upload-artifact@v7
         if: always()
         with:
