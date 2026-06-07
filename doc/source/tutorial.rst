@@ -2,7 +2,7 @@ Tutorial
 ========
 
 The API is very similar to that of NetworkX.  Much of the
-NetworkX tutorial at https://networkx.org/documentation/latest/tutorial.html
+`NetworkX tutorial <https://networkx.org/documentation/latest/tutorial.html>`_
 is applicable to PyGraphviz.
 
 Start-up
