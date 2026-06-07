@@ -94,6 +94,7 @@ if __name__ == "__main__":
                 "gvplugin_dot_layout",
                 "gvplugin_neato_layout",
                 "gvplugin_gd",
+                "gvplugin_pango",
             ],
             define_macros=define_macros,
             swig_opts=swig_options,
