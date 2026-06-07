@@ -6,6 +6,7 @@ build/*
 doc/source/pygraphviz-documentation.zip
 doc/source/pygraphviz.pdf
 doc/source/auto_examples/*
+doc/source/sg_execution_times.rst
 doc/gh-pages
 doc/build
 
