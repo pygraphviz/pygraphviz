@@ -90,25 +90,14 @@ if __name__ == "__main__":
         "gvplugin_neato_layout",
     ]
 
+    # Raster renderer per platform (see graphviz.i for the rationale).
     if MACOS:
-        # macOS uses the native Quartz (CoreText/CoreGraphics) renderer for
-        # anti-aliased raster output (png/pdf/jpg/gif/...). It supersedes gd,
-        # which is therefore not built on macOS (--with-libgd=no), letting the
-        # wheel build drop libpng/freetype/libgd entirely. The plugin's
-        # library struct is registered as a builtin in graphviz.i;
-        # ApplicationServices supplies the CoreGraphics/CoreText symbols.
+        # Native Quartz renderer; needs the ApplicationServices framework.
         libraries.append("gvplugin_quartz")
         extra_kwargs.setdefault("extra_link_args", [])
         extra_kwargs["extra_link_args"] += ["-framework", "ApplicationServices"]
     else:
-        # Windows + Linux: pango/cairo for anti-aliased, correctly-centered text
-        # in png/svg/pdf/ps, kept alongside gd because cairo/pango have no
-        # gif/jpg device (gd also supplies the legacy gd/gd2/wbmp formats). cairo
-        # is graphviz's default png renderer on Windows too, and unlike GDI+ it
-        # centers text correctly. Both plugin structs are registered as builtins
-        # in graphviz.i; pango pulls in cairo/pango/fontconfig/freetype, which
-        # auditwheel (Linux) / delvewheel (Windows) bundle. The official Windows
-        # graphviz installer ships gvplugin_gd.lib and gvplugin_pango.lib.
+        # Windows + Linux: pango/cairo (centered text) plus gd for gif/jpg.
         libraries.append("gvplugin_gd")
         libraries.append("gvplugin_pango")
 

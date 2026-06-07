@@ -103,8 +103,6 @@ jobs:
           # deployment target. ApplicationServices is a system framework (always
           # present, never bundled), so Quartz adds no bundled runtime deps.
           # System libs (zlib, expat) come from the SDK and are not bundled.
-          #
-          # BEFORE_ALL runs once per job (per arch).
           CIBW_BEFORE_ALL_MACOS: |
             set -eux
 
@@ -240,27 +238,22 @@ jobs:
           name: wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
-      # Render a sample image FROM THE BUILT WHEEL (installed on the host runner,
-      # so it exercises the wheel's bundled libs + builtins -- the same code path
-      # users get) and upload it for visual inspection. Done as a host step
-      # rather than in CIBW_TEST_COMMAND because the Linux test runs in a
-      # container whose filesystem (incl. any rendered file) is not copied back.
+      # Render a sample image from the built wheel and upload it for visual
+      # inspection -- a smoke test that the wheel renders correctly, not just
+      # that it imports. Done as a host step (not CIBW_TEST_COMMAND) because the
+      # Linux test runs in a container whose filesystem is not copied back.
       - name: Render sample image from the built wheel
         shell: bash
         run: |
           python -m pip install --force-reinstall --no-index --find-links wheelhouse pygraphviz
           mkdir -p rendered
-          # Force the wheel to use ONLY its bundled builtin plugins -- the real
-          # end-user scenario. The render runs on the build runner, which still
-          # has a system graphviz (C:\graphviz / /opt/graphviz) that graphviz
-          # would otherwise demand-load, masking what the wheel actually ships.
-          # GVBINDIR alone does NOT disable this on Windows, so remove it.
+          # Remove the runner's system graphviz so the wheel can only use its OWN
+          # bundled builtin plugins; otherwise graphviz demand-loads the system
+          # install and masks what the wheel actually ships.
           if [ "$RUNNER_OS" = "Windows" ]; then rm -rf "/c/graphviz" || true; fi
           if [ "$RUNNER_OS" = "macOS" ]; then sudo rm -rf /opt/graphviz || true; fi
-          export GVBINDIR="$PWD/__force_builtin_plugins__"
-          # Run from inside rendered/ so sys.path[0] is not the repo root (whose
-          # ./pygraphviz source dir would shadow the installed wheel and lack the
-          # compiled _graphviz extension).
+          # Run from inside rendered/ so the ./pygraphviz source dir does not
+          # shadow the installed wheel (which has the compiled _graphviz ext).
           cd rendered
           OUT="foo-${{ matrix.os }}.png" python - <<'PY'
           import os
@@ -281,15 +274,11 @@ jobs:
           print("wrote", os.environ["OUT"], os.path.getsize(os.environ["OUT"]), "bytes")
           PY
 
-      # Sample image(s) rendered by the built wheel, one per OS, for download +
-      # visual inspection of each platform's native renderer output.
       - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: rendered-${{ matrix.os }}
-          path: |
-            ./rendered/*.png
-            ./rendered/*.txt
+          path: ./rendered/*.png
           if-no-files-found: warn
 
   build_sdist:

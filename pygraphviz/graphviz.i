@@ -359,13 +359,10 @@ int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, unsigned 
 /* Free memory allocated and pointed to by *result in gvRenderData */
 extern void gvFreeRenderData (char* data);
 
-/* --- Wheel-compatible context with builtin plugins --- */
-/* When graphviz is built with ENABLE_LTDL=OFF (as in wheel builds),    */
-/* gvContext() cannot discover plugins dynamically. This function        */
-/* explicitly registers the core plugins via gvAddLibrary(), ensuring    */
-/* they work regardless of ltdl/config6 availability.                   */
-/* On system installs with ltdl enabled, the gvAddLibrary() calls are   */
-/* harmless re-registrations.                                           */
+/* --- Wheel-compatible context with builtin plugins ---                */
+/* Wheels build graphviz with demand-loading (ltdl/config6) disabled,    */
+/* so plugins must be registered as builtins -- see                      */
+/* gvContextWithBuiltins() below.                                        */
 %{
 #include "graphviz/gvplugin.h"
 
@@ -380,18 +377,12 @@ extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
 extern gvplugin_library_t gvplugin_core_LTX_library;
 #endif
 
-/* Raster output plugin, chosen per platform:                                */
-/*   macOS         -> Quartz (CoreText/CoreGraphics): native, anti-aliased    */
-/*                   png/pdf/jpg/gif/tiff/... supersedes gd; gd is not built   */
-/*                   on macOS (--with-libgd=no). Needs ApplicationServices.    */
-/*   Windows/Linux -> pango/cairo for anti-aliased, correctly-centered text    */
-/*                   in png/svg/pdf/ps, PLUS gd (cairo/pango have no gif/jpg    */
-/*                   device; gd also supplies the legacy gd/gd2/wbmp formats).  */
-/*                   cairo is graphviz's DEFAULT png renderer on Windows too,   */
-/*                   and unlike GDI+ it centers text correctly. pango uses      */
-/*                   fontconfig at runtime: Linux uses the host's /etc/fonts;   */
-/*                   on Windows fontconfig discovers the system font dir on its */
-/*                   own (no fonts.conf needed).                                */
+/* Raster output plugin, per platform:                                       */
+/*   macOS         -> Quartz (native CoreText/CoreGraphics); supersedes gd,    */
+/*                    which isn't built there (--with-libgd=no).               */
+/*   Windows/Linux -> pango/cairo (graphviz's default png renderer; centers    */
+/*                    text correctly) PLUS gd for the gif/jpg that cairo/pango  */
+/*                    can't emit. pango finds system fonts via fontconfig.      */
 #ifdef __APPLE__
 extern gvplugin_library_t gvplugin_quartz_LTX_library;
 #elif defined(_WIN32)
@@ -404,21 +395,17 @@ extern gvplugin_library_t gvplugin_pango_LTX_library;
 %}
 
 %inline %{
-/* Create a context from a fixed list of builtin plugins, exactly the way
-   graphviz's own `dot` does for ENABLE_LTDL=off builds (see dot_builtins.cpp).
-   gvContextPlugins() both registers the listed plugin libraries AND binds the
-   default engine for each API -- the latter is what gvContext()+gvAddLibrary()
-   miss: without it gvtextlayout() finds no engine and the cairo/pango renderer
-   dereferences an unset span->layout ("PANGO_IS_LAYOUT" warnings, missing text).
-   It is the only PUBLIC (exported) API for this; the internal gvconfig() it
-   calls is not exported from the Windows gvc.dll. demand_loading=0 keeps it to
-   these builtins, ignoring any graphviz that happens to be installed. */
+/* Build the context from a fixed builtin-plugin list, like graphviz's own `dot`
+   for ENABLE_LTDL=off builds (dot_builtins.cpp). gvContextPlugins() registers
+   the plugins AND binds the default engine per API; gvContext()+gvAddLibrary()
+   skip the latter, leaving pango's textlayout unbound so text vanishes with
+   "PANGO_IS_LAYOUT" warnings. It is the only exported API for this -- the
+   gvconfig() it calls internally is not exported from the Windows gvc.dll. */
 GVC_t *gvContextWithBuiltins(void) {
-    /* The symlist must outlive the returned context (gvContextPlugins stores the
-       pointer, it does not copy), so it is static. The addresses are assigned at
-       runtime rather than in the static initializer because MSVC rejects the
-       address of a __declspec(dllimport) symbol as a non-constant initializer
-       (C2099); this mirrors how graphviz's own gvpack builds its symlist. */
+    /* static: gvContextPlugins keeps this pointer (no copy), so it must outlive
+       the context. Addresses are set at runtime because MSVC rejects the address
+       of a __declspec(dllimport) symbol in a static initializer (C2099) -- same
+       approach as graphviz's gvpack. */
     static lt_symlist_t builtins[] = {
         { "gvplugin_core_LTX_library", 0 },
         { "gvplugin_dot_layout_LTX_library", 0 },
