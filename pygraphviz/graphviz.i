@@ -397,40 +397,36 @@ extern gvplugin_library_t gvplugin_quartz_LTX_library;
 #elif defined(_WIN32)
 extern __declspec(dllimport) gvplugin_library_t gvplugin_gd_LTX_library;
 extern __declspec(dllimport) gvplugin_library_t gvplugin_pango_LTX_library;
-extern __declspec(dllimport) void gvconfig(GVC_t *gvc, int rescan);
 #else
 extern gvplugin_library_t gvplugin_gd_LTX_library;
 extern gvplugin_library_t gvplugin_pango_LTX_library;
-/* Internal graphviz call (exported from libgvc) that binds the default engine
-   for each API from the registered plugin libraries. The demand-loading path
-   runs this; the pure-builtins path below must call it explicitly for pango.
-   Declared in this (non-%inline) block so SWIG does not wrap it, and with int
-   instead of bool to avoid a <stdbool.h> dependency in the generated wrapper
-   (graphviz <= 2.x headers, used by the source-build test CI, don't pull it in;
-   the arg is ABI-compatible -- old graphviz typed it `boolean` = int). */
-extern void gvconfig(GVC_t *gvc, int rescan);
 #endif
 %}
 
 %inline %{
+/* Create a context from a fixed list of builtin plugins, exactly the way
+   graphviz's own `dot` does for ENABLE_LTDL=off builds (see dot_builtins.cpp).
+   gvContextPlugins() both registers the listed plugin libraries AND binds the
+   default engine for each API -- the latter is what gvContext()+gvAddLibrary()
+   miss: without it gvtextlayout() finds no engine and the cairo/pango renderer
+   dereferences an unset span->layout ("PANGO_IS_LAYOUT" warnings, missing text).
+   It is the only PUBLIC (exported) API for this; the internal gvconfig() it
+   calls is not exported from the Windows gvc.dll. demand_loading=0 keeps it to
+   these builtins, ignoring any graphviz that happens to be installed. */
 GVC_t *gvContextWithBuiltins(void) {
-    GVC_t *gvc = gvContext();
-    gvAddLibrary(gvc, &gvplugin_core_LTX_library);
-    gvAddLibrary(gvc, &gvplugin_dot_layout_LTX_library);
-    gvAddLibrary(gvc, &gvplugin_neato_layout_LTX_library);
+    static lt_symlist_t builtins[] = {
+        { "gvplugin_core_LTX_library", &gvplugin_core_LTX_library },
+        { "gvplugin_dot_layout_LTX_library", &gvplugin_dot_layout_LTX_library },
+        { "gvplugin_neato_layout_LTX_library", &gvplugin_neato_layout_LTX_library },
 #if defined(__APPLE__)
-    gvAddLibrary(gvc, &gvplugin_quartz_LTX_library);
+        { "gvplugin_quartz_LTX_library", &gvplugin_quartz_LTX_library },
 #else
-    /* Windows + Linux: gd (gif/jpg/legacy) + pango/cairo (centered text). */
-    gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
-    gvAddLibrary(gvc, &gvplugin_pango_LTX_library);
-    /* Bind the default engines (notably pango's textlayout) for the builtins-
-       only wheel. Without this, gvtextlayout() finds no engine and the cairo
-       renderer dereferences an unset span->layout -> "PANGO_IS_LAYOUT" warnings
-       and missing text labels. The quartz builtin self-binds its textlayout,
-       so this is only needed on the gd+pango (Windows/Linux) path. */
-    gvconfig(gvc, 0);
+        /* Windows + Linux: gd (gif/jpg/legacy) + pango/cairo (centered text). */
+        { "gvplugin_gd_LTX_library", &gvplugin_gd_LTX_library },
+        { "gvplugin_pango_LTX_library", &gvplugin_pango_LTX_library },
 #endif
-    return gvc;
+        { 0, 0 }
+    };
+    return gvContextPlugins(builtins, 0);
 }
 %}
