@@ -15,15 +15,15 @@ if __name__ == "__main__":
         os.environ["PATH"] += ";C:\\graphviz\\bin"
     # Extract graphviz major version from command line
     # NOTE: A GRAPHVIZ_MAJOR_VERSION macro was added in Graphviz v14.0, but is
-    # not availble prior - so parsing the CLI version output is the only
+    # not available prior - so parsing the CLI version output is the only
     # reliable way to get portable version info across all versions.
     # If, in the future, it is possible/reasonable to set Graphviz 14 as a
     # minimum supported version, then this should be replaced with the macro
     # See gh-573 for further discussion
     try:  # Better exception message if graphviz not installed
         version_str = subprocess.check_output(["dot", "-V"], stderr=subprocess.STDOUT)
-    except FileNotFoundError:
-        raise FileNotFoundError(
+    except FileNotFoundError as e:
+        raise FileNotFoundError from e(
             "\n\nCould not find `dot` executable!\n"
             "Graphviz must be installed to build pygraphviz from source.\n\n"
         )
