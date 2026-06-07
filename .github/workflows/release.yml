@@ -58,20 +58,20 @@ jobs:
           tar -xzf "$env:TEMP\gv.tar.gz" -C "$env:TEMP"
           $src = "$env:TEMP\graphviz-$ver"
 
-          # GDI+ text vertical-centering fix. Stock gdiplus draws node labels
-          # ~one font ascent too low (measured +14px for 14pt with the bundled
-          # builtin, after removing the runner's system graphviz). The renderer
-          # draws text top-anchored at -p.y yet still adds span->yoffset_layout
-          # (the ascent); unlike the pango renderer (draws at +p.y via cairo,
-          # which needs that term) the GDI+ -p.y path must not -- drop it. Then
-          # give yoffset_centerline the small below-midline nudge the other
-          # engines use. Literal .Replace avoids regex escaping.
+          # GDI+ text vertical-centering DIAGNOSTIC SWEEP. Stock gdiplus draws
+          # node labels ~14px too low and our fixed-constant guesses had no
+          # visible effect, so instrument the plugin: make yoffset_centerline a
+          # runtime knob (PYGV_YOFF * font->size) and reduce the renderer to that
+          # single y lever (drop the +yoffset_layout term). The render step then
+          # sweeps PYGV_YOFF over a range in ONE run; we measure offset-vs-knob,
+          # fit the line, and bake the exact centering constant next.
+          # Literal .Replace avoids regex escaping.
           $r = "$src\plugin\gdiplus\gvrender_gdiplus.cpp"
           $t = "$src\plugin\gdiplus\gvtextlayout_gdiplus.cpp"
           (Get-Content $r -Raw).Replace('p.y += span->yoffset_centerline + span->yoffset_layout;', 'p.y += span->yoffset_centerline;') | Set-Content $r -NoNewline
-          (Get-Content $t -Raw).Replace('span->yoffset_centerline = 0;', 'span->yoffset_centerline = 0.05 * span->font->size;') | Set-Content $t -NoNewline
+          (Get-Content $t -Raw).Replace('span->yoffset_centerline = 0;', 'span->yoffset_centerline = (getenv("PYGV_YOFF") ? atof(getenv("PYGV_YOFF")) : 0.0) * span->font->size;') | Set-Content $t -NoNewline
           if (Select-String -Path $r -Pattern ([regex]::Escape('yoffset_centerline + span->yoffset_layout')) -Quiet) { throw "gdiplus render patch did not apply" }
-          if (-not (Select-String -Path $t -Pattern ([regex]::Escape('span->yoffset_centerline = 0.05 * span->font->size;')) -Quiet)) { throw "gdiplus textlayout patch did not apply" }
+          if (-not (Select-String -Path $t -Pattern ([regex]::Escape('getenv("PYGV_YOFF")')) -Quiet)) { throw "gdiplus sweep instrumentation did not apply" }
 
           # The plugin's only config.h dependency is the GVDLL macro, which we
           # pass via /DGVDLL; an empty config.h satisfies the #include.
@@ -310,7 +310,7 @@ jobs:
           # ./pygraphviz source dir would shadow the installed wheel and lack the
           # compiled _graphviz extension).
           cd rendered
-          OUT="foo-${{ matrix.os }}.png" python - <<'PY'
+          cat > _render.py <<'PY'
           import os
           import pygraphviz as pgv
           A = pgv.AGraph(directed=True, strict=True, rankdir="LR")
@@ -324,12 +324,19 @@ jobs:
           A.add_edge(3, 6)
           A.add_edge(4, 6)
           A.graph_attr["epsilon"] = "0.001"
-          print(A.string())
           A.layout("dot")
-          out = os.environ["OUT"]
-          A.draw(out)
-          print("wrote", out, os.path.getsize(out), "bytes")
+          A.draw(os.environ["OUT"])
+          print("wrote", os.environ["OUT"], os.path.getsize(os.environ["OUT"]), "bytes")
           PY
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            # Sweep the gdiplus yoffset_centerline knob (PYGV_YOFF * font size) so
+            # one run yields the offset-vs-knob curve to solve for centered text.
+            for v in -1.0 -0.75 -0.5 -0.25 0.0 0.25 0.5 0.75 1.0; do
+              PYGV_YOFF="$v" OUT="foo-win-yoff_${v}.png" python _render.py
+            done
+          else
+            OUT="foo-${{ matrix.os }}.png" python _render.py
+          fi
 
       # Sample image(s) rendered by the built wheel, one per OS, for download +
       # visual inspection of each platform's native renderer output.
