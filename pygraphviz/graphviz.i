@@ -387,14 +387,18 @@ extern gvplugin_library_t gvplugin_core_LTX_library;
 /*   Windows -> GDI+: native png/jpg/gif/bmp/tiff/emf, the Windows analog of  */
 /*             Quartz. Shipped in the official graphviz installer as          */
 /*             gvplugin_gdiplus.dll (+ import lib); no fontconfig needed.     */
-/*   others  -> gd: provides gif/jpg output (cairo/pango have no such device) */
-/*             plus the legacy gd/gd2/wbmp formats.                           */
+/*   Linux   -> pango/cairo for anti-aliased png/svg/pdf/ps text, PLUS gd:    */
+/*             cairo/pango have no gif/jpg device, so gd is kept for those     */
+/*             (and the legacy gd/gd2/wbmp formats). pango uses the host's     */
+/*             system fontconfig (/etc/fonts) + installed fonts at runtime.    */
+/*   (other  -> gd alone, e.g. unknown platforms.)                            */
 #ifdef __APPLE__
 extern gvplugin_library_t gvplugin_quartz_LTX_library;
 #elif defined(_WIN32)
 extern __declspec(dllimport) gvplugin_library_t gvplugin_gdiplus_LTX_library;
 #else
 extern gvplugin_library_t gvplugin_gd_LTX_library;
+extern gvplugin_library_t gvplugin_pango_LTX_library;
 #endif
 %}
 
@@ -410,6 +414,7 @@ GVC_t *gvContextWithBuiltins(void) {
     gvAddLibrary(gvc, &gvplugin_gdiplus_LTX_library);
 #else
     gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
+    gvAddLibrary(gvc, &gvplugin_pango_LTX_library);
 #endif
     return gvc;
 }

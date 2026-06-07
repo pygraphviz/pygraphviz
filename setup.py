@@ -108,9 +108,13 @@ if __name__ == "__main__":
         # The plugin's library struct is registered as a builtin in graphviz.i.
         libraries.append("gvplugin_gdiplus")
     else:
-        # Linux: gd provides gif/jpg output (cairo/pango lack those devices)
-        # and the legacy gd/gd2/wbmp formats.
+        # Linux: pango/cairo for anti-aliased text in png/svg/pdf/ps, kept
+        # alongside gd because cairo/pango have no gif/jpg device (gd also
+        # supplies the legacy gd/gd2/wbmp formats). Both plugin structs are
+        # registered as builtins in graphviz.i; pango pulls in cairo/pango/
+        # fontconfig/freetype at link time, which auditwheel bundles.
         libraries.append("gvplugin_gd")
+        libraries.append("gvplugin_pango")
 
     extension = [
         Extension(
