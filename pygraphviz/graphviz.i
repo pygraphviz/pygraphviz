@@ -414,19 +414,33 @@ extern gvplugin_library_t gvplugin_pango_LTX_library;
    calls is not exported from the Windows gvc.dll. demand_loading=0 keeps it to
    these builtins, ignoring any graphviz that happens to be installed. */
 GVC_t *gvContextWithBuiltins(void) {
+    /* The symlist must outlive the returned context (gvContextPlugins stores the
+       pointer, it does not copy), so it is static. The addresses are assigned at
+       runtime rather than in the static initializer because MSVC rejects the
+       address of a __declspec(dllimport) symbol as a non-constant initializer
+       (C2099); this mirrors how graphviz's own gvpack builds its symlist. */
     static lt_symlist_t builtins[] = {
-        { "gvplugin_core_LTX_library", &gvplugin_core_LTX_library },
-        { "gvplugin_dot_layout_LTX_library", &gvplugin_dot_layout_LTX_library },
-        { "gvplugin_neato_layout_LTX_library", &gvplugin_neato_layout_LTX_library },
+        { "gvplugin_core_LTX_library", 0 },
+        { "gvplugin_dot_layout_LTX_library", 0 },
+        { "gvplugin_neato_layout_LTX_library", 0 },
 #if defined(__APPLE__)
-        { "gvplugin_quartz_LTX_library", &gvplugin_quartz_LTX_library },
+        { "gvplugin_quartz_LTX_library", 0 },
 #else
         /* Windows + Linux: gd (gif/jpg/legacy) + pango/cairo (centered text). */
-        { "gvplugin_gd_LTX_library", &gvplugin_gd_LTX_library },
-        { "gvplugin_pango_LTX_library", &gvplugin_pango_LTX_library },
+        { "gvplugin_gd_LTX_library", 0 },
+        { "gvplugin_pango_LTX_library", 0 },
 #endif
         { 0, 0 }
     };
+    builtins[0].address = &gvplugin_core_LTX_library;
+    builtins[1].address = &gvplugin_dot_layout_LTX_library;
+    builtins[2].address = &gvplugin_neato_layout_LTX_library;
+#if defined(__APPLE__)
+    builtins[3].address = &gvplugin_quartz_LTX_library;
+#else
+    builtins[3].address = &gvplugin_gd_LTX_library;
+    builtins[4].address = &gvplugin_pango_LTX_library;
+#endif
     return gvContextPlugins(builtins, 0);
 }
 %}
