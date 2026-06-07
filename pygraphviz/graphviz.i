@@ -403,6 +403,11 @@ extern gvplugin_library_t gvplugin_pango_LTX_library;
 %}
 
 %inline %{
+/* Internal graphviz call (exported from libgvc) that binds the default engine
+   for each API from the registered plugin libraries. The demand-loading path
+   runs this; the pure-builtins path below must call it explicitly for pango. */
+extern void gvconfig(GVC_t *gvc, bool rescan);
+
 GVC_t *gvContextWithBuiltins(void) {
     GVC_t *gvc = gvContext();
     gvAddLibrary(gvc, &gvplugin_core_LTX_library);
@@ -415,6 +420,12 @@ GVC_t *gvContextWithBuiltins(void) {
 #else
     gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
     gvAddLibrary(gvc, &gvplugin_pango_LTX_library);
+    /* Bind the default engines (notably pango's textlayout) for the builtins-
+       only wheel. Without this, gvtextlayout() finds no engine and the cairo
+       renderer dereferences an unset span->layout -> "PANGO_IS_LAYOUT" warnings
+       and missing text labels. The quartz/gdiplus builtins self-bind their
+       textlayout, so this is only needed on the gd+pango (Linux) path. */
+    gvconfig(gvc, false);
 #endif
     return gvc;
 }
