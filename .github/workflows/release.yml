@@ -60,11 +60,12 @@ jobs:
 
           # Upstream GDI+ bug: plugin/gdiplus/gvtextlayout_gdiplus.cpp sets
           # span->yoffset_centerline = 0, so node labels render vertically
-          # off-center. Quartz uses 0.2*font->size for the same offset; apply it
-          # here so Windows text is centered like macOS/Linux.
+          # off-center (too low). The GDI+ renderer positions text with
+          # `p.y += yoffset_centerline + yoffset_layout`, identical to the pango
+          # renderer, so use pango's value (0.05 * font->size) for a match.
           $f = "$src\plugin\gdiplus\gvtextlayout_gdiplus.cpp"
-          (Get-Content $f -Raw) -replace 'span->yoffset_centerline = 0;', 'span->yoffset_centerline = 0.2 * span->font->size;' | Set-Content $f -NoNewline
-          if (-not (Select-String -Path $f -Pattern ([regex]::Escape('span->yoffset_centerline = 0.2 * span->font->size;')) -Quiet)) {
+          (Get-Content $f -Raw) -replace 'span->yoffset_centerline = 0;', 'span->yoffset_centerline = 0.05 * span->font->size;' | Set-Content $f -NoNewline
+          if (-not (Select-String -Path $f -Pattern ([regex]::Escape('span->yoffset_centerline = 0.05 * span->font->size;')) -Quiet)) {
             throw "gdiplus centering patch did not apply"
           }
 
@@ -81,7 +82,7 @@ jobs:
              plugin\gdiplus\gvtextlayout_gdiplus.cpp `
              /Fe:gvplugin_gdiplus.dll `
              /link C:\graphviz\lib\gvc.lib C:\graphviz\lib\cgraph.lib C:\graphviz\lib\cdt.lib `
-                   gdi32.lib ole32.lib uuid.lib gdiplus.lib
+                   gdi32.lib user32.lib ole32.lib uuid.lib gdiplus.lib
           if ($LASTEXITCODE -ne 0) { throw "cl build of gvplugin_gdiplus failed" }
 
           Copy-Item -Force gvplugin_gdiplus.dll C:\graphviz\bin\gvplugin_gdiplus.dll
