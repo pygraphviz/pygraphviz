@@ -58,21 +58,13 @@ jobs:
           tar -xzf "$env:TEMP\gv.tar.gz" -C "$env:TEMP"
           $src = "$env:TEMP\graphviz-$ver"
 
-          # Upstream GDI+ text vertical-centering bug. Two parts:
-          #  1) gvrender_gdiplus.cpp draws text top-anchored at -p.y but still
-          #     adds span->yoffset_layout (the font ascent), pushing every label
-          #     down by ~one ascent (measured ~14px for 14pt). Unlike the pango
-          #     renderer (which draws at +p.y via cairo), the GDI+ -p.y draw does
-          #     not need that baseline term -- drop it.
-          #  2) gvtextlayout_gdiplus.cpp leaves yoffset_centerline at 0; give it
-          #     the small below-midline correction the other engines use.
-          # Use literal .Replace (not -replace) to avoid regex escaping.
-          $r = "$src\plugin\gdiplus\gvrender_gdiplus.cpp"
-          $t = "$src\plugin\gdiplus\gvtextlayout_gdiplus.cpp"
-          (Get-Content $r -Raw).Replace('p.y += span->yoffset_centerline + span->yoffset_layout;', 'p.y += span->yoffset_centerline;') | Set-Content $r -NoNewline
-          (Get-Content $t -Raw).Replace('span->yoffset_centerline = 0;', 'span->yoffset_centerline = 0.05 * span->font->size;') | Set-Content $t -NoNewline
-          if (Select-String -Path $r -Pattern ([regex]::Escape('yoffset_centerline + span->yoffset_layout')) -Quiet) { throw "gdiplus render patch did not apply" }
-          if (-not (Select-String -Path $t -Pattern ([regex]::Escape('span->yoffset_centerline = 0.05 * span->font->size;')) -Quiet)) { throw "gdiplus textlayout patch did not apply" }
+          # NOTE: GDI+ text vertical-centering patch is intentionally NOT applied
+          # in this run. Earlier render tests were measuring the runner's
+          # *official* graphviz (demand-loaded from C:\graphviz), not the wheel's
+          # bundled gdiplus builtin -- the render step now sets GVBINDIR to force
+          # the builtins path, so this run measures STOCK gdiplus as a clean
+          # baseline. The centering fix (and its exact constant) will be applied
+          # once that baseline is known.
 
           # The plugin's only config.h dependency is the GVDLL macro, which we
           # pass via /DGVDLL; an empty config.h satisfies the #include.
@@ -302,6 +294,12 @@ jobs:
           # ./pygraphviz source dir would shadow the installed wheel and lack the
           # compiled _graphviz extension).
           cd rendered
+          # Force graphviz to use the wheel's BUILTIN plugins, not whatever
+          # graphviz happens to be installed on the runner (e.g. C:\graphviz on
+          # Windows, /opt/graphviz on macOS). Pointing GVBINDIR at a nonexistent
+          # dir disables ltdl demand-loading, so this renders exactly what an end
+          # user (who has no system graphviz) gets from the bundled plugins.
+          export GVBINDIR="$PWD/__force_builtin_plugins__"
           OUT="foo-${{ matrix.os }}.png" python - <<'PY'
           import os
           import pygraphviz as pgv
