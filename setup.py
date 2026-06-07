@@ -100,19 +100,15 @@ if __name__ == "__main__":
         libraries.append("gvplugin_quartz")
         extra_kwargs.setdefault("extra_link_args", [])
         extra_kwargs["extra_link_args"] += ["-framework", "ApplicationServices"]
-    elif WINDOWS:
-        # Windows uses the native GDI+ renderer (png/jpg/gif/bmp/tiff/emf), the
-        # Windows analog of Quartz, and needs no fontconfig. The wheel build
-        # rebuilds gvplugin_gdiplus.dll from source with the upstream text
-        # vertical-centering bug fixed (yoffset_centerline); see release.yml.
-        # The (patched) installer ships gvplugin_gdiplus.lib to link against.
-        libraries.append("gvplugin_gdiplus")
     else:
-        # Linux: pango/cairo for anti-aliased text in png/svg/pdf/ps, kept
-        # alongside gd because cairo/pango have no gif/jpg device (gd also
-        # supplies the legacy gd/gd2/wbmp formats). Both plugin structs are
-        # registered as builtins in graphviz.i; pango pulls in cairo/pango/
-        # fontconfig/freetype at link time, which auditwheel bundles.
+        # Windows + Linux: pango/cairo for anti-aliased, correctly-centered text
+        # in png/svg/pdf/ps, kept alongside gd because cairo/pango have no
+        # gif/jpg device (gd also supplies the legacy gd/gd2/wbmp formats). cairo
+        # is graphviz's default png renderer on Windows too, and unlike GDI+ it
+        # centers text correctly. Both plugin structs are registered as builtins
+        # in graphviz.i; pango pulls in cairo/pango/fontconfig/freetype, which
+        # auditwheel (Linux) / delvewheel (Windows) bundle. The official Windows
+        # graphviz installer ships gvplugin_gd.lib and gvplugin_pango.lib.
         libraries.append("gvplugin_gd")
         libraries.append("gvplugin_pango")
 

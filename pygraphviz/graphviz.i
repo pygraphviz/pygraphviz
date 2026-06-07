@@ -381,22 +381,23 @@ extern gvplugin_library_t gvplugin_core_LTX_library;
 #endif
 
 /* Raster output plugin, chosen per platform:                                */
-/*   macOS   -> Quartz (CoreText/CoreGraphics): native, anti-aliased          */
-/*             png/pdf/jpg/gif/tiff/... supersedes gd; gd is not built on      */
-/*             macOS (--with-libgd=no). Needs ApplicationServices.             */
-/*   Windows -> GDI+: native png/jpg/gif/bmp/tiff/emf, the Windows analog of   */
-/*             Quartz (no fontconfig). Stock graphviz 12.2.1 GDI+ leaves text  */
-/*             vertically off-center (yoffset_centerline=0); the wheel build   */
-/*             rebuilds gvplugin_gdiplus.dll from source with that one-line    */
-/*             bug fixed (see CIBW_BEFORE_ALL_WINDOWS in release.yml).         */
-/*   Linux   -> pango/cairo for anti-aliased png/svg/pdf/ps text, PLUS gd:     */
-/*             cairo/pango have no gif/jpg device, so gd is kept for those      */
-/*             (and the legacy gd/gd2/wbmp formats). pango uses the host's      */
-/*             system fontconfig (/etc/fonts) + installed fonts at runtime.     */
+/*   macOS         -> Quartz (CoreText/CoreGraphics): native, anti-aliased    */
+/*                   png/pdf/jpg/gif/tiff/... supersedes gd; gd is not built   */
+/*                   on macOS (--with-libgd=no). Needs ApplicationServices.    */
+/*   Windows/Linux -> pango/cairo for anti-aliased, correctly-centered text    */
+/*                   in png/svg/pdf/ps, PLUS gd (cairo/pango have no gif/jpg    */
+/*                   device; gd also supplies the legacy gd/gd2/wbmp formats).  */
+/*                   cairo is graphviz's DEFAULT png renderer on Windows too,   */
+/*                   and unlike GDI+ it centers text correctly. pango uses      */
+/*                   fontconfig at runtime: Linux uses the host's /etc/fonts;   */
+/*                   on Windows fontconfig discovers the system font dir on its */
+/*                   own (no fonts.conf needed).                                */
 #ifdef __APPLE__
 extern gvplugin_library_t gvplugin_quartz_LTX_library;
 #elif defined(_WIN32)
-extern __declspec(dllimport) gvplugin_library_t gvplugin_gdiplus_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_gd_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_pango_LTX_library;
+extern __declspec(dllimport) void gvconfig(GVC_t *gvc, int rescan);
 #else
 extern gvplugin_library_t gvplugin_gd_LTX_library;
 extern gvplugin_library_t gvplugin_pango_LTX_library;
@@ -419,16 +420,15 @@ GVC_t *gvContextWithBuiltins(void) {
     gvAddLibrary(gvc, &gvplugin_neato_layout_LTX_library);
 #if defined(__APPLE__)
     gvAddLibrary(gvc, &gvplugin_quartz_LTX_library);
-#elif defined(_WIN32)
-    gvAddLibrary(gvc, &gvplugin_gdiplus_LTX_library);
 #else
+    /* Windows + Linux: gd (gif/jpg/legacy) + pango/cairo (centered text). */
     gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
     gvAddLibrary(gvc, &gvplugin_pango_LTX_library);
     /* Bind the default engines (notably pango's textlayout) for the builtins-
        only wheel. Without this, gvtextlayout() finds no engine and the cairo
        renderer dereferences an unset span->layout -> "PANGO_IS_LAYOUT" warnings
-       and missing text labels. The quartz/gdiplus builtins self-bind their
-       textlayout, so this is only needed on the gd+pango (Linux) path. */
+       and missing text labels. The quartz builtin self-binds its textlayout,
+       so this is only needed on the gd+pango (Windows/Linux) path. */
     gvconfig(gvc, 0);
 #endif
     return gvc;

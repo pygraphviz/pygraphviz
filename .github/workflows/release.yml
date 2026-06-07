@@ -34,56 +34,19 @@ jobs:
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel
 
-      # --- Windows: install graphviz + rebuild gvplugin_gdiplus with the text
-      #     vertical-centering fix. Done here (not in CIBW_BEFORE_ALL_WINDOWS)
-      #     because rebuilding the plugin needs the MSVC toolchain on PATH. ---
-      - name: Set up MSVC (Windows)
-        if: runner.os == 'Windows'
-        uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Set up Graphviz on Windows (install + patch gdiplus text centering)
+      # Windows: install the official graphviz to C:\graphviz. The wheel links +
+      # bundles its gd and pango/cairo plugins (cairo is the default png renderer
+      # on Windows and centers text correctly, unlike GDI+). delvewheel bundles
+      # the cairo/pango/glib/fontconfig DLLs from C:\graphviz\bin.
+      - name: Set up Graphviz on Windows
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           $ErrorActionPreference = "Stop"
           $ver  = "${{ env.GRAPHVIZ_VERSION }}"
-          $base = "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/$ver"
-
-          Write-Host "Installing official graphviz $ver to C:\graphviz"
-          curl.exe -L --retry 3 -o "$env:TEMP\graphviz.exe" "$base/windows_10_cmake_Release_graphviz-install-$ver-win64.exe"
+          $url  = "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/$ver/windows_10_cmake_Release_graphviz-install-$ver-win64.exe"
+          curl.exe -L --retry 3 -o "$env:TEMP\graphviz.exe" "$url"
           Start-Process -Wait -FilePath "$env:TEMP\graphviz.exe" -ArgumentList "/S","/D=C:\graphviz"
-
-          Write-Host "Fetching graphviz source to rebuild the gdiplus plugin"
-          curl.exe -L --retry 3 -o "$env:TEMP\gv.tar.gz" "$base/graphviz-$ver.tar.gz"
-          tar -xzf "$env:TEMP\gv.tar.gz" -C "$env:TEMP"
-          $src = "$env:TEMP\graphviz-$ver"
-
-          # Build STOCK gdiplus (no source patch). This run is a DIAGNOSTIC: the
-          # render step uses the official dot.exe -v to determine which
-          # render/device/textlayout "png" actually resolves to on Windows, and
-          # compares png:gdiplus vs png:cairo, before we attempt any fix.
-
-          # The plugin's only config.h dependency is the GVDLL macro, which we
-          # pass via /DGVDLL; an empty config.h satisfies the #include.
-          New-Item -ItemType File -Force -Path "$src\config.h" | Out-Null
-
-          Push-Location $src
-          Write-Host "Compiling patched gvplugin_gdiplus.dll against the installed import libs"
-          cl /nologo /LD /EHsc /O2 /DNDEBUG /DGVDLL `
-             /I. /Ilib /Ilib\common /Ilib\pathplan /Ilib\gvc /Ilib\cgraph /Ilib\cdt /Iplugin\gdiplus `
-             plugin\gdiplus\gvdevice_gdiplus.cpp plugin\gdiplus\gvloadimage_gdiplus.cpp `
-             plugin\gdiplus\gvplugin_gdiplus.cpp plugin\gdiplus\gvrender_gdiplus.cpp `
-             plugin\gdiplus\gvtextlayout_gdiplus.cpp `
-             /Fe:gvplugin_gdiplus.dll `
-             /link C:\graphviz\lib\gvc.lib C:\graphviz\lib\cgraph.lib C:\graphviz\lib\cdt.lib `
-                   gdi32.lib user32.lib ole32.lib uuid.lib gdiplus.lib
-          if ($LASTEXITCODE -ne 0) { throw "cl build of gvplugin_gdiplus failed" }
-
-          Copy-Item -Force gvplugin_gdiplus.dll C:\graphviz\bin\gvplugin_gdiplus.dll
-          Copy-Item -Force gvplugin_gdiplus.lib C:\graphviz\lib\gvplugin_gdiplus.lib
-          Pop-Location
-          Write-Host "Patched plugin installed:"
-          Get-Item C:\graphviz\bin\gvplugin_gdiplus.dll | Format-List Name,Length,LastWriteTime
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
@@ -204,9 +167,9 @@ jobs:
             # Confirm the built plugin set: libgvplugin_quartz present, no gd.
             ls -la "$PREFIX/lib/graphviz/" || true
 
-          # Windows graphviz is installed + its gdiplus plugin patched in
-          # dedicated steps before this one (see "Set up Graphviz on Windows"),
-          # because the patched-plugin rebuild needs the MSVC toolchain.
+          # Windows graphviz is installed by the "Set up Graphviz on Windows"
+          # step before this one; the wheel links + bundles its gd + pango/cairo
+          # plugins (no from-source build needed).
 
           # --- Environment for pip build step ---
           CIBW_ENVIRONMENT_LINUX: >
@@ -287,21 +250,11 @@ jobs:
         run: |
           python -m pip install --force-reinstall --no-index --find-links wheelhouse pygraphviz
           mkdir -p rendered
-          # --- Windows DIAGNOSTIC: use the official dot.exe (still installed at
-          # C:\graphviz) with -v to see which render/device/textlayout "png"
-          # resolves to, and render png:gdiplus vs png:cairo explicitly so we can
-          # measure which (if any) is off-center. Done BEFORE removing graphviz. ---
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            printf 'digraph{rankdir=LR;1[color=red];5[color=blue];1->2[color=green];2->3;1->3;3->4;3->5;3->6;4->6}\n' > rendered/g.dot
-            DOT="/c/graphviz/bin/dot.exe"
-            "$DOT" -V 2> rendered/diag_version.txt || true
-            "$DOT" -Tpng           -v rendered/g.dot -o rendered/diag_default.png  2> rendered/diag_default_v.txt  || true
-            "$DOT" -Tpng:gdiplus   -v rendered/g.dot -o rendered/diag_gdiplus.png  2> rendered/diag_gdiplus_v.txt  || true
-            "$DOT" -Tpng:cairo     -v rendered/g.dot -o rendered/diag_cairo.png    2> rendered/diag_cairo_v.txt    || true
-            echo "=== default png plugin selection ==="; grep -iE "Using (render|device)|textlayout" rendered/diag_default_v.txt || true
-          fi
           # Force the wheel to use ONLY its bundled builtin plugins -- the real
-          # end-user scenario (remove the system graphviz it would demand-load).
+          # end-user scenario. The render runs on the build runner, which still
+          # has a system graphviz (C:\graphviz / /opt/graphviz) that graphviz
+          # would otherwise demand-load, masking what the wheel actually ships.
+          # GVBINDIR alone does NOT disable this on Windows, so remove it.
           if [ "$RUNNER_OS" = "Windows" ]; then rm -rf "/c/graphviz" || true; fi
           if [ "$RUNNER_OS" = "macOS" ]; then sudo rm -rf /opt/graphviz || true; fi
           export GVBINDIR="$PWD/__force_builtin_plugins__"
