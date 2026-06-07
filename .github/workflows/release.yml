@@ -55,6 +55,7 @@ jobs:
             cd /tmp/graphviz-${{ env.GRAPHVIZ_VERSION }} &&
             ./configure
             --prefix=/opt/graphviz
+            --with-pangocairo
             --disable-swig
             --disable-tcl
             --disable-sharp
