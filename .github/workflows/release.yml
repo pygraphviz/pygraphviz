@@ -140,9 +140,6 @@ jobs:
               --disable-java --disable-lua --disable-perl --disable-php \
               --disable-python --disable-python3 --disable-r --disable-ruby \
               --disable-man-pdfs --with-expat --with-zlib
-            # Static pathplan link fix for the macOS plugin build, mirroring the
-            # long-standing gd fix; harmless if Quartz pulls no pathplan symbols.
-            echo 'libgvplugin_quartz_la_LIBADD += ../../lib/pathplan/libpathplan_C.la' >> plugin/quartz/Makefile
             make -j"$JOBS"
             make install
             # Confirm the built plugin set: libgvplugin_quartz present, no gd.
