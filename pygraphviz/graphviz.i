@@ -381,16 +381,18 @@ extern gvplugin_library_t gvplugin_core_LTX_library;
 #endif
 
 /* Raster output plugin, chosen per platform:                                */
-/*   macOS  -> Quartz (CoreText/CoreGraphics): native, anti-aliased          */
-/*            png/pdf/jpg/gif/tiff/... It supersedes gd, so gd is not built  */
-/*            on macOS (--with-libgd=no) and libpng/freetype/libgd are        */
-/*            dropped from the wheel build. Needs ApplicationServices.        */
-/*   others -> gd: provides gif/jpg output (cairo/pango have no such device)  */
-/*            plus the legacy gd/gd2/wbmp formats.                            */
+/*   macOS   -> Quartz (CoreText/CoreGraphics): native, anti-aliased         */
+/*             png/pdf/jpg/gif/tiff/... supersedes gd; gd is not built on     */
+/*             macOS (--with-libgd=no). Needs ApplicationServices.            */
+/*   Windows -> GDI+: native png/jpg/gif/bmp/tiff/emf, the Windows analog of  */
+/*             Quartz. Shipped in the official graphviz installer as          */
+/*             gvplugin_gdiplus.dll (+ import lib); no fontconfig needed.     */
+/*   others  -> gd: provides gif/jpg output (cairo/pango have no such device) */
+/*             plus the legacy gd/gd2/wbmp formats.                           */
 #ifdef __APPLE__
 extern gvplugin_library_t gvplugin_quartz_LTX_library;
 #elif defined(_WIN32)
-extern __declspec(dllimport) gvplugin_library_t gvplugin_gd_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_gdiplus_LTX_library;
 #else
 extern gvplugin_library_t gvplugin_gd_LTX_library;
 #endif
@@ -402,8 +404,10 @@ GVC_t *gvContextWithBuiltins(void) {
     gvAddLibrary(gvc, &gvplugin_core_LTX_library);
     gvAddLibrary(gvc, &gvplugin_dot_layout_LTX_library);
     gvAddLibrary(gvc, &gvplugin_neato_layout_LTX_library);
-#ifdef __APPLE__
+#if defined(__APPLE__)
     gvAddLibrary(gvc, &gvplugin_quartz_LTX_library);
+#elif defined(_WIN32)
+    gvAddLibrary(gvc, &gvplugin_gdiplus_LTX_library);
 #else
     gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
 #endif

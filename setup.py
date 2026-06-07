@@ -100,9 +100,16 @@ if __name__ == "__main__":
         libraries.append("gvplugin_quartz")
         extra_kwargs.setdefault("extra_link_args", [])
         extra_kwargs["extra_link_args"] += ["-framework", "ApplicationServices"]
+    elif WINDOWS:
+        # Windows uses the native GDI+ renderer (png/jpg/gif/bmp/tiff/emf),
+        # the Windows analog of Quartz on macOS, in place of gd. The official
+        # graphviz installer ships gvplugin_gdiplus.dll and its import lib
+        # gvplugin_gdiplus.lib; GDI+ uses Windows system fonts (no fontconfig).
+        # The plugin's library struct is registered as a builtin in graphviz.i.
+        libraries.append("gvplugin_gdiplus")
     else:
-        # Linux/Windows: gd provides gif/jpg output (cairo/pango lack those
-        # devices) and the legacy gd/gd2/wbmp formats.
+        # Linux: gd provides gif/jpg output (cairo/pango lack those devices)
+        # and the legacy gd/gd2/wbmp formats.
         libraries.append("gvplugin_gd")
 
     extension = [
