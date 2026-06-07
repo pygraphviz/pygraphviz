@@ -8,7 +8,6 @@ Reference
    :maxdepth: 2
 
    agraph
-   faq
    related
    history
    credits
