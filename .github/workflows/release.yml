@@ -140,6 +140,13 @@ jobs:
               --disable-java --disable-lua --disable-perl --disable-php \
               --disable-python --disable-python3 --disable-r --disable-ruby \
               --disable-man-pdfs --with-expat --with-zlib
+            # graphviz 12.2.1's plugin/quartz/Makefile.am sets
+            # libgvplugin_quartz_la_LIBADD = $(QUARTZ_LIBS) only, leaving gvc/
+            # cgraph symbols (gvwrite, agnameof, gvusershape_*) undefined in the
+            # plugin dylib. Older linkers allowed that in a -module bundle; the
+            # Xcode 16 ld does not, so the link fails. The core plugin links
+            # these libs explicitly -- give quartz the same so it links cleanly.
+            echo 'libgvplugin_quartz_la_LIBADD += $(top_builddir)/lib/gvc/libgvc.la $(top_builddir)/lib/cgraph/libcgraph.la $(top_builddir)/lib/cdt/libcdt.la' >> plugin/quartz/Makefile
             make -j"$JOBS"
             make install
             # Confirm the built plugin set: libgvplugin_quartz present, no gd.
