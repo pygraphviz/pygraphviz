@@ -289,17 +289,20 @@ jobs:
         shell: bash
         run: |
           python -m pip install --force-reinstall --no-index --find-links wheelhouse pygraphviz
+          # Force the wheel to use ONLY its bundled builtin plugins -- the real
+          # end-user scenario. The render step runs on the build runner, which
+          # still has a system graphviz (C:\graphviz on Windows, /opt/graphviz on
+          # macOS) that graphviz would otherwise demand-load, masking what the
+          # wheel actually ships. GVBINDIR alone does NOT disable this on Windows,
+          # so physically remove the system graphviz before rendering.
+          if [ "$RUNNER_OS" = "Windows" ]; then rm -rf "/c/graphviz" || true; fi
+          if [ "$RUNNER_OS" = "macOS" ]; then sudo rm -rf /opt/graphviz || true; fi
+          export GVBINDIR="$PWD/__force_builtin_plugins__"
           mkdir -p rendered
           # Run from inside rendered/ so sys.path[0] is not the repo root (whose
           # ./pygraphviz source dir would shadow the installed wheel and lack the
           # compiled _graphviz extension).
           cd rendered
-          # Force graphviz to use the wheel's BUILTIN plugins, not whatever
-          # graphviz happens to be installed on the runner (e.g. C:\graphviz on
-          # Windows, /opt/graphviz on macOS). Pointing GVBINDIR at a nonexistent
-          # dir disables ltdl demand-loading, so this renders exactly what an end
-          # user (who has no system graphviz) gets from the bundled plugins.
-          export GVBINDIR="$PWD/__force_builtin_plugins__"
           OUT="foo-${{ matrix.os }}.png" python - <<'PY'
           import os
           import pygraphviz as pgv
