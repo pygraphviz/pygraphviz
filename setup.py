@@ -6,6 +6,7 @@ from setuptools import setup, Extension
 
 if __name__ == "__main__":
     WINDOWS = sys.platform == "win32"
+    MACOS = sys.platform == "darwin"
 
     # FIXME: This should be handled with the cibuildwheel windows path specification
     # but for whatever reason it's not being picked up correctly. This is a hack
@@ -74,27 +75,39 @@ if __name__ == "__main__":
         # runtime_library_dirs must not be defined with windows else setup will fail
         extra_kwargs = {} if WINDOWS else {"runtime_library_dirs": library_dirs}
 
+    # cdt does not link to cgraph, whereas cgraph links to cdt.
+    # thus, cdt needs to come first in the library list to be sure
+    # that both libraries are linked in the final built .so (if cgraph
+    # is first, the implicit inclusion of cdt can lead to an incomplete
+    # link list, having only cdt and preventing the module from being loaded with
+    # undefined symbol errors. seen under PyPy on Linux.)
+    libraries = [
+        "cdt",
+        "cgraph",
+        "gvc",
+        "gvplugin_core",
+        "gvplugin_dot_layout",
+        "gvplugin_neato_layout",
+    ]
+
+    # Raster renderer per platform (see graphviz.i for the rationale).
+    if MACOS:
+        # Native Quartz renderer; needs the ApplicationServices framework.
+        libraries.append("gvplugin_quartz")
+        extra_kwargs.setdefault("extra_link_args", [])
+        extra_kwargs["extra_link_args"] += ["-framework", "ApplicationServices"]
+    else:
+        # Windows + Linux: pango/cairo (centered text) plus gd for gif/jpg.
+        libraries.append("gvplugin_gd")
+        libraries.append("gvplugin_pango")
+
     extension = [
         Extension(
             name="pygraphviz._graphviz",
             sources=["pygraphviz/graphviz.i"],
             include_dirs=include_dirs,
             library_dirs=library_dirs,
-            # cdt does not link to cgraph, whereas cgraph links to cdt.
-            # thus, cdt needs to come first in the library list to be sure
-            # that both libraries are linked in the final built .so (if cgraph
-            # is first, the implicit inclusion of cdt can lead to an incomplete
-            # link list, having only cdt and preventing the module from being loaded with
-            # undefined symbol errors. seen under PyPy on Linux.)
-            libraries=[
-                "cdt",
-                "cgraph",
-                "gvc",
-                "gvplugin_core",
-                "gvplugin_dot_layout",
-                "gvplugin_neato_layout",
-                "gvplugin_gd",
-            ],
+            libraries=libraries,
             define_macros=define_macros,
             swig_opts=swig_options,
             **extra_kwargs,

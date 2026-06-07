@@ -359,36 +359,75 @@ int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, unsigned 
 /* Free memory allocated and pointed to by *result in gvRenderData */
 extern void gvFreeRenderData (char* data);
 
-/* --- Wheel-compatible context with builtin plugins --- */
-/* When graphviz is built with ENABLE_LTDL=OFF (as in wheel builds),    */
-/* gvContext() cannot discover plugins dynamically. This function        */
-/* explicitly registers the core plugins via gvAddLibrary(), ensuring    */
-/* they work regardless of ltdl/config6 availability.                   */
-/* On system installs with ltdl enabled, the gvAddLibrary() calls are   */
-/* harmless re-registrations.                                           */
+/* --- Wheel-compatible context with builtin plugins ---                */
+/* Wheels build graphviz with demand-loading (ltdl/config6) disabled,    */
+/* so plugins must be registered as builtins -- see                      */
+/* gvContextWithBuiltins() below.                                        */
 %{
 #include "graphviz/gvplugin.h"
 
+/* Layout engines + core text-format output: builtin on every platform. */
 #ifdef _WIN32
 extern __declspec(dllimport) gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern __declspec(dllimport) gvplugin_library_t gvplugin_neato_layout_LTX_library;
 extern __declspec(dllimport) gvplugin_library_t gvplugin_core_LTX_library;
-extern __declspec(dllimport) gvplugin_library_t gvplugin_gd_LTX_library;
 #else
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
 extern gvplugin_library_t gvplugin_core_LTX_library;
+#endif
+
+/* Raster output plugin, per platform:                                       */
+/*   macOS         -> Quartz (native CoreText/CoreGraphics); supersedes gd,    */
+/*                    which isn't built there (--with-libgd=no).               */
+/*   Windows/Linux -> pango/cairo (graphviz's default png renderer; centers    */
+/*                    text correctly) PLUS gd for the gif/jpg that cairo/pango  */
+/*                    can't emit. pango finds system fonts via fontconfig.      */
+#ifdef __APPLE__
+extern gvplugin_library_t gvplugin_quartz_LTX_library;
+#elif defined(_WIN32)
+extern __declspec(dllimport) gvplugin_library_t gvplugin_gd_LTX_library;
+extern __declspec(dllimport) gvplugin_library_t gvplugin_pango_LTX_library;
+#else
 extern gvplugin_library_t gvplugin_gd_LTX_library;
+extern gvplugin_library_t gvplugin_pango_LTX_library;
 #endif
 %}
 
 %inline %{
+/* Build the context from a fixed builtin-plugin list, like graphviz's own `dot`
+   for ENABLE_LTDL=off builds (dot_builtins.cpp). gvContextPlugins() registers
+   the plugins AND binds the default engine per API; gvContext()+gvAddLibrary()
+   skip the latter, leaving pango's textlayout unbound so text vanishes with
+   "PANGO_IS_LAYOUT" warnings. It is the only exported API for this -- the
+   gvconfig() it calls internally is not exported from the Windows gvc.dll. */
 GVC_t *gvContextWithBuiltins(void) {
-    GVC_t *gvc = gvContext();
-    gvAddLibrary(gvc, &gvplugin_core_LTX_library);
-    gvAddLibrary(gvc, &gvplugin_dot_layout_LTX_library);
-    gvAddLibrary(gvc, &gvplugin_neato_layout_LTX_library);
-    gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
-    return gvc;
+    /* static: gvContextPlugins keeps this pointer (no copy), so it must outlive
+       the context. Addresses are set at runtime because MSVC rejects the address
+       of a __declspec(dllimport) symbol in a static initializer (C2099) -- same
+       approach as graphviz's gvpack. */
+    static lt_symlist_t builtins[] = {
+        { "gvplugin_core_LTX_library", 0 },
+        { "gvplugin_dot_layout_LTX_library", 0 },
+        { "gvplugin_neato_layout_LTX_library", 0 },
+#if defined(__APPLE__)
+        { "gvplugin_quartz_LTX_library", 0 },
+#else
+        /* Windows + Linux: gd (gif/jpg/legacy) + pango/cairo (centered text). */
+        { "gvplugin_gd_LTX_library", 0 },
+        { "gvplugin_pango_LTX_library", 0 },
+#endif
+        { 0, 0 }
+    };
+    builtins[0].address = &gvplugin_core_LTX_library;
+    builtins[1].address = &gvplugin_dot_layout_LTX_library;
+    builtins[2].address = &gvplugin_neato_layout_LTX_library;
+#if defined(__APPLE__)
+    builtins[3].address = &gvplugin_quartz_LTX_library;
+#else
+    builtins[3].address = &gvplugin_gd_LTX_library;
+    builtins[4].address = &gvplugin_pango_LTX_library;
+#endif
+    return gvContextPlugins(builtins, 0);
 }
 %}

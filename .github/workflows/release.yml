@@ -34,6 +34,20 @@ jobs:
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel
 
+      # Windows: install the official graphviz to C:\graphviz. The wheel links +
+      # bundles its gd and pango/cairo plugins (cairo is the default png renderer
+      # on Windows and centers text correctly, unlike GDI+). delvewheel bundles
+      # the cairo/pango/glib/fontconfig DLLs from C:\graphviz\bin.
+      - name: Set up Graphviz on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $ver  = "${{ env.GRAPHVIZ_VERSION }}"
+          $url  = "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/$ver/windows_10_cmake_Release_graphviz-install-$ver-win64.exe"
+          curl.exe -L --retry 3 -o "$env:TEMP\graphviz.exe" "$url"
+          Start-Process -Wait -FilePath "$env:TEMP\graphviz.exe" -ArgumentList "/S","/D=C:\graphviz"
+
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         env:
@@ -47,7 +61,7 @@ jobs:
           # --disable-swig --disable-tcl etc: skip language bindings we don't need
           # CFLAGS=-fPIC: needed for linking into a shared Python extension
           CIBW_BEFORE_ALL_LINUX: >
-            dnf install -y gcc gcc-c++ bison flex expat-devel zlib-devel autoconf automake libtool gd-devel &&
+            dnf install -y gcc gcc-c++ bison flex expat-devel zlib-devel autoconf automake libtool gd-devel cairo-devel pango-devel &&
             curl -L
             "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/graphviz-${{ env.GRAPHVIZ_VERSION }}.tar.gz"
             -o /tmp/graphviz.tar.gz &&
@@ -55,6 +69,7 @@ jobs:
             cd /tmp/graphviz-${{ env.GRAPHVIZ_VERSION }} &&
             ./configure
             --prefix=/opt/graphviz
+            --with-pangocairo
             --disable-swig
             --disable-tcl
             --disable-sharp
@@ -76,29 +91,18 @@ jobs:
             make install &&
             ldconfig
 
-          # macOS: build libgd and its image deps (libpng, freetype) AND
-          # graphviz from source into GRAPHVIZ_PREFIX, instead of
-          # `brew install gd`.
+          # macOS: build only libtool/libltdl + graphviz from source into
+          # GRAPHVIZ_PREFIX. The native Quartz renderer (gvplugin_quartz,
+          # CoreText/CoreGraphics) provides anti-aliased png/pdf/jpg/gif/tiff
+          # output, so libgd is NOT built (--with-libgd=no) and its image deps
+          # (libpng, freetype) are dropped -- a much smaller, faster build.
           #
-          # WHY: Homebrew bottles are compiled for the runner's current macOS
-          # (15), so delocate >= 0.11 refuses to bundle them into a wheel tagged
-          # for an older macOS (our 11.0 floor). Building the bundled
-          # libs from source makes them carry the wheel's deployment target.
-          # Build *tools* (pkg-config, cmake) are already on the macos-15 runner,
-          # so no `brew install` is needed; only the runtime libs are built. (In
-          # any case tools are not bundled into the wheel, only runtime libs are.)
-          #
-          # libpng/freetype/gd are not Homebrew-installed on the runner, so a
-          # prefix-first PKG_CONFIG_PATH is enough to find our builds. delocate
-          # (>= 0.11) is the backstop: it fails the wheel if any bundled dylib
-          # needs newer than 11.0. System libs (zlib, expat) come from the SDK
-          # and are not bundled, so they are fine.
-          #
-          # BEFORE_ALL runs once per job (per arch), so these builds happen once,
-          # not once per Python version. Dropped vs brew gd: jpeg, tiff, webp,
-          # avif, heif, xpm and fontconfig (macOS resolves fonts from the system
-          # font dirs). avif/heif are dropped deliberately to hold the 11.0 floor
-          # (see the libgd configure note below).
+          # WHY build from source at all: Homebrew bottles target the runner's
+          # current macOS (15), so delocate >= 0.11 refuses to bundle them into
+          # a wheel tagged for our 11.0 floor; source builds carry the wheel's
+          # deployment target. ApplicationServices is a system framework (always
+          # present, never bundled), so Quartz adds no bundled runtime deps.
+          # System libs (zlib, expat) come from the SDK and are not bundled.
           CIBW_BEFORE_ALL_MACOS: |
             set -eux
 
@@ -106,105 +110,64 @@ jobs:
             PREFIX=/opt/graphviz
             JOBS="$(sysctl -n hw.logicalcpu)"
 
-            LIBPNG_VERSION=1.6.58
-            FREETYPE_VERSION=2.13.3
-            LIBGD_VERSION=2.3.3
             LIBTOOL_VERSION=2.5.4
 
             # Own the prefix so every `make install` works without sudo.
             sudo mkdir -p "$PREFIX"
             sudo chown -R "$(id -u):$(id -g)" "$PREFIX"
 
-            # Find our freshly built libs first; pkg-config then supplies the
-            # actual -I/-L flags from each package's .pc file.
             export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
             export PATH="$PREFIX/bin:$PATH"
-
-            # The macOS SDK ships zlib (libz + zlib.h) but no zlib.pc, while
-            # libpng.pc declares "Requires.private: zlib". Without a zlib.pc,
-            # pkg-config can't resolve libpng, so libgd silently turns off PNG.
-            # Provide a zlib.pc pointing at the system zlib to close the chain.
-            mkdir -p "$PREFIX/lib/pkgconfig"
-            printf '%s\n' 'Name: zlib' 'Description: zlib (macOS system)' \
-              'Version: 1.2.12' 'Libs: -lz' 'Cflags:' \
-              > "$PREFIX/lib/pkgconfig/zlib.pc"
 
             dl() { curl -fSL --retry 3 --retry-delay 5 "$1" -o "$2"; }
             cd /tmp
 
-            # libpng (PNG; links system zlib from the SDK). GitHub archive -- the
-            # tag commits a generated ./configure, so no autogen is needed, and
-            # it is more reliable in CI than the SourceForge mirror redirect.
-            dl "https://github.com/pnggroup/libpng/archive/refs/tags/v${LIBPNG_VERSION}.tar.gz" libpng.tar.gz
-            tar xf libpng.tar.gz
-            ( cd "libpng-${LIBPNG_VERSION}" \
-              && ./configure --prefix="$PREFIX" --disable-static \
-              && make -j"$JOBS" && make install )
-
-            # freetype (TrueType text; no harfbuzz/brotli to avoid the cycle)
-            dl "https://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.xz" freetype.tar.xz
-            tar xf freetype.tar.xz
-            ( cd "freetype-${FREETYPE_VERSION}" \
-              && ./configure --prefix="$PREFIX" --disable-static --without-harfbuzz --without-brotli \
-              && make -j"$JOBS" && make install )
-
-            # libgd (PNG/GIF + freetype text). autotools build ships gdlib.pc
-            # that graphviz discovers via pkg-config. That PNG actually works is
-            # verified by the wheel test rendering a real .png (CIBW_TEST_COMMAND).
-            #
-            # --without-avif/--without-heif: libgd 2.3.2+ declares these as
-            # AC_ARG_WITH options defaulting to "auto", i.e. link them if found.
-            # pkg-config still scans its built-in dirs (Homebrew's /usr/local)
-            # even with PKG_CONFIG_PATH set, so on "auto" libgd links Homebrew's
-            # libavif -> libdav1d/libaom/libvmaf (and libheif -> libde265/x265).
-            # Those bottles target macOS 14.0, so delocate rejects them in an
-            # 11.0 wheel. Disabling both keeps every bundled dylib at the 11.0
-            # floor; we don't ship AVIF/HEIF output anyway.
-            dl "https://github.com/libgd/libgd/releases/download/gd-${LIBGD_VERSION}/libgd-${LIBGD_VERSION}.tar.xz" libgd.tar.xz
-            tar xf libgd.tar.xz
-            ( cd "libgd-${LIBGD_VERSION}" \
-              && ./configure --prefix="$PREFIX" --disable-static \
-                   --without-jpeg --without-fontconfig --without-tiff --without-webp --without-xpm \
-                   --without-avif --without-heif \
-              && make -j"$JOBS" && make install )
-
-            # libtool / libltdl (graphviz links libltdl for runtime plugin
-            # loading). Same Homebrew-bottle problem as libgd: the runner's
-            # libtool bottle (/usr/local/.../libltdl.7.dylib) targets the
-            # current macOS (15), so delocate rejects it in an 11.0 wheel.
-            # Build libltdl from source so the bundled copy carries the 11.0
-            # floor, and point graphviz's configure at it below.
+            # libtool / libltdl (graphviz links libltdl for plugin loading).
+            # The runner's Homebrew libtool bottle targets the current macOS
+            # (15), so delocate rejects it in an 11.0 wheel. Build from source
+            # so the bundled copy carries the 11.0 floor, and point graphviz's
+            # configure at it below.
             dl "https://ftpmirror.gnu.org/libtool/libtool-${LIBTOOL_VERSION}.tar.gz" libtool.tar.gz
             tar xzf libtool.tar.gz
             ( cd "libtool-${LIBTOOL_VERSION}" \
               && ./configure --prefix="$PREFIX" --disable-static \
               && make -j"$JOBS" && make install )
 
-            # graphviz (links the libgd and libltdl we just built). CPPFLAGS/
-            # LDFLAGS steer ltdl detection to $PREFIX so graphviz links our
-            # 11.0 libltdl instead of the Homebrew bottle on the runner.
+            # graphviz with the native Quartz renderer and no gd:
+            #   --with-quartz=yes  builds gvplugin_quartz (NOT default in the
+            #     autotools build); QUARTZ_LIBS points the link at the
+            #     ApplicationServices framework.
+            #   --with-libgd=no    skips the gd plugin AND stops configure from
+            #     auto-detecting a stray Homebrew libgd on the runner (which
+            #     would target macOS 15 and break the 11.0 floor).
+            # CPPFLAGS/LDFLAGS steer ltdl detection to our 11.0 libltdl in $PREFIX.
             dl "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/graphviz-${{ env.GRAPHVIZ_VERSION }}.tar.gz" graphviz.tar.gz
             tar xzf graphviz.tar.gz
             cd "graphviz-${{ env.GRAPHVIZ_VERSION }}"
             CPPFLAGS="-I$PREFIX/include" LDFLAGS="-L$PREFIX/lib" \
             ./configure \
               --prefix="$PREFIX" \
+              --with-quartz=yes QUARTZ_LIBS="-framework ApplicationServices" \
+              --with-libgd=no \
               --disable-swig --disable-tcl --disable-sharp --disable-go --disable-guile \
               --disable-java --disable-lua --disable-perl --disable-php \
               --disable-python --disable-python3 --disable-r --disable-ruby \
-              --disable-man-pdfs --with-expat --with-zlib \
-              --with-gdincludedir="$PREFIX/include" --with-gdlibdir="$PREFIX/lib"
-            # Same gd-plugin link fix as before (static pathplan on macOS).
-            echo 'libgvplugin_gd_la_LIBADD += ../../lib/pathplan/libpathplan_C.la' >> plugin/gd/Makefile
+              --disable-man-pdfs --with-expat --with-zlib
+            # graphviz 12.2.1's plugin/quartz/Makefile.am sets
+            # libgvplugin_quartz_la_LIBADD = $(QUARTZ_LIBS) only, leaving gvc/
+            # cgraph symbols (gvwrite, agnameof, gvusershape_*) undefined in the
+            # plugin dylib. Older linkers allowed that in a -module bundle; the
+            # Xcode 16 ld does not, so the link fails. The core plugin links
+            # these libs explicitly -- give quartz the same so it links cleanly.
+            echo 'libgvplugin_quartz_la_LIBADD += $(top_builddir)/lib/gvc/libgvc.la $(top_builddir)/lib/cgraph/libcgraph.la $(top_builddir)/lib/cdt/libcdt.la' >> plugin/quartz/Makefile
             make -j"$JOBS"
             make install
+            # Confirm the built plugin set: libgvplugin_quartz present, no gd.
+            ls -la "$PREFIX/lib/graphviz/" || true
 
-          # Windows: use the official graphviz installer to a simple path (no spaces).
-          # Update the package_files URL when changing GRAPHVIZ_VERSION.
-          CIBW_BEFORE_ALL_WINDOWS: >
-            curl -L -o C:\Temp\graphviz.exe
-            "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/windows_10_cmake_Release_graphviz-install-${{ env.GRAPHVIZ_VERSION }}-win64.exe" &&
-            C:\Temp\graphviz.exe /S /D=C:\graphviz
+          # Windows graphviz is installed by the "Set up Graphviz on Windows"
+          # step before this one; the wheel links + bundles its gd + pango/cairo
+          # plugins (no from-source build needed).
 
           # --- Environment for pip build step ---
           CIBW_ENVIRONMENT_LINUX: >
@@ -267,7 +230,7 @@ jobs:
           # --- Testing ---
           CIBW_TEST_REQUIRES: pytest
           CIBW_TEST_COMMAND: >
-            python -c "import pygraphviz as p, tempfile, os; print('pygraphviz', p.__version__); G = p.AGraph(); G.add_edge('a', 'b'); f = os.path.join(tempfile.mkdtemp(), 't.png'); G.draw(f, prog='dot'); assert os.path.getsize(f) > 0; print('PNG render OK:', f)" &&
+            python -c "import os, tempfile, pygraphviz as p; print('pygraphviz', p.__version__); G = p.AGraph(); G.add_edge('a', 'b'); f = os.path.join(tempfile.mkdtemp(), 't.png'); G.draw(f, prog='dot'); assert os.path.getsize(f) > 0; print('PNG render OK:', f)" &&
             pytest --pyargs pygraphviz
 
       - uses: actions/upload-artifact@v7
