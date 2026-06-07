@@ -37,6 +37,10 @@ sphinx_gallery_conf = {
     "min_reported_time": 60.0,
 }
 
+# Prevent numpydoc from trying to create toctree prematurely - suppresses a
+# bunch of missing stub file warnings
+numpydoc_class_members_toctree = False
+
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
