@@ -47,7 +47,7 @@ jobs:
           # --disable-swig --disable-tcl etc: skip language bindings we don't need
           # CFLAGS=-fPIC: needed for linking into a shared Python extension
           CIBW_BEFORE_ALL_LINUX: >
-            dnf install -y gcc gcc-c++ bison flex expat-devel zlib-devel autoconf automake libtool gd-devel pango-devel cairo-devel &&
+            dnf install -y gcc gcc-c++ bison flex expat-devel zlib-devel autoconf automake libtool gd-devel pango-devel cairo-devel harfbuzz-devel &&
             curl -L
             "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${{ env.GRAPHVIZ_VERSION }}/graphviz-${{ env.GRAPHVIZ_VERSION }}.tar.gz"
             -o /tmp/graphviz.tar.gz &&
