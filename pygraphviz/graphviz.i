@@ -369,15 +369,29 @@ extern void gvFreeRenderData (char* data);
 %{
 #include "graphviz/gvplugin.h"
 
+/* Layout engines + core text-format output: builtin on every platform. */
 #ifdef _WIN32
 extern __declspec(dllimport) gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern __declspec(dllimport) gvplugin_library_t gvplugin_neato_layout_LTX_library;
 extern __declspec(dllimport) gvplugin_library_t gvplugin_core_LTX_library;
-extern __declspec(dllimport) gvplugin_library_t gvplugin_gd_LTX_library;
 #else
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
 extern gvplugin_library_t gvplugin_core_LTX_library;
+#endif
+
+/* Raster output plugin, chosen per platform:                                */
+/*   macOS  -> Quartz (CoreText/CoreGraphics): native, anti-aliased          */
+/*            png/pdf/jpg/gif/tiff/... It supersedes gd, so gd is not built  */
+/*            on macOS (--with-libgd=no) and libpng/freetype/libgd are        */
+/*            dropped from the wheel build. Needs ApplicationServices.        */
+/*   others -> gd: provides gif/jpg output (cairo/pango have no such device)  */
+/*            plus the legacy gd/gd2/wbmp formats.                            */
+#ifdef __APPLE__
+extern gvplugin_library_t gvplugin_quartz_LTX_library;
+#elif defined(_WIN32)
+extern __declspec(dllimport) gvplugin_library_t gvplugin_gd_LTX_library;
+#else
 extern gvplugin_library_t gvplugin_gd_LTX_library;
 #endif
 %}
@@ -388,7 +402,11 @@ GVC_t *gvContextWithBuiltins(void) {
     gvAddLibrary(gvc, &gvplugin_core_LTX_library);
     gvAddLibrary(gvc, &gvplugin_dot_layout_LTX_library);
     gvAddLibrary(gvc, &gvplugin_neato_layout_LTX_library);
+#ifdef __APPLE__
+    gvAddLibrary(gvc, &gvplugin_quartz_LTX_library);
+#else
     gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
+#endif
     return gvc;
 }
 %}
