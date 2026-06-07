@@ -239,7 +239,11 @@ jobs:
         run: |
           python -m pip install --force-reinstall --no-index --find-links wheelhouse pygraphviz
           mkdir -p rendered
-          OUT="rendered/foo-${{ matrix.os }}.png" python - <<'PY'
+          # Run from inside rendered/ so sys.path[0] is not the repo root (whose
+          # ./pygraphviz source dir would shadow the installed wheel and lack the
+          # compiled _graphviz extension).
+          cd rendered
+          OUT="foo-${{ matrix.os }}.png" python - <<'PY'
           import os
           import pygraphviz as pgv
           A = pgv.AGraph(directed=True, strict=True, rankdir="LR")
