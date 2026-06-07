@@ -101,11 +101,11 @@ if __name__ == "__main__":
         extra_kwargs.setdefault("extra_link_args", [])
         extra_kwargs["extra_link_args"] += ["-framework", "ApplicationServices"]
     elif WINDOWS:
-        # Windows uses the native GDI+ renderer (png/jpg/gif/bmp/tiff/emf),
-        # the Windows analog of Quartz on macOS, in place of gd. The official
-        # graphviz installer ships gvplugin_gdiplus.dll and its import lib
-        # gvplugin_gdiplus.lib; GDI+ uses Windows system fonts (no fontconfig).
-        # The plugin's library struct is registered as a builtin in graphviz.i.
+        # Windows uses the native GDI+ renderer (png/jpg/gif/bmp/tiff/emf), the
+        # Windows analog of Quartz, and needs no fontconfig. The wheel build
+        # rebuilds gvplugin_gdiplus.dll from source with the upstream text
+        # vertical-centering bug fixed (yoffset_centerline); see release.yml.
+        # The (patched) installer ships gvplugin_gdiplus.lib to link against.
         libraries.append("gvplugin_gdiplus")
     else:
         # Linux: pango/cairo for anti-aliased text in png/svg/pdf/ps, kept

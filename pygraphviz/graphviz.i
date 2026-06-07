@@ -381,17 +381,18 @@ extern gvplugin_library_t gvplugin_core_LTX_library;
 #endif
 
 /* Raster output plugin, chosen per platform:                                */
-/*   macOS   -> Quartz (CoreText/CoreGraphics): native, anti-aliased         */
-/*             png/pdf/jpg/gif/tiff/... supersedes gd; gd is not built on     */
-/*             macOS (--with-libgd=no). Needs ApplicationServices.            */
-/*   Windows -> GDI+: native png/jpg/gif/bmp/tiff/emf, the Windows analog of  */
-/*             Quartz. Shipped in the official graphviz installer as          */
-/*             gvplugin_gdiplus.dll (+ import lib); no fontconfig needed.     */
-/*   Linux   -> pango/cairo for anti-aliased png/svg/pdf/ps text, PLUS gd:    */
-/*             cairo/pango have no gif/jpg device, so gd is kept for those     */
-/*             (and the legacy gd/gd2/wbmp formats). pango uses the host's     */
-/*             system fontconfig (/etc/fonts) + installed fonts at runtime.    */
-/*   (other  -> gd alone, e.g. unknown platforms.)                            */
+/*   macOS   -> Quartz (CoreText/CoreGraphics): native, anti-aliased          */
+/*             png/pdf/jpg/gif/tiff/... supersedes gd; gd is not built on      */
+/*             macOS (--with-libgd=no). Needs ApplicationServices.             */
+/*   Windows -> GDI+: native png/jpg/gif/bmp/tiff/emf, the Windows analog of   */
+/*             Quartz (no fontconfig). Stock graphviz 12.2.1 GDI+ leaves text  */
+/*             vertically off-center (yoffset_centerline=0); the wheel build   */
+/*             rebuilds gvplugin_gdiplus.dll from source with that one-line    */
+/*             bug fixed (see CIBW_BEFORE_ALL_WINDOWS in release.yml).         */
+/*   Linux   -> pango/cairo for anti-aliased png/svg/pdf/ps text, PLUS gd:     */
+/*             cairo/pango have no gif/jpg device, so gd is kept for those      */
+/*             (and the legacy gd/gd2/wbmp formats). pango uses the host's      */
+/*             system fontconfig (/etc/fonts) + installed fonts at runtime.     */
 #ifdef __APPLE__
 extern gvplugin_library_t gvplugin_quartz_LTX_library;
 #elif defined(_WIN32)
