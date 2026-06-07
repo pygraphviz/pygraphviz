@@ -1,8 +1,5 @@
 ..  -*- coding: utf-8 -*-
 
-News
-====
-
 pygraphviz-1.12
 ---------------
 
