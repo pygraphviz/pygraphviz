@@ -23,10 +23,10 @@ if __name__ == "__main__":
     try:  # Better exception message if graphviz not installed
         version_str = subprocess.check_output(["dot", "-V"], stderr=subprocess.STDOUT)
     except FileNotFoundError as e:
-        raise FileNotFoundError from e(
+        raise FileNotFoundError(
             "\n\nCould not find `dot` executable!\n"
             "Graphviz must be installed to build pygraphviz from source.\n\n"
-        )
+        ) from e
 
     vm = re.match(r"dot - graphviz version (\d+)", version_str.decode())
     graphviz_major_version = int(vm.string[: vm.end()].split(" ")[-1])
