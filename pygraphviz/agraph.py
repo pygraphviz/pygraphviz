@@ -1462,11 +1462,6 @@ class AGraph:
     def layout(self, prog="neato", args=""):
         """Assign positions to nodes in graph.
 
-        .. caution:: EXPERIMENTAL
-
-        This version of the layout command uses libgvc for layout instead
-        of command line GraphViz tools like in versions <1.6 and the default.
-
         Optional prog=['neato'|'dot'|'twopi'|'circo'|'fdp'|'nop']
         will use specified graphviz layout method.
 
@@ -1509,11 +1504,6 @@ class AGraph:
 
     def draw(self, path=None, format=None, prog=None, args=""):
         """Output graph to path in specified format.
-
-        .. caution:: EXPERIMENTAL
-
-        This version of the draw command uses libgvc for drawing instead
-        of command line GraphViz tools like in versions <1.6 and the default.
 
         An attempt will be made to guess the output format based on the file
         extension of `path`.  If that fails, then the `format` parameter will
