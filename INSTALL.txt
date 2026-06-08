@@ -2,14 +2,22 @@
 Install
 *******
 
-PyGraphviz requires:
+PyGraphviz provides `wheels`_ for most common platforms and can be installed
+with ``pip``::
 
-- Python (version 3.12, 3.13, or 3.14)
-- `Graphviz <https://www.graphviz.org/>`_ (version 2.46 or later)
-- C/C++ Compiler
+    pip install pygraphviz
+
+.. _wheels: https://pypi.org/project/pygraphviz/#files
 
 .. note::
-   These instructions assume you have Python and a C/C++ Compiler on your computer.
+
+   Prior to version 2.0, ``pygraphviz`` requires
+   `Graphviz <https://www.graphviz.org/>`_ (version 2.46 or later) to be installed
+   on the system.
+
+or other popular management systems such as conda::
+
+    conda install --channel conda-forge pygraphviz
 
 .. warning::
    Do not use the default channels to install pygraphviz with ``conda``. The
@@ -26,129 +34,34 @@ PyGraphviz requires:
 .. |conda-forge-macos-badge| image:: https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-macos/badge.svg
 .. |conda-forge-windows-badge| image:: https://github.com/pygraphviz/pygraphviz/workflows/conda-forge-windows/badge.svg
 
+Install from Source
+-------------------
 
-Linux
------
+Building PyGraphviz from source requires:
 
-We recommend installing Graphviz using your Linux system's package manager.
-Below are examples for some popular distributions.
+- Python (version 3.12, 3.13 or 3.14)
+- `Graphviz <https://www.graphviz.org/>`_ (version 2.46 or later)
+- C/C++ compiler
 
-Ubuntu and Debian
-~~~~~~~~~~~~~~~~~
+See the `Graphviz installation docs <https://graphviz.org/download/>`_ for
+information on how to install graphviz on your platform.
+You can verify that graphviz is installed correctly with::
 
-.. code-block:: console
+    dot -V
 
-    $ sudo apt-get install graphviz graphviz-dev
-    $ pip install pygraphviz
+Then, from the source directory::
 
-Fedora and Red Hat
-~~~~~~~~~~~~~~~~~~
+    pip install . --verbose
 
-You may need to replace ``dnf`` with ``yum`` in the example below.
+This will work out-of-the-box if the graphviz headers and libraries are on the
+default discovery paths for your system.
+If not, you will have to provide the header and library locations using the
+``--global-option`` flag, for example::
 
-.. code-block:: console
+    pip install --config-settings="--global-option=build_ext" \
+                --config-settings="--global-option=-I<graphviz_install>/include/" \
+                --config-settings="--global-option=-L<graphviz_include/lib" \
+                .
 
-    $ sudo dnf install graphviz graphviz-devel
-    $ pip install pygraphviz
-
-macOS
------
-
-We recommend installing Graphviz using the Homebrew package manager or MacPorts for macOS.
-
-Homebrew
-~~~~~~~~
-
-.. code-block:: console
-
-    $ brew install graphviz
-    $ pip install pygraphviz
-
-.. note::
-
-   Graphviz may be installed in a location that is not on the default search
-   path.
-   In this case, it may be necessary to manually specify the path to the
-   graphviz include and/or library directories, e.g. ::
-
-       pip install --config-settings="--global-option=build_ext" \
-                   --config-settings="--global-option=-I$(brew --prefix graphviz)/include/" \
-                   --config-settings="--global-option=-L$(brew --prefix graphviz)/lib/" \
-                   pygraphviz
-
-   See the Advanced section for details.
-
-MacPorts
-~~~~~~~~
-
-.. code-block:: console
-
-    $ port install graphviz
-    $ pip install pygraphviz
-    $ pip install --config-settings="--global-option=build_ext" \
-                  --config-settings="--global-option=-I/opt/local/include/" \
-                  --config-settings="--global-option=-L/opt/local/lib/" \
-                  pygraphviz
-
-Advanced
-========
-
-The two main difficulties are
-   1. installing Graphviz and
-   2. informing pip where Graphviz is installed.
-
-Providing path to Graphviz
---------------------------
-
-If you've installed Graphviz and ``pip`` is unable to find Graphviz, then you need to
-provide ``pip`` with the path(s) where it can find Graphviz.
-To do this, you first need to figure out where the binary files, includes files, and
-library files for Graphviz are located on your file system.
-
-Once you know where you've installed Graphviz, you will need to do something like
-the following.  There is an additional example using Chocolatey on Windows further
-down the page.
-
-
-.. _windows-install:
-
-Windows
--------
-
-Historically, installing Graphviz and PyGraphviz on Windows has been challenging.
-Fortunately, the Graphviz developers are working to fix this and
-their recent releases have much improved the situation.
-
-You may also need to install Visual C/C++, e.g. from here:
-https://visualstudio.microsoft.com/visual-cpp-build-tools/
-
-Assuming you have Python and Visual C/C++ installed,
-we believe the following should work on Windows 10 (64 bit) using PowerShell.
-
-Manual download
-~~~~~~~~~~~~~~~
-
-1. Download and install 12.2.1 for Windows 10 (64-bit):
-   `windows_10_cmake_Release_graphviz-install-12.2.1-win64.exe
-   <https://gitlab.com/graphviz/graphviz/-/package_files/164443457/download>`_.
-2. Install PyGraphviz via
-
-.. code-block:: console
-
-    PS C:\> python -m pip install --config-settings="--global-option=build_ext" `
-                  --config-settings="--global-option=-IC:\Program Files\Graphviz\include" `
-                  --config-settings="--global-option=-LC:\Program Files\Graphviz\lib" `
-                  pygraphviz
-
-Chocolatey
-~~~~~~~~~~
-
-.. code-block:: console
-
-    PS C:\> choco install graphviz
-    PS C:\> python -m pip install --config-settings="--global-option=build_ext" `
-                  --config-settings="--global-option=-IC:\Program Files\Graphviz\include" `
-                  --config-settings="--global-option=-LC:\Program Files\Graphviz\lib" `
-                  pygraphviz
-
-.. include:: reference/faq.rst
+Where ``<graphviz_install>`` is the location where graphviz was installed on
+your system.
