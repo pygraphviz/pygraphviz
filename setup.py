@@ -8,12 +8,6 @@ if __name__ == "__main__":
     WINDOWS = sys.platform == "win32"
     MACOS = sys.platform == "darwin"
 
-    # FIXME: This should be handled with the cibuildwheel windows path specification
-    # but for whatever reason it's not being picked up correctly. This is a hack
-    # to make this work with the specific installation locations used within the
-    # cibuildwheel environment.
-    if WINDOWS:
-        os.environ["PATH"] += ";C:\\graphviz\\bin"
     # Extract graphviz major version from command line
     # NOTE: A GRAPHVIZ_MAJOR_VERSION macro was added in Graphviz v14.0, but is
     # not available prior - so parsing the CLI version output is the only
