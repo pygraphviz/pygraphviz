@@ -1421,13 +1421,29 @@ class AGraph:
     def tred(self, args="", copy=False):
         """Transitive reduction of graph.  Modifies existing graph.
 
-        To create a new graph use
+        See the graphviz "tred" program for details of the algorithm.
+
+        Examples
+        --------
+        tred modifies the graph in-place by default:
 
         >>> import pygraphviz as pgv
         >>> A = pgv.AGraph(directed=True)
-        >>> B = A.tred(copy=True)  # doctest: +SKIP
+        >>> A.add_edges_from([(0, 1), (1, 2), (0, 2)])
+        >>> B = A.tred()
+        >>> A.edges()
+        [('0', '1'), ('1', '2')]
+        >>> A.edges() == B.edges()
+        True
 
-        See the graphviz "tred" program for details of the algorithm.
+        To create a new graph use ``copy=True``
+
+        >>> import pygraphviz as pgv
+        >>> A = pgv.AGraph(directed=True)
+        >>> A.add_edges_from([(0, 1), (1, 2), (0, 2)])
+        >>> B = A.tred(copy=True)
+        >>> B.edges()
+        [('0', '1'), ('1', '2')]
         """
         if not self.directed:
             raise TypeError("tred requires a directed graph")
