@@ -1,8 +1,46 @@
+import warnings
 import pytest
 import unittest
 import pygraphviz as pgv
 
 stringify = pgv.testing.stringify
+
+
+def test_tred():
+    A = pgv.AGraph(directed=True)
+    A.add_edges_from([(0, 1), (1, 2), (0, 2)])
+    # copy=False by default
+    B = A.tred()
+    assert A.edges() == B.edges() == [("0", "1"), ("1", "2")]
+
+
+def test_tred_copy():
+    A = pgv.AGraph(directed=True)
+    A.add_edges_from([(0, 1), (1, 2), (0, 2)])
+    # With copy=True, original graph should remain unchanged
+    B = A.tred(copy=True)
+    # NOTE: edges may be reordered, but should remain unaltered
+    assert set(A.edges()) == {("0", "1"), ("1", "2"), ("0", "2")}
+    assert B.edges() == [("0", "1"), ("1", "2")]
+
+
+def test_tred_undirected():
+    A = pgv.AGraph()
+    A.add_edges_from([(0, 1), (1, 2), (0, 2)])
+    with pytest.raises(TypeError, match="tred requires a directed graph"):
+        A.tred()
+
+
+def test_tred_cycle():
+    """RuntimeWarning raised when cycle detected."""
+    A = pgv.AGraph(directed=True)
+    A.add_edges_from([(0, 1), (1, 2), (2, 0)])  # Directed 3-cycle
+    with warnings.catch_warnings(record=True, category=RuntimeWarning) as rec:
+        A.tred()
+    # No transitive reduction possible on 3-cycle
+    assert A.edges() == [("0", "1"), ("1", "2"), ("2", "0")]
+    assert len(rec) == 1  # Expect 1 RuntimeWarning
+    assert "transitive reduction not unique" in str(rec[0].message)
 
 
 class TestGraph(unittest.TestCase):
