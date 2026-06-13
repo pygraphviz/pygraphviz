@@ -181,7 +181,7 @@ jobs:
             MACOSX_DEPLOYMENT_TARGET=11.0
             PATH="$PATH:/opt/graphviz/bin"
           CIBW_ENVIRONMENT_WINDOWS: >
-            GRAPHVIZ_PREFIX=C:\graphviz
+            GRAPHVIZ_PREFIX="C:\\graphviz"
             PATH="C:\\graphviz\\bin;$PATH"
 
           # --- Bundle CLI tools into the wheel ---
