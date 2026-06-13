@@ -209,14 +209,14 @@ jobs:
             {package}/pygraphviz/bin/
           CIBW_BEFORE_BUILD_WINDOWS: >
             mkdir {package}\\pygraphviz\\bin &
-            copy C:\graphviz\bin\gc.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\acyclic.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\gvpr.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\gvcolor.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\ccomps.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\sccmap.exe {package}\pygraphviz\bin\ &
+            copy C:\\graphviz\\bin\\gc.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\acyclic.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\gvpr.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\gvcolor.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\ccomps.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\sccmap.exe {package}\\pygraphviz\\bin\\ &
             copy C:\\graphviz\\bin\\tred.exe {package}\\pygraphviz\\bin\\ &
-            copy C:\graphviz\bin\unflatten.exe {package}\pygraphviz\bin\
+            copy C:\\graphviz\\bin\\unflatten.exe {package}\\pygraphviz\\bin\\
 
           # --- Wheel repair (bundle shared libs into wheel) ---
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
