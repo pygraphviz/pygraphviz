@@ -181,8 +181,8 @@ jobs:
             MACOSX_DEPLOYMENT_TARGET=11.0
             PATH="$PATH:/opt/graphviz/bin"
           CIBW_ENVIRONMENT_WINDOWS: >
-            GRAPHVIZ_PREFIX=C:\graphviz
-            PATH="C:\graphviz\bin;$PATH"
+            GRAPHVIZ_PREFIX="C:\\graphviz"
+            PATH="C:\\graphviz\\bin;$PATH"
 
           # --- Bundle CLI tools into the wheel ---
           CIBW_BEFORE_BUILD_LINUX: >
@@ -208,15 +208,15 @@ jobs:
             /opt/graphviz/bin/unflatten
             {package}/pygraphviz/bin/
           CIBW_BEFORE_BUILD_WINDOWS: >
-            mkdir {package}\pygraphviz\bin &
-            copy C:\graphviz\bin\gc.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\acyclic.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\gvpr.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\gvcolor.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\ccomps.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\sccmap.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\tred.exe {package}\pygraphviz\bin\ &
-            copy C:\graphviz\bin\unflatten.exe {package}\pygraphviz\bin\
+            mkdir {package}\\pygraphviz\\bin &
+            copy C:\\graphviz\\bin\\gc.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\acyclic.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\gvpr.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\gvcolor.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\ccomps.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\sccmap.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\tred.exe {package}\\pygraphviz\\bin\\ &
+            copy C:\\graphviz\\bin\\unflatten.exe {package}\\pygraphviz\\bin\\
 
           # --- Wheel repair (bundle shared libs into wheel) ---
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
@@ -225,7 +225,7 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
             pip install delvewheel &&
             delvewheel repair -w {dest_dir} {wheel}
-            --add-path C:\graphviz\bin
+            --add-path C:\\graphviz\\bin
 
           # --- Testing ---
           CIBW_TEST_REQUIRES: pytest
