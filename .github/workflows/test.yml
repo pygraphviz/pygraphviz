@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.14t"]
 
     steps:
       - name: Checkout pygraphviz
@@ -45,15 +45,20 @@ jobs:
           pip list
 
       - name: Test pygraphviz
+        if: ${{ matrix.python-version }} != '3.14t'
         run: |
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
+      - name: Test pygraphviz freethreaded
+        if: ${{ matrix.python-version }} == '3.14t'
+        run: |
+          PYTHON_GIL=0 pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
   brew:
     runs-on: macOS-latest
 
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.14t"]
 
     steps:
       - name: Checkout pygraphviz
@@ -78,15 +83,20 @@ jobs:
           pip list
 
       - name: Test pygraphviz
+        if: ${{ matrix.python-version }} != '3.14t'
         run: |
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
+      - name: Test pygraphviz freethreaded
+        if: ${{ matrix.python-version }} == '3.14t'
+        run: |
+          PYTHON_GIL=0 pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
   windows:
     runs-on: windows-latest
 
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.14t"]
 
     steps:
       - name: Checkout pygraphviz
@@ -118,8 +128,16 @@ jobs:
       - name: List
         run: Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\bin"
 
-      # Set PY_IGNORE_IMPORTMISMATCH b/c otherwise --doctest-modules is confused.
+      #      # Set PY_IGNORE_IMPORTMISMATCH b/c otherwise --doctest-modules is confused.
+      #      - name: Test pygraphviz
+      #        run: |
+      #          [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
+      #          pytest --doctest-modules --durations=10 --pyargs pygraphviz
       - name: Test pygraphviz
+        if: ${{ matrix.python-version }} != '3.14t'
         run: |
-          [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
+      - name: Test pygraphviz freethreaded
+        if: ${{ matrix.python-version }} == '3.14t'
+        run: |
+          PYTHON_GIL=0 pytest --doctest-modules --durations=10 --pyargs pygraphviz
