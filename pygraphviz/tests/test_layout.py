@@ -3,6 +3,17 @@ import pytest
 import pygraphviz as pgv
 
 
+def test_sequential_layout_filehandles_windows():
+    """See gh-483"""
+    # Check that a bunch of sequential layout calls doesn't bork windows
+    for _ in range(512):
+        A = pgv.AGraph()
+        A.layout()
+    # The existence of "node" in the graph is an indication that the layout
+    # was run successfully.
+    assert "node" in A.to_string()
+
+
 def test_layout():
     A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4])
