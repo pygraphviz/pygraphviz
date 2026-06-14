@@ -45,11 +45,11 @@ jobs:
           pip list
 
       - name: Test pygraphviz
-        if: ${{ matrix.python-version }} != '3.14t'
+        if: ${{ matrix.python-version != '3.14t' }}
         run: |
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
       - name: Test pygraphviz freethreaded
-        if: ${{ matrix.python-version }} == '3.14t'
+        if: ${{ matrix.python-version  == '3.14t' }}
         run: |
           PYTHON_GIL=0 pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
@@ -83,11 +83,11 @@ jobs:
           pip list
 
       - name: Test pygraphviz
-        if: ${{ matrix.python-version }} != '3.14t'
+        if: ${{ matrix.python-version != '3.14t' }}
         run: |
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
       - name: Test pygraphviz freethreaded
-        if: ${{ matrix.python-version }} == '3.14t'
+        if: ${{ matrix.python-version == '3.14t' }}
         run: |
           PYTHON_GIL=0 pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
@@ -134,10 +134,10 @@ jobs:
       #          [Environment]::SetEnvironmentVariable("PY_IGNORE_IMPORTMISMATCH", 1)
       #          pytest --doctest-modules --durations=10 --pyargs pygraphviz
       - name: Test pygraphviz
-        if: ${{ matrix.python-version }} != '3.14t'
+        if: ${{ matrix.python-version != '3.14t' }}
         run: |
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
       - name: Test pygraphviz freethreaded
-        if: ${{ matrix.python-version }} == '3.14t'
+        if: ${{ matrix.python-version == '3.14t' }}
         run: |
           PYTHON_GIL=0 pytest --doctest-modules --durations=10 --pyargs pygraphviz
