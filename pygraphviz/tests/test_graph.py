@@ -565,3 +565,19 @@ def test_repr_on_incomplete_initialization():
     in __repr__ when object initialization fails. See gh-519."""
     with pytest.raises(TypeError, match="Unrecognized input"):
         A = pgv.AGraph(object())
+
+
+@pytest.mark.parametrize(
+    "node",
+    (
+        "Node D_0__Bacteria D_1__Cyanobacteria D_2__Chloroplast D_3__Bryum argenteum var. argenteum D_4__Bryum argenteum var. argenteum D_5__Bryum argenteum var. argenteum D_6__Bryum argenteum var",  # Very long node name
+        "xxxxxx市中西医结合医疗健康集团xxxxx分院(xxx市xxxxxxxxxx镇卫生院、xxx市xxxxxxxxxxx镇社区卫生服务中心)(15094137051)",  # with unicode
+    ),
+)
+def test_long_node(node):
+    """Test agnode doesn't fail when graph contains very long nodes. See gh-123."""
+    A = pgv.AGraph(directed=True)
+    A.add_nodes_from(list(range(5)) + [node])
+    A.layout()  # Smoke test - should not raise
+    # Check each node was assigned a position
+    assert A.to_string().count("pos") == 6
