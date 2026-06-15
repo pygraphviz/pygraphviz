@@ -1,6 +1,21 @@
 import pygraphviz as pgv
 
 
+def test_multiple_reads_same_source_trailing_character(tmp_path):
+    """Ensure multiple reads from the same text file with an unexpected trailing
+    character don't cause agread fails. See gh-171."""
+    fpath = tmp_path / "hello.gv.txt"
+    # Original bug was in the read-from-file code path
+    with open(fpath, "w") as fh:
+        fh.write('digraph G {Hello->World}"')  # note the trailing "
+
+    # Smoke test: sequential reads from the same file via the AGraph constructor
+    # should not raise ValueError/DotError
+    A = pgv.AGraph(str(fpath))
+    B = pgv.AGraph(str(fpath))
+    assert A.to_string() == B.to_string()
+
+
 def test_readwrite(tmp_path):
     A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
