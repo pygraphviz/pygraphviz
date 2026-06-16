@@ -6,6 +6,14 @@ import pygraphviz as pgv
 stringify = pgv.testing.stringify
 
 
+def test_agraph_multiedges():
+    """See gh-162"""
+    G = pgv.AGraph(strict=False)
+    G.add_edge("a", "b", "first")
+    G.add_edge("a", "b", "second")
+    assert sorted(G.edges(keys=True)) == [("a", "b", "first"), ("a", "b", "second")]
+
+
 def test_tred():
     A = pgv.AGraph(directed=True)
     A.add_edges_from([(0, 1), (1, 2), (0, 2)])
