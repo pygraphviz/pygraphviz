@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  GRAPHVIZ_VERSION: "12.2.1"
+  GRAPHVIZ_VERSION: "14.1.5"
 
 jobs:
   build_wheels:
