@@ -1,3 +1,4 @@
+import pytest
 import pygraphviz as pgv
 
 graphviz_major_version = int(pgv.__graphviz_version__.split(".")[0])
