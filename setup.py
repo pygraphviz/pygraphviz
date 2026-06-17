@@ -26,7 +26,10 @@ if __name__ == "__main__":
     vm = re.match(r"dot - graphviz version \d+(\.\d+)+", version_str.decode())
     graphviz_version = vm.string[: vm.end()].split(" ")[-1]
     print(f"Detected Graphviz version {graphviz_version}")
+
     vmaj, vmin, vpatch = graphviz_version.split(".")
+    # NOTE: int() is not strictly necessary, but used as implicit validation of
+    # version string
     graphviz_major_version = int(vmaj)
     graphviz_minor_version = int(vmin)
     graphviz_patch_version = int(vpatch)
