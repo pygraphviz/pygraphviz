@@ -1,6 +1,9 @@
 import pygraphviz as pgv
 
+graphviz_major_version = int(pgv.__graphviz_version__.split(".")[0])
 
+
+@pytest.mark.skipif(graphviz_major_version < 13, reason="Graphviz version too old")
 def test_multiple_reads_same_source_trailing_character(tmp_path):
     """Ensure multiple reads from the same text file with an unexpected trailing
     character don't cause agread fails. See gh-171."""
