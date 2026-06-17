@@ -58,7 +58,9 @@ class _SwigNonDynamicMeta(type):
     __setattr__ = _swig_setattr_nondynamic_class_variable(type.__setattr__)
 
 
-GRAPHVIZ_VERSION = _graphviz.GRAPHVIZ_VERSION
+GRAPHVIZ_MAJOR_VERSION = _graphviz.GRAPHVIZ_MAJOR_VERSION
+GRAPHVIZ_MINOR_VERSION = _graphviz.GRAPHVIZ_MINOR_VERSION
+GRAPHVIZ_PATCH_VERSION = _graphviz.GRAPHVIZ_PATCH_VERSION
 
 def agopen(name, kind, disc):
     return _graphviz.agopen(name, kind, disc)

@@ -11,7 +11,9 @@
 #include <string.h>
 %}
 
-#define GRAPHVIZ_VERSION GRAPHVIZ_VERSION_MAJOR
+#define GRAPHVIZ_MAJOR_VERSION GRAPHVIZ_VERSION_MAJOR
+#define GRAPHVIZ_MINOR_VERSION GRAPHVIZ_VERSION_MINOR
+#define GRAPHVIZ_PATCH_VERSION GRAPHVIZ_VERSION_PATCH
 
 %typemap(in) FILE* input_file (int fd, PyObject *mode_obj, PyObject *mode_byte_obj, char *mode) {
     if ($input == Py_None) { $1 = NULL; }
