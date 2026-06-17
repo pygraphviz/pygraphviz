@@ -23,11 +23,22 @@ if __name__ == "__main__":
             "Graphviz must be installed to build pygraphviz from source.\n\n"
         ) from e
 
-    vm = re.match(r"dot - graphviz version (\d+)", version_str.decode())
-    graphviz_major_version = int(vm.string[: vm.end()].split(" ")[-1])
-    print(f"Detected Graphviz version {graphviz_major_version}")
+    vm = re.match(r"dot - graphviz version \d+(\.\d+)+", version_str.decode())
+    graphviz_version = vm.string[: vm.end()].split(" ")[-1]
+    print(f"Detected Graphviz version {graphviz_version}")
+
+    vmaj, vmin, vpatch = graphviz_version.split(".")
+    # NOTE: int() is not strictly necessary, but used as implicit validation of
+    # version string
+    graphviz_major_version = int(vmaj)
+    graphviz_minor_version = int(vmin)
+    graphviz_patch_version = int(vpatch)
     # Pass version info into swig build
-    swig_options = [f"-DGRAPHVIZ_VERSION_MAJOR={graphviz_major_version}"]
+    swig_options = [
+        f"-DGRAPHVIZ_VERSION_MAJOR={graphviz_major_version}",
+        f"-DGRAPHVIZ_VERSION_MINOR={graphviz_minor_version}",
+        f"-DGRAPHVIZ_VERSION_PATCH={graphviz_patch_version}",
+    ]
 
     define_macros = [("SWIG_PYTHON_STRICT_BYTE_CHAR", None)]
     if WINDOWS:
