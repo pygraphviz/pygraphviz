@@ -12,6 +12,13 @@ Import PyGraphviz with
 
 >>> import pygraphviz as pgv
 
+PyGraphviz wraps `graphviz <https://graphviz.org>`_ providing a Python interface
+to graphviz's functionality.
+Information about the version of graphviz that is wrapped by pygraphviz can be
+found with
+
+>>> pgv.__graphviz_version__
+
 Graphs
 ------
 
