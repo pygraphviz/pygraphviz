@@ -26,7 +26,10 @@ if sys.version_info >= (3, 8, 0) and sys.platform == "win32":
             os.add_dll_directory(path)
 
 
+from ._graphviz import GRAPHVIZ_VERSION
+
 __version__ = "2.0rc2"
+__graphviz_version__ = GRAPHVIZ_VERSION
 
 from .agraph import AGraph, Attribute, DotError, Edge, ItemAttribute, Node
 
