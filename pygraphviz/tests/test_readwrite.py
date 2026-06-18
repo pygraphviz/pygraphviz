@@ -1,4 +1,23 @@
+import pytest
 import pygraphviz as pgv
+
+graphviz_major_version = int(pgv.__graphviz_version__.split(".")[0])
+
+
+@pytest.mark.skipif(graphviz_major_version < 13, reason="Graphviz version too old")
+def test_multiple_reads_same_source_trailing_character(tmp_path):
+    """Ensure multiple reads from the same text file with an unexpected trailing
+    character don't cause agread fails. See gh-171."""
+    fpath = tmp_path / "hello.gv.txt"
+    # Original bug was in the read-from-file code path
+    with open(fpath, "w") as fh:
+        fh.write('digraph G {Hello->World}"')  # note the trailing "
+
+    # Smoke test: sequential reads from the same file via the AGraph constructor
+    # should not raise ValueError/DotError
+    A = pgv.AGraph(str(fpath))
+    B = pgv.AGraph(str(fpath))
+    assert A.to_string() == B.to_string()
 
 
 def test_readwrite(tmp_path):
