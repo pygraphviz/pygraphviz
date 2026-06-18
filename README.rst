@@ -1,7 +1,7 @@
 PyGraphviz
 ==========
 
-.. image:: https://github.com/pygraphviz/pygraphviz/workflows/test/badge.svg?branch=main
+.. image:: https://github.com/pygraphviz/pygraphviz/workflows/test/badge.svg
   :target: https://github.com/pygraphviz/pygraphviz/actions/workflows/test.yml
 
 .. image:: https://codecov.io/gh/pygraphviz/pygraphviz/branch/main/graph/badge.svg
