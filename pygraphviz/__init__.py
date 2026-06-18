@@ -32,7 +32,7 @@ from ._graphviz import (
     GRAPHVIZ_PATCH_VERSION,
 )
 
-__version__ = "2.0rc2"
+__version__ = "2.0rc3"
 __graphviz_version__ = (
     f"{GRAPHVIZ_MAJOR_VERSION}.{GRAPHVIZ_MINOR_VERSION}.{GRAPHVIZ_PATCH_VERSION}"
 )
