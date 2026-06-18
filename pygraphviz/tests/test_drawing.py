@@ -41,7 +41,7 @@ def test_drawing_hex_colors(tmp_path):
     # fmt: on
     A = pgv.AGraph()
     A.from_string(dotstr)
-    with warnings.catch_warnings(record=True, category=RuntimeWarning) as rec:
+    with warnings.catch_warnings(record=True) as rec:
         A.layout("dot")
         A.draw(str(tmp_path / "img.png"))
     assert len(rec) == 0

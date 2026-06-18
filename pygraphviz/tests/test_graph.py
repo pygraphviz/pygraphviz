@@ -43,11 +43,12 @@ def test_tred_cycle():
     """RuntimeWarning raised when cycle detected."""
     A = pgv.AGraph(directed=True)
     A.add_edges_from([(0, 1), (1, 2), (2, 0)])  # Directed 3-cycle
-    with warnings.catch_warnings(record=True, category=RuntimeWarning) as rec:
+    with warnings.catch_warnings(record=True) as rec:
         A.tred()
     # No transitive reduction possible on 3-cycle
     assert A.edges() == [("0", "1"), ("1", "2"), ("2", "0")]
     assert len(rec) == 1  # Expect 1 RuntimeWarning
+    assert rec[0].category == RuntimeWarning
     assert "transitive reduction not unique" in str(rec[0].message)
 
 
