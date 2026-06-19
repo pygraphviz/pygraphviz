@@ -50,3 +50,7 @@ Released under the 3-Clause BSD license (see ``LICENSE``)::
   Aric Hagberg <aric.hagberg@gmail.gov>
   Dan Schult <dschult@colgate.edu>
   Manos Renieris
+
+The binary wheels distributed on PyPI bundle the Graphviz libraries and
+command-line tools, which are licensed separately under the Eclipse Public
+License v2.0 (see ``LICENSE.graphviz``).
