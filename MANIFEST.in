@@ -2,6 +2,7 @@ include MANIFEST.in
 include INSTALL.txt
 include README.rst
 include LICENSE
+include LICENSE.graphviz
 
 include *.py
 include *.swg
