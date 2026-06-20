@@ -22,6 +22,7 @@ extensions = [
     "sphinx.ext.imgconverter",
     "sphinx_gallery.gen_gallery",
     "numpydoc",
+    "myst_nb",
 ]
 
 # General substitutions.
