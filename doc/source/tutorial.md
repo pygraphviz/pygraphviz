@@ -147,6 +147,44 @@ e.attr["color"] = "green"
 print(G)
 ```
 
+### Substitution Characters
+
+The DOT language defines several special characters that substitute other values
+during drawing.
+These characters typically take the form of `\?` where `?` is a capital letter.
+For example, the special character `\G`, if used in a node or edge label,
+will be replaced with the graph name during drawing:
+
+```{code-cell}
+A = pgv.AGraph(name="foo")
+A.add_node(1, label=r"my graph: \G")
+A.add_edges_from([(1, 2), (2, 3)])
+print(A)
+```
+
+Special characters have no effect during layout:
+
+```{code-cell}
+A.layout()
+print(A)
+```
+
+Character substitution occurs during figure drawing:
+
+```{code-cell}
+A.draw("foo.png")
+```
+
+```{figure} foo.png
+
+```
+
+Character substitution can be disabled by escaping the special characters, e.g.
+`\\G`.
+See the [DOT language specification (pdf link)][dot_spec] for further details.
+
+[dot_spec]: https://www.graphviz.org/pdf/dot.1.pdf
+
 ## Layout and Drawing
 
 Pygraphviz provides several methods for layout and drawing of graphs.

@@ -15,6 +15,7 @@ doc/source/static/examples/*
 doc/source/reference/generated/*
 doc/source/examples/*
 doc/source/file.*
+doc/source/foo.*
 
 # Generated when 'python setup_egg.py'
 pygraphviz.egg-info/
