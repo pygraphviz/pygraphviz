@@ -22,6 +22,7 @@ extensions = [
     "sphinx.ext.imgconverter",
     "sphinx_gallery.gen_gallery",
     "numpydoc",
+    "myst_nb",
 ]
 
 # General substitutions.
@@ -65,6 +66,12 @@ add_module_names = False
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
+
+
+def setup(app):
+    # Workaround to prevent duplicate file warnings from sphinx due to having
+    # both myst-nb and sphinx-gallery generating executable files
+    app.registry.source_suffix.pop(".ipynb")
 
 
 # Options for HTML output
