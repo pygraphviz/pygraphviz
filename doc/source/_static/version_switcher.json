@@ -5,10 +5,15 @@
         "url": "https://pygraphviz.github.io/documentation/latest/"
     },
     {
-        "name": "1.14 (stable)",
-        "version": "1.14",
+        "name": "2.0 (stable)",
+        "version": "2.0",
         "url": "https://pygraphviz.github.io/documentation/stable/",
         "preferred": true
+    },
+    {
+        "name": "1.14",
+        "version": "1.14",
+        "url": "https://pygraphviz.github.io/documentation/pygraphviz-1.14/"
     },
     {
         "name": "1.13",
