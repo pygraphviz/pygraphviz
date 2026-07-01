@@ -1,2 +1,2 @@
-twine>=4.0
+twine>=6.2.0
 wheel>=0.40
