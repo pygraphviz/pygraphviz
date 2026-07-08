@@ -93,5 +93,5 @@ if __name__ == "__main__":
 
     G.write("miles.dot")
     print("Wrote miles.dot")
-    G.draw("miles.png", prog="neato", args="-n2")
+    G.draw("miles.png", prog="nop2")
     print("Wrote miles.png")
