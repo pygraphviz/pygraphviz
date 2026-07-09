@@ -1580,8 +1580,7 @@ class AGraph:
 
         if prog is None:
             if self.has_layout:
-                prog = "neato"
-                args += " -n2"
+                prog = "nop2"
             else:
                 msg = """Graph has no layout information, see layout() or specify prog={}.""".format(
                     "|".join(["neato", "dot", "twopi", "circo", "fdp", "nop"])
