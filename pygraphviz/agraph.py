@@ -1939,10 +1939,12 @@ class Attribute(MutableMapping):
             )
 
     def __getitem__(self, name):
-        item = gv.agget(self.handle, name.encode(self.encoding))
-        if item is None:
-            ah = gv.agattr(self.handle, self.type, name.encode(self.encoding), None)
-            item = gv.agattrdefval(ah)
+        # Look up the default value directly via ``agattr``/``agattrdefval``
+        # rather than ``agget``.  ``agget`` returns "" (not None) when a
+        # same-named attribute is defined at the graph level, which would mask
+        # the node/edge default (see gh-563).  This mirrors ``iteritems``.
+        ah = gv.agattr(self.handle, self.type, name.encode(self.encoding), None)
+        item = gv.agattrdefval(ah)
         return item.decode(self.encoding)
 
     def __delitem__(self, name):
