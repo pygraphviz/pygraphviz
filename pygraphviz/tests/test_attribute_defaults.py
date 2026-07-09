@@ -83,3 +83,13 @@ def test_edge_defaults():
     del A.edge_attr["label"]
     ans = """strict graph { }"""
     assert stringify(A) == " ".join(ans.split())
+
+
+def test_default_not_masked_by_graph_attribute():
+    # See gh-563: an attribute set at the graph level (e.g. via a subgraph)
+    # must not mask a same-named node/edge default.
+    A = pgv.AGraph("digraph { edge[penwidth=2]; subgraph { penwidth=1; } }")
+    assert A.edge_attr["penwidth"] == "2"
+
+    A = pgv.AGraph("digraph { node[shape=box]; subgraph { shape=circle; } }")
+    assert A.node_attr["shape"] == "box"
