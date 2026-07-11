@@ -4,6 +4,30 @@ import subprocess
 import sys
 from setuptools import setup, Extension
 
+
+def _graphviz_paths_from_pkg_config():
+    """Return Graphviz include and library paths reported by pkg-config."""
+    try:
+        include_dir = subprocess.check_output(
+            ["pkg-config", "--variable=includedir", "libgvc"],
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+        lib_dir = subprocess.check_output(
+            ["pkg-config", "--variable=libdir", "libgvc"],
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+    if not include_dir or not lib_dir:
+        return None
+
+    plugin_lib_dir = os.path.join(lib_dir, "graphviz")
+    return [include_dir], [lib_dir, plugin_lib_dir]
+
+
 if __name__ == "__main__":
     WINDOWS = sys.platform == "win32"
     MACOS = sys.platform == "darwin"
@@ -59,24 +83,28 @@ if __name__ == "__main__":
         # Repair tools (auditwheel/delocate/delvewheel) handle rpath for wheels
         extra_kwargs = {}
     else:
-        # Development install: search system paths
-        include_dirs = []
-        # List of search paths for where graphviz libs may be installed.
-        # The graphviz library subdir contains the plugin libraries (e.g.
-        # gvplugin_*). The main graphviz libs (cgraph etc.) are in the
-        # parent dir
-        library_dirs = [
-            "/usr/lib/x86_64-linux-gnu",  # Ubuntu x86_64
-            "/usr/lib/x86_64-linux-gnu/graphviz",
-            "/opt/homebrew/lib",  # Macos, homebrew aarch64
-            "/opt/homebrew/lib/graphviz",
-            "/usr/lib64",  # Fedora
-            "/usr/lib64/graphviz",
-            "/usr/local/lib",  # source install / macos homebrew x86_64
-            "/usr/local/lib/graphviz",
-            "/opt/local/lib",
-            "/opt/local/lib/graphviz",
-        ]
+        graphviz_paths = None if WINDOWS else _graphviz_paths_from_pkg_config()
+        if graphviz_paths:
+            include_dirs, library_dirs = graphviz_paths
+        else:
+            # Development install: search system paths
+            include_dirs = []
+            # List of search paths for where graphviz libs may be installed.
+            # The graphviz library subdir contains the plugin libraries (e.g.
+            # gvplugin_*). The main graphviz libs (cgraph etc.) are in the
+            # parent dir
+            library_dirs = [
+                "/usr/lib/x86_64-linux-gnu",  # Ubuntu x86_64
+                "/usr/lib/x86_64-linux-gnu/graphviz",
+                "/opt/homebrew/lib",  # Macos, homebrew aarch64
+                "/opt/homebrew/lib/graphviz",
+                "/usr/lib64",  # Fedora
+                "/usr/lib64/graphviz",
+                "/usr/local/lib",  # source install / macos homebrew x86_64
+                "/usr/local/lib/graphviz",
+                "/opt/local/lib",
+                "/opt/local/lib/graphviz",
+            ]
         # runtime_library_dirs must not be defined with windows else setup will fail
         extra_kwargs = {} if WINDOWS else {"runtime_library_dirs": library_dirs}
 

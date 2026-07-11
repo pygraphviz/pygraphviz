@@ -55,8 +55,14 @@ Then, from the source directory::
 
 This will work out-of-the-box if the graphviz headers and libraries are on the
 default discovery paths for your system.
-If not, you will have to provide the header and library locations using the
-``--global-option`` flag, for example::
+If ``pkg-config`` is available, PyGraphviz uses the paths reported by
+``pkg-config libgvc``. For a Graphviz installation in a nonstandard prefix,
+point ``pkg-config`` at its metadata before installing::
+
+    PKG_CONFIG_PATH=<graphviz_install>/lib/pkgconfig pip install . --verbose
+
+If neither method finds Graphviz, provide the header and library locations
+using the ``--global-option`` flag, for example::
 
     pip install --config-settings="--global-option=build_ext" \
                 --config-settings="--global-option=-I<graphviz_install>/include/" \
