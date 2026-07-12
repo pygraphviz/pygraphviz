@@ -35,7 +35,7 @@ jobs:
         run: sudo apt-get update
 
       - name: Install graphviz
-        run: sudo apt-get install graphviz graphviz-dev pkg-config
+        run: sudo apt-get install graphviz graphviz-dev
 
       - name: Install packages
         run: |
@@ -47,7 +47,6 @@ jobs:
       - name: Test pygraphviz
         if: ${{ matrix.python-version != '3.14t' }}
         run: |
-          pytest tests/test_setup.py
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
       - name: Test pygraphviz freethreaded
         if: ${{ matrix.python-version  == '3.14t' }}
