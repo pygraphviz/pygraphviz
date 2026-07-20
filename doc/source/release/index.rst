@@ -8,6 +8,7 @@ Releases
    :maxdepth: 2
 
    release_dev
+   release_2.0.1
    release_2.0
    release_1.14
    release_1.13
