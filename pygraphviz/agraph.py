@@ -2,6 +2,7 @@
 A Python interface to Graphviz.
 """
 
+import fileinput
 import os
 import re
 import shlex
@@ -1670,16 +1671,7 @@ class AGraph:
         import os
 
         if isinstance(path, str):
-            if path.endswith(".gz"):
-                # import gzip
-                # fh = gzip.open(path,mode=mode)  # doesn't return real fh
-                fh = os.popen("gzcat " + path)  # probably not portable
-            elif path.endswith(".bz2"):
-                # import bz2
-                # fh = bz2.BZ2File(path,mode=mode) # doesn't return real fh
-                fh = os.popen("bzcat " + path)  # probably not portable
-            else:
-                fh = open(path, mode=mode)
+            fh = fileinput.hook_compressed(path, mode=mode)
         elif hasattr(path, "write"):
             # Note, mode of file handle is unchanged.
             fh = path
