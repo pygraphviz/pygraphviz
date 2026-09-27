@@ -222,9 +222,11 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel
             --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
+          # Repair bundled EXEs too, so their DLL imports match the vendored names.
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
-            pip install delvewheel &&
+            pip install "delvewheel>=1.11.0" &&
             delvewheel repair -w {dest_dir} {wheel}
+            --analyze-existing-exes
             --add-path C:\\graphviz\\bin
 
           # --- Testing ---
@@ -237,6 +239,64 @@ jobs:
         with:
           name: wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
+
+  test_windows_wheels:
+    needs: [build_wheels]
+    name: Test Windows wheel with Python ${{ matrix.python-version }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14", "3.15"]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # Test the installed wheel without a source checkout or build-time Graphviz.
+      - uses: actions/download-artifact@v8
+        with:
+          name: wheels-windows-latest
+          path: wheelhouse
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+
+      - name: Install wheel
+        run: |
+          python -m pip install pytest
+          python -m pip install --no-index --find-links wheelhouse pygraphviz
+
+      - name: Check bundled executables
+        run: |
+          python - <<'PY'
+          import os
+          import subprocess
+          from pathlib import Path
+
+          import pygraphviz as pgv
+
+          # Exclude external Graphviz DLLs, even if the runner image has them.
+          os.environ["PATH"] = str(Path(os.environ["SystemRoot"]) / "System32")
+          graph = pgv.AGraph()
+          env = graph._get_prog_env()
+          bin_dir = Path(pgv.__file__).parent / "bin"
+          for prog in ("gc", "acyclic", "gvpr", "gvcolor", "ccomps", "sccmap", "tred", "unflatten"):
+              executable = bin_dir / f"{prog}.exe"
+              assert executable.is_file(), f"Missing bundled executable: {executable}"
+              assert Path(graph._get_prog(prog)) == executable
+              result = subprocess.run(
+                  [str(executable), "-?"], env=env, capture_output=True, text=True, timeout=30
+              )
+              output = result.stdout + result.stderr
+              assert result.returncode == 0, f"{prog} exited with {result.returncode}: {output}"
+              assert "Usage:" in output, f"{prog} did not print its usage: {output}"
+              print(f"{prog}: OK")
+          PY
+
+      - name: Test wheel
+        run: pytest --pyargs pygraphviz
 
   build_sdist:
     name: Build source distribution
@@ -278,10 +338,10 @@ jobs:
       - run: ls -lh ${{ github.workspace }}/dist/
 
   pypi-publish:
-    needs: [build_wheels, build_sdist]
+    needs: [build_wheels, test_windows_wheels, build_sdist]
     name: Publish wheels and sdist to PyPI
     # Only publish on a pygraphviz-* tag pushed to the canonical repo -- never on
-    # PRs, branch pushes, or forks. Runs only if every wheel/sdist build succeeded.
+    # PRs, branch pushes, or forks. Requires successful builds and wheel tests.
     if: >
       github.repository_owner == 'pygraphviz' &&
       startsWith(github.ref, 'refs/tags/pygraphviz-')
