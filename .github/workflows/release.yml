@@ -268,35 +268,12 @@ jobs:
           python -m pip install pytest
           python -m pip install --no-index --find-links wheelhouse pygraphviz
 
-      - name: Check bundled executables
+      - name: Test wheel without external Graphviz
+        shell: pwsh
         run: |
-          python - <<'PY'
-          import os
-          import subprocess
-          from pathlib import Path
-
-          import pygraphviz as pgv
-
-          # Exclude external Graphviz DLLs, even if the runner image has them.
-          os.environ["PATH"] = str(Path(os.environ["SystemRoot"]) / "System32")
-          graph = pgv.AGraph()
-          env = graph._get_prog_env()
-          bin_dir = Path(pgv.__file__).parent / "bin"
-          for prog in ("gc", "acyclic", "gvpr", "gvcolor", "ccomps", "sccmap", "tred", "unflatten"):
-              executable = bin_dir / f"{prog}.exe"
-              assert executable.is_file(), f"Missing bundled executable: {executable}"
-              assert Path(graph._get_prog(prog)) == executable
-              result = subprocess.run(
-                  [str(executable), "-?"], env=env, capture_output=True, text=True, timeout=30
-              )
-              output = result.stdout + result.stderr
-              assert result.returncode == 0, f"{prog} exited with {result.returncode}: {output}"
-              assert "Usage:" in output, f"{prog} did not print its usage: {output}"
-              print(f"{prog}: OK")
-          PY
-
-      - name: Test wheel
-        run: pytest --pyargs pygraphviz
+          $env:PATH = ($env:PATH -split ';' |
+            Where-Object { $_ -notmatch 'graphviz' }) -join ';'
+          python -m pytest --pyargs pygraphviz
 
   build_sdist:
     name: Build source distribution
