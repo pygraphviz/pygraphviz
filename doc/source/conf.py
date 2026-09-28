@@ -36,6 +36,7 @@ sphinx_gallery_conf = {
     "ignore_pattern": "skip_",
     "image_scrapers": ("pygraphviz",),
     "min_reported_time": 60.0,
+    "parallel": True,
 }
 
 # Prevent numpydoc from trying to create toctree prematurely - suppresses a
