@@ -2,6 +2,7 @@ import os
 import re
 import subprocess
 import sys
+import sysconfig
 from setuptools import setup, Extension
 
 if __name__ == "__main__":
@@ -43,6 +44,20 @@ if __name__ == "__main__":
     define_macros = [("SWIG_PYTHON_STRICT_BYTE_CHAR", None)]
     if WINDOWS:
         define_macros.append(("GVDLL", None))
+
+    # Build against the Python stable ABI (abi3) so one wheel per platform works
+    # on all CPython >= 3.10. SWIG supports this as long as -builtin/-fast are
+    # not used and custom typemaps only use limited-API calls. The stable ABI is
+    # not available on PyPy or free-threaded CPython builds. See:
+    # https://github.com/joerick/python-abi3-package-sample
+    # https://www.swig.org/Doc4.3/Python.html#Python_stable_abi
+    py_limited_api = sys.implementation.name == "cpython" and not (
+        sysconfig.get_config_var("Py_GIL_DISABLED")
+    )
+    setup_options = {}
+    if py_limited_api:
+        define_macros.append(("Py_LIMITED_API", "0x030A0000"))
+        setup_options["bdist_wheel"] = {"py_limited_api": "cp310"}
 
     # Check for custom graphviz prefix (used by cibuildwheel builds)
     graphviz_prefix = os.environ.get("GRAPHVIZ_PREFIX", "")
@@ -115,8 +130,9 @@ if __name__ == "__main__":
             libraries=libraries,
             define_macros=define_macros,
             swig_opts=swig_options,
+            py_limited_api=py_limited_api,
             **extra_kwargs,
         )
     ]
 
-    setup(ext_modules=extension)
+    setup(ext_modules=extension, options=setup_options)
