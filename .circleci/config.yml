@@ -42,7 +42,7 @@ jobs:
           name: Build docs
           command: |
             source venv/bin/activate
-            make -C doc/ html
+            make "SPHINXOPTS=-j 2" -C doc/ html
 
       - store_artifacts:
           path: doc/build/html
