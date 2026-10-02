@@ -21,6 +21,7 @@ doc/source/foo.*
 pygraphviz.egg-info/
 
 # Generated files from swig build
+pygraphviz/graphviz.py
 pygraphviz/graphviz_wrap.c
 
 # Testing
