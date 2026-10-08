@@ -3,6 +3,15 @@ import re
 import subprocess
 import sys
 from setuptools import setup, Extension
+from setuptools.command.build_py import build_py
+
+
+class BuildPy(build_py):
+    def run(self):
+        # SWIG generates graphviz.py during build_ext; copy it after generation.
+        self.run_command("build_ext")
+        super().run()
+
 
 if __name__ == "__main__":
     WINDOWS = sys.platform == "win32"
@@ -119,4 +128,4 @@ if __name__ == "__main__":
         )
     ]
 
-    setup(ext_modules=extension)
+    setup(ext_modules=extension, cmdclass={"build_py": BuildPy})
