@@ -48,6 +48,10 @@ if __name__ == "__main__":
         f"-DGRAPHVIZ_VERSION_MAJOR={graphviz_major_version}",
         f"-DGRAPHVIZ_VERSION_MINOR={graphviz_minor_version}",
         f"-DGRAPHVIZ_VERSION_PATCH={graphviz_patch_version}",
+        # Declare the module safe to use without the GIL on free-threaded
+        # Python; access to Graphviz is serialized by a lock (see graphviz.i).
+        # No effect on builds with the GIL.
+        "-nogil",
     ]
 
     define_macros = [("SWIG_PYTHON_STRICT_BYTE_CHAR", None)]

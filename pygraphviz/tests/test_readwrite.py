@@ -1,3 +1,5 @@
+import os
+
 import pytest
 import pygraphviz as pgv
 
@@ -18,6 +20,24 @@ def test_multiple_reads_same_source_trailing_character(tmp_path):
     A = pgv.AGraph(str(fpath))
     B = pgv.AGraph(str(fpath))
     assert A.to_string() == B.to_string()
+
+
+def _open_fds():
+    for fd_dir in ("/proc/self/fd", "/dev/fd"):
+        if os.path.isdir(fd_dir):
+            return len(os.listdir(fd_dir))
+    pytest.skip("cannot list open file descriptors on this platform")
+
+
+def test_failed_read_does_not_leak_fd(tmp_path):
+    """A failed agread must still close its dup'ed file descriptor."""
+    fpath = tmp_path / "bad.gv"
+    fpath.write_text("graph { a -- }")
+    n_before = _open_fds()
+    for _ in range(10):
+        with pytest.raises(pgv.DotError):
+            pgv.AGraph(str(fpath))
+    assert _open_fds() == n_before
 
 
 def test_readwrite(tmp_path):

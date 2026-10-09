@@ -53,9 +53,11 @@ jobs:
         env:
           # The extension is built against the stable ABI (see setup.py), so a
           # single cp310-abi3 wheel per platform covers all CPython >= 3.10
-          # (cibuildwheel checks it with abi3audit automatically). It is tested
-          # on every supported version in the test_wheels job below.
-          CIBW_BUILD: "cp310-*"
+          # (cibuildwheel checks it with abi3audit automatically).
+          # Free-threaded CPython can't use the stable ABI, so it gets
+          # version-specific wheels. All wheels are tested on every supported
+          # version in the test_wheels job below.
+          CIBW_BUILD: "cp310-* cp314t-* cp315t-*"
           CIBW_SKIP: "*-win32 *-manylinux_i686 *-musllinux_*"
 
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
@@ -251,7 +253,7 @@ jobs:
           - macos-26-intel
           - windows-latest
           - ubuntu-24.04-arm
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14", "3.15"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14", "3.14t", "3.15", "3.15t"]
     defaults:
       run:
         shell: bash
