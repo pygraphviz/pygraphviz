@@ -1,0 +1,48 @@
+name: conda-forge
+
+# Weekly canary: install the latest pygraphviz from conda-forge and run its test
+# suite, to catch feedstock breakage the `test` workflow cannot see. `pixi exec`
+# builds a throwaway env and resolves against conda-forge as it is today, so
+# there is deliberately no manifest and no lockfile.
+
+on:
+  schedule:
+    # Once a week, Sunday 00:00 UTC.
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+  pull_request: 
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / py${{ matrix.python-version }}
+    if: github.event_name != 'schedule' || github.repository_owner == 'pygraphviz'
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-26.04-arm
+          - macos-latest
+          - macos-latest-large
+          - windows-latest
+        python-version: ["3.11", "3.15"]
+
+    steps:
+      - uses: prefix-dev/setup-pixi@v0.11.0
+        with:
+          run-install: false
+
+      - name: Install the latest conda-forge release and test it
+        shell: bash
+        run: |
+          pixi exec --channel conda-forge \
+            --spec "python=${{ matrix.python-version }}" \
+            --spec pygraphviz \
+            --spec pytest \
+            "--list=^pygraphviz$" \
+            -- pytest --doctest-modules --durations=10 --pyargs pygraphviz
