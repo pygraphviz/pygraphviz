@@ -53,3 +53,32 @@ def test_concurrent_use():
         futures = [executor.submit(work) for _ in range(n_threads)]
         for future in futures:
             assert future.result() == expected
+
+
+def test_concurrent_draw_different_attributes():
+    # Graphviz's layout stores attribute symbols of the graph being laid out in
+    # process-wide globals that rendering reads later, so layout, render, and
+    # cleanup must not interleave with another thread's (even with the GIL).
+    # Declaring edge attributes in a different order gives the graphs different
+    # symbol ids, so an interleaved render reads the wrong attribute (or
+    # aborts).
+    def make(i):
+        A = pgv.AGraph(directed=True)
+        if i % 2:
+            A.edge_attr["label"] = ""
+            A.edge_attr["penwidth"] = "1"
+        A.add_edge("a", "b", color="red", label="x")
+        return A
+
+    n_threads = 8
+    barrier = threading.Barrier(n_threads)
+
+    def work(i):
+        A = make(i)
+        barrier.wait()
+        return [b'stroke="red"' in A.draw(format="svg", prog="dot") for _ in range(20)]
+
+    with ThreadPoolExecutor(n_threads) as executor:
+        futures = [executor.submit(work, i) for i in range(n_threads)]
+        for future in futures:
+            assert all(future.result())
