@@ -590,3 +590,35 @@ def test_long_node(node):
     A.layout()  # Smoke test - should not raise
     # Check each node was assigned a position
     assert A.to_string().count("pos") == 6
+
+
+@pytest.mark.parametrize(
+    "prefix",
+    [
+        "/* Graph exported by another application. */\n",
+        "// Graph exported by another application.\n",
+        "\r\n// Windows line endings\r\n",
+        '# 1 "generated.dot"\n',
+        "\n /* first */ // second\n# third\n /* last */ ",
+    ],
+)
+@pytest.mark.parametrize(
+    "declaration", ["graph G {a -- b}", "strict digraph G {a -> b}"]
+)
+def test_agraph_constructor_string_with_leading_comments(prefix, declaration):
+    graph = pgv.AGraph(prefix + declaration)
+    explicit = pgv.AGraph(string=prefix + declaration)
+    assert graph.to_string() == explicit.to_string()
+    assert set(graph.nodes()) == {"a", "b"}
+    assert graph.has_edge("a", "b")
+    assert b"<svg" in graph.draw(format="svg", prog="dot")
+    graph.close()
+    explicit.close()
+
+
+def test_agraph_constructor_string_filename_with_graph_keyword(tmp_path):
+    path = tmp_path / "graph.dot"
+    path.write_text("// exported graph\ngraph G {a -- b}")
+    graph = pgv.AGraph(str(path))
+    assert graph.has_edge("a", "b")
+    graph.close()
