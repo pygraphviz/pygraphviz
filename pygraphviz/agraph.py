@@ -198,7 +198,9 @@ class AGraph:
             # encoding is already set but if it was specified explicitly
             # as an attr, then set it explicitly for the graph
             if "charset" in attr:
-                gv.agattr_label(self.handle, 0, "charset", self.encoding)
+                gv.agattr_label(
+                    self.handle, 0, b"charset", self.encoding.encode("ascii")
+                )
 
             # if data is specified, populate the newly created graph
             if data is not None:
@@ -1024,20 +1026,60 @@ class AGraph:
         Notes
         =====
         Versions <=1.6 made a copy by writing and the reading a dot string.
-        This version loads a new graph with nodes, edges and attributes.
+        This version loads a new graph with nodes, edges, attributes and subgraphs.
         """
+        attributes = {"charset": self.encoding} if "charset" in self.graph_attr else {}
         G = self.__class__(
-            directed=self.is_directed(), strict=self.strict, name=self.name
+            directed=self.is_directed(),
+            strict=self.strict,
+            name=self.name,
+            **attributes,
         )
         for node in self.nodes():
             G.add_node(node)
             G.get_node(node).attr.update(self.get_node(node).attr)
-        for edge in self.edges(keys=True):
-            G.add_edge(*edge)
-            G.get_edge(*edge).attr.update(self.get_edge(*edge).attr)
-        G.graph_attr.update(self.graph_attr)
+        # Keep exact edge identities: unnamed parallel edges cannot be looked
+        # up uniquely by endpoints and key, including within subgraphs.
+        copied_edges = {}
+        for edge in self.edges_iter():
+            key = edge.name.encode(G.encoding) if edge.name is not None else None
+            handle = gv.agedge(
+                G.handle,
+                Node(G, edge[0]).handle,
+                Node(G, edge[1]).handle,
+                key,
+                _Action.create,
+            )
+            Edge(G, eh=handle).attr.update(edge.attr)
+            copied_edges[int(edge.handle)] = handle
+        G.graph_attr.update(
+            {k: v for k, v in self.graph_attr.items() if k != "charset"}
+        )
         G.node_attr.update(self.node_attr)
         G.edge_attr.update(self.edge_attr)
+        pending = [(self, G)]
+        while pending:
+            source, target = pending.pop()
+            for child in source.subgraphs_iter():
+                copied = target.add_subgraph(name=child.name)
+                copied.graph_attr.update(
+                    {k: v for k, v in child.graph_attr.items() if k != "charset"}
+                )
+                for defaults in (child.node_attr, child.edge_attr):
+                    for name, value in defaults.items():
+                        gv.agattr_label(
+                            copied.handle,
+                            defaults.type,
+                            name.encode(G.encoding),
+                            value.encode(G.encoding),
+                        )
+                for node in child.nodes_iter():
+                    gv.agsubnode(copied.handle, Node(G, node).handle, _Action.create)
+                for edge in child.edges_iter():
+                    gv.agsubedge(
+                        copied.handle, copied_edges[int(edge.handle)], _Action.create
+                    )
+                pending.append((child, copied))
         return G
 
     def add_path(self, nlist):
