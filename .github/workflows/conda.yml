@@ -28,7 +28,6 @@ jobs:
           - ubuntu-latest
           - ubuntu-26.04-arm
           - macos-latest
-          - macos-latest-large
           - windows-latest
         python-version: ["3.11", "3.15"]
 
