@@ -595,6 +595,10 @@ def test_long_node(node):
 @pytest.mark.parametrize(
     "prefix",
     [
+        "",
+        " ",
+        "\n",
+        "\r\n\t ",
         "/* Graph exported by another application. */\n",
         "// Graph exported by another application.\n",
         "\r\n// Windows line endings\r\n",
@@ -605,7 +609,9 @@ def test_long_node(node):
 @pytest.mark.parametrize(
     "declaration", ["graph G {a -- b}", "strict digraph G {a -> b}"]
 )
-def test_agraph_constructor_string_with_leading_comments(prefix, declaration):
+def test_agraph_constructor_string_with_leading_comments_or_whitespace(
+    prefix, declaration
+):
     graph = pgv.AGraph(prefix + declaration)
     explicit = pgv.AGraph(string=prefix + declaration)
     assert graph.to_string() == explicit.to_string()
