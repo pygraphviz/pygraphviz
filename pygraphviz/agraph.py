@@ -143,7 +143,12 @@ class AGraph:
                 handle = thing
             elif isinstance(thing, str):
                 pattern = re.compile(r"(strict)?\s*(graph|digraph).*{.*}\s*", re.DOTALL)
-                if pattern.match(thing):
+                # Skip leading DOT comments only when guessing the input type.
+                # The original text is still passed to Graphviz for parsing.
+                prefix = re.compile(r"(?:\s+|//[^\n]*|#[^\n]*|/\*.*?\*/)+", re.DOTALL)
+                match = prefix.match(thing)
+                start = match.end() if match else 0
+                if pattern.match(thing, start):
                     string = thing  # this is a dot format graph in a string
                 else:
                     filename = thing  # assume this is a file name
