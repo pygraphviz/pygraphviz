@@ -20,6 +20,12 @@ import contextlib
 
 _DEFAULT_ENCODING = "UTF-8"
 
+# Graphviz's layout stores state (such as the attribute symbols of the graph being
+# laid out) in process-wide globals that rendering and cleanup read later. Each
+# Graphviz call is atomic, but a layout -> render -> free sequence must not
+# interleave with another thread's, with or without the GIL.
+_layout_lock = threading.Lock()
+
 
 class PipeReader(threading.Thread):
     """Read and write pipes using threads."""
@@ -1509,17 +1515,18 @@ class AGraph:
         if isinstance(prog, str):
             prog = prog.encode(self.encoding)
 
-        gvc = gv.gvContextWithBuiltins()
-        retval = gv.gvLayout(gvc, self.handle, prog)
-        # gvLayout returns -1 if `prog` is not a valid program.
-        # TODO: Check other possible return values from gvLayout
-        # TODO: Catch/suppress msg on stderr from graphviz
-        if retval == -1:
-            raise ValueError(f"Program {prog} is not a valid layout program.")
-        gv.gvRender(gvc, self.handle, format=b"dot")
+        with _layout_lock:
+            gvc = gv.gvContextWithBuiltins()
+            retval = gv.gvLayout(gvc, self.handle, prog)
+            # gvLayout returns -1 if `prog` is not a valid program.
+            # TODO: Check other possible return values from gvLayout
+            # TODO: Catch/suppress msg on stderr from graphviz
+            if retval == -1:
+                raise ValueError(f"Program {prog} is not a valid layout program.")
+            gv.gvRender(gvc, self.handle, format=b"dot")
 
-        gv.gvFreeLayout(gvc, self.handle)
-        gv.gvFreeContext(gvc)
+            gv.gvFreeLayout(gvc, self.handle)
+            gv.gvFreeContext(gvc)
 
         self.has_layout = True
         return
@@ -1608,37 +1615,42 @@ class AGraph:
         if isinstance(prog, str):
             prog = prog.encode(self.encoding)
 
-        # Start the drawing
-        gvc = gv.gvContextWithBuiltins()
-        G = self.handle
+        with _layout_lock:
+            # Start the drawing
+            gvc = gv.gvContextWithBuiltins()
+            G = self.handle
 
-        # Layout
-        err = gv.gvLayout(gvc, G, prog)
-        if err:
-            if err != -1:
-                raise ValueError("Graphviz raised a layout error.")
-            prog = prog.decode(self.encoding)
-            raise ValueError(f"Can't find prog={prog} in this graphviz installation")
+            # Layout
+            err = gv.gvLayout(gvc, G, prog)
+            if err:
+                if err != -1:
+                    raise ValueError("Graphviz raised a layout error.")
+                prog = prog.decode(self.encoding)
+                raise ValueError(
+                    f"Can't find prog={prog} in this graphviz installation"
+                )
 
-        # Render
-        if path is None:
-            out = gv.gvRenderData(gvc, G, format)
-            if out[0]:
-                raise ValueError(f"Graphviz Error creating dot representation:{out[0]}")
-            err, dot_string = out
+            # Render
+            if path is None:
+                out = gv.gvRenderData(gvc, G, format)
+                if out[0]:
+                    raise ValueError(
+                        f"Graphviz Error creating dot representation:{out[0]}"
+                    )
+                err, dot_string = out
+                gv.gvFreeLayout(gvc, G)
+                gv.gvFreeContext(gvc)
+                return dot_string
+
+            # path is string holding the filename, a file handle, or pathlib.Path
+            fh = self._get_fh(path, "wb")
+            err = gv.gvRender(gvc, G, format, fh)
+            if err:
+                raise ValueError("Graphviz raised a render error. Maybe bad format?")
+            if isinstance(path, str):
+                fh.close()
             gv.gvFreeLayout(gvc, G)
             gv.gvFreeContext(gvc)
-            return dot_string
-
-        # path is string holding the filename, a file handle, or pathlib.Path
-        fh = self._get_fh(path, "wb")
-        err = gv.gvRender(gvc, G, format, fh)
-        if err:
-            raise ValueError("Graphviz raised a render error. Maybe bad format?")
-        if isinstance(path, str):
-            fh.close()
-        gv.gvFreeLayout(gvc, G)
-        gv.gvFreeContext(gvc)
 
     # some private helper functions
 

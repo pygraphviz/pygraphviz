@@ -9,6 +9,25 @@
 #include "graphviz/gvc.h"
 #include <stdlib.h>
 #include <string.h>
+
+/* Thread safety for free-threaded Python.
+ *
+ * Graphviz keeps process-wide state (error handling, plugin and context setup,
+ * cgraph internals) and is not thread-safe. With the GIL, calls into it are
+ * already serialized; without it, every wrapped call must hold this lock (see
+ * the %exception blocks below). The lock is only held around the Graphviz call
+ * itself, never while running Python code, and PyMutex_Lock detaches the
+ * thread state while waiting, so it cannot deadlock with stop-the-world pauses.
+ * Together with SWIG's -nogil option (see setup.py), this lets the module be
+ * imported without re-enabling the GIL. */
+#ifdef Py_GIL_DISABLED
+static PyMutex pygraphviz_lock = {0};
+#define PYGRAPHVIZ_LOCK() PyMutex_Lock(&pygraphviz_lock)
+#define PYGRAPHVIZ_UNLOCK() PyMutex_Unlock(&pygraphviz_lock)
+#else
+#define PYGRAPHVIZ_LOCK()
+#define PYGRAPHVIZ_UNLOCK()
+#endif
 %}
 
 #define GRAPHVIZ_MAJOR_VERSION GRAPHVIZ_VERSION_MAJOR
@@ -48,88 +67,115 @@
 }
 
 %typemap(freearg) FILE* input_file {
-    fclose($1);
+    if ($1) fclose($1);
 }
 
 %typemap(freearg) FILE* output_file {
     if ($1) fclose($1);
 }
 
+/* Hold the lock around every wrapped call. The function-specific %exception
+   blocks below replace this one, so each of them must lock and unlock as well
+   (unlocking right after $action, before any SWIG_fail). They use SWIG_fail
+   rather than returning directly so that freearg typemaps still run. */
+%exception {
+  PYGRAPHVIZ_LOCK();
+  $action
+  PYGRAPHVIZ_UNLOCK();
+}
 
 %exception agnode {
+  PYGRAPHVIZ_LOCK();
   $action
+  PYGRAPHVIZ_UNLOCK();
   if (!result) {
      PyErr_SetString(PyExc_KeyError,"agnode: no key");
-     return NULL;
+     SWIG_fail;
   }
 }
 
 %exception agedge {
+  PYGRAPHVIZ_LOCK();
   $action
+  PYGRAPHVIZ_UNLOCK();
   if (!result) {
      PyErr_SetString(PyExc_KeyError,"agedge: no key");
-     return NULL;
+     SWIG_fail;
   }
 }
 
 /* agset returns -1 on error */
 %exception agset {
+  PYGRAPHVIZ_LOCK();
   $action
+  PYGRAPHVIZ_UNLOCK();
   if (result==-1) {
      PyErr_SetString(PyExc_KeyError,"agset: no key");
-     return NULL;
+     SWIG_fail;
   }
 }
 
 /* agsetsafeset_label returns -1 on error */
 %exception agsafeset_label {
+  PYGRAPHVIZ_LOCK();
   $action
+  PYGRAPHVIZ_UNLOCK();
   if (result==-1) {
      PyErr_SetString(PyExc_KeyError,"agsafeset_label: Error");
-     return NULL;
+     SWIG_fail;
   }
 }
 
 
 /* agdelnode returns -1 on error */
 %exception agdelnode {
+  PYGRAPHVIZ_LOCK();
   $action
+  PYGRAPHVIZ_UNLOCK();
   if (result==-1) {
      PyErr_SetString(PyExc_KeyError,"agdelnode: no key");
-     return NULL;
+     SWIG_fail;
   }
 }
 
 %exception agnxtattr {
+  PYGRAPHVIZ_LOCK();
   $action
+  PYGRAPHVIZ_UNLOCK();
   if (!result) {
      PyErr_SetString(PyExc_StopIteration,"agnxtattr");
-     return NULL;
+     SWIG_fail;
   }
 }
 
 %exception agattr {
+  PYGRAPHVIZ_LOCK();
   $action
+  PYGRAPHVIZ_UNLOCK();
   if (!result) {
      PyErr_SetString(PyExc_KeyError,"agattr: no key");
-     return NULL;
+     SWIG_fail;
   }
 }
 
 
 %exception agattr_label {
+  PYGRAPHVIZ_LOCK();
   $action
+  PYGRAPHVIZ_UNLOCK();
   if (!result) {
      PyErr_SetString(PyExc_KeyError,"agattr_label: no key");
-     return NULL;
+     SWIG_fail;
   }
 }
 
 %exception agread {
+  PYGRAPHVIZ_LOCK();
   $action
+  PYGRAPHVIZ_UNLOCK();
   if (!result) {
      PyErr_SetString(PyExc_ValueError,"agread: bad input data");
-     return NULL;
+     SWIG_fail;
   }
 }
 

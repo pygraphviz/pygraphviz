@@ -47,13 +47,8 @@ jobs:
           pip list
 
       - name: Test pygraphviz
-        if: ${{ !endsWith(matrix.python-version, 't') }}
         run: |
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
-      - name: Test pygraphviz freethreaded
-        if: ${{ endsWith(matrix.python-version, 't') }}
-        run: |
-          PYTHON_GIL=0 pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
   brew:
     runs-on: macOS-latest
@@ -87,13 +82,8 @@ jobs:
           pip list
 
       - name: Test pygraphviz
-        if: ${{ !endsWith(matrix.python-version, 't') }}
         run: |
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
-      - name: Test pygraphviz freethreaded
-        if: ${{ endsWith(matrix.python-version, 't') }}
-        run: |
-          PYTHON_GIL=0 pytest --doctest-modules --durations=10 --pyargs pygraphviz
 
   windows:
     runs-on: windows-latest
@@ -135,11 +125,5 @@ jobs:
         run: Get-ChildItem "$($env:WIN_GRAPHVIZ_DIR)\bin"
 
       - name: Test pygraphviz
-        if: ${{ !endsWith(matrix.python-version, 't') }}
         run: |
-          pytest --doctest-modules --durations=10 --pyargs pygraphviz
-      - name: Test pygraphviz freethreaded
-        if: ${{ endsWith(matrix.python-version, 't') }}
-        run: |
-          [Environment]::SetEnvironmentVariable("PYTHON_GIL", 0)
           pytest --doctest-modules --durations=10 --pyargs pygraphviz
