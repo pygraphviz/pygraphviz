@@ -38,7 +38,7 @@ jobs:
 
       - name: Install graphviz
         run: |
-          sudo apt-get install -y graphviz libgraphviz-dev \
+          sudo apt-get install -y graphviz graphviz-tools libgraphviz-dev \
             libgvplugin-neato-layout-dev \
             libgvplugin-gd-dev \
             libgvplugin-pango-dev
