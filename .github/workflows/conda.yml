@@ -31,7 +31,7 @@ jobs:
         python-version: ["3.11", "3.15"]
 
     steps:
-      - uses: prefix-dev/setup-pixi@v0.11.0
+      - uses: prefix-dev/setup-pixi@v0.11.3
         with:
           run-install: false
 
