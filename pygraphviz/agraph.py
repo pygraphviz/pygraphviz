@@ -1543,6 +1543,7 @@ class AGraph:
         cases, one should explicitly set the `format` parameter; otherwise, it
         will default to 'dot'.
 
+        Binary file-like objects, including io.BytesIO, are supported.
         If path is None, the result is returned as a Bytes object.
 
         Formats (not all may be available on every system depending on
@@ -1631,7 +1632,7 @@ class AGraph:
                 )
 
             # Render
-            if path is None:
+            if path is None or hasattr(path, "write"):
                 out = gv.gvRenderData(gvc, G, format)
                 if out[0]:
                     raise ValueError(
@@ -1640,7 +1641,10 @@ class AGraph:
                 err, dot_string = out
                 gv.gvFreeLayout(gvc, G)
                 gv.gvFreeContext(gvc)
-                return dot_string
+                if path is None:
+                    return dot_string
+                path.write(dot_string)
+                return None
 
             # path is string holding the filename, a file handle, or pathlib.Path
             fh = self._get_fh(path, "wb")

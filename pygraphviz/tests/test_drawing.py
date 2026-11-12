@@ -1,3 +1,4 @@
+import io
 import warnings
 import pygraphviz as pgv
 import pytest
@@ -65,6 +66,18 @@ def test_drawing_no_error_with_no_layout():
     A.add_path([1, 2, 3, 4])
     d = A.draw(prog="nop")
     A.string_nop()
+
+
+@pytest.mark.parametrize("format", ["png", "svg"])
+def test_drawing_to_bytesio(format):
+    A = pgv.AGraph()
+    A.add_edge("a", "b")
+    output = io.BytesIO()
+    assert A.draw(output, format=format, prog="dot") is None
+    if format == "png":
+        assert output.getvalue().startswith(b"\x89PNG\r\n\x1a\n")
+    else:
+        assert b"<svg" in output.getvalue()
 
 
 def test_drawing_makes_file_handle(tmp_path):
