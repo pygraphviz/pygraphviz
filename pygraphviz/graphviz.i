@@ -328,6 +328,12 @@ int agdegree(Agraph_t * g, Agnode_t * n, int in, int out);
 Agraph_t  *agraphof(void*);
 char      *agnameof(void*);
 
+%inline %{
+  char *agnodename(Agnode_t *node) {
+    return agnameof(node);
+  }
+%}
+
 int agdelnode(Agraph_t * g, Agnode_t * arg_n);
 int agdeledge(Agraph_t * g, Agedge_t * arg_e);
 

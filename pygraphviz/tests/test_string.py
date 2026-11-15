@@ -31,7 +31,10 @@ def test_string_representation_large():
              8 -- 9;
              9 -- 10;
              11; }"""
-    assert stringify(A) == " ".join(ans.split())
+    expected = " ".join(ans.split())
+    # Graphviz 16 writes isolated nodes before edges; older versions write them last.
+    isolated_first = expected.replace(" { ", " { 11; ", 1).replace(" 11; }", " }", 1)
+    assert stringify(A) in (expected, isolated_first)
 
 
 def test_bad_dot_input():
