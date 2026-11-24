@@ -1644,7 +1644,7 @@ class AGraph:
                 if path is None:
                     return dot_string
                 path.write(dot_string)
-                return None
+                return
 
             # path is string holding the filename, a file handle, or pathlib.Path
             fh = self._get_fh(path, "wb")
