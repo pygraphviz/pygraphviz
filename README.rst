@@ -23,7 +23,7 @@ PyGraphviz provides a similar programming interface to NetworkX
 Simple example
 --------------
 
-.. code:: pycon
+.. code-block:: pycon
 
     >>> import pygraphviz as pgv
     >>> G = pgv.AGraph()
