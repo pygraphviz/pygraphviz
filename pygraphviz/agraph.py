@@ -1795,7 +1795,7 @@ class Node(str):
 
     def __new__(self, graph, name=None, nh=None):
         if nh is not None:
-            n = super().__new__(self, gv.agnameof(nh), graph.encoding)
+            n = super().__new__(self, gv.agnodename(nh), graph.encoding)
         else:
             n = super().__new__(self, name)
             try:
@@ -1816,7 +1816,7 @@ class Node(str):
     #    handle=property(get_handle)
 
     def get_name(self):
-        name = gv.agnameof(self.handle)
+        name = gv.agnodename(self.handle)
         if name is not None:
             name = name.decode(self.encoding)
         return name
