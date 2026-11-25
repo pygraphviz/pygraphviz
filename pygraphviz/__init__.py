@@ -26,11 +26,20 @@ if sys.version_info >= (3, 8, 0) and sys.platform == "win32":
             os.add_dll_directory(path)
 
 
-from ._graphviz import (
-    GRAPHVIZ_MAJOR_VERSION,
-    GRAPHVIZ_MINOR_VERSION,
-    GRAPHVIZ_PATCH_VERSION,
-)
+try:
+    from ._graphviz import (
+        GRAPHVIZ_MAJOR_VERSION,
+        GRAPHVIZ_MINOR_VERSION,
+        GRAPHVIZ_PATCH_VERSION,
+    )
+except ImportError as err:
+    # Linux wheels use the system's Pango and cairo; source builds need Graphviz.
+    if sys.platform != "linux" or "cannot open shared object file" not in str(err):
+        raise
+    raise ImportError(
+        f"{err}\npygraphviz needs this system library, see "
+        "https://pygraphviz.github.io/documentation/stable/install.html"
+    ) from None
 
 __version__ = "2.0.4"
 __graphviz_version__ = (

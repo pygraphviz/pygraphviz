@@ -9,6 +9,17 @@ with ``pip``::
 
 .. _wheels: https://pypi.org/project/pygraphviz/#files
 
+On Linux, the wheels use the system's Pango and cairo libraries. Desktop
+distributions already include them; on minimal systems such as containers,
+install them with::
+
+    # Debian, Ubuntu
+    sudo apt-get update
+    sudo apt-get install libpangocairo-1.0-0
+
+    # Fedora
+    sudo dnf install pango
+
 .. note::
 
    Prior to version 2.0, ``pygraphviz`` requires
