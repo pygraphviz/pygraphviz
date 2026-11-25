@@ -225,6 +225,19 @@ jobs:
             copy C:\\graphviz\\bin\\unflatten.exe {package}\\pygraphviz\\bin\\
 
           # --- Wheel repair (bundle shared libs into wheel) ---
+          # Linux: use the system's Pango/cairo text stack, like GLib, which is
+          # never bundled. Bundled copies clash with it: a second Pango in the
+          # host GObject hangs or crashes, and an old fontconfig warns about
+          # the host's font config (#648). libgd stays bundled but links
+          # fontconfig and FreeType; HarfBuzz must match the system FreeType.
+          CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
+            auditwheel repair
+            --exclude 'libpango*'
+            --exclude libcairo.so.2
+            --exclude libharfbuzz.so.0
+            --exclude libfontconfig.so.1
+            --exclude libfreetype.so.6
+            -w {dest_dir} {wheel}
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel
             --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
@@ -270,6 +283,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
 
+      # Linux wheels use the system's Pango and cairo (see INSTALL.txt).
+      - name: Install system libraries (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpangocairo-1.0-0
+
       - name: Install wheel
         run: |
           python -m pip install pytest
@@ -279,6 +299,13 @@ jobs:
         run: |
           python -c "import os, tempfile, pygraphviz as p; print('pygraphviz', p.__version__); G = p.AGraph(); G.add_edge('a', 'b'); f = os.path.join(tempfile.mkdtemp(), 't.png'); G.draw(f, prog='dot'); assert os.path.getsize(f) > 0; print('PNG render OK:', f)"
           pytest --pyargs pygraphviz
+
+      # A mismatched text stack warns on stderr but still writes a PNG (#648).
+      - name: Check PNG render writes nothing to stderr (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          python -c "import pygraphviz as p; G = p.AGraph(); G.add_edge('a', 'b'); G.draw(format='png', prog='dot')" 2> stderr.txt
+          if [ -s stderr.txt ]; then cat stderr.txt; exit 1; fi
 
   build_sdist:
     name: Build source distribution
