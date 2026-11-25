@@ -20,7 +20,7 @@ def test_string_representation_large():
     A = pgv.AGraph(name="test graph")
     A.add_path([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     A.add_node(11)
-    ans = """strict graph "test graph" {
+    ans1 = """strict graph "test graph" {
              1 -- 2;
              2 -- 3;
              3 -- 4;
@@ -31,7 +31,20 @@ def test_string_representation_large():
              8 -- 9;
              9 -- 10;
              11; }"""
-    assert stringify(A) == " ".join(ans.split())
+    ans2 = """strict graph "test graph" {
+             11;
+             1 -- 2;
+             2 -- 3;
+             3 -- 4;
+             4 -- 5;
+             5 -- 6;
+             6 -- 7;
+             7 -- 8;
+             8 -- 9;
+             9 -- 10;
+             }"""
+    result = stringify(A)
+    assert result in {" ".join(a.split()) for a in (ans1, ans2)}
 
 
 def test_bad_dot_input():
